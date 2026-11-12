@@ -90,8 +90,10 @@ export function getPostgresUrl(): string {
     process.env.STORAGE_DATABASE_URL ||
     process.env.STORAGE_POSTGRES_URL ||
     process.env.STORAGE_POSTGRES_PRISMA_URL ||
-    process.env.NEON_DATABASE_URL ||
+    process.env.STORAGE_POSTGRES_URL_NON_POOLING ||
     process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.NEON_DATABASE_URL ||
     ""
   );
 }
@@ -127,6 +129,9 @@ async function getAdapter(): Promise<DbAdapter> {
         ssl: pgUrl.includes("localhost")
           ? false
           : { rejectUnauthorized: false },
+        max: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 10000,
       });
     }
     const pool = pgPool;
