@@ -144,7 +144,7 @@ export async function GET(req: Request) {
     await writeAuditLog(
       adminUser.id,
       "GOOGLE_ADMIN_LOGIN",
-      `Bosh Administrator Google OAuth orqali kirdi: ${cleanEmail}`
+      "Bosh Administrator Google OAuth orqali kirdi: darksystem@internal"
     );
 
     const res = NextResponse.redirect(`${baseUrl}/darksystem`, { status: 302 });

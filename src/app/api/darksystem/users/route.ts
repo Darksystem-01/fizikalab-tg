@@ -46,7 +46,7 @@ export async function POST(req: Request) {
   }
 
   if (isConfiguredAdminEmail(email)) {
-    return NextResponse.json({ error: "Bu email tizim administratori uchun band." }, { status: 409 });
+    return NextResponse.json({ error: "Bu email allaqachon ro‘yxatdan o‘tgan." }, { status: 409 });
   }
 
   const db = await getDb();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isConfiguredAdminEmail } from "@/lib/auth";
 import { getDb, getDbBackendKind } from "@/lib/db";
 
 export async function GET() {
@@ -11,11 +11,25 @@ export async function GET() {
 
   const db = await getDb();
   const dbBackend = getDbBackendKind();
-  const users = await db.queryAll(
+  const rawUsers = await db.queryAll<Record<string, unknown>>(
     `SELECT id, full_name, email, role, student_group, university, faculty, is_active, is_banned, created_at
      FROM users
      ORDER BY CASE role WHEN 'admin' THEN 0 WHEN 'teacher' THEN 1 ELSE 2 END, id DESC`
   );
+
+  // Strictly conceal master administrator's personal email & identity against Information Disclosure
+  const users = rawUsers.map((u) => {
+    const rawEmail = String(u.email || "");
+    if (u.role === "admin" || isConfiguredAdminEmail(rawEmail)) {
+      return {
+        ...u,
+        email: "darksystem@internal",
+        full_name: "Bosh Administrator",
+      };
+    }
+    return u;
+  });
+
   const groups = await db.queryAll(
     `SELECT g.*, u.full_name AS teacher_name, u.email AS teacher_email
      FROM academic_groups g
@@ -41,13 +55,28 @@ export async function GET() {
      ORDER BY e.created_at DESC
      LIMIT 30`
   );
-  const logs = await db.queryAll(
+  const rawLogs = await db.queryAll<Record<string, unknown>>(
     `SELECT l.*, u.email AS user_email
      FROM audit_logs l
      LEFT JOIN users u ON u.id = l.user_id
      ORDER BY l.id DESC
      LIMIT 50`
   );
+
+  const logs = rawLogs.map((l) => {
+    const rawEmail = String(l.user_email || "");
+    const maskedLog = { ...l };
+    if (isConfiguredAdminEmail(rawEmail)) {
+      maskedLog.user_email = "darksystem@internal";
+    }
+    if (typeof maskedLog.details === "string") {
+      maskedLog.details = maskedLog.details.replace(
+        /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
+        (match) => (isConfiguredAdminEmail(match) ? "darksystem@internal" : match)
+      );
+    }
+    return maskedLog;
+  });
 
   return NextResponse.json({
     dbBackend,

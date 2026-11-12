@@ -89,8 +89,8 @@ export async function POST(req: Request) {
 
     if (isConfiguredAdminEmail(email)) {
       return NextResponse.json(
-        { error: "Bu email bilan ro‘yxatdan o‘tish mumkin emas." },
-        { status: 403 }
+        { error: "Bu email allaqachon ro‘yxatdan o‘tgan." },
+        { status: 409 }
       );
     }
 

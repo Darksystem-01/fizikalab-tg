@@ -203,17 +203,6 @@ export function LoginPortal() {
           },
           auto_select: false,
         });
-
-        const btnDiv = document.getElementById("google-gis-button-slot");
-        if (btnDiv) {
-          window.google.accounts.id.renderButton(btnDiv, {
-            theme: "outline",
-            size: "large",
-            text: "continue_with",
-            shape: "rectangular",
-            width: 320,
-          });
-        }
         gisMountedRef.current = true;
       } catch {
         // Fallback gracefully
@@ -223,25 +212,6 @@ export function LoginPortal() {
 
   function handleGoogleButtonClick() {
     setLoading(true);
-    // 1. If Google Identity Services prompt is initialized in browser, open One Tap
-    if (typeof window !== "undefined" && window.google?.accounts?.id && googleClientId) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.google.accounts.id.prompt((notification: any) => {
-          if (notification && (notification.isNotDisplayed?.() || notification.isSkippedMoment?.())) {
-            // If One Tap cannot be displayed (e.g. adblock or origin restriction), redirect to OAuth start
-            // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-            window.location.assign("/api/auth/google/start");
-          }
-        });
-        setLoading(false);
-        return;
-      } catch {
-        // fall through to redirect
-      }
-    }
-
-    // 2. Direct official Google OAuth 2.0 flow
     if (typeof window !== "undefined") {
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/api/auth/google/start");
@@ -345,16 +315,6 @@ export function LoginPortal() {
                 },
                 auto_select: false,
               });
-              const btnDiv = document.getElementById("google-gis-button-slot");
-              if (btnDiv) {
-                window.google.accounts.id.renderButton(btnDiv, {
-                  theme: "outline",
-                  size: "large",
-                  text: "continue_with",
-                  shape: "rectangular",
-                  width: 320,
-                });
-              }
               gisMountedRef.current = true;
             } catch {
               // fallback
@@ -609,34 +569,17 @@ export function LoginPortal() {
                   </p>
                 </div>
 
-                {/* Google Sign-in Prominent Button */}
-                <div className="mb-4 space-y-2">
+                {/* Google Sign-in Single Clean Button */}
+                <div className="mb-4">
                   <button
                     type="button"
                     onClick={handleGoogleButtonClick}
                     disabled={loading}
-                    className="flex w-full items-center justify-center gap-2.5 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400 cursor-pointer disabled:opacity-50"
+                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900 cursor-pointer disabled:opacity-50"
                   >
-                    <GoogleIcon className="h-4 w-4" />
-                    <span>Google orqali kirish</span>
+                    <GoogleIcon className="h-5 w-5 shrink-0" />
+                    <span>Continue with Google</span>
                   </button>
-                  <div
-                    id="google-gis-button-slot"
-                    className="flex justify-center empty:hidden"
-                  />
-                  <div className="text-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setTab("login");
-                        setEmail("tolqinovmahmudjon72@gmail.com");
-                        setError(null);
-                      }}
-                      className="text-[11px] text-slate-500 hover:text-[#1E3A8A] underline cursor-pointer"
-                    >
-                      Bosh Administrator (tolqinovmahmudjon72@gmail.com) sifatida kirish
-                    </button>
-                  </div>
                 </div>
 
                 {/* Divider */}

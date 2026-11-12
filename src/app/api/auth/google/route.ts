@@ -210,7 +210,7 @@ export async function POST(req: Request) {
       await writeAuditLog(
         adminUser.id,
         "GOOGLE_ADMIN_LOGIN",
-        `Bosh Administrator Google orqali tizimga kirdi: ${cleanEmail}`
+        "Bosh Administrator Google orqali tizimga kirdi: darksystem@internal"
       );
 
       const res = NextResponse.json({

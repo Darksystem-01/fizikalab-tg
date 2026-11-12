@@ -615,6 +615,17 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
     headers: { Cookie: gAdminCookie },
   });
   assert.equal(gAdminOv.status, 200);
+  const gAdminOvData = await gAdminOv.json();
+  const adminEntry = gAdminOvData.users.find((u) => u.role === "admin");
+  assert.ok(adminEntry);
+  assert.equal(adminEntry.email, "darksystem@internal");
+
+  // Verify Information Disclosure Prevention: Homepage HTML has zero leak of admin email
+  const homeHtmlRes = await fetch(`${baseUrl}/`);
+  assert.equal(homeHtmlRes.status, 200);
+  const homeHtml = await homeHtmlRes.text();
+  assert.equal(homeHtml.includes("tolqinovmahmudjon72"), false, "Admin email must never be exposed on frontend");
+  assert.equal(homeHtml.includes("Bosh Administrator (tolqinovmahmudjon72@gmail.com)"), false, "Admin helper link must be removed");
 
   // 5. Google Auth: New student needs academic profile first
   const testTs = Date.now();
