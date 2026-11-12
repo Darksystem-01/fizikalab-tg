@@ -420,6 +420,57 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
   }
 }
 
+export interface GoogleOnboardingPayload {
+  email: string;
+  fullName: string;
+  googleId: string;
+  exp: number;
+}
+
+export function signGoogleOnboardingToken(data: {
+  email: string;
+  fullName: string;
+  googleId: string;
+}): string {
+  const payload: GoogleOnboardingPayload = {
+    email: data.email.trim().toLowerCase(),
+    fullName: data.fullName.trim(),
+    googleId: data.googleId.trim(),
+    exp: Date.now() + 1000 * 60 * 30, // 30 minutes
+  };
+  const key = getEncryptionKey();
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+  const plainText = Buffer.from(JSON.stringify(payload), "utf8");
+  const encrypted = Buffer.concat([cipher.update(plainText), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return `onb.${iv.toString("base64url")}.${encrypted.toString("base64url")}.${tag.toString("base64url")}`;
+}
+
+export function verifyGoogleOnboardingToken(
+  token: string | undefined
+): GoogleOnboardingPayload | null {
+  if (!token || !token.startsWith("onb.")) return null;
+  const parts = token.slice(4).split(".");
+  if (parts.length !== 3) return null;
+  const [ivB64, cipherB64, tagB64] = parts;
+  try {
+    const key = getEncryptionKey();
+    const iv = Buffer.from(ivB64, "base64url");
+    const encrypted = Buffer.from(cipherB64, "base64url");
+    const tag = Buffer.from(tagB64, "base64url");
+    const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+    decipher.setAuthTag(tag);
+    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    const parsed = JSON.parse(decrypted.toString("utf8")) as GoogleOnboardingPayload;
+    if (!parsed.exp || parsed.exp < Date.now()) return null;
+    if (!parsed.email || !parsed.email.includes("@")) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
 export function shouldRotateSession(payload: SessionPayload): boolean {
   if (!payload.issuedAt) return true;
   return Date.now() - payload.issuedAt > 30_000;

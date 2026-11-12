@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import {
   ensureConfiguredAdminRecord,
   getDb,
@@ -10,6 +11,7 @@ import {
   isConfiguredAdminEmail,
   SESSION_COOKIE_NAME,
   signSessionToken,
+  verifyGoogleOnboardingToken,
 } from "@/lib/auth";
 import { validateAndSanitizeEmail } from "@/lib/emailValidation";
 import { findUniversity, isValidFacultyForUniversity } from "@/lib/universities";
@@ -55,6 +57,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       credential?: string;
       accessToken?: string;
+      onboardingToken?: string;
       code?: string;
       mockGoogleUser?: {
         email: string;
@@ -157,27 +160,55 @@ export async function POST(req: Request) {
           { status: 502 }
         );
       }
-    } else if (
-      body.mockGoogleUser &&
-      (process.env.NODE_ENV !== "production" ||
-        process.env.CI ||
-        process.env.FIZIKALAB_TEST === "1")
-    ) {
-      // Authorized test harness path for CI / development
-      if (!body.mockGoogleUser.emailVerified) {
+    } else if (body.onboardingToken) {
+      const verified = verifyGoogleOnboardingToken(body.onboardingToken);
+      if (!verified) {
         return NextResponse.json(
-          { error: "Google hisobidagi elektron pochta tasdiqlanmagan." },
+          {
+            error:
+              "Google hisobi tasdiqlanish muddati tugagan yoki token yaroqsiz. Qaytadan 'Continue with Google' orqali kiring.",
+          },
+          { status: 401 }
+        );
+      }
+      googleEmail = verified.email;
+      googleName = verified.fullName;
+      googleId = verified.googleId;
+    } else {
+      // Check secure onboarding cookie fallback
+      const cookieStore = await cookies();
+      const cookieToken = cookieStore.get("fizikalab_google_onboarding")?.value;
+      const verifiedFromCookie = verifyGoogleOnboardingToken(cookieToken);
+
+      if (verifiedFromCookie) {
+        googleEmail = verifiedFromCookie.email;
+        googleName = verifiedFromCookie.fullName;
+        googleId = verifiedFromCookie.googleId;
+      } else if (
+        body.mockGoogleUser &&
+        (process.env.NODE_ENV !== "production" ||
+          process.env.CI ||
+          process.env.FIZIKALAB_TEST === "1")
+      ) {
+        // Authorized test harness path for CI / development
+        if (!body.mockGoogleUser.emailVerified) {
+          return NextResponse.json(
+            { error: "Google hisobidagi elektron pochta tasdiqlanmagan." },
+            { status: 400 }
+          );
+        }
+        googleEmail = body.mockGoogleUser.email;
+        googleName = body.mockGoogleUser.name;
+        googleId = body.mockGoogleUser.googleId;
+      } else {
+        return NextResponse.json(
+          {
+            error:
+              "Google hisob ma'lumotlari topilmadi. Iltimos, qaytadan 'Continue with Google' tugmasi orqali kiring.",
+          },
           { status: 400 }
         );
       }
-      googleEmail = body.mockGoogleUser.email;
-      googleName = body.mockGoogleUser.name;
-      googleId = body.mockGoogleUser.googleId;
-    } else {
-      return NextResponse.json(
-        { error: "Google credential tokeni yuborilmadi." },
-        { status: 400 }
-      );
     }
 
     // 2. Multi-layer validation and sanitization of the verified Google email
@@ -374,6 +405,14 @@ export async function POST(req: Request) {
       sameSite: "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60,
+    });
+
+    res.cookies.set("fizikalab_google_onboarding", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
     });
 
     return res;

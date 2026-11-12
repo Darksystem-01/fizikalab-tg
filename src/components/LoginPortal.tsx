@@ -62,6 +62,7 @@ declare global {
 interface PendingGoogleProfile {
   credential?: string;
   accessToken?: string;
+  onboardingToken?: string;
   email: string;
   fullName: string;
   googleId: string;
@@ -99,6 +100,7 @@ export function LoginPortal() {
         email: p.get("email") || "",
         fullName: p.get("name") || "",
         googleId: p.get("google_id") || "",
+        onboardingToken: p.get("token") || "",
       };
     }
     return null;
@@ -132,6 +134,7 @@ export function LoginPortal() {
     async (payload: {
       credential?: string;
       accessToken?: string;
+      onboardingToken?: string;
       university?: string;
       faculty?: string;
       studentGroup?: string;
@@ -157,6 +160,7 @@ export function LoginPortal() {
           setPendingGoogleUser({
             credential: payload.credential,
             accessToken: payload.accessToken,
+            onboardingToken: payload.onboardingToken,
             email: data.email,
             fullName: data.fullName || "",
             googleId: data.googleId || "",
@@ -237,6 +241,7 @@ export function LoginPortal() {
     await processGoogleAuth({
       credential: pendingGoogleUser.credential,
       accessToken: pendingGoogleUser.accessToken,
+      onboardingToken: pendingGoogleUser.onboardingToken,
       university,
       faculty,
       studentGroup: studentGroup.trim(),

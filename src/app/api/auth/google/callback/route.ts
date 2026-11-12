@@ -9,6 +9,7 @@ import {
 import {
   isConfiguredAdminEmail,
   SESSION_COOKIE_NAME,
+  signGoogleOnboardingToken,
   signSessionToken,
 } from "@/lib/auth";
 import { validateAndSanitizeEmail } from "@/lib/emailValidation";
@@ -239,13 +240,28 @@ export async function GET(req: Request) {
   }
 
   // 3. New student: redirect to frontend onboarding with prefilled Google verified info
+  const onboardingToken = signGoogleOnboardingToken({
+    email: cleanEmail,
+    fullName: googleName,
+    googleId: googleId || "",
+  });
+
   const onboardingUrl = new URL(`${baseUrl}/`);
   onboardingUrl.searchParams.set("google_onboarding", "1");
   onboardingUrl.searchParams.set("email", cleanEmail);
   onboardingUrl.searchParams.set("name", googleName);
   if (googleId) onboardingUrl.searchParams.set("google_id", googleId);
+  onboardingUrl.searchParams.set("token", onboardingToken);
 
   const res = NextResponse.redirect(onboardingUrl.toString(), { status: 302 });
+  // Store onboarding ticket in secure cookie as well as URL parameter
+  res.cookies.set("fizikalab_google_onboarding", onboardingToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 30 * 60,
+  });
   // Clear any existing session cookie so onboarding is completely fresh
   res.cookies.set(SESSION_COOKIE_NAME, "", {
     httpOnly: true,
