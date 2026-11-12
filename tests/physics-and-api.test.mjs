@@ -140,6 +140,38 @@ test("2. Student registration validation (university/faculty/group), role lock, 
   });
   assert.equal(fakeUni.status, 400);
 
+  // Reject mismatched faculty for selected university
+  const mismatchedFaculty = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: "Test Talaba",
+      university: "Toshkent Axborot Texnologiyalari Universiteti (TATU)",
+      faculty: "Tibbiyot va Jarrohlik fakulteti", // not in TATU
+      studentGroup: "FI-202",
+      email: `mismatch-${Date.now()}@example.test`,
+      password: "Password123!",
+    }),
+  });
+  assert.equal(mismatchedFaculty.status, 400);
+
+  // Successfully register student with TATU 2026 Kiberxavfsizlik faculty
+  const tatuStudent = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: "Kiberxavfsizlik Mutaxassisi",
+      university: "Toshkent Axborot Texnologiyalari Universiteti (TATU)",
+      faculty: "Kiberxavfsizlik fakulteti",
+      studentGroup: "KB-101",
+      email: `tatu-${Date.now()}@example.test`,
+      password: "Password123!",
+    }),
+  });
+  assert.equal(tatuStudent.status, 201);
+  const tatuBody = await tatuStudent.json();
+  assert.equal(tatuBody.user.faculty, "Kiberxavfsizlik fakulteti");
+
   // Even if body attempts role escalation to admin/teacher, server forces role="student"
   const regRes = await fetch(`${baseUrl}/api/auth/register`, {
     method: "POST",

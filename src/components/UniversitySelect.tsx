@@ -26,6 +26,7 @@ export function UniversitySelect({
   const [openUni, setOpenUni] = useState(false);
   const [typedQuery, setTypedQuery] = useState<string | null>(null);
   const [openFaculty, setOpenFaculty] = useState(false);
+  const [facultySearch, setFacultySearch] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const facultyRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +49,7 @@ export function UniversitySelect({
         !facultyRef.current.contains(event.target as Node)
       ) {
         setOpenFaculty(false);
+        setFacultySearch("");
       }
     }
 
@@ -55,8 +57,13 @@ export function UniversitySelect({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredUnis = searchUniversities(currentSearchQuery, 10);
+  const filteredUnis = searchUniversities(currentSearchQuery, 25);
   const availableFaculties = selectedUni ? selectedUni.faculties : [];
+  const displayedFaculties = facultySearch
+    ? availableFaculties.filter((f) =>
+        f.toLowerCase().includes(facultySearch.toLowerCase())
+      )
+    : availableFaculties;
 
   function handleSelectUniversity(u: University) {
     setTypedQuery(null);
@@ -69,12 +76,14 @@ export function UniversitySelect({
     // Auto-open faculty selector for seamless workflow
     setTimeout(() => {
       setOpenFaculty(true);
+      setFacultySearch("");
     }, 100);
   }
 
   function handleSelectFaculty(f: string) {
     onFacultyChange(f);
     setOpenFaculty(false);
+    setFacultySearch("");
   }
 
   return (
@@ -250,18 +259,32 @@ export function UniversitySelect({
 
         {/* Scrollable Faculty Dropdown List */}
         {openFaculty && selectedUni && (
-          <div className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-y-auto rounded-md border border-slate-200 bg-white shadow-xl divide-y divide-slate-100">
-            <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center justify-between sticky top-0 border-b border-slate-200">
-              <span>{selectedUni.shortName} fakultetlari</span>
-              <span>{availableFaculties.length} ta</span>
+          <div className="absolute z-50 left-0 right-0 mt-1 max-h-60 overflow-y-auto rounded-md border border-slate-200 bg-white shadow-xl divide-y divide-slate-100">
+            <div className="sticky top-0 bg-white z-10 border-b border-slate-200">
+              <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <span>{selectedUni.shortName} fakultetlari</span>
+                <span>{availableFaculties.length} ta</span>
+              </div>
+              {availableFaculties.length > 5 && (
+                <div className="p-1.5 bg-white border-b border-slate-100">
+                  <input
+                    type="text"
+                    value={facultySearch}
+                    onChange={(e) => setFacultySearch(e.target.value)}
+                    placeholder="Fakultet nomini qidirish..."
+                    className="w-full text-xs px-2 py-1 border border-slate-200 rounded focus:outline-none focus:border-[#1E3A8A]"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+              )}
             </div>
 
-            {availableFaculties.length === 0 ? (
+            {displayedFaculties.length === 0 ? (
               <div className="p-3 text-center text-xs text-slate-500">
-                Fakultetlar ro‘yxati mavjud emas.
+                Mos keluvchi fakultet topilmadi.
               </div>
             ) : (
-              availableFaculties.map((f, idx) => {
+              displayedFaculties.map((f, idx) => {
                 const isSelected = faculty === f;
                 return (
                   <button
