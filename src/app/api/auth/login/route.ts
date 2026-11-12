@@ -16,12 +16,14 @@ import {
   type DbUser,
 } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { sanitizeEmail } from "@/lib/emailValidation";
 
 export async function POST(req: Request) {
   try {
     const ip = getClientIp(req);
     const body = (await req.json()) as { email?: string; password?: string };
-    const email = (body.email || "").trim().toLowerCase();
+    const rawEmail = (body.email || "").trim();
+    const email = rawEmail.includes("@") ? sanitizeEmail(rawEmail) : rawEmail.toLowerCase();
     const password = body.password || "";
 
     const rl = checkRateLimit(`login:${ip}:${email}`, 20, 5 * 60 * 1000);

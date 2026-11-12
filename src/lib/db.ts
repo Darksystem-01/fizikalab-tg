@@ -17,6 +17,7 @@ export interface DbUser {
   faculty: string;
   is_active: number;
   is_banned: number;
+  google_id?: string | null;
   created_by: number | null;
   created_at: string;
 }
@@ -205,6 +206,9 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
       `ALTER TABLE users ADD COLUMN IF NOT EXISTS created_by INTEGER`
     );
     await adapter.execute(
+      `ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id TEXT`
+    );
+    await adapter.execute(
       `ALTER TABLE assignments ADD COLUMN IF NOT EXISTS group_name TEXT`
     );
     await adapter.execute(
@@ -271,6 +275,9 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
     if (!colSet.has("created_by")) {
       await adapter.execute(`ALTER TABLE users ADD COLUMN created_by INTEGER`);
     }
+    if (!colSet.has("google_id")) {
+      await adapter.execute(`ALTER TABLE users ADD COLUMN google_id TEXT`);
+    }
   }
 
   const assignCols = await adapter.queryAll<{ name: string }>(`PRAGMA table_info(assignments)`);
@@ -312,6 +319,7 @@ async function ensureSchemaAndSeed() {
           faculty TEXT NOT NULL DEFAULT '',
           is_active INTEGER NOT NULL DEFAULT 1,
           is_banned INTEGER NOT NULL DEFAULT 0,
+          google_id TEXT,
           created_by INTEGER,
           created_at TEXT NOT NULL
         )`,
@@ -382,6 +390,7 @@ async function ensureSchemaAndSeed() {
           faculty TEXT NOT NULL DEFAULT '',
           is_active INTEGER NOT NULL DEFAULT 1,
           is_banned INTEGER NOT NULL DEFAULT 0,
+          google_id TEXT,
           created_by INTEGER,
           created_at TEXT NOT NULL
         )`,

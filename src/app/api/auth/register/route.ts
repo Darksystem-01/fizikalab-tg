@@ -11,8 +11,7 @@ import {
   findUniversity,
   isValidFacultyForUniversity,
 } from "@/lib/universities";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { validateAndSanitizeEmail } from "@/lib/emailValidation";
 
 export async function POST(req: Request) {
   try {
@@ -39,7 +38,14 @@ export async function POST(req: Request) {
 
     // Public registration is strictly limited to student role regardless of payload
     const fullName = (body.fullName || "").trim();
-    const email = (body.email || "").trim().toLowerCase();
+    const emailResult = validateAndSanitizeEmail(body.email || "");
+    if (!emailResult.isValid) {
+      return NextResponse.json(
+        { error: emailResult.error || "Elektron pochta manzili noto‘g‘ri." },
+        { status: 400 }
+      );
+    }
+    const email = emailResult.sanitized;
     const password = body.password || "";
     const university = (body.university || "").trim();
     const faculty = (body.faculty || "").trim();
@@ -47,7 +53,6 @@ export async function POST(req: Request) {
 
     if (
       fullName.length < 3 ||
-      !EMAIL_RE.test(email) ||
       password.length < 6 ||
       university.length < 2 ||
       faculty.length < 2 ||

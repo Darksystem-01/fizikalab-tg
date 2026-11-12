@@ -49,6 +49,7 @@ test.before(async () => {
         ADMIN_EMAIL: "",
         ADMIN_PASSWORD: "",
         AUTH_SECRET: process.env.AUTH_SECRET || "ci-test-auth-secret-minimum-32-chars-ok",
+        FIZIKALAB_TEST: "1",
       },
       stdio: "ignore",
     });
@@ -541,4 +542,130 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
     headers: { Cookie: adminCookie },
   });
   assert.equal(delTeacher.status, 200);
+});
+
+test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", async () => {
+  // 1. Rejection of disposable fake email on registration
+  const disposableRes = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: "Fake User",
+      email: "hacker@tempmail.com",
+      password: "TestPassword123!",
+      university: "O'zbekiston Milliy universiteti (O'zMU)",
+      faculty: "Fizika fakulteti",
+      studentGroup: "FI-101",
+    }),
+  });
+  assert.equal(disposableRes.status, 400);
+  const dispJson = await disposableRes.json();
+  assert.match(dispJson.error, /vaqtinchalik/i);
+
+  // 2. Rejection of CRLF / header injection in email
+  const crlfRes = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: "Injection Test",
+      email: "user@example.com\r\nBcc:admin@secret.uz",
+      password: "TestPassword123!",
+      university: "O'zbekiston Milliy universiteti (O'zMU)",
+      faculty: "Fizika fakulteti",
+      studentGroup: "FI-101",
+    }),
+  });
+  assert.equal(crlfRes.status, 400);
+
+  // 3. Google GET endpoint returns config
+  const gGetRes = await fetch(`${baseUrl}/api/auth/google`);
+  assert.equal(gGetRes.status, 200);
+  const gGetData = await gGetRes.json();
+  assert.equal(gGetData.enabled, true);
+
+  // 4. Google Auth: Bosh Administrator sign-in (tolqinovmahmudjon72@gmail.com)
+  const gAdminRes = await fetch(`${baseUrl}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mockGoogleUser: {
+        email: "tolqinovmahmudjon72@gmail.com",
+        name: "Mahmudjon Tolqinov",
+        googleId: "google-admin-10001",
+        emailVerified: true,
+      },
+    }),
+  });
+  assert.equal(gAdminRes.status, 200);
+  const gAdminData = await gAdminRes.json();
+  assert.equal(gAdminData.user.role, "darksystem");
+  assert.equal(gAdminData.user.email, "darksystem@internal");
+  const gAdminCookie = extractSessionCookie(gAdminRes);
+  assert.ok(gAdminCookie);
+
+  // Admin cookie grants access to /api/darksystem/overview
+  const gAdminOv = await fetch(`${baseUrl}/api/darksystem/overview`, {
+    headers: { Cookie: gAdminCookie },
+  });
+  assert.equal(gAdminOv.status, 200);
+
+  // 5. Google Auth: New student needs academic profile first
+  const newGoogleEmail = `student.google.${Date.now()}@example.com`;
+  const gNewStudentRes1 = await fetch(`${baseUrl}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mockGoogleUser: {
+        email: newGoogleEmail,
+        name: "Google Yangi Talaba",
+        googleId: "google-stud-5501",
+        emailVerified: true,
+      },
+    }),
+  });
+  assert.equal(gNewStudentRes1.status, 200);
+  const gNewData1 = await gNewStudentRes1.json();
+  assert.equal(gNewData1.needsAcademicProfile, true);
+  assert.equal(gNewData1.email, newGoogleEmail.toLowerCase());
+
+  // 6. Complete registration with verified university and faculty from catalog
+  const gNewStudentRes2 = await fetch(`${baseUrl}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mockGoogleUser: {
+        email: newGoogleEmail,
+        name: "Google Yangi Talaba",
+        googleId: "google-stud-5501",
+        emailVerified: true,
+      },
+      university: "Toshkent Axborot Texnologiyalari Universiteti (TATU)",
+      faculty: "Dasturiy injiniring fakulteti",
+      studentGroup: "988-1",
+    }),
+  });
+  assert.equal(gNewStudentRes2.status, 201);
+  const gNewData2 = await gNewStudentRes2.json();
+  assert.equal(gNewData2.user.role, "student");
+  assert.equal(gNewData2.user.studentGroup, "988-1");
+  const gStudentCookie = extractSessionCookie(gNewStudentRes2);
+  assert.ok(gStudentCookie);
+
+  // 7. Existing Google student logging in directly on subsequent visits
+  const gExistingRes = await fetch(`${baseUrl}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mockGoogleUser: {
+        email: newGoogleEmail,
+        name: "Google Yangi Talaba",
+        googleId: "google-stud-5501",
+        emailVerified: true,
+      },
+    }),
+  });
+  assert.equal(gExistingRes.status, 200);
+  const gExistingData = await gExistingRes.json();
+  assert.equal(gExistingData.user.email, newGoogleEmail.toLowerCase());
+  assert.equal(gExistingData.user.role, "student");
 });

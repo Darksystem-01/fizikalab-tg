@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUser, hashPassword, isConfiguredAdminEmail } from "@/lib/auth";
 import { getDb, writeAuditLog, type DbUser } from "@/lib/db";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { validateAndSanitizeEmail } from "@/lib/emailValidation";
 
 export async function POST(req: Request) {
   const admin = await getSessionUser();
@@ -21,7 +20,11 @@ export async function POST(req: Request) {
   };
 
   const fullName = (body.fullName || "").trim();
-  const email = (body.email || "").trim().toLowerCase();
+  const emailResult = validateAndSanitizeEmail(body.email || "");
+  if (!emailResult.isValid) {
+    return NextResponse.json({ error: emailResult.error || "Email noto‘g‘ri." }, { status: 400 });
+  }
+  const email = emailResult.sanitized;
   const password = body.password || "";
   const role: "teacher" | "student" = body.role === "teacher" ? "teacher" : "student";
   const university = (body.university || "").trim();
@@ -30,7 +33,6 @@ export async function POST(req: Request) {
 
   if (
     fullName.length < 2 ||
-    !EMAIL_RE.test(email) ||
     password.length < 6 ||
     (role === "student" && (!university || !faculty || !studentGroup))
   ) {
