@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { getDb, getDbBackendKind } from "@/lib/db";
 
 export async function GET() {
   const user = await getSessionUser();
@@ -10,6 +10,7 @@ export async function GET() {
   }
 
   const db = await getDb();
+  const dbBackend = getDbBackendKind();
   const users = await db.queryAll(
     `SELECT id, full_name, email, role, student_group, university, faculty, is_active, is_banned, created_at
      FROM users
@@ -49,6 +50,7 @@ export async function GET() {
   );
 
   return NextResponse.json({
+    dbBackend,
     users,
     groups,
     reports,

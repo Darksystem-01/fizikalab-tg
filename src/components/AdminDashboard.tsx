@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { UniversitySelect } from "./UniversitySelect";
 import {
   Activity,
+  AlertTriangle,
   Ban,
+  Check,
   CheckCircle2,
   ClipboardCopy,
   ClipboardPlus,
@@ -19,6 +21,7 @@ import {
 } from "lucide-react";
 
 interface AdminOverviewData {
+  dbBackend?: "postgres" | "sqlite-local" | "sqlite-tmp";
   users: {
     id: number;
     full_name: string;
@@ -186,12 +189,10 @@ export function AdminDashboard() {
     if (res.ok) {
       const roleWord = uRole === "teacher" ? "Ustoz" : "Talaba";
       setNotice({ type: "ok", text: `Yangi ${roleWord} hisobi (#${json.id}) muvaffaqiyatli yaratildi.` });
-      if (uRole === "teacher") {
-        const origin = typeof window !== "undefined" ? window.location.origin : "";
-        setCreatedSnippet(
-          `Assalomu alaykum, ${uName}!\nFizikaLab ustoz kabinetingiz tayyor:\nHavola: ${origin}\nLogin (Email): ${uEmail}\nParol: ${uPassword}`
-        );
-      }
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      setCreatedSnippet(
+        `Assalomu alaykum, ${uName}!\nFizikaLab ${roleWord} kabinetingiz tayyor:\nHavola: ${origin}\nLogin (Email): ${uEmail}\nParol: ${uPassword}`
+      );
       setUName("");
       setUEmail("");
       setUPassword("");
@@ -325,6 +326,30 @@ export function AdminDashboard() {
           <div className="font-mono text-xl font-bold text-slate-900">{data.assignments.length}</div>
         </div>
       </div>
+
+      {/* Database status banner */}
+      {data.dbBackend === "sqlite-tmp" && (
+        <div className="border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 flex items-start gap-2.5">
+          <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <div className="font-semibold text-amber-950 flex items-center gap-1.5">
+              <span>Baza holati: Vercel Serverless (Vaqtinchalik /tmp xotira)</span>
+              <span className="bg-amber-200/80 text-amber-800 text-[10px] px-1.5 py-0.2 rounded font-mono">ephemeral</span>
+            </div>
+            <p className="mt-1 text-amber-800 leading-relaxed text-[11px]">
+              Vercel Serverless arxitekturasida har bir API so‘rov alohida konteynerda ishlaydi va har bir necha daqiqada konteynerlar yangilanadi. Yangi ro‘yxatdan o‘tgan talabalar, ustozlar va hisobotlar barcha konteynerlarda doimiy va abadiy saqlanib qolishi uchun Vercel panelida <strong>Storage → Neon (Serverless Postgres)</strong> bepul bazasini 1 marta ulab qo‘ying.
+            </p>
+          </div>
+        </div>
+      )}
+      {data.dbBackend === "postgres" && (
+        <div className="border border-emerald-300 bg-emerald-50 p-2.5 text-xs text-emerald-900 flex items-center gap-2">
+          <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+          <span>
+            <strong>Doimiy Cloud PostgreSQL (Neon) bazasi faol.</strong> Barcha foydalanuvchilar, hisobotlar va ma&apos;lumotlar xavfsiz va doimiy saqlanadi.
+          </span>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-1.5 border border-slate-200 bg-slate-50 p-2">

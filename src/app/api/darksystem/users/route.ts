@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   }
 
   const db = await getDb();
-  const existing = await db.queryOne("SELECT id FROM users WHERE email = $1", [email]);
+  const existing = await db.queryOne("SELECT id FROM users WHERE LOWER(TRIM(email)) = $1", [email]);
   if (existing) {
     return NextResponse.json({ error: "Bu email allaqachon mavjud." }, { status: 409 });
   }

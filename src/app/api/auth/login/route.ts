@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       }
       const db = await getDb();
       const found = await db.queryOne<DbUser>(
-        "SELECT * FROM users WHERE email = $1 AND role <> 'admin'",
+        "SELECT * FROM users WHERE LOWER(TRIM(email)) = $1 AND role <> 'admin'",
         [email]
       );
 

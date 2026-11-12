@@ -91,7 +91,7 @@ export async function POST(req: Request) {
 
     const db = await getDb();
     const existing = await db.queryOne<DbUser>(
-      "SELECT id FROM users WHERE email = $1",
+      "SELECT id FROM users WHERE LOWER(TRIM(email)) = $1",
       [email]
     );
     if (existing) {
