@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { UniversitySelect } from "./UniversitySelect";
 import {
   Activity,
   Ban,
@@ -406,34 +407,13 @@ export function AdminDashboard() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div>
-                  <label className="mb-1 block font-medium text-slate-700">
-                    Universitet {uRole === "student" ? "*" : ""}
-                  </label>
-                  <input
-                    type="text"
-                    required={uRole === "student"}
-                    value={uUniversity}
-                    onChange={(e) => setUUniversity(e.target.value)}
-                    placeholder="O‘zMU / TATU"
-                    className="w-full border border-slate-300 px-2 py-1.5"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block font-medium text-slate-700">
-                    Fakultet {uRole === "student" ? "*" : ""}
-                  </label>
-                  <input
-                    type="text"
-                    required={uRole === "student"}
-                    value={uFaculty}
-                    onChange={(e) => setUFaculty(e.target.value)}
-                    placeholder="Fizika"
-                    className="w-full border border-slate-300 px-2 py-1.5"
-                  />
-                </div>
-              </div>
+              <UniversitySelect
+                university={uUniversity}
+                onUniversityChange={(uName) => setUUniversity(uName)}
+                faculty={uFaculty}
+                onFacultyChange={(fName) => setUFaculty(fName)}
+                required={uRole === "student"}
+              />
 
               <div className="text-xs">
                 <label className="mb-1 block font-medium text-slate-700">

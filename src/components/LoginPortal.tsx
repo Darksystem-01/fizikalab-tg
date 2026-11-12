@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { UniversitySelect } from "./UniversitySelect";
 import {
   Atom,
   BookOpen,
@@ -56,6 +57,19 @@ export function LoginPortal() {
     setLoading(true);
     setError(null);
     try {
+      if (tab === "register") {
+        if (!university) {
+          setError("Iltimos, O‘zbekistondagi tasdiqlangan OTMni tanlang.");
+          setLoading(false);
+          return;
+        }
+        if (!faculty) {
+          setError("Iltimos, ushbu universitetning tasdiqlangan fakultetini tanlang.");
+          setLoading(false);
+          return;
+        }
+      }
+
       const endpoint = tab === "login" ? "/api/auth/login" : "/api/auth/register";
       const payload =
         tab === "login"
@@ -288,34 +302,13 @@ export function LoginPortal() {
                       />
                     </div>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1 block text-xs font-semibold text-slate-700">
-                        Universitet / OTM *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={university}
-                        onChange={(e) => setUniversity(e.target.value)}
-                        placeholder="Masalan: O‘zMU"
-                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-xs font-semibold text-slate-700">
-                        Fakultet *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={faculty}
-                        onChange={(e) => setFaculty(e.target.value)}
-                        placeholder="Masalan: Fizika fakulteti"
-                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
-                      />
-                    </div>
-                  </div>
+                  <UniversitySelect
+                    university={university}
+                    onUniversityChange={(uName) => setUniversity(uName)}
+                    faculty={faculty}
+                    onFacultyChange={(fName) => setFaculty(fName)}
+                    required
+                  />
                 </>
               )}
 

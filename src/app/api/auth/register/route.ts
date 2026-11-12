@@ -7,6 +7,10 @@ import {
 } from "@/lib/auth";
 import { getDb, writeAuditLog, type DbUser } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import {
+  findUniversity,
+  isValidFacultyForUniversity,
+} from "@/lib/universities";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -58,6 +62,26 @@ export async function POST(req: Request) {
       );
     }
 
+    const matchedUni = findUniversity(university);
+    if (!matchedUni) {
+      return NextResponse.json(
+        {
+          error:
+            "Iltimos, ro‘yxatdan O‘zbekistondagi haqiqiy universitet (OTM)ni tanlang. Noto‘g‘ri yoki soxta universitet qabul qilinmaydi.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidFacultyForUniversity(matchedUni.name, faculty)) {
+      return NextResponse.json(
+        {
+          error: `"${matchedUni.shortName}" uchun tasdiqlangan haqiqiy fakultetni tanlang.`,
+        },
+        { status: 400 }
+      );
+    }
+
     if (isConfiguredAdminEmail(email)) {
       return NextResponse.json(
         { error: "Bu email bilan ro‘yxatdan o‘tish mumkin emas." },
@@ -81,14 +105,14 @@ export async function POST(req: Request) {
     const inserted = await db.execute(
       `INSERT INTO users (full_name, email, password_hash, role, student_group, university, faculty, is_active, is_banned, created_at)
        VALUES ($1, $2, $3, 'student', $4, $5, $6, 1, 0, $7) RETURNING id`,
-      [fullName, email, hashPassword(password), studentGroup, university, faculty, now]
+      [fullName, email, hashPassword(password), studentGroup, matchedUni.name, faculty, now]
     );
 
     const newId = inserted.lastInsertId!;
     await writeAuditLog(
       newId,
       "REGISTER",
-      `Yangi talaba: ${email} (${university} / ${faculty} / ${studentGroup})`
+      `Yangi talaba: ${email} (${matchedUni.name} / ${faculty} / ${studentGroup})`
     );
 
     const token = signSessionToken({
@@ -97,7 +121,7 @@ export async function POST(req: Request) {
       fullName,
       role: "student",
       studentGroup,
-      university,
+      university: matchedUni.name,
       faculty,
     });
 
@@ -109,7 +133,7 @@ export async function POST(req: Request) {
           email,
           role: "student",
           studentGroup,
-          university,
+          university: matchedUni.name,
           faculty,
         },
       },

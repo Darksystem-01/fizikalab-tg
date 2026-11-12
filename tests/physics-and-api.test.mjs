@@ -125,13 +125,28 @@ test("2. Student registration validation (university/faculty/group), role lock, 
   });
   assert.equal(missingUni.status, 400);
 
+  // Reject junk / fake university
+  const fakeUni = await fetch(`${baseUrl}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: "Test Talaba",
+      university: "1234 Soxta Universitet",
+      faculty: "Fizika fakulteti",
+      studentGroup: "FI-202",
+      email: sharedStudentEmail,
+      password: "Password123!",
+    }),
+  });
+  assert.equal(fakeUni.status, 400);
+
   // Even if body attempts role escalation to admin/teacher, server forces role="student"
   const regRes = await fetch(`${baseUrl}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       fullName: "Test Talaba",
-      university: "O'zMU",
+      university: "O‘zbekiston Milliy Universiteti (O‘zMU)",
       faculty: "Fizika fakulteti",
       studentGroup: "FI-202",
       email: sharedStudentEmail,
@@ -142,7 +157,10 @@ test("2. Student registration validation (university/faculty/group), role lock, 
   assert.equal(regRes.status, 201);
   const regBody = await regRes.json();
   assert.equal(regBody.user.role, "student");
-  assert.equal(regBody.user.university, "O'zMU");
+  assert.ok(
+    regBody.user.university.includes("O‘zMU") ||
+      regBody.user.university.includes("O'zMU")
+  );
   assert.equal(regBody.user.faculty, "Fizika fakulteti");
 
   sharedStudentCookie = extractSessionCookie(regRes);
