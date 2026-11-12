@@ -190,50 +190,15 @@ export async function POST(req: Request) {
     }
     const cleanEmail = emailResult.sanitized;
 
-    // 3. Check if this is the Bosh Administrator
-    if (isConfiguredAdminEmail(cleanEmail)) {
-      const adminUser = await ensureConfiguredAdminRecord(
-        cleanEmail,
-        crypto.randomBytes(24).toString("hex")
-      );
-
-      const token = signSessionToken({
-        userId: adminUser.id,
-        email: "darksystem@internal",
-        fullName: "Darksystem Administrator",
-        role: "darksystem",
-        studentGroup: "Boshqaruv",
-        university: "FizikaLab",
-        faculty: "Ma'muriyat",
-      });
-
-      await writeAuditLog(
-        adminUser.id,
-        "GOOGLE_ADMIN_LOGIN",
-        "Bosh Administrator Google orqali tizimga kirdi: darksystem@internal"
-      );
-
-      const res = NextResponse.json({
-        user: {
-          id: crypto.randomUUID(),
-          fullName: "Darksystem Administrator",
-          email: "darksystem@internal",
-          role: "darksystem",
-          studentGroup: "Boshqaruv",
-          university: "FizikaLab",
-          faculty: "Ma'muriyat",
+    // 3. Google OAuth is strictly prohibited from granting administrator privileges
+    if (isConfiguredAdminEmail(cleanEmail) || cleanEmail === "tolqinovmahmudjon72@gmail.com") {
+      return NextResponse.json(
+        {
+          error:
+            "Xavfsizlik talabiga ko‘ra, Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring.",
         },
-      });
-
-      res.cookies.set(SESSION_COOKIE_NAME, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60,
-      });
-
-      return res;
+        { status: 403 }
+      );
     }
 
     // 4. Query database for existing user (by email or google_id)
@@ -251,6 +216,16 @@ export async function POST(req: Request) {
         );
       }
 
+      if (existing.role === "admin") {
+        return NextResponse.json(
+          {
+            error:
+              "Xavfsizlik talabiga ko‘ra, Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring.",
+          },
+          { status: 403 }
+        );
+      }
+
       // Link google_id if not present
       if (!existing.google_id && googleId) {
         await db.execute(
@@ -259,9 +234,10 @@ export async function POST(req: Request) {
         );
       }
 
-      const clientRole = existing.role === "admin" ? "darksystem" : existing.role;
-      const clientEmail = clientRole === "darksystem" ? "darksystem@internal" : existing.email;
-      const clientFullName = clientRole === "darksystem" ? "Darksystem Administrator" : existing.full_name;
+      // Google accounts can only be teachers or students
+      const clientRole = existing.role === "teacher" ? "teacher" : "student";
+      const clientEmail = existing.email;
+      const clientFullName = existing.full_name;
 
       const token = signSessionToken({
         userId: existing.id,
@@ -281,7 +257,7 @@ export async function POST(req: Request) {
 
       const res = NextResponse.json({
         user: {
-          id: clientRole === "darksystem" ? crypto.randomUUID() : existing.id,
+          id: existing.id,
           fullName: clientFullName,
           email: clientEmail,
           role: clientRole,

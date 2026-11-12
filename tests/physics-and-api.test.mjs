@@ -590,7 +590,7 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
   const startLoc = gStartRes.headers.get("location");
   assert.match(startLoc, /accounts\.google\.com/);
 
-  // 4. Google Auth: Bosh Administrator sign-in (tolqinovmahmudjon72@gmail.com)
+  // 4. Strict Security Rule: Google Auth is FORBIDDEN from granting administrator access
   const gAdminRes = await fetch(`${baseUrl}/api/auth/google`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -603,12 +603,36 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
       },
     }),
   });
-  assert.equal(gAdminRes.status, 200);
-  const gAdminData = await gAdminRes.json();
-  assert.equal(gAdminData.user.role, "darksystem");
-  assert.equal(gAdminData.user.email, "darksystem@internal");
-  const gAdminCookie = extractSessionCookie(gAdminRes);
+  assert.equal(gAdminRes.status, 403, "Google auth must reject admin sign-in attempt with 403");
+  const gAdminErr = await gAdminRes.json();
+  assert.match(gAdminErr.error, /Administrator/);
+
+  // Exclusive Admin Access: ONLY Form Input Login with exact credentials grants darksystem access
+  const inputAdminRes = await fetch(`${baseUrl}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: "tolqinovmahmudjon72@gmail.com",
+      password: "Mahmudjon2009.",
+    }),
+  });
+  assert.equal(inputAdminRes.status, 200, "Valid input credentials must log into admin");
+  const inputAdminData = await inputAdminRes.json();
+  assert.equal(inputAdminData.user.role, "darksystem");
+  assert.equal(inputAdminData.user.email, "darksystem@internal");
+  const gAdminCookie = extractSessionCookie(inputAdminRes);
   assert.ok(gAdminCookie);
+
+  // Wrong password on admin email must fail with 401
+  const wrongPassRes = await fetch(`${baseUrl}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: "tolqinovmahmudjon72@gmail.com",
+      password: "WrongPassword999!",
+    }),
+  });
+  assert.equal(wrongPassRes.status, 401, "Invalid password on admin email must return 401");
 
   // Admin cookie grants access to /api/darksystem/overview
   const gAdminOv = await fetch(`${baseUrl}/api/darksystem/overview`, {

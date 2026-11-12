@@ -40,17 +40,33 @@ export async function GET(req: Request) {
   const errorParam = url.searchParams.get("error");
 
   if (errorParam) {
-    return NextResponse.redirect(
+    const res = NextResponse.redirect(
       `${baseUrl}/?google_error=${encodeURIComponent(
         "Google orqali kirish bekor qilindi yoki xatolik yuz berdi."
       )}`
     );
+    res.cookies.set(SESSION_COOKIE_NAME, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+    });
+    return res;
   }
 
   if (!code) {
-    return NextResponse.redirect(
+    const res = NextResponse.redirect(
       `${baseUrl}/?google_error=${encodeURIComponent("Google avtorizatsiya kodi topilmadi.")}`
     );
+    res.cookies.set(SESSION_COOKIE_NAME, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+    });
+    return res;
   }
 
   const clientId = DEFAULT_GOOGLE_CLIENT_ID;
@@ -124,36 +140,19 @@ export async function GET(req: Request) {
   }
   const cleanEmail = emailRes.sanitized;
 
-  // 1. Check if Administrator
-  if (isConfiguredAdminEmail(cleanEmail)) {
-    const adminUser = await ensureConfiguredAdminRecord(
-      cleanEmail,
-      crypto.randomBytes(24).toString("hex")
+  // 1. Google OAuth is strictly prohibited from granting administrator privileges
+  if (isConfiguredAdminEmail(cleanEmail) || cleanEmail === "tolqinovmahmudjon72@gmail.com") {
+    const res = NextResponse.redirect(
+      `${baseUrl}/?google_error=${encodeURIComponent(
+        "Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring."
+      )}`
     );
-
-    const token = signSessionToken({
-      userId: adminUser.id,
-      email: "darksystem@internal",
-      fullName: "Darksystem Administrator",
-      role: "darksystem",
-      studentGroup: "Boshqaruv",
-      university: "FizikaLab",
-      faculty: "Ma'muriyat",
-    });
-
-    await writeAuditLog(
-      adminUser.id,
-      "GOOGLE_ADMIN_LOGIN",
-      "Bosh Administrator Google OAuth orqali kirdi: darksystem@internal"
-    );
-
-    const res = NextResponse.redirect(`${baseUrl}/darksystem`, { status: 302 });
-    res.cookies.set(SESSION_COOKIE_NAME, token, {
+    res.cookies.set(SESSION_COOKIE_NAME, "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: 0,
     });
     return res;
   }
@@ -167,11 +166,35 @@ export async function GET(req: Request) {
 
   if (existing) {
     if (existing.is_banned === 1 || existing.is_active !== 1) {
-      return NextResponse.redirect(
+      const res = NextResponse.redirect(
         `${baseUrl}/?google_error=${encodeURIComponent(
           "Hisobingiz administrator tomonidan bloklangan."
         )}`
       );
+      res.cookies.set(SESSION_COOKIE_NAME, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0,
+      });
+      return res;
+    }
+
+    if (existing.role === "admin") {
+      const res = NextResponse.redirect(
+        `${baseUrl}/?google_error=${encodeURIComponent(
+          "Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring."
+        )}`
+      );
+      res.cookies.set(SESSION_COOKIE_NAME, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0,
+      });
+      return res;
     }
 
     if (!existing.google_id && googleId) {
@@ -181,9 +204,10 @@ export async function GET(req: Request) {
       ]);
     }
 
-    const clientRole = existing.role === "admin" ? "darksystem" : existing.role;
-    const clientEmail = clientRole === "darksystem" ? "darksystem@internal" : existing.email;
-    const clientFullName = clientRole === "darksystem" ? "Darksystem Administrator" : existing.full_name;
+    // Google accounts can only be teachers or students
+    const clientRole = existing.role === "teacher" ? "teacher" : "student";
+    const clientEmail = existing.email;
+    const clientFullName = existing.full_name;
 
     const token = signSessionToken({
       userId: existing.id,
@@ -201,12 +225,7 @@ export async function GET(req: Request) {
       `${existing.email} Google OAuth orqali kirdi (${clientRole})`
     );
 
-    const redirectPath =
-      clientRole === "darksystem"
-        ? "/darksystem"
-        : clientRole === "teacher"
-        ? "/teacher"
-        : "/labs/metrology";
+    const redirectPath = clientRole === "teacher" ? "/teacher" : "/labs/metrology";
 
     const res = NextResponse.redirect(`${baseUrl}${redirectPath}`, { status: 302 });
     res.cookies.set(SESSION_COOKIE_NAME, token, {
@@ -226,5 +245,14 @@ export async function GET(req: Request) {
   onboardingUrl.searchParams.set("name", googleName);
   if (googleId) onboardingUrl.searchParams.set("google_id", googleId);
 
-  return NextResponse.redirect(onboardingUrl.toString(), { status: 302 });
+  const res = NextResponse.redirect(onboardingUrl.toString(), { status: 302 });
+  // Clear any existing session cookie so onboarding is completely fresh
+  res.cookies.set(SESSION_COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
+  return res;
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { DEFAULT_GOOGLE_CLIENT_ID } from "../route";
+import { SESSION_COOKIE_NAME } from "@/lib/auth";
 
 export async function GET(req: Request) {
   const clientId = DEFAULT_GOOGLE_CLIENT_ID;
@@ -17,5 +18,14 @@ export async function GET(req: Request) {
   googleAuthUrl.searchParams.set("access_type", "online");
   googleAuthUrl.searchParams.set("prompt", "select_account");
 
-  return NextResponse.redirect(googleAuthUrl.toString(), { status: 302 });
+  const res = NextResponse.redirect(googleAuthUrl.toString(), { status: 302 });
+  // Always clear any existing session cookie so new Google auth starts with a clean slate
+  res.cookies.set(SESSION_COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
+  return res;
 }

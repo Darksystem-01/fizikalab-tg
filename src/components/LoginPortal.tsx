@@ -169,9 +169,7 @@ export function LoginPortal() {
         }
 
         const role = data.user?.role;
-        if (role === "admin" || role === "darksystem") {
-          router.push("/darksystem");
-        } else if (role === "teacher") {
+        if (role === "teacher") {
           router.push("/teacher");
         } else {
           router.push("/labs/metrology");
@@ -213,6 +211,7 @@ export function LoginPortal() {
   function handleGoogleButtonClick() {
     setLoading(true);
     if (typeof window !== "undefined") {
+      document.cookie = "fizikalab_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/api/auth/google/start");
     }
