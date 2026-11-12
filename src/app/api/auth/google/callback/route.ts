@@ -54,7 +54,9 @@ export async function GET(req: Request) {
   }
 
   const clientId = DEFAULT_GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET || "";
+  const clientSecret =
+    process.env.GOOGLE_CLIENT_SECRET ||
+    "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";
 
   let googleEmail = "";
   let googleName = "";
