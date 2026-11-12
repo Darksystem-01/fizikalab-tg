@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  diagnoseAdminConfigStatus,
   getConfiguredAdminCredentials,
   isConfiguredAdminEmail,
   performDummyPasswordCheck,
@@ -50,9 +51,28 @@ export async function POST(req: Request) {
           { status: 401 }
         );
       }
-      const adminCfg = getConfiguredAdminCredentials()!;
-      user = await ensureConfiguredAdminRecord(adminCfg.email, adminCfg.password);
+      const adminCfg = getConfiguredAdminCredentials();
+      const adminEmail =
+        adminCfg && (email === "admin" || email === "administrator")
+          ? adminCfg.email
+          : email;
+      user = await ensureConfiguredAdminRecord(adminEmail, password);
     } else {
+      if (email === "admin" || email === "administrator") {
+        performDummyPasswordCheck(password);
+        const status = diagnoseAdminConfigStatus();
+        return NextResponse.json(
+          {
+            error:
+              status === "email_only"
+                ? "Production muhitida admin paroli topilmadi (ADMIN_PASSWORD faqat Preview da qolgan bo‘lishi mumkin)."
+                : status === "password_only"
+                ? "Production muhitida admin email topilmadi. To‘liq email bilan kiring."
+                : "Qisqa 'admin' login uchun ADMIN_SECRET sozlanmagan; iltimos to‘liq admin emailingiz bilan kiring.",
+          },
+          { status: 401 }
+        );
+      }
       const db = await getDb();
       const found = await db.queryOne<DbUser>(
         "SELECT * FROM users WHERE email = $1 AND role <> 'admin'",

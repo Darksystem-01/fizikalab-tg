@@ -472,7 +472,7 @@ async function ensureSchemaAndSeed() {
   const assignCountRow = await adapter.queryOne<{ cnt: number | string }>(
     "SELECT COUNT(*) AS cnt FROM assignments"
   );
-  if (Number(assignCountRow?.cnt || 0) === 0 && admin) {
+  if (Number(assignCountRow?.cnt || 0) === 0) {
     const now = new Date().toISOString();
     const initialAssignments = [
       {
@@ -557,7 +557,7 @@ async function ensureSchemaAndSeed() {
           a.description,
           a.target_params_json,
           a.tolerance_pct,
-          admin.id,
+          admin ? admin.id : null,
           null,
           now,
         ]
