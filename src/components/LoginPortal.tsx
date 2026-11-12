@@ -18,7 +18,6 @@ import {
   Sparkles,
   UserPlus,
   Wrench,
-  X,
 } from "lucide-react";
 
 const MODULES = [
@@ -71,7 +70,11 @@ interface PendingGoogleProfile {
 export function LoginPortal() {
   const router = useRouter();
   const [tab, setTab] = useState<"login" | "register">("login");
-  const [fullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState(() => {
+    if (typeof window === "undefined") return "";
+    const p = new URLSearchParams(window.location.search);
+    return p.get("name") || "";
+  });
   const [university, setUniversity] = useState("");
   const [faculty, setFaculty] = useState("");
   const [studentGroup, setStudentGroup] = useState("");
@@ -79,14 +82,27 @@ export function LoginPortal() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const p = new URLSearchParams(window.location.search);
+    return p.get("google_error") || null;
+  });
   const [phase, setPhase] = useState(0);
 
   // Google OAuth state
   const [googleClientId, setGoogleClientId] = useState<string>("");
-  const [pendingGoogleUser, setPendingGoogleUser] = useState<PendingGoogleProfile | null>(null);
-  const [googleModalOpen, setGoogleModalOpen] = useState(false);
-  const [manualToken, setManualToken] = useState("");
+  const [pendingGoogleUser, setPendingGoogleUser] = useState<PendingGoogleProfile | null>(() => {
+    if (typeof window === "undefined") return null;
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("google_onboarding") === "1") {
+      return {
+        email: p.get("email") || "",
+        fullName: p.get("name") || "",
+        googleId: p.get("google_id") || "",
+      };
+    }
+    return null;
+  });
   const gisMountedRef = useRef(false);
 
   useEffect(() => {
@@ -148,7 +164,6 @@ export function LoginPortal() {
           if (data.fullName) {
             setFullName(data.fullName);
           }
-          setGoogleModalOpen(false);
           setLoading(false);
           return;
         }
@@ -207,14 +222,29 @@ export function LoginPortal() {
   }, [googleClientId, processGoogleAuth]);
 
   function handleGoogleButtonClick() {
+    setLoading(true);
+    // 1. If Google Identity Services prompt is initialized in browser, open One Tap
     if (typeof window !== "undefined" && window.google?.accounts?.id && googleClientId) {
       try {
-        window.google.accounts.id.prompt();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        window.google.accounts.id.prompt((notification: any) => {
+          if (notification && (notification.isNotDisplayed?.() || notification.isSkippedMoment?.())) {
+            // If One Tap cannot be displayed (e.g. adblock or origin restriction), redirect to OAuth start
+            // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+            window.location.assign("/api/auth/google/start");
+          }
+        });
+        setLoading(false);
+        return;
       } catch {
-        setGoogleModalOpen(true);
+        // fall through to redirect
       }
-    } else {
-      setGoogleModalOpen(true);
+    }
+
+    // 2. Direct official Google OAuth 2.0 flow
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      window.location.assign("/api/auth/google/start");
     }
   }
 
@@ -594,6 +624,19 @@ export function LoginPortal() {
                     id="google-gis-button-slot"
                     className="flex justify-center empty:hidden"
                   />
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTab("login");
+                        setEmail("tolqinovmahmudjon72@gmail.com");
+                        setError(null);
+                      }}
+                      className="text-[11px] text-slate-500 hover:text-[#1E3A8A] underline cursor-pointer"
+                    >
+                      Bosh Administrator (tolqinovmahmudjon72@gmail.com) sifatida kirish
+                    </button>
+                  </div>
                 </div>
 
                 {/* Divider */}
@@ -711,79 +754,6 @@ export function LoginPortal() {
           </div>
         </div>
       </main>
-
-      {/* Google Sign-in Verification Modal (When GIS prompt needs token input or direct connection) */}
-      {googleModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xl">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                <GoogleIcon className="h-4 w-4" />
-                Google orqali kirish
-              </div>
-              <button
-                type="button"
-                onClick={() => setGoogleModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="mt-4 space-y-3 text-xs text-slate-600">
-              <p>
-                Google hisobingiz xavfsiz OAuth 2.0 protokoli orqali tekshiriladi.
-                Agar brauzeringizda Google Identity Services avtomatik ochilmagan bo‘lsa,
-                Google ID token yoki kirish tokenini quyiga kiritib tizimga kirishingiz mumkin:
-              </p>
-
-              <div>
-                <label className="mb-1 block font-semibold text-slate-700">
-                  Google Token (ID token yoki Access token)
-                </label>
-                <textarea
-                  rows={3}
-                  value={manualToken}
-                  onChange={(e) => setManualToken(e.target.value)}
-                  placeholder="eyJhbGciOiJSUzI1NiIsImtpZCI6..."
-                  className="w-full rounded-md border border-slate-300 font-mono text-[11px] p-2 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
-                />
-              </div>
-
-              {error && (
-                <div className="rounded-md border border-red-200 bg-red-50 p-2 text-red-800">
-                  {error}
-                </div>
-              )}
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setGoogleModalOpen(false)}
-                  className="rounded-md border border-slate-300 px-3 py-1.5 font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
-                >
-                  Yopish
-                </button>
-                <button
-                  type="button"
-                  disabled={loading || !manualToken.trim()}
-                  onClick={() => {
-                    const token = manualToken.trim();
-                    if (token.startsWith("ya29.")) {
-                      processGoogleAuth({ accessToken: token });
-                    } else {
-                      processGoogleAuth({ credential: token });
-                    }
-                  }}
-                  className="rounded-md bg-[#1E3A8A] px-4 py-1.5 font-semibold text-white shadow-xs hover:bg-[#172554] disabled:opacity-50 cursor-pointer"
-                >
-                  {loading ? "Tekshirilmoqda..." : "Tasdiqlash & Kirish"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <footer className="border-t border-slate-200 bg-white px-6 py-3 text-center text-[11px] text-slate-500">
         FizikaLab · Akademik Virtual Fizika Laboratoriyasi

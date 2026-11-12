@@ -582,6 +582,13 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
   assert.equal(gGetRes.status, 200);
   const gGetData = await gGetRes.json();
   assert.equal(gGetData.enabled, true);
+  assert.ok(gGetData.clientId);
+
+  // 3b. Google Start route redirects to Google OAuth accounts.google.com
+  const gStartRes = await fetch(`${baseUrl}/api/auth/google/start`, { redirect: "manual" });
+  assert.equal(gStartRes.status, 302);
+  const startLoc = gStartRes.headers.get("location");
+  assert.match(startLoc, /accounts\.google\.com/);
 
   // 4. Google Auth: Bosh Administrator sign-in (tolqinovmahmudjon72@gmail.com)
   const gAdminRes = await fetch(`${baseUrl}/api/auth/google`, {
@@ -591,7 +598,7 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
       mockGoogleUser: {
         email: "tolqinovmahmudjon72@gmail.com",
         name: "Mahmudjon Tolqinov",
-        googleId: "google-admin-10001",
+        googleId: `google-admin-${Date.now()}`,
         emailVerified: true,
       },
     }),
@@ -610,7 +617,9 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
   assert.equal(gAdminOv.status, 200);
 
   // 5. Google Auth: New student needs academic profile first
-  const newGoogleEmail = `student.google.${Date.now()}@example.com`;
+  const testTs = Date.now();
+  const newGoogleEmail = `student.google.${testTs}@example.com`;
+  const newGoogleId = `google-stud-${testTs}`;
   const gNewStudentRes1 = await fetch(`${baseUrl}/api/auth/google`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -618,7 +627,7 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
       mockGoogleUser: {
         email: newGoogleEmail,
         name: "Google Yangi Talaba",
-        googleId: "google-stud-5501",
+        googleId: newGoogleId,
         emailVerified: true,
       },
     }),
@@ -636,7 +645,7 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
       mockGoogleUser: {
         email: newGoogleEmail,
         name: "Google Yangi Talaba",
-        googleId: "google-stud-5501",
+        googleId: newGoogleId,
         emailVerified: true,
       },
       university: "Toshkent Axborot Texnologiyalari Universiteti (TATU)",
@@ -659,7 +668,7 @@ test("8. Strict Email Sanitization, Validation & Google OAuth Sign-in flow", asy
       mockGoogleUser: {
         email: newGoogleEmail,
         name: "Google Yangi Talaba",
-        googleId: "google-stud-5501",
+        googleId: newGoogleId,
         emailVerified: true,
       },
     }),

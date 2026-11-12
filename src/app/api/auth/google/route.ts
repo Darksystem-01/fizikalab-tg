@@ -16,11 +16,13 @@ import { findUniversity, isValidFacultyForUniversity } from "@/lib/universities"
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import crypto from "crypto";
 
+export const DEFAULT_GOOGLE_CLIENT_ID =
+  process.env.GOOGLE_CLIENT_ID ||
+  process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+  "1094080295210-1nrn1j6spn5cse3n493ufavftdcj2mjc.apps.googleusercontent.com";
+
 export async function GET() {
-  const clientId =
-    process.env.GOOGLE_CLIENT_ID ||
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-    "";
+  const clientId = DEFAULT_GOOGLE_CLIENT_ID;
 
   return NextResponse.json({
     clientId,
