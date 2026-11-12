@@ -73,8 +73,8 @@ export function LoginPortal() {
         return;
       }
       const role = data.user?.role;
-      if (role === "admin") {
-        router.push("/admin");
+      if (role === "admin" || role === "darksystem") {
+        router.push("/darksystem");
       } else if (role === "teacher") {
         router.push("/teacher");
       } else {

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getSessionUser, type SessionPayload } from "./auth";
 
 export async function requirePageUser(): Promise<{
@@ -11,21 +11,28 @@ export async function requirePageUser(): Promise<{
   return { user };
 }
 
+export async function requirePageDarksystem(): Promise<{
+  user: SessionPayload;
+}> {
+  const user = await getSessionUser();
+  if (!user || (user.role !== "admin" && user.role !== "darksystem")) {
+    notFound();
+  }
+  return { user };
+}
+
 export async function requirePageAdmin(): Promise<{
   user: SessionPayload;
 }> {
-  const { user } = await requirePageUser();
-  if (user.role !== "admin") {
-    redirect(user.role === "teacher" ? "/teacher" : "/labs/metrology");
-  }
-  return { user };
+  // Stealth: /admin path is disabled by design. Always returns 404 Not Found to prevent reconnaissance.
+  notFound();
 }
 
 export async function requirePageTeacher(): Promise<{
   user: SessionPayload;
 }> {
   const { user } = await requirePageUser();
-  if (user.role !== "teacher" && user.role !== "admin") {
+  if (user.role !== "teacher" && user.role !== "admin" && user.role !== "darksystem") {
     redirect("/labs/metrology");
   }
   return { user };

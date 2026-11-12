@@ -122,7 +122,7 @@ export function AdminDashboard() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/overview");
+      const res = await fetch("/api/darksystem/overview");
       if (res.ok) {
         const json = (await res.json()) as AdminOverviewData;
         setData(json);
@@ -168,7 +168,7 @@ export function AdminDashboard() {
     setNotice(null);
     setCreatedSnippet(null);
 
-    const res = await fetch("/api/admin/users", {
+    const res = await fetch("/api/darksystem/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -206,7 +206,7 @@ export function AdminDashboard() {
   async function toggleUserBan(userId: number, isBanned: number, isActive: number) {
     setNotice(null);
     const currentlyBanned = isBanned === 1 || isActive !== 1;
-    const res = await fetch("/api/admin/users", {
+    const res = await fetch("/api/darksystem/users", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, isBanned: !currentlyBanned }),
@@ -225,7 +225,7 @@ export function AdminDashboard() {
 
   async function deleteUser(userId: number, fullName: string) {
     setNotice(null);
-    const res = await fetch(`/api/admin/users?userId=${userId}`, {
+    const res = await fetch(`/api/darksystem/users?userId=${userId}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -240,7 +240,7 @@ export function AdminDashboard() {
   async function submitGrade(reportId: number) {
     setNotice(null);
     const gradeNum = Number(grades[reportId] ?? 0);
-    const res = await fetch(`/api/admin/reports/${reportId}`, {
+    const res = await fetch(`/api/darksystem/reports/${reportId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

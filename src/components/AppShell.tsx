@@ -22,11 +22,11 @@ import {
 } from "lucide-react";
 
 export interface NavUser {
-  userId?: number;
-  id?: number;
+  userId?: number | string;
+  id?: number | string;
   fullName: string;
   email: string;
-  role: "admin" | "teacher" | "student";
+  role: "admin" | "darksystem" | "teacher" | "student";
   studentGroup: string;
   university?: string;
   faculty?: string;
@@ -82,8 +82,8 @@ export function AppShell({
         <div className="mb-4 border-b border-slate-200 pb-3 px-1">
           <Link
             href={
-              user.role === "admin"
-                ? "/admin"
+              user.role === "admin" || user.role === "darksystem"
+                ? "/darksystem"
                 : user.role === "teacher"
                 ? "/teacher"
                 : "/labs/metrology"
@@ -150,24 +150,26 @@ export function AppShell({
           })}
         </nav>
 
-        {(user.role === "admin" || user.role === "teacher") && (
+        {(user.role === "admin" || user.role === "darksystem" || user.role === "teacher") && (
           <>
             <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              {user.role === "admin" ? "Ma’muriyat & Ustozlar" : "O‘qituvchi Paneli"}
+              {user.role === "admin" || user.role === "darksystem"
+                ? "Boshqaruv & Ustozlar"
+                : "O‘qituvchi Paneli"}
             </div>
             <nav className="space-y-0.5">
-              {user.role === "admin" && (
+              {(user.role === "admin" || user.role === "darksystem") && (
                 <Link
-                  href="/admin"
+                  href="/darksystem"
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-colors border-l-2 ${
-                    pathname === "/admin"
+                    pathname === "/darksystem"
                       ? "border-blue-900 bg-white text-blue-900 font-semibold shadow-2xs"
                       : "border-transparent text-slate-700 hover:bg-white hover:text-slate-900"
                   }`}
                 >
                   <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                  <span>Administrator Paneli</span>
+                  <span>Darksystem Boshqaruvi</span>
                 </Link>
               )}
               <Link
@@ -191,24 +193,32 @@ export function AppShell({
         <div className="mb-2">
           <div className="flex items-center justify-between gap-2">
             <span className="truncate text-xs font-semibold text-slate-900">
-              {user.fullName}
+              {user.role === "admin" || user.role === "darksystem"
+                ? "Bosh Administrator"
+                : user.fullName}
             </span>
             <span
               className={`px-1.5 py-0.5 text-[10px] font-semibold uppercase border ${
-                user.role === "admin"
+                user.role === "admin" || user.role === "darksystem"
                   ? "border-blue-900 text-blue-900 bg-blue-50"
                   : user.role === "teacher"
                   ? "border-emerald-700 text-emerald-800 bg-emerald-50"
                   : "border-slate-300 text-slate-700 bg-slate-50"
               }`}
             >
-              {roleLabel}
+              {user.role === "admin" || user.role === "darksystem" ? "DARKSYSTEM" : roleLabel}
             </span>
           </div>
           <div className="truncate text-[11px] text-slate-500">
-            {[user.university, user.studentGroup].filter(Boolean).join(" · ") || user.email}
+            {user.role === "admin" || user.role === "darksystem"
+              ? "Maxsus Himoyalangan Konsol"
+              : [user.university, user.studentGroup].filter(Boolean).join(" · ") || user.email}
           </div>
-          <div className="truncate text-[10px] text-slate-400">{user.email}</div>
+          <div className="truncate text-[10px] text-slate-400">
+            {user.role === "admin" || user.role === "darksystem"
+              ? "ID: [HIMOYALANGAN]"
+              : user.email}
+          </div>
         </div>
         <button
           type="button"

@@ -1,9 +1,10 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
 
-export type UserRole = "admin" | "teacher" | "student";
+export type UserRole = "admin" | "darksystem" | "teacher" | "student";
 
 export interface SessionPayload {
+  sessionId?: string;
   userId: number;
   email: string;
   fullName: string;
@@ -11,6 +12,7 @@ export interface SessionPayload {
   studentGroup: string;
   university?: string;
   faculty?: string;
+  issuedAt?: number;
   exp: number;
 }
 
@@ -358,38 +360,55 @@ export function performDummyPasswordCheck(password: string): void {
   crypto.scryptSync(password || "dummy", dummySalt, 64);
 }
 
-export function signSessionToken(payload: Omit<SessionPayload, "exp">): string {
+function getEncryptionKey(): Buffer {
+  const secret = getAuthSecret();
+  return crypto.createHash("sha256").update(`fizikalab-aes256gcm:${secret}`).digest();
+}
+
+export function signSessionToken(
+  payload: Omit<SessionPayload, "sessionId" | "issuedAt" | "exp">
+): string {
+  const isDarksystem = payload.role === "admin" || payload.role === "darksystem";
+  const role: UserRole = isDarksystem ? "darksystem" : payload.role;
+
   const full: SessionPayload = {
     ...payload,
+    sessionId: crypto.randomUUID(),
+    role,
+    email: isDarksystem ? "darksystem@internal" : payload.email,
+    fullName: isDarksystem ? "Darksystem Administrator" : payload.fullName,
+    issuedAt: Date.now(),
     exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
   };
-  const data = Buffer.from(JSON.stringify(full), "utf8").toString("base64url");
-  const sig = crypto
-    .createHmac("sha256", getAuthSecret())
-    .update(data)
-    .digest("base64url");
-  return `${data}.${sig}`;
+
+  const key = getEncryptionKey();
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+  const plainText = Buffer.from(JSON.stringify(full), "utf8");
+  const encrypted = Buffer.concat([cipher.update(plainText), cipher.final()]);
+  const tag = cipher.getAuthTag();
+
+  return `enc.${iv.toString("base64url")}.${encrypted.toString("base64url")}.${tag.toString("base64url")}`;
 }
 
 export function verifySessionToken(token: string | undefined): SessionPayload | null {
-  if (!token) return null;
-  const parts = token.split(".");
-  if (parts.length !== 2) return null;
-  const [data, sig] = parts;
-  const expectedSig = crypto
-    .createHmac("sha256", getAuthSecret())
-    .update(data)
-    .digest("base64url");
-  const sigBuf = Buffer.from(sig);
-  const expBuf = Buffer.from(expectedSig);
-  if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
-    return null;
-  }
+  if (!token || !token.startsWith("enc.")) return null;
+  const parts = token.slice(4).split(".");
+  if (parts.length !== 3) return null;
+  const [ivB64, cipherB64, tagB64] = parts;
   try {
-    const parsed = JSON.parse(Buffer.from(data, "base64url").toString("utf8")) as SessionPayload;
+    const key = getEncryptionKey();
+    const iv = Buffer.from(ivB64, "base64url");
+    const encrypted = Buffer.from(cipherB64, "base64url");
+    const tag = Buffer.from(tagB64, "base64url");
+    const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+    decipher.setAuthTag(tag);
+    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    const parsed = JSON.parse(decrypted.toString("utf8")) as SessionPayload;
     if (!parsed.exp || parsed.exp < Date.now()) return null;
     if (
       parsed.role !== "admin" &&
+      parsed.role !== "darksystem" &&
       parsed.role !== "teacher" &&
       parsed.role !== "student"
     ) {
@@ -399,6 +418,11 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
   } catch {
     return null;
   }
+}
+
+export function shouldRotateSession(payload: SessionPayload): boolean {
+  if (!payload.issuedAt) return true;
+  return Date.now() - payload.issuedAt > 30_000;
 }
 
 export async function getSessionUser(): Promise<SessionPayload | null> {
@@ -413,8 +437,10 @@ export async function getSessionUser(): Promise<SessionPayload | null> {
     return null;
   }
 
-  // Sole administrator must always match configured admin credentials or owner HMAC
-  if (dbUser.role === "admin") {
+  const isDarksystem = dbUser.role === "admin" || payload.role === "darksystem";
+
+  // Sole administrator / darksystem must always match configured admin credentials or owner HMAC
+  if (isDarksystem) {
     const cfg = getConfiguredAdminCredentials();
     const matchesEnv =
       cfg !== null && timingSafeStringEqual(dbUser.email.toLowerCase(), cfg.email);
@@ -425,13 +451,15 @@ export async function getSessionUser(): Promise<SessionPayload | null> {
   }
 
   return {
+    sessionId: payload.sessionId,
     userId: dbUser.id,
-    email: dbUser.email,
-    fullName: dbUser.full_name,
-    role: dbUser.role,
+    email: isDarksystem ? "darksystem@internal" : dbUser.email,
+    fullName: isDarksystem ? "Darksystem Administrator" : dbUser.full_name,
+    role: isDarksystem ? "darksystem" : dbUser.role,
     studentGroup: dbUser.student_group,
     university: dbUser.university || "",
     faculty: dbUser.faculty || "",
+    issuedAt: payload.issuedAt,
     exp: payload.exp,
   };
 }

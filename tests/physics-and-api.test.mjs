@@ -89,8 +89,17 @@ test("1. Health check non-leakage, security headers, formula catalog >= 100, and
   });
   assert.equal(simUnauth.status, 401);
 
-  const adminUnauth = await fetch(`${baseUrl}/api/admin/overview`);
-  assert.equal(adminUnauth.status, 403);
+  const adminUnauth = await fetch(`${baseUrl}/api/darksystem/overview`);
+  assert.equal(adminUnauth.status, 404, "Unauth darksystem API must return 404 Not Found");
+
+  const adminOldApi = await fetch(`${baseUrl}/api/admin/overview`);
+  assert.equal(adminOldApi.status, 404, "Deprecated /api/admin/* must return 404 Not Found");
+
+  const darksystemPageUnauth = await fetch(`${baseUrl}/darksystem`);
+  assert.equal(darksystemPageUnauth.status, 404, "Unauth /darksystem page must return 404 Not Found");
+
+  const adminPageDead = await fetch(`${baseUrl}/admin`);
+  assert.equal(adminPageDead.status, 404, "Deprecated /admin page must return 404 Not Found");
 
   const teacherUnauth = await fetch(`${baseUrl}/api/teacher/overview`);
   assert.equal(teacherUnauth.status, 403);
@@ -139,11 +148,16 @@ test("2. Student registration validation (university/faculty/group), role lock, 
   sharedStudentCookie = extractSessionCookie(regRes);
   assert.ok(sharedStudentCookie.startsWith("fizikalab_session="));
 
-  // Student blocked from admin & teacher endpoints
-  const forbiddenAdmin = await fetch(`${baseUrl}/api/admin/overview`, {
+  // Student blocked from darksystem & teacher endpoints (stealth 404 for darksystem)
+  const forbiddenAdmin = await fetch(`${baseUrl}/api/darksystem/overview`, {
     headers: { Cookie: sharedStudentCookie },
   });
-  assert.equal(forbiddenAdmin.status, 403);
+  assert.equal(forbiddenAdmin.status, 404);
+
+  const forbiddenAdminOld = await fetch(`${baseUrl}/api/admin/overview`, {
+    headers: { Cookie: sharedStudentCookie },
+  });
+  assert.equal(forbiddenAdminOld.status, 404);
 
   const forbiddenTeacher = await fetch(`${baseUrl}/api/teacher/overview`, {
     headers: { Cookie: sharedStudentCookie },
@@ -319,8 +333,15 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
     }),
   });
   assert.equal(loginRes.status, 200);
+  const loginData = await loginRes.json();
+  assert.equal(loginData.user.role, "darksystem", "Admin role must be darksystem in response");
+  assert.equal(loginData.user.email, "darksystem@internal", "Real email must never be exposed to frontend");
   const adminCookie = extractSessionCookie(loginRes);
   assert.ok(adminCookie.startsWith("fizikalab_session="));
+  const rawCookieVal = adminCookie.replace("fizikalab_session=", "").split(";")[0];
+  assert.ok(rawCookieVal.startsWith("enc."), "Cookie must be opaque AES-256-GCM encrypted");
+  assert.ok(!rawCookieVal.includes("email"), "Opaque cookie must not leak plaintext email");
+  assert.ok(!rawCookieVal.includes("darksystem"), "Opaque cookie must not leak plaintext role");
 
   // Also verify 'admin' alias login with password
   const adminAliasRes = await fetch(`${baseUrl}/api/auth/login`, {
@@ -333,9 +354,15 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
   });
   assert.equal(adminAliasRes.status, 200);
 
-  // Admin creates a teacher account
+  // Admin access to /darksystem page must succeed (200)
+  const darksystemPageRes = await fetch(`${baseUrl}/darksystem`, {
+    headers: { Cookie: adminCookie },
+  });
+  assert.equal(darksystemPageRes.status, 200);
+
+  // Admin creates a teacher account via /api/darksystem/users
   const teacherEmail = `ustoz_${Date.now()}@example.test`;
-  const createTeacherRes = await fetch(`${baseUrl}/api/admin/users`, {
+  const createTeacherRes = await fetch(`${baseUrl}/api/darksystem/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Cookie: adminCookie },
     body: JSON.stringify({
@@ -364,17 +391,17 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
   assert.equal(tLoginRes.status, 200);
   const teacherCookie = extractSessionCookie(tLoginRes);
 
-  // Teacher CANNOT access /api/admin/* or /admin page
-  const tForbiddenAdminApi = await fetch(`${baseUrl}/api/admin/overview`, {
+  // Teacher CANNOT access /api/darksystem/* or /darksystem page -> MUST BE 404 (stealth)
+  const tForbiddenAdminApi = await fetch(`${baseUrl}/api/darksystem/overview`, {
     headers: { Cookie: teacherCookie },
   });
-  assert.equal(tForbiddenAdminApi.status, 403);
+  assert.equal(tForbiddenAdminApi.status, 404, "Teacher hitting /api/darksystem/* must get 404 Not Found");
 
-  const tForbiddenAdminPage = await fetch(`${baseUrl}/admin`, {
+  const tForbiddenAdminPage = await fetch(`${baseUrl}/darksystem`, {
     headers: { Cookie: teacherCookie },
     redirect: "manual",
   });
-  assert.equal(tForbiddenAdminPage.status, 307);
+  assert.equal(tForbiddenAdminPage.status, 404, "Teacher hitting /darksystem page must get 404 Not Found");
 
   // Teacher CAN access /teacher page and /api/teacher/overview
   const teacherPage = await fetch(`${baseUrl}/teacher`, {
@@ -431,7 +458,7 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
   assert.equal(gradeRes.status, 200);
 
   // Admin bans the student and confirms existing session cookie is immediately invalidated
-  const adminOvRes = await fetch(`${baseUrl}/api/admin/overview`, {
+  const adminOvRes = await fetch(`${baseUrl}/api/darksystem/overview`, {
     headers: { Cookie: adminCookie },
   });
   assert.equal(adminOvRes.status, 200);
@@ -439,7 +466,7 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
   const studentRow = adminOv.users.find((u) => u.email === sharedStudentEmail);
   assert.ok(studentRow);
 
-  const banRes = await fetch(`${baseUrl}/api/admin/users`, {
+  const banRes = await fetch(`${baseUrl}/api/darksystem/users`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", Cookie: adminCookie },
     body: JSON.stringify({ userId: studentRow.id, isBanned: true }),
@@ -453,13 +480,13 @@ test("3. Three-tier RBAC: Sole Admin -> Teacher creation -> Teacher group & grad
   assert.equal(meAfterBan.status, 401);
 
   // Admin deletes test teacher and test student
-  const delStudent = await fetch(`${baseUrl}/api/admin/users?userId=${studentRow.id}`, {
+  const delStudent = await fetch(`${baseUrl}/api/darksystem/users?userId=${studentRow.id}`, {
     method: "DELETE",
     headers: { Cookie: adminCookie },
   });
   assert.equal(delStudent.status, 200);
 
-  const delTeacher = await fetch(`${baseUrl}/api/admin/users?userId=${createdTeacher.id}`, {
+  const delTeacher = await fetch(`${baseUrl}/api/darksystem/users?userId=${createdTeacher.id}`, {
     method: "DELETE",
     headers: { Cookie: adminCookie },
   });

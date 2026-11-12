@@ -104,24 +104,33 @@ export async function POST(req: Request) {
       user = found;
     }
 
+    const isDarksystem = user.role === "admin";
+    const clientRole = isDarksystem ? "darksystem" : user.role;
+    const clientEmail = isDarksystem ? "darksystem@internal" : user.email;
+    const clientFullName = isDarksystem ? "Darksystem Administrator" : user.full_name;
+
     const token = signSessionToken({
       userId: user.id,
-      email: user.email,
-      fullName: user.full_name,
-      role: user.role,
+      email: clientEmail,
+      fullName: clientFullName,
+      role: clientRole,
       studentGroup: user.student_group,
       university: user.university || "",
       faculty: user.faculty || "",
     });
 
-    await writeAuditLog(user.id, "LOGIN", `${user.email} (${user.role}) tizimga kirdi`);
+    await writeAuditLog(
+      user.id,
+      "LOGIN",
+      `${isDarksystem ? "Darksystem Administrator" : user.email} (${clientRole}) tizimga kirdi`
+    );
 
     const res = NextResponse.json({
       user: {
-        id: user.id,
-        fullName: user.full_name,
-        email: user.email,
-        role: user.role,
+        id: isDarksystem ? crypto.randomUUID() : user.id,
+        fullName: clientFullName,
+        email: clientEmail,
+        role: clientRole,
         studentGroup: user.student_group,
         university: user.university || "",
         faculty: user.faculty || "",
