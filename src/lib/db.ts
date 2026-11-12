@@ -82,10 +82,22 @@ export interface DbAuditLog {
 
 export type DbBackendKind = "postgres" | "sqlite-local" | "sqlite-tmp";
 
-const POSTGRES_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+export function getPostgresUrl(): string {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.STORAGE_URL ||
+    process.env.STORAGE_DATABASE_URL ||
+    process.env.STORAGE_POSTGRES_URL ||
+    process.env.STORAGE_POSTGRES_PRISMA_URL ||
+    process.env.NEON_DATABASE_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    ""
+  );
+}
 
 export function getDbBackendKind(): DbBackendKind {
-  if (POSTGRES_URL) return "postgres";
+  if (getPostgresUrl()) return "postgres";
   if (process.env.VERCEL) return "sqlite-tmp";
   return "sqlite-local";
 }
@@ -106,12 +118,13 @@ function convertPlaceholdersToSqlite(sql: string): string {
 }
 
 async function getAdapter(): Promise<DbAdapter> {
-  if (POSTGRES_URL) {
+  const pgUrl = getPostgresUrl();
+  if (pgUrl) {
     if (!pgPool) {
       const { Pool } = await import("pg");
       pgPool = new Pool({
-        connectionString: POSTGRES_URL,
-        ssl: POSTGRES_URL.includes("localhost")
+        connectionString: pgUrl,
+        ssl: pgUrl.includes("localhost")
           ? false
           : { rejectUnauthorized: false },
       });
@@ -279,7 +292,7 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
 
 async function ensureSchemaAndSeed() {
   const adapter = await getAdapter();
-  const isPg = Boolean(POSTGRES_URL);
+  const isPg = Boolean(getPostgresUrl());
 
   const schemaStatements = isPg
     ? [
