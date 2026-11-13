@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Compass,
   FileText,
+  FlaskConical,
   Gauge,
   GraduationCap,
   LogOut,
@@ -47,6 +48,7 @@ const NAV_ITEMS = [
 ];
 
 const SECONDARY_ITEMS = [
+  { href: "/interactive-labs", label: "16 ta Interaktiv Stendlar", icon: FlaskConical },
   { href: "/practice", label: "400 ta Masala & Mashqlar", icon: CheckCircle2 },
   { href: "/instruments", label: "75 ta Qurilma Katalogi", icon: Wrench },
   { href: "/reference", label: "100+ Formulalar & CODATA", icon: BookOpen },

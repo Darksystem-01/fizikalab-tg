@@ -30,6 +30,8 @@ export function KinematicsLab() {
 
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
+  const [showComponents, setShowComponents] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -388,7 +390,31 @@ export function KinematicsLab() {
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Stend" : "📐 Akademik To‘r"}
+                    </button>
+                    {mode === "projectile" && (
+                      <button
+                        type="button"
+                        onClick={() => setShowComponents((c) => !c)}
+                        className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium transition cursor-pointer ${
+                          showComponents
+                            ? "border-blue-600 bg-blue-50 text-blue-900 font-semibold"
+                            : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        {showComponents ? "Vektorlar (vx, vy)" : "Oddiy |v|"}
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => setPlaying((p) => !p)}
@@ -411,15 +437,75 @@ export function KinematicsLab() {
                   </div>
                 </div>
 
-                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2">
-                  <svg viewBox="0 0 640 230" className="h-56 w-full">
+                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+                  <svg viewBox="0 0 640 230" className="h-60 w-full select-none">
                     <defs>
-                      <marker id="kinArrRed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                        <path d="M0,0 L0,6 L6,3 z" fill="#B91C1C" />
+                      <marker id="kinArrRed" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                        <path d="M0,1 L0,7 L7,4 z" fill="#DC2626" />
+                      </marker>
+                      <marker id="kinArrGreen" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                        <path d="M0,1 L0,7 L7,4 z" fill="#16A34A" />
+                      </marker>
+                      <marker id="kinArrCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                        <path d="M0,1 L0,7 L7,4 z" fill="#0284C7" />
+                      </marker>
+                      <marker id="kinArrOrange" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                        <path d="M0,1 L0,7 L7,4 z" fill="#EA580C" />
                       </marker>
                       <marker id="kinArrBlue" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
                         <path d="M0,0 L0,6 L6,3 z" fill="#1E3A8A" />
                       </marker>
+
+                      {/* 3D Specular Shaded Cannonball */}
+                      <radialGradient id="cannonBallGrad" cx="35%" cy="30%" r="65%" fx="28%" fy="25%">
+                        <stop offset="0%" stopColor="#FFFFFF" />
+                        <stop offset="20%" stopColor="#93C5FD" />
+                        <stop offset="55%" stopColor="#1E3A8A" />
+                        <stop offset="85%" stopColor="#0F172A" />
+                        <stop offset="100%" stopColor="#020617" />
+                      </radialGradient>
+
+                      {/* Metallic Cannon Gradient */}
+                      <linearGradient id="cannonMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#64748B" />
+                        <stop offset="35%" stopColor="#CBD5E1" />
+                        <stop offset="70%" stopColor="#475569" />
+                        <stop offset="100%" stopColor="#1E293B" />
+                      </linearGradient>
+
+                      {/* Cannon Brass Trim */}
+                      <linearGradient id="cannonBrass" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FDE047" />
+                        <stop offset="50%" stopColor="#CA8A04" />
+                        <stop offset="100%" stopColor="#854D0E" />
+                      </linearGradient>
+
+                      {/* Realistic Sky Gradient */}
+                      <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#EFF6FF" />
+                        <stop offset="65%" stopColor="#F8FAFC" />
+                        <stop offset="100%" stopColor="#F1F5F9" />
+                      </linearGradient>
+
+                      {/* Realistic Ground Grass to Soil Gradient */}
+                      <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#22C55E" />
+                        <stop offset="22%" stopColor="#16A34A" />
+                        <stop offset="40%" stopColor="#78350F" />
+                        <stop offset="100%" stopColor="#451A03" />
+                      </linearGradient>
+
+                      {/* Ruler Ticks Pattern */}
+                      <pattern id="rulerTicks" width="20" height="8" patternUnits="userSpaceOnUse">
+                        <line x1="0" y1="0" x2="0" y2="8" stroke="#475569" strokeWidth="1" />
+                        <line x1="5" y1="0" x2="5" y2="4" stroke="#94A3B8" strokeWidth="0.8" />
+                        <line x1="10" y1="0" x2="10" y2="6" stroke="#64748B" strokeWidth="0.8" />
+                        <line x1="15" y1="0" x2="15" y2="4" stroke="#94A3B8" strokeWidth="0.8" />
+                      </pattern>
+
+                      <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="2.5" />
+                      </filter>
                     </defs>
                     {(() => {
                       const padL = 46;
@@ -501,7 +587,7 @@ export function KinematicsLab() {
                                 markerEnd="url(#kinArrRed)"
                               />
                             )}
-                            <circle cx={300} cy={cy} r={10} fill="#1E3A8A" stroke="#FFFFFF" strokeWidth="2" />
+                            <circle cx={300} cy={cy} r={10} fill="url(#cannonBallGrad)" stroke="#FFFFFF" strokeWidth="1.5" />
                             <text x={324} y={cy - 2} fontSize="11" fill="#1E3A8A" fontFamily="monospace" fontWeight="700">
                               h = {activePt ? activePt.y.toFixed(2) : y0} m
                             </text>
@@ -512,6 +598,7 @@ export function KinematicsLab() {
                         );
                       }
 
+                      // Mode: Projectile (Ballistic)
                       const maxX = Math.max(2, ...pts.map((p) => p.x));
                       const maxY = Math.max(2, ...pts.map((p) => p.y));
                       const toX = (xv: number) => padL + (xv / maxX) * w;
@@ -531,20 +618,392 @@ export function KinematicsLab() {
 
                       return (
                         <>
-                          <line x1={padL} y1={padT + h} x2={640 - padR} y2={padT + h} stroke="#334155" strokeWidth="2" />
-                          <line x1={padL} y1={padT} x2={padL} y2={padT + h} stroke="#94A3B8" strokeWidth="1.5" />
-                          <text x={toX(maxX)} y={padT + h + 16} textAnchor="end" fontSize="9.5" fill="#475569" fontFamily="monospace">
-                            R = {result.rangeM} m
-                          </text>
-                          <text x={padL - 4} y={toY(maxY) + 4} textAnchor="end" fontSize="9.5" fill="#475569" fontFamily="monospace">
+                          {/* Realistic Sky Background if active */}
+                          {realisticView && (
+                            <rect
+                              x={padL - 10}
+                              y={padT - 10}
+                              width={w + 20}
+                              height={h + 10}
+                              fill="url(#skyGrad)"
+                              rx="6"
+                            />
+                          )}
+
+                          {/* Horizontal grid elevation lines */}
+                          {[0.25, 0.5, 0.75, 1].map((f) => (
+                            <line
+                              key={f}
+                              x1={padL}
+                              y1={toY(f * maxY)}
+                              x2={padL + w}
+                              y2={toY(f * maxY)}
+                              stroke="#E2E8F0"
+                              strokeDasharray="3 3"
+                              strokeWidth="1"
+                            />
+                          ))}
+
+                          {/* Realistic Ground and Measuring Ruler */}
+                          {realisticView ? (
+                            <>
+                              <rect
+                                x={padL - 20}
+                                y={padT + h}
+                                width={w + 40}
+                                height={padB + 10}
+                                fill="url(#groundGrad)"
+                              />
+                              <line
+                                x1={padL - 20}
+                                y1={padT + h}
+                                x2={padL + w + 20}
+                                y2={padT + h}
+                                stroke="#16A34A"
+                                strokeWidth="3"
+                              />
+                              {/* Steel measuring tape along ground */}
+                              <rect
+                                x={padL}
+                                y={padT + h + 4}
+                                width={w}
+                                height={7}
+                                fill="#FEF08A"
+                                stroke="#CA8A04"
+                                strokeWidth="0.8"
+                              />
+                              <rect
+                                x={padL}
+                                y={padT + h + 4}
+                                width={w}
+                                height={7}
+                                fill="url(#rulerTicks)"
+                              />
+                              {[0, 0.25, 0.5, 0.75, 1].map((f) => {
+                                const rx = padL + f * w;
+                                const valM = (f * maxX).toFixed(1);
+                                return (
+                                  <g key={f}>
+                                    <line
+                                      x1={rx}
+                                      y1={padT + h + 2}
+                                      x2={rx}
+                                      y2={padT + h + 14}
+                                      stroke="#0F172A"
+                                      strokeWidth="1.2"
+                                    />
+                                    <text
+                                      x={rx}
+                                      y={padT + h + 23}
+                                      textAnchor="middle"
+                                      fontSize="9"
+                                      fill="#0F172A"
+                                      fontFamily="monospace"
+                                      fontWeight="600"
+                                    >
+                                      {valM} m
+                                    </text>
+                                  </g>
+                                );
+                              })}
+                            </>
+                          ) : (
+                            <>
+                              <line
+                                x1={padL}
+                                y1={padT + h}
+                                x2={640 - padR}
+                                y2={padT + h}
+                                stroke="#334155"
+                                strokeWidth="2"
+                              />
+                              <text
+                                x={toX(maxX)}
+                                y={padT + h + 16}
+                                textAnchor="end"
+                                fontSize="9.5"
+                                fill="#475569"
+                                fontFamily="monospace"
+                              >
+                                R = {result.rangeM} m
+                              </text>
+                            </>
+                          )}
+
+                          {/* Vertical Axis Tick Labels */}
+                          <line
+                            x1={padL}
+                            y1={padT}
+                            x2={padL}
+                            y2={padT + h}
+                            stroke="#94A3B8"
+                            strokeWidth="1.5"
+                          />
+                          <text
+                            x={padL - 4}
+                            y={toY(maxY) + 4}
+                            textAnchor="end"
+                            fontSize="9.5"
+                            fill="#475569"
+                            fontFamily="monospace"
+                          >
                             {result.maxHeightM}m
                           </text>
-                          <path d={fullPath} fill="none" stroke="#CBD5E1" strokeWidth="2" strokeDasharray="4 3" />
-                          <path d={activePath} fill="none" stroke="#1E3A8A" strokeWidth="2.5" />
+
+                          {/* Full Theoretical Trajectory Path */}
+                          <path
+                            d={fullPath}
+                            fill="none"
+                            stroke={realisticView ? "#94A3B8" : "#CBD5E1"}
+                            strokeWidth={realisticView ? "2.2" : "2"}
+                            strokeDasharray="4 3"
+                          />
+
+                          {/* Active Completed Trajectory Path */}
+                          <path
+                            d={activePath}
+                            fill="none"
+                            stroke="#1E3A8A"
+                            strokeWidth={realisticView ? "3" : "2.5"}
+                          />
+
+                          {/* Apex Altitude Marker Crosshair */}
+                          {realisticView && result.maxHeightM > 0 && (
+                            <g
+                              transform={`translate(${toX(result.rangeM / 2)}, ${toY(
+                                result.maxHeightM
+                              )})`}
+                            >
+                              <line
+                                x1="-8"
+                                y1="0"
+                                x2="8"
+                                y2="0"
+                                stroke="#0284C7"
+                                strokeWidth="1"
+                                strokeDasharray="2 2"
+                              />
+                              <line
+                                x1="0"
+                                y1="-8"
+                                x2="0"
+                                y2="8"
+                                stroke="#0284C7"
+                                strokeWidth="1"
+                                strokeDasharray="2 2"
+                              />
+                              <circle
+                                cx="0"
+                                cy="0"
+                                r="3"
+                                fill="none"
+                                stroke="#0284C7"
+                                strokeWidth="1.2"
+                              />
+                              <text
+                                x="5"
+                                y="-6"
+                                fontSize="9"
+                                fill="#0284C7"
+                                fontFamily="monospace"
+                                fontWeight="bold"
+                              >
+                                H = {result.maxHeightM}m
+                              </text>
+                            </g>
+                          )}
+
+                          {/* Landing Target Flag at Range R */}
+                          {realisticView && result.rangeM > 0 && result.rangeM <= maxX && (
+                            <g transform={`translate(${toX(result.rangeM)}, ${padT + h})`}>
+                              <ellipse
+                                cx="0"
+                                cy="0"
+                                rx="9"
+                                ry="3.5"
+                                fill="#DC2626"
+                                fillOpacity="0.4"
+                                stroke="#DC2626"
+                                strokeWidth="1.2"
+                              />
+                              <ellipse cx="0" cy="0" rx="4" ry="1.8" fill="#FFFFFF" />
+                              <line x1="0" y1="0" x2="0" y2="-28" stroke="#334155" strokeWidth="1.5" />
+                              <polygon points="0,-28 16,-22 0,-16" fill="#DC2626" />
+                              <text
+                                x="3"
+                                y="-31"
+                                fontSize="9"
+                                fill="#DC2626"
+                                fontFamily="monospace"
+                                fontWeight="bold"
+                              >
+                                R = {result.rangeM}m
+                              </text>
+                            </g>
+                          )}
+
+                          {/* Realistic Cannon Launcher Apparatus at Launch Point */}
+                          {realisticView && (
+                            <g transform={`translate(${padL}, ${toY(y0)})`}>
+                              {/* Heavy Pedestal Base */}
+                              <path
+                                d="M-13,0 L-7,-9 L7,-9 L13,0 Z"
+                                fill="#334155"
+                                stroke="#1E293B"
+                                strokeWidth="1"
+                              />
+                              {/* Carriage Wheel */}
+                              <circle
+                                cx="0"
+                                cy="0"
+                                r="8.5"
+                                fill="#475569"
+                                stroke="#1E293B"
+                                strokeWidth="1.5"
+                              />
+                              <circle cx="0" cy="0" r="2.5" fill="#CBD5E1" />
+                              {/* Rotating Cannon Barrel */}
+                              <g transform={`rotate(${-angleDeg}, 0, 0)`}>
+                                <rect
+                                  x="0"
+                                  y="-5.5"
+                                  width="26"
+                                  height="11"
+                                  rx="2"
+                                  fill="url(#cannonMetal)"
+                                  stroke="#1E293B"
+                                  strokeWidth="1"
+                                />
+                                <rect
+                                  x="23"
+                                  y="-6.5"
+                                  width="4"
+                                  height="13"
+                                  rx="1"
+                                  fill="url(#cannonBrass)"
+                                  stroke="#854D0E"
+                                  strokeWidth="0.8"
+                                />
+                                <ellipse cx="26" cy="0" rx="1.5" ry="5.5" fill="#0F172A" />
+                              </g>
+                              <text
+                                x="12"
+                                y="-12"
+                                fontSize="9"
+                                fill="#1E3A8A"
+                                fontFamily="monospace"
+                                fontWeight="bold"
+                              >
+                                {angleDeg}°
+                              </text>
+                            </g>
+                          )}
+
+                          {/* Projectile & Physics Vectors */}
                           {activePt && (
                             <>
-                              <line x1={bx} y1={by} x2={vxEnd} y2={vyEnd} stroke="#B91C1C" strokeWidth="2.2" markerEnd="url(#kinArrRed)" />
-                              <circle cx={bx} cy={by} r={7.5} fill="#1E3A8A" stroke="#FFFFFF" strokeWidth="2" />
+                              {/* Realistic ground drop-shadow */}
+                              {realisticView && (
+                                <ellipse
+                                  cx={bx}
+                                  cy={padT + h}
+                                  rx={Math.max(2.5, 8.5 * (1 - (activePt.y / (maxY || 1)) * 0.7))}
+                                  ry={Math.max(1.2, 3.2 * (1 - (activePt.y / (maxY || 1)) * 0.7))}
+                                  fill="#0F172A"
+                                  opacity={Math.max(0.12, 0.45 - (activePt.y / (maxY || 1)) * 0.35)}
+                                  filter="url(#softShadow)"
+                                />
+                              )}
+
+                              {/* Trajectory motion particles */}
+                              {realisticView &&
+                                pts.slice(Math.max(0, activeIdx - 10), activeIdx).map((pt, ti) => (
+                                  <circle
+                                    key={ti}
+                                    cx={toX(pt.x)}
+                                    cy={toY(pt.y)}
+                                    r={Math.max(1.5, 4.5 * (ti / 10))}
+                                    fill="#3B82F6"
+                                    opacity={0.12 + 0.3 * (ti / 10)}
+                                  />
+                                ))}
+
+                              {/* Horizontal (vx, green) and Vertical (vy, cyan) Component Vectors */}
+                              {showComponents && (
+                                <>
+                                  <line
+                                    x1={bx}
+                                    y1={by}
+                                    x2={bx + (activePt.vx / vScale) * 44}
+                                    y2={by}
+                                    stroke="#16A34A"
+                                    strokeWidth="1.8"
+                                    markerEnd="url(#kinArrGreen)"
+                                  />
+                                  <line
+                                    x1={bx}
+                                    y1={by}
+                                    x2={bx}
+                                    y2={by - (activePt.vy / vScale) * 44}
+                                    stroke="#0284C7"
+                                    strokeWidth="1.8"
+                                    markerEnd="url(#kinArrCyan)"
+                                  />
+                                  {/* Dashed parallelogram projection */}
+                                  <line
+                                    x1={bx + (activePt.vx / vScale) * 44}
+                                    y1={by}
+                                    x2={vxEnd}
+                                    y2={vyEnd}
+                                    stroke="#94A3B8"
+                                    strokeWidth="0.8"
+                                    strokeDasharray="2 2"
+                                  />
+                                  <line
+                                    x1={bx}
+                                    y1={by - (activePt.vy / vScale) * 44}
+                                    x2={vxEnd}
+                                    y2={vyEnd}
+                                    stroke="#94A3B8"
+                                    strokeWidth="0.8"
+                                    strokeDasharray="2 2"
+                                  />
+                                </>
+                              )}
+
+                              {/* Total Resultant Velocity Vector (Crimson) */}
+                              <line
+                                x1={bx}
+                                y1={by}
+                                x2={vxEnd}
+                                y2={vyEnd}
+                                stroke="#DC2626"
+                                strokeWidth="2.4"
+                                markerEnd="url(#kinArrRed)"
+                              />
+
+                              {/* Aerodynamic Air Drag Vector (Orange, Opposite to v) */}
+                              {airDrag && activePt.speed > 1 && (
+                                <line
+                                  x1={bx}
+                                  y1={by}
+                                  x2={bx - (activePt.vx / activePt.speed) * 18}
+                                  y2={by + (activePt.vy / activePt.speed) * 18}
+                                  stroke="#EA580C"
+                                  strokeWidth="1.8"
+                                  markerEnd="url(#kinArrOrange)"
+                                />
+                              )}
+
+                              {/* 3D Specular Shaded Spherical Ball */}
+                              <circle
+                                cx={bx}
+                                cy={by}
+                                r={realisticView ? 8.5 : 7.5}
+                                fill={realisticView ? "url(#cannonBallGrad)" : "#1E3A8A"}
+                                stroke="#FFFFFF"
+                                strokeWidth="1.5"
+                              />
                             </>
                           )}
                         </>
