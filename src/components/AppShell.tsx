@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   Atom,
   BookOpen,
+  CheckCircle2,
   Compass,
   FileText,
   Gauge,
@@ -46,6 +47,7 @@ const NAV_ITEMS = [
 ];
 
 const SECONDARY_ITEMS = [
+  { href: "/practice", label: "400 ta Masala & Mashqlar", icon: CheckCircle2 },
   { href: "/instruments", label: "75 ta Qurilma Katalogi", icon: Wrench },
   { href: "/reference", label: "100+ Formulalar & CODATA", icon: BookOpen },
   { href: "/reports", label: "Hisobotlarim & Topshiriqlar", icon: FileText },

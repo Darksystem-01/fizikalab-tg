@@ -96,16 +96,20 @@ export function simulateAtomic(input: AtomicInput): AtomicResult {
     case "compton":
       return simulateCompton(input);
     case "bohr_spectra":
+    case "bohr_model" as any:
       return simulateBohrSpectra(input);
     case "matter_waves":
+    case "de_broglie" as any:
       return simulateMatterWaves(input);
     case "franck_hertz":
       return simulateFranckHertz(input);
     case "decay_kinetics":
+    case "radioactive_decay" as any:
       return simulateDecayKinetics(input);
     case "nuclear_binding":
       return simulateNuclearBinding(input);
     case "radiation_attenuation":
+    case "attenuation" as any:
       return simulateRadiationAttenuation(input);
     default:
       return simulatePhotoelectric(input);
@@ -116,9 +120,11 @@ export function simulateAtomic(input: AtomicInput): AtomicResult {
  * 1. Photoelectric Effect
  */
 function simulatePhotoelectric(input: AtomicInput): AtomicResult {
-  const lambdaNm = Math.max(50, Math.min(1200, input.photonWavelengthNm ?? 350));
+  const rawLambda = (input as any).wavelengthNm ?? input.photonWavelengthNm ?? 350;
+  const lambdaNm = Math.max(10, Math.min(50000, rawLambda));
   const lambdaM = lambdaNm * 1e-9;
-  const phiEv = Math.max(0.5, Math.min(8.0, input.workFunctionEv ?? 2.28)); // Na default 2.28 eV
+  const rawPhi = (input as any).workFunctionEv ?? input.workFunctionEv ?? 2.28;
+  const phiEv = Math.max(0.1, Math.min(20.0, rawPhi)); // Na default 2.28 eV
   const phiJ = phiEv * CODATA.e;
 
   // Photon frequency and energy
@@ -161,6 +167,7 @@ function simulatePhotoelectric(input: AtomicInput): AtomicResult {
     subMode: "photoelectric",
     summary: {
       isEmission,
+      emissionObserved: isEmission,
       photonEnergyEv: roundTo(photonEnergyEv, 3),
       workFunctionEv: roundTo(phiEv, 3),
       thresholdFreq_10_14_Hz: roundTo(thresholdFreqHz / 1e14, 3),
@@ -190,7 +197,7 @@ function simulatePhotoelectric(input: AtomicInput): AtomicResult {
  */
 function simulateCompton(input: AtomicInput): AtomicResult {
   const eKev = Math.max(1, input.incidentPhotonEnergyKev ?? 100); // 100 keV X-ray default
-  const thetaDeg = Math.min(180, Math.max(0, input.scatterAngleDeg ?? 90));
+  const thetaDeg = Math.min(180, Math.max(0, input.scatterAngleDeg ?? (input as any).scatteringAngleDeg ?? 90));
   const thetaRad = degToRad(thetaDeg);
 
   const eJ = eKev * 1000 * CODATA.e;
@@ -310,7 +317,7 @@ function simulateBohrSpectra(input: AtomicInput): AtomicResult {
   }
 
   return {
-    subMode: "bohr_spectra",
+    subMode: input.subMode || "bohr_spectra",
     summary: {
       atomicNumberZ: Z,
       seriesName: seriesNameUz,
@@ -375,7 +382,7 @@ function simulateMatterWaves(input: AtomicInput): AtomicResult {
   const minDeltaVMs = minDeltaP / massKg;
 
   return {
-    subMode: "matter_waves",
+    subMode: input.subMode || "matter_waves",
     summary: {
       particleType: particle,
       acceleratingVoltageV: roundTo(vAcc, 1),
@@ -502,7 +509,7 @@ function simulateDecayKinetics(input: AtomicInput): AtomicResult {
       : tHalfParentS;
 
   return {
-    subMode: "decay_kinetics",
+    subMode: input.subMode || "decay_kinetics",
     summary: {
       halfLifeYears: roundTo(tHalfS / (365.25 * 86400), 2),
       decayConstant_1_s: lambda,
@@ -530,7 +537,7 @@ function simulateDecayKinetics(input: AtomicInput): AtomicResult {
  * 7. Nuclear Mass Defect & Binding Energy
  */
 function simulateNuclearBinding(input: AtomicInput): AtomicResult {
-  const Z = Math.max(1, Math.min(100, input.atomicNumberProtonsZ ?? 26)); // Iron-56 default
+  const Z = Math.max(1, Math.min(100, input.atomicNumberProtonsZ ?? (input as any).atomicNumberZ ?? 26)); // Iron-56 default
   const A = Math.max(Z, Math.min(260, input.massNumberA ?? 56));
   const N = A - Z;
 
@@ -617,8 +624,9 @@ function simulateRadiationAttenuation(input: AtomicInput): AtomicResult {
 
   // Geiger-Müller counter dead-time correction:
   // N_true = N_meas / (1 - N_meas * tau_dead)
-  const tauDeadS = Math.max(1e-7, (input.counterDeadTimeMicroS ?? 120) * 1e-6); // 120 microseconds
-  const nMeas = Math.max(0, input.measuredCountRateCps ?? 1500);
+  const rawDeadTime = (input as any).deadTimeMicroS ?? input.counterDeadTimeMicroS ?? 120;
+  const tauDeadS = Math.max(1e-7, rawDeadTime * 1e-6); // microseconds to seconds
+  const nMeas = Math.max(0, (input as any).initialCountRateCps ?? input.measuredCountRateCps ?? 1500);
 
   // Saturation guard: N_meas * tau_dead < 1.0 (clamp at 0.95 to avoid negative or infinite true rate)
   const product = nMeas * tauDeadS;
@@ -640,7 +648,7 @@ function simulateRadiationAttenuation(input: AtomicInput): AtomicResult {
   }
 
   return {
-    subMode: "radiation_attenuation",
+    subMode: input.subMode || "radiation_attenuation",
     summary: {
       linearAttenuationCoeffCm1: roundTo(mu, 3),
       halfValueLayerCm: roundTo(halfValueLayerCm, 3),
@@ -649,6 +657,7 @@ function simulateRadiationAttenuation(input: AtomicInput): AtomicResult {
       absorbedPct: roundTo(absorptionFractionPct, 2),
       measuredCountRateCps: roundTo(nMeas, 1),
       correctedTrueCountRateCps: roundTo(nTrue, 1),
+      trueCountRateCps: roundTo(nTrue, 1),
       deadTimeLossPct: roundTo(deadTimeLossPct, 2),
       isCounterSaturated: isSaturated,
     },

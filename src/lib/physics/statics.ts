@@ -89,21 +89,27 @@ export function simulateStatics(input: StaticsInput): StaticsResult {
         equilibrantMagnitudeN: roundTo(resultantMag, 4),
         equilibrantAngleDeg: roundTo(equilibrantAngle, 2),
         inEquilibrium,
+        balanced: inEquilibrium,
       },
       details: { components },
     };
   }
 
-  if (input.subMode === "beam_moments") {
+  if (input.subMode === "beam_moments" || input.subMode === ("beam" as any)) {
     const L = Math.max(0.5, input.beamLengthM ?? 4.0);
     const Mb = Math.max(0, input.beamMassKg ?? 10);
-    const xA = Math.min(L, Math.max(0, input.supportAM ?? 0.5));
-    const xB = Math.min(L, Math.max(xA + 0.1, input.supportBM ?? 3.5));
-    const loads = (input.loads ?? []).map((ld) => ({
-      label: ld.label,
-      positionM: Math.min(L, Math.max(0, ld.positionM)),
-      forceN: Math.max(0, ld.massKg) * CODATA.g,
-    }));
+    const rawXA = (input as any).supportAPosM ?? input.supportAM ?? 0.5;
+    const rawXB = (input as any).supportBPosM ?? input.supportBM ?? 3.5;
+    const xA = Math.min(L, Math.max(0, rawXA));
+    const xB = Math.min(L, Math.max(0, rawXB));
+    const loads = (input.loads ?? []).map((ld) => {
+      const mass = ld.massKg !== undefined ? ld.massKg : ((ld as any).forceN !== undefined ? (ld as any).forceN / CODATA.g : 0);
+      return {
+        label: ld.label,
+        positionM: Math.min(L, Math.max(0, ld.positionM)),
+        forceN: Math.max(0, mass) * CODATA.g,
+      };
+    });
 
     const beamWeightN = Mb * CODATA.g;
     const beamCenterM = L / 2;
@@ -115,8 +121,15 @@ export function simulateStatics(input: StaticsInput): StaticsResult {
       totalDownForce += ld.forceN;
     }
 
-    const rB = momentAboutA / (xB - xA);
-    const rA = totalDownForce - rB;
+    let rA: number;
+    let rB: number;
+    if (Math.abs(xB - xA) < 1e-4) {
+      rB = totalDownForce / 2;
+      rA = totalDownForce / 2;
+    } else {
+      rB = momentAboutA / (xB - xA);
+      rA = totalDownForce - rB;
+    }
     const stable = rA >= -1e-4 && rB >= -1e-4;
 
     const sampleN = 80;
@@ -154,10 +167,12 @@ export function simulateStatics(input: StaticsInput): StaticsResult {
     );
 
     return {
-      subMode: "beam_moments",
+      subMode: input.subMode,
       summary: {
         reactionAN: roundTo(rA, 3),
+        supportReactionAN: roundTo(rA, 3),
         reactionBN: roundTo(rB, 3),
+        supportReactionBN: roundTo(rB, 3),
         totalLoadN: roundTo(totalDownForce, 3),
         maxBendingMomentNm: roundTo(maxBendingMomentNm, 3),
         stable,

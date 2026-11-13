@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   getScenariosByChapter,
   type ScenarioDefinition,
@@ -85,23 +86,33 @@ export function ScenarioCatalogSelector({
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsExpanded((v) => !v)}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 cursor-pointer"
-        >
-          <BookOpen className="h-4 w-4 text-[#1E3A8A]" />
-          <span>
-            {isExpanded
-              ? "Katalogni yashirish"
-              : `Barcha 30 ta stendni ko‘rish (${allScenarios.length})`}
-          </span>
-          {isExpanded ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/practice"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-300 bg-blue-50/80 px-3 py-2 text-xs font-semibold text-[#1E3A8A] transition hover:bg-blue-100"
+          >
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <span className="hidden sm:inline">Bob Masalalari (50 ta)</span>
+            <span className="sm:hidden">Masalalar</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsExpanded((v) => !v)}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 cursor-pointer"
+          >
+            <BookOpen className="h-4 w-4 text-[#1E3A8A]" />
+            <span>
+              {isExpanded
+                ? "Katalogni yashirish"
+                : `Barcha 30 ta stend (${allScenarios.length})`}
+            </span>
+            {isExpanded ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Expanded Catalog Grid */}

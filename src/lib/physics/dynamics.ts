@@ -52,11 +52,12 @@ export function simulateDynamics(input: DynamicsInput): DynamicsResult {
   const g = Math.max(0.1, input.gravity ?? CODATA.g);
 
   if (input.subMode === "inclined_plane") {
-    const m1 = Math.max(0.001, input.mass1Kg ?? 2);
+    const m1 = Math.max(0.001, (input as any).massKg ?? input.mass1Kg ?? 2);
     const m2 = Math.max(0, input.mass2Kg ?? 0);
     const theta = degToRad(Math.min(89.5, Math.max(0.5, input.angleDeg ?? 30)));
-    const muS = Math.max(0, input.muStatic ?? 0.35);
-    const muK = Math.min(muS, Math.max(0, input.muKinetic ?? 0.25));
+    const genericFriction = (input as any).frictionCoeff;
+    const muS = Math.max(0, input.muStatic ?? (genericFriction !== undefined ? genericFriction : 0.35));
+    const muK = Math.min(muS, Math.max(0, input.muKinetic ?? (genericFriction !== undefined ? genericFriction : 0.25)));
     const L = Math.max(0.1, input.planeLengthM ?? 2.5);
 
     const N = m1 * g * Math.cos(theta);

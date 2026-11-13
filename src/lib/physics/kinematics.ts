@@ -58,6 +58,7 @@ export interface KinematicsResult {
   vacuumFlightTimeS: number;
   energyLostPct: number;
   points: KinematicsPoint[];
+  summary?: Record<string, any>;
 }
 
 export function simulateKinematics(input: KinematicsInput): KinematicsResult {
@@ -94,6 +95,12 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
           totalEnergy: 0,
         },
       ],
+      summary: {
+        flightTimeS: 0,
+        maxHeightM: 0,
+        rangeM: 0,
+        impactSpeedMs: 0,
+      },
     };
   }
 
@@ -191,19 +198,23 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
 
   // Tsiolkovsky rocket equation: Delta v = v_ex * ln(m0 / mf)
   if (input.mode === "rocket") {
-    const vex = Math.max(100, input.exhaustSpeedMs ?? 2500); // 2500 m/s
-    const m0 = Math.max(10, input.initialMassKg ?? 1000); // 1000 kg
-    const mf = Math.max(1, Math.min(m0 * 0.99, input.finalMassKg ?? 200)); // 200 kg
-    const deltaV = vex * Math.log(m0 / mf);
-    const T = Math.max(1, input.durationS ?? 60);
+    const vex = Math.max(10, input.exhaustSpeedMs ?? 2500); // 2500 m/s
+    const m0 = Math.max(0.1, input.initialMassKg ?? 1000); // 1000 kg
+    const userMf = input.finalMassKg;
+    let mf = userMf !== undefined ? Math.max(0.001, userMf) : 200;
+    if (mf >= m0) {
+      mf = m0;
+    }
+    const deltaV = mf >= m0 ? 0 : vex * Math.log(m0 / mf);
+    const T = Math.max(0.1, (input as any).burnTimeS ?? input.durationS ?? 60);
     const steps = 60;
     const dt = T / steps;
     const points: KinematicsPoint[] = [];
 
     for (let i = 0; i <= steps; i++) {
       const t = i * dt;
-      const currentM = m0 - ((m0 - mf) * t) / T;
-      const v = vex * Math.log(m0 / currentM);
+      const currentM = Math.max(mf, m0 - ((m0 - mf) * t) / T);
+      const v = currentM >= m0 ? 0 : vex * Math.log(m0 / currentM);
       points.push({
         t: roundTo(t, 4),
         x: 0,
@@ -211,7 +222,7 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
         vx: 0,
         vy: roundTo(v, 4),
         speed: roundTo(v, 4),
-        at: roundTo(vex * ((m0 - mf) / (T * currentM)), 4),
+        at: roundTo(currentM > 0 && T > 0 && m0 > mf ? vex * ((m0 - mf) / (T * currentM)) : 0, 4),
         an: 0,
         curvatureRadius: 0,
         kineticEnergy: roundTo(0.5 * currentM * v * v, 4),
@@ -232,6 +243,14 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
       vacuumFlightTimeS: roundTo(T, 4),
       energyLostPct: 0,
       points,
+      summary: {
+        idealDeltaVMs: roundTo(deltaV, 4),
+        deltaVMs: roundTo(deltaV, 4),
+        burnTimeS: roundTo(T, 4),
+        initialMassKg: m0,
+        finalMassKg: mf,
+        exhaustSpeedMs: vex,
+      },
     };
   }
 
@@ -415,5 +434,15 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
     vacuumFlightTimeS: roundTo(vacuumFlightTimeS, 4),
     energyLostPct: roundTo(energyLostPct, 3),
     points,
+    summary: {
+      flightTimeS: last.t,
+      maxHeightM: roundTo(maxH, 4),
+      rangeM: last.x,
+      impactSpeedMs: last.speed,
+      vacuumRangeM: roundTo(vacuumRangeM, 4),
+      vacuumMaxHeightM: roundTo(vacuumMaxHeightM, 4),
+      vacuumFlightTimeS: roundTo(vacuumFlightTimeS, 4),
+      energyLostPct: roundTo(energyLostPct, 3),
+    },
   };
 }

@@ -352,15 +352,21 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
 
   let spherometerRadiusMm: number | undefined;
   let spherometerUncertaintyMm: number | undefined;
+  let surfaceType: string | undefined;
   if (mode === "spherometer") {
     const l = Math.max(5, input.legSpacingMm ?? 40);
-    // Plano-flat guard: if h is very close to 0, clamp to 0.001 and calculate
-    const h = Math.max(0.001, correctedReadingMm);
-    spherometerRadiusMm = roundTo((l * l) / (6 * h) + h / 2, 4);
-    // Error propagation: dR/dh = -l^2/(6h^2) + 1/2
-    const dRdh = Math.abs(-(l * l) / (6 * h * h) + 0.5);
-    const dh = Math.max(leastCountMm, stats.stdError);
-    spherometerUncertaintyMm = roundTo(dRdh * dh, 4);
+    if (trueVal === 0 || correctedReadingMm <= 1e-4) {
+      spherometerRadiusMm = 999999;
+      spherometerUncertaintyMm = 0;
+      surfaceType = "Plano-flat (R -> inf)";
+    } else {
+      const h = Math.max(0.001, correctedReadingMm);
+      spherometerRadiusMm = roundTo((l * l) / (6 * h) + h / 2, 4);
+      const dRdh = Math.abs(-(l * l) / (6 * h * h) + 0.5);
+      const dh = Math.max(leastCountMm, stats.stdError);
+      spherometerUncertaintyMm = roundTo(dRdh * dh, 4);
+      surfaceType = spherometerRadiusMm > 0 ? "Spherical" : "Plano-flat (R -> inf)";
+    }
   }
 
   return {
@@ -375,6 +381,12 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
     spherometerUncertaintyMm,
     samples,
     stats,
+    summary: {
+      surfaceType: surfaceType ?? (mode === "spherometer" ? "Spherical" : "Measurement"),
+      spherometerRadiusMm: spherometerRadiusMm ?? 0,
+      correctedReadingMm,
+      meanReadingMm: stats.mean,
+    },
   };
 }
 

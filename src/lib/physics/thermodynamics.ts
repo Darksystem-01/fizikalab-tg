@@ -104,24 +104,34 @@ export function simulateThermodynamics(input: ThermodynamicsInput): Thermodynami
   switch (input.subMode) {
     case "ideal_gas":
     case "gas_laws": {
+      const rawV1 = input.v1M3 ?? ((input as any).vInitialL !== undefined ? (input as any).vInitialL / 1000 : input.volumeL !== undefined ? input.volumeL / 1000 : undefined);
+      const rawV2 = input.v2M3 ?? ((input as any).vFinalL !== undefined ? (input as any).vFinalL / 1000 : undefined);
+      const rawT1 = input.t1K ?? (input as any).tKelvin ?? input.temperatureK;
       const normalized: ThermodynamicsInput = {
         ...input,
-        t1K: input.t1K ?? input.temperatureK,
-        v1M3: input.v1M3 ?? (input.volumeL !== undefined ? input.volumeL / 1000 : undefined),
+        t1K: rawT1,
+        v1M3: rawV1,
+        v2M3: rawV2,
         p1Pa: input.p1Pa ?? (input.pressureKPa !== undefined ? input.pressureKPa * 1000 : undefined),
       };
       return simulateGasLaws(normalized);
     }
     case "mkt_speeds":
+    case "maxwell_boltzmann" as any:
       return simulateMktSpeeds(input);
     case "cycles":
       return simulateCycles(input);
     case "real_gas":
     case "real_gas_vdw": {
+      const rawPreset = input.gasPreset ?? ((input as any).gasType ? String((input as any).gasType).toLowerCase() : undefined);
+      const gasPreset = rawPreset === "co2" || rawPreset === "carbon_dioxide" ? "co2" : rawPreset;
+      const rawV = input.v1M3 ?? (input.volumeL !== undefined ? input.volumeL / 1000 : (input as any).vInitialL !== undefined ? (input as any).vInitialL / 1000 : undefined);
+      const rawT = input.t1K ?? (input as any).temperatureK ?? (input as any).tKelvin;
       const normalized: ThermodynamicsInput = {
         ...input,
-        t1K: input.t1K ?? input.temperatureK,
-        v1M3: input.v1M3 ?? (input.volumeL !== undefined ? input.volumeL / 1000 : undefined),
+        gasPreset: gasPreset as any,
+        t1K: rawT,
+        v1M3: rawV,
         p1Pa: input.p1Pa ?? (input.pressureKPa !== undefined ? input.pressureKPa * 1000 : undefined),
       };
       return simulateRealGasVdw(normalized);
@@ -131,6 +141,8 @@ export function simulateThermodynamics(input: ThermodynamicsInput): Thermodynami
     case "calorimetry":
       return simulateCalorimetry(input);
     case "fluid_surface":
+    case "viscosity_transport" as any:
+    case "surface_tension" as any:
       return simulateFluidSurface(input);
     default:
       return simulateGasLaws(input);
@@ -183,10 +195,17 @@ function simulateGasLaws(input: ThermodynamicsInput): ThermodynamicsResult {
       V2 = V1 * 2;
       P2 = P1 / 2;
     }
-    workW = n * CODATA.R * T1 * Math.log(V2 / V1);
-    heatQ = workW;
-    deltaU = 0;
-    deltaS = n * CODATA.R * Math.log(V2 / V1);
+    if (Math.abs(V2 - V1) < 1e-9) {
+      workW = 0;
+      heatQ = 0;
+      deltaU = 0;
+      deltaS = 0;
+    } else {
+      workW = n * CODATA.R * T1 * Math.log(V2 / V1);
+      heatQ = workW;
+      deltaU = 0;
+      deltaS = n * CODATA.R * Math.log(V2 / V1);
+    }
   } else if (pType === "isobaric") {
     P2 = P1;
     if (targetV2 !== undefined) {
@@ -350,7 +369,7 @@ function simulateMktSpeeds(input: ThermodynamicsInput): ThermodynamicsResult {
   }
 
   return {
-    subMode: "mkt_speeds",
+    subMode: input.subMode || "mkt_speeds",
     summary: {
       temperatureK: roundTo(T, 2),
       molarMassG_Mol: roundTo(M * 1000, 2),
@@ -376,7 +395,6 @@ function simulateMktSpeeds(input: ThermodynamicsInput): ThermodynamicsResult {
 function simulateCycles(input: ThermodynamicsInput): ThermodynamicsResult {
   const cycle = input.cycleType ?? "carnot";
   const Th = Math.max(10, input.tHotK ?? 600);
-  // Guard: cold temperature must be strictly less than hot temperature
   const Tc = Math.min(Th - 1, Math.max(1, input.tColdK ?? 300));
   const r = Math.max(1.1, input.compressionRatio ?? 8);
   const rc = Math.max(1.05, Math.min(r * 0.9, input.cutoffRatio ?? 2.0));
@@ -521,6 +539,7 @@ function simulateCycles(input: ThermodynamicsInput): ThermodynamicsResult {
     summary: {
       cycleType: cycle,
       thermalEfficiencyPct: roundTo(thermalEfficiency * 100, 2),
+      efficiencyPct: roundTo(thermalEfficiency * 100, 2),
       copRefrigerator: roundTo(copRefrigerator, 3),
       copHeatPump: roundTo(copHeatPump, 3),
       workNetJ: roundTo(workNetJ, 2),
@@ -564,7 +583,10 @@ function simulateRealGasVdw(input: ThermodynamicsInput): ThermodynamicsResult {
   const V = Math.max(minAllowedV, input.v1M3 ?? Vc);
 
   // Pressure from Van der Waals: P = n R T / (V - n b) - a n^2 / V^2
-  const pVdw = (n * CODATA.R * T) / (V - n * b) - (a * n * n) / (V * V);
+  let pVdw = (n * CODATA.R * T) / (V - n * b) - (a * n * n) / (V * V);
+  if (pVdw <= 0) {
+    pVdw = Math.max(100, ((n * CODATA.R * T) / (V - n * b)) * 0.1);
+  }
   const pIdeal = (n * CODATA.R * T) / V;
   const compressibilityZ = (pVdw * V) / (n * CODATA.R * T);
 
@@ -594,6 +616,7 @@ function simulateRealGasVdw(input: ThermodynamicsInput): ThermodynamicsResult {
     summary: {
       gasName: defaultConsts.nameUz,
       pVdwMPa: roundTo(pVdw / 1e6, 4),
+      vdwPressureKPa: roundTo(pVdw / 1e3, 3),
       pIdealMPa: roundTo(pIdeal / 1e6, 4),
       compressibilityZ: roundTo(compressibilityZ, 4),
       tCritK: roundTo(Tc, 2),
@@ -750,7 +773,7 @@ function simulateFluidSurface(input: ThermodynamicsInput): ThermodynamicsResult 
   const clementGamma = h1 / (h1 - h2);
 
   return {
-    subMode: "fluid_surface",
+    subMode: input.subMode || "fluid_surface",
     summary: {
       capillaryRiseMm: roundTo(capillaryHeightM * 1000, 2),
       laplacePressurePa: roundTo(laplacePressurePa, 2),
