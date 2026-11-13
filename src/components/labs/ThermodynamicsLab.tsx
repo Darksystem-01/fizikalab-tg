@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, RefreshCw, FileText } from "lucide-react";
+import { Plus, RefreshCw, FileText, Pause, Play, RotateCcw } from "lucide-react";
 import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { ParamInput } from "@/components/ParamInput";
@@ -42,6 +42,9 @@ export function ThermodynamicsLab() {
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<MeasurementRow[]>([]);
   const [academicModalOpen, setAcademicModalOpen] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -113,6 +116,21 @@ export function ThermodynamicsLab() {
   useEffect(() => {
     simulate(false);
   }, [simulate]);
+
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = performance.now();
+    const cycleDurMs = 3500;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      setProgress((p) => (p + dt / cycleDurMs) % 1);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
 
   function handleSelectScenario(sc: ScenarioDefinition) {
     setActiveScenarioId(sc.id);
@@ -445,43 +463,109 @@ export function ThermodynamicsLab() {
 
         {/* Right: Interactive SVG Visual Apparatus & Telemetry */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <span className="text-xs font-bold text-slate-900 uppercase tracking-wide">
-                Jonli Porshen & Gaz Kamerasi Telemetriyasi
-              </span>
-              <span className="font-mono text-xs font-semibold text-[#1E3A8A]">
-                T = {temperatureK} K · V = {volumeL.toFixed(2)} L
-              </span>
+          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  Jonli Porshen & Gaz Kamerasi Tajriba Stendi (PV = nRT)
+                </h3>
+                <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                  P = <strong className="text-[#1E3A8A]">
+                    {result?.summary?.calculatedPressureKPa ? Number(result.summary.calculatedPressureKPa).toFixed(1) : pressureKPa.toFixed(1)} kPa
+                  </strong> · V = <strong className="text-[#1E3A8A]">{volumeL.toFixed(2)} L</strong> · T ={" "}
+                  <strong className="text-[#B91C1C]">{temperatureK} K</strong> · ν ={" "}
+                  <strong>{moles.toFixed(2)} mol</strong> ·{" "}
+                  <span className="font-sans font-semibold text-slate-700">
+                    [{processType}]
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setRealisticView((v) => !v)}
+                  className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                    realisticView
+                      ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                      : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {realisticView ? "🎨 Realistik Kamera" : "📐 Akademik To‘r"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPlaying((p) => !p)}
+                  className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                >
+                  {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                  {playing ? "Pauza" : "O‘ynatish"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProgress(0);
+                    setPlaying(true);
+                  }}
+                  className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Qayta
+                </button>
+              </div>
             </div>
 
             {/* SVG Apparatus */}
-            <div className="relative mt-4 flex justify-center bg-slate-950 rounded-lg p-4">
-              <svg viewBox="0 0 400 220" className="h-56 w-full max-w-md">
+            <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+              <svg viewBox="0 0 440 240" className="h-60 w-full select-none">
+                <defs>
+                  {/* Metal Cylinder Wall Gradient */}
+                  <linearGradient id="cylinderMetal" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#475569" />
+                    <stop offset="15%" stopColor="#94A3B8" />
+                    <stop offset="50%" stopColor="#CBD5E1" />
+                    <stop offset="85%" stopColor="#94A3B8" />
+                    <stop offset="100%" stopColor="#334155" />
+                  </linearGradient>
+
+                  {/* Flame Gradient */}
+                  <radialGradient id="flameGrad" cx="50%" cy="80%" r="60%">
+                    <stop offset="0%" stopColor="#FFFFFF" />
+                    <stop offset="35%" stopColor="#FDE047" />
+                    <stop offset="70%" stopColor="#EA580C" />
+                    <stop offset="100%" stopColor="#DC2626" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
                 {/* Cylinder container */}
-                <rect x="120" y="30" width="160" height="150" fill="#0F172A" stroke="#334155" strokeWidth="3" rx="4" />
-                
+                <rect x="135" y="25" width="170" height="155" fill="#0F172A" stroke="#334155" strokeWidth="3" rx="4" />
+
                 {/* Thermal Gas Glow inside chamber */}
                 <rect
-                  x="124"
+                  x="139"
                   y={pistonY + 12}
-                  width="152"
+                  width="162"
                   height={176 - (pistonY + 12)}
                   fill={`hsl(${tempHue}, 85%, 45%)`}
-                  fillOpacity="0.25"
+                  fillOpacity="0.22"
                 />
 
-                {/* Animated Gas molecules */}
-                {[...Array(16)].map((_, i) => {
-                  const mx = 135 + ((i * 37) % 130);
-                  const my = pistonY + 20 + ((i * 29) % Math.max(10, 150 - pistonY));
+                {/* Animated Gas molecules with Maxwell Speed distribution */}
+                {[...Array(20)].map((_, i) => {
+                  const speedFactor = 1 + (temperatureK / 300);
+                  const oscX = Math.sin(progress * Math.PI * (i + 3) * speedFactor) * 25;
+                  const oscY = Math.cos(progress * Math.PI * (i + 2) * speedFactor) * 18;
+                  const baseX = 150 + ((i * 31) % 140);
+                  const baseY = pistonY + 22 + ((i * 23) % Math.max(12, 145 - pistonY));
+                  const mx = Math.max(143, Math.min(295, baseX + oscX));
+                  const my = Math.max(pistonY + 16, Math.min(172, baseY + oscY));
+
                   return (
                     <circle
                       key={i}
                       cx={mx}
                       cy={my}
                       r="3.5"
-                      fill={`hsl(${tempHue}, 90%, 65%)`}
+                      fill={`hsl(${tempHue}, 95%, 65%)`}
                       stroke="#FFFFFF"
                       strokeWidth="0.8"
                     />
@@ -490,47 +574,95 @@ export function ThermodynamicsLab() {
 
                 {/* Piston head */}
                 <rect
-                  x="122"
+                  x="137"
                   y={pistonY}
-                  width="156"
+                  width="166"
                   height="14"
-                  fill="#94A3B8"
+                  fill="url(#cylinderMetal)"
                   stroke="#E2E8F0"
-                  strokeWidth="2"
+                  strokeWidth="1.8"
                   rx="2"
                 />
                 {/* Piston rod */}
-                <line x1="200" y1="10" x2="200" y2={pistonY} stroke="#CBD5E1" strokeWidth="8" strokeLinecap="round" />
-                <circle cx="200" cy="10" r="7" fill="#64748B" />
+                <line x1="220" y1="8" x2="220" y2={pistonY} stroke="#CBD5E1" strokeWidth="8" strokeLinecap="round" />
+                <circle cx="220" cy="8" r="7" fill="#64748B" />
 
                 {/* Pressure Gauge */}
-                <circle cx="70" cy="80" r="32" fill="#1E293B" stroke="#475569" strokeWidth="2" />
-                <circle cx="70" cy="80" r="28" fill="#0F172A" />
-                <text x="70" y="75" fill="#94A3B8" fontSize="8" textAnchor="middle" fontFamily="monospace">kPa</text>
-                <text x="70" y="90" fill="#38BDF8" fontSize="10" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
+                <circle cx="68" cy="85" r="34" fill="#1E293B" stroke="#475569" strokeWidth="2.5" />
+                <circle cx="68" cy="85" r="30" fill="#0F172A" />
+                <text x="68" y="78" fill="#94A3B8" fontSize="8" textAnchor="middle" fontFamily="monospace">kPa</text>
+                <text x="68" y="94" fill="#38BDF8" fontSize="11" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
                   {result?.summary?.calculatedPressureKPa ? Number(result.summary.calculatedPressureKPa).toFixed(0) : "101"}
                 </text>
-                {/* Needle */}
-                <line x1="70" y1="80" x2="86" y2="68" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" />
-                <circle cx="70" cy="80" r="3" fill="#EF4444" />
+                {/* Gauge Needle rotating proportionally to pressure */}
+                {(() => {
+                  const pVal = Number(result?.summary?.calculatedPressureKPa ?? 101);
+                  const pAngle = -130 + Math.min(260, (pVal / 400) * 260) + (playing ? Math.sin(progress * Math.PI * 8) * 1.5 : 0);
+                  const pRad = (pAngle * Math.PI) / 180;
+                  const nx = 68 + 22 * Math.cos(pRad);
+                  const ny = 85 + 22 * Math.sin(pRad);
+                  return (
+                    <>
+                      <line x1="68" y1="85" x2={nx} y2={ny} stroke="#EF4444" strokeWidth="2" strokeLinecap="round" />
+                      <circle cx="68" cy="85" r="3.5" fill="#EF4444" />
+                    </>
+                  );
+                })()}
                 {/* Pipe connecting gauge to cylinder */}
-                <line x1="102" y1="80" x2="120" y2="80" stroke="#64748B" strokeWidth="4" />
+                <line x1="102" y1="85" x2="135" y2="85" stroke="#64748B" strokeWidth="4" />
 
                 {/* Thermometer Tube */}
-                <rect x="315" y="45" width="12" height="110" rx="6" fill="#1E293B" stroke="#475569" strokeWidth="1.5" />
+                <rect x="330" y="45" width="14" height="115" rx="7" fill="#1E293B" stroke="#475569" strokeWidth="1.5" />
                 <rect
-                  x="317"
-                  y={145 - ((temperatureK - 150) / 650) * 85}
-                  width="8"
-                  height={((temperatureK - 150) / 650) * 85}
-                  rx="4"
+                  x="332"
+                  y={150 - ((temperatureK - 150) / 650) * 90}
+                  width="10"
+                  height={Math.max(4, ((temperatureK - 150) / 650) * 90)}
+                  rx="5"
                   fill="#EF4444"
                 />
-                <circle cx="321" cy="150" r="9" fill="#EF4444" stroke="#475569" strokeWidth="1.5" />
-                <text x="321" y="175" fill="#F87171" fontSize="9" textAnchor="middle" fontFamily="monospace" fontWeight="bold">
+                <circle cx="337" cy="155" r="11" fill="#EF4444" stroke="#475569" strokeWidth="1.5" />
+                <text x="337" y="182" fill="#F87171" fontSize="9.5" textAnchor="middle" fontFamily="monospace" fontWeight="bold">
                   {temperatureK} K
                 </text>
+
+                {/* Bunsen Burner below cylinder */}
+                {realisticView && (
+                  <g>
+                    <rect x="200" y="215" width="40" height="14" rx="2" fill="#475569" stroke="#1E293B" />
+                    <line x1="220" y1="195" x2="220" y2="215" stroke="#64748B" strokeWidth="6" />
+                    {temperatureK > 280 && (
+                      <ellipse
+                        cx="220"
+                        cy="188"
+                        rx={10 + Math.sin(progress * Math.PI * 10) * 2}
+                        ry={12 + Math.cos(progress * Math.PI * 8) * 3}
+                        fill="url(#flameGrad)"
+                      />
+                    )}
+                  </g>
+                )}
               </svg>
+            </div>
+
+            {/* Timeline Scrubber */}
+            <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+              <span className="font-semibold">Vaqt o‘qi:</span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.005}
+                value={progress}
+                onChange={(e) => {
+                  setPlaying(false);
+                  setProgress(Number(e.target.value));
+                }}
+                className="flex-1 accent-[#1E3A8A]"
+              />
+              <span className="w-16 text-right font-mono tabular-nums">
+                {Math.round(progress * 100)}%
+              </span>
             </div>
 
             {/* Live Numerical Summary Tiles */}

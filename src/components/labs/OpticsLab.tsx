@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, RefreshCw } from "lucide-react";
+import { Pause, Play, Plus, RefreshCw, RotateCcw } from "lucide-react";
 import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { MathFormula } from "@/components/MathFormula";
@@ -24,6 +24,9 @@ function wavelengthToColor(nm: number): string {
 export function OpticsLab() {
   const [activeScenarioId, setActiveScenarioId] = useState("opt-01");
   const [subMode, setSubMode] = useState<OpticsSubMode>("optical_bench");
+  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0.5);
+  const [realisticView, setRealisticView] = useState(true);
 
   // Optical bench
   const [elementType, setElementType] = useState<
@@ -128,6 +131,21 @@ export function OpticsLab() {
     }, 50);
     return () => clearTimeout(timer);
   }, [simulate]);
+
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = performance.now();
+    const cycleDurMs = 4000;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      setProgress((p) => (p + dt / cycleDurMs) % 1);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
 
   function recordRow() {
     if (!result) return;
@@ -585,13 +603,54 @@ export function OpticsLab() {
           {subMode === "optical_bench" && result && (
             <>
               <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <span className="text-sm font-semibold text-slate-900">
-                    Geometrik Nurlar Trassirovkasi (Optik Skameyka)
-                  </span>
-                  <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-slate-700">
-                    {String(result.summary.imageNature ?? "—")} · {String(result.summary.imageOrientation ?? "—")}
-                  </span>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      Jonli Optik Skameyka va Nurlar Trassirovkasi Stendi
+                    </h3>
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                      d_o = <strong className="text-[#1E3A8A]">{objectDistanceCm.toFixed(1)} sm</strong> ·
+                      d_i = <strong className="text-[#B91C1C]">{String(result.summary.imageDistanceCm ?? "—")} sm</strong> ·
+                      F = <strong className="text-[#15803D]">{focalLengthCm.toFixed(1)} sm</strong> ·
+                      D = <strong>{(100 / (focalLengthCm || 1)).toFixed(2)} dptr</strong> ·
+                      M = <strong>{String(result.summary.magnification ?? "—")}×</strong> ·
+                      <span className="font-sans font-semibold text-slate-700">
+                        [{String(result.summary.imageNature ?? "—")}, {String(result.summary.imageOrientation ?? "—")}]
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Skameyka" : "📐 Akademik Nurlar"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaying((p) => !p)}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                    >
+                      {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                      {playing ? "Pauza" : "O‘ynatish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProgress(0);
+                        setPlaying(true);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Qayta
+                    </button>
+                  </div>
                 </div>
                 <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2">
                   <svg viewBox="0 0 640 250" className="h-64 w-full">
@@ -816,6 +875,25 @@ export function OpticsLab() {
                     })()}
                   </svg>
                 </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi (Nur oqimi):</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -1020,6 +1098,25 @@ export function OpticsLab() {
                     </text>
                   </svg>
                 </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi (Nur oqimi):</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
+                  </span>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -1085,6 +1182,25 @@ export function OpticsLab() {
                       );
                     })}
                   </svg>
+                </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi (Nur oqimi):</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
+                  </span>
                 </div>
               </div>
 

@@ -54,6 +54,7 @@ export function ElectromagnetismLab() {
   const [rows, setRows] = useState<MeasurementRow[]>([]);
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -143,14 +144,15 @@ export function ElectromagnetismLab() {
   }, [simulate]);
 
   useEffect(() => {
-    if (!playing || subMode !== "em_fields_faraday") return;
+    if (!playing) return;
     let raf = 0;
     let last = performance.now();
+    const cycleDurMs = subMode === "em_fields_faraday" ? 4200 : 3000;
     const step = (now: number) => {
       const dt = now - last;
       last = now;
       setProgress((p) => {
-        const next = p + dt / 4200;
+        const next = p + dt / cycleDurMs;
         return next >= 1 ? 0 : next;
       });
       raf = requestAnimationFrame(step);
@@ -669,92 +671,165 @@ export function ElectromagnetismLab() {
         <div className="space-y-4 lg:col-span-8">
           {(subMode === "wheatstone_meter_bridge" || subMode === "potentiometer") && result && (
             <>
-              <div className="grid gap-4 border border-slate-200 bg-white p-4 sm:grid-cols-12">
-                {/* Galvanometer Gauge */}
-                <div className="flex flex-col items-center justify-center border border-slate-100 bg-slate-50 p-3 sm:col-span-5">
-                  <div className="mb-1 text-xs font-semibold text-slate-800">
-                    #62 Markaziy-nol Galvanometr
+              <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      Jonli Elektromagnetizm va Ko‘prik Tajriba Stendi
+                    </h3>
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                      U = <strong className="text-[#1E3A8A]">{subMode === "wheatstone_meter_bridge" ? supplyV : driverEmfV} V</strong> · l ={" "}
+                      <strong className="text-[#1E3A8A]">{(subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm).toFixed(1)} sm</strong> · Ig ={" "}
+                      <strong className={result.summary.balanced ? "text-[#15803D]" : "text-[#B91C1C]"}>
+                        {String(result.summary.galvanometerCurrentMa)} mA
+                      </strong> ·{" "}
+                      <span className={`font-sans font-semibold ${result.summary.balanced ? "text-emerald-700" : "text-amber-700"}`}>
+                        [{result.summary.balanced ? "Nol nuqta topildi!" : "Nol nuqtaga keltiring"}]
+                      </span>
+                    </div>
                   </div>
-                  <svg viewBox="0 0 220 130" className="h-32 w-full max-w-[220px]">
-                    <path
-                      d="M 25 110 A 85 85 0 0 1 195 110"
-                      fill="#FFFFFF"
-                      stroke="#CBD5E1"
-                      strokeWidth="2"
-                    />
-                    <line x1={110} y1={25} x2={110} y2={35} stroke="#15803D" strokeWidth="2" />
-                    <text x={110} y={48} textAnchor="middle" fontSize="9" fill="#15803D" fontWeight="700">
-                      0 (NOL)
-                    </text>
-                    <g transform={`translate(110, 110) rotate(${needleAngleDeg})`}>
-                      <line
-                        x1={0}
-                        y1={0}
-                        x2={0}
-                        y2={-78}
-                        stroke={result.summary.balanced ? "#15803D" : "#B91C1C"}
-                        strokeWidth="2.5"
-                      />
-                    </g>
-                    <circle cx={110} cy={110} r={5} fill="#0F172A" />
-                  </svg>
-                  <div className="font-mono text-sm font-semibold text-slate-900">
-                    Ig = {String(result.summary.galvanometerCurrentMa)} mA
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Stend" : "📐 Akademik Sxema"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaying((p) => !p)}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                    >
+                      {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                      {playing ? "Pauza" : "O‘ynatish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProgress(0);
+                        setPlaying(true);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Qayta
+                    </button>
                   </div>
-                  <span
-                    className={`mt-1 border px-2 py-0.5 text-[11px] font-semibold ${
-                      result.summary.balanced
-                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                        : "border-amber-300 bg-amber-50 text-amber-800"
-                    }`}
-                  >
-                    {result.summary.balanced ? "Nol nuqta topildi!" : "Nol nuqtaga keltiring"}
-                  </span>
                 </div>
 
-                {/* Clickable 100 cm Resistance Wire Bar */}
-                <div className="sm:col-span-12 rounded-md border border-slate-200 bg-slate-50 p-3">
-                  <div className="mb-1.5 flex items-center justify-between text-xs">
-                    <span className="font-semibold text-slate-800">
-                      100 sm Reoxord / Ko&apos;prik Simi (Jokeyni bosing yoki suring)
-                    </span>
-                    <span className="font-mono font-bold text-[#1E3A8A]">
-                      l = {(subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm).toFixed(1)} sm
-                    </span>
-                  </div>
-                  <div
-                    onClick={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const cm = Math.min(99, Math.max(1, Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(1))));
-                      if (subMode === "wheatstone_meter_bridge") setJockeyCm(cm);
-                      else setSliderCm(cm);
-                    }}
-                    className="relative h-8 cursor-crosshair rounded border border-slate-300 bg-white"
-                    title="Nol nuqtani topish uchun istalgan santimetrga bosing"
-                  >
-                    <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-amber-600/70" />
-                    {[0, 25, 50, 75, 100].map((mark) => (
-                      <div
-                        key={mark}
-                        style={{ left: `${mark}%` }}
-                        className="absolute top-0 bottom-0 border-l border-slate-200"
+                <div className="grid gap-4 border border-slate-200 bg-slate-50/50 p-4 sm:grid-cols-12 rounded-md">
+                  {/* Galvanometer Gauge */}
+                  <div className="flex flex-col items-center justify-center border border-slate-200 bg-white p-3 sm:col-span-5 rounded-md shadow-2xs">
+                    <div className="mb-1 text-xs font-semibold text-slate-800">
+                      #62 Markaziy-nol Galvanometr
+                    </div>
+                    <svg viewBox="0 0 220 130" className="h-32 w-full max-w-[220px] select-none">
+                      <path
+                        d="M 25 110 A 85 85 0 0 1 195 110"
+                        fill="#FFFFFF"
+                        stroke="#CBD5E1"
+                        strokeWidth="2"
                       />
-                    ))}
-                    <div
-                      style={{
-                        left: `${subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm}%`,
-                      }}
-                      className="absolute top-0 bottom-0 w-2 -translate-x-1/2 rounded-xs bg-[#1E3A8A]"
-                    />
+                      <line x1={110} y1={25} x2={110} y2={35} stroke="#15803D" strokeWidth="2" />
+                      <text x={110} y={48} textAnchor="middle" fontSize="9" fill="#15803D" fontWeight="700">
+                        0 (NOL)
+                      </text>
+                      <g transform={`translate(110, 110) rotate(${needleAngleDeg + (playing ? Math.sin(progress * Math.PI * 6) * 1.2 : 0)})`}>
+                        <line
+                          x1={0}
+                          y1={0}
+                          x2={0}
+                          y2={-78}
+                          stroke={result.summary.balanced ? "#15803D" : "#B91C1C"}
+                          strokeWidth="2.5"
+                        />
+                      </g>
+                      <circle cx={110} cy={110} r={5} fill="#0F172A" />
+                    </svg>
+                    <div className="font-mono text-sm font-semibold text-slate-900">
+                      Ig = {String(result.summary.galvanometerCurrentMa)} mA
+                    </div>
+                    <span
+                      className={`mt-1 border px-2 py-0.5 text-[11px] font-semibold ${
+                        result.summary.balanced
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                          : "border-amber-300 bg-amber-50 text-amber-800"
+                      }`}
+                    >
+                      {result.summary.balanced ? "Nol nuqta topildi!" : "Nol nuqtaga keltiring"}
+                    </span>
                   </div>
-                  <div className="mt-1 flex justify-between font-mono text-[10px] text-slate-500">
-                    <span>0 sm</span>
-                    <span>25 sm</span>
-                    <span>50 sm</span>
-                    <span>75 sm</span>
-                    <span>100 sm</span>
+
+                  {/* Clickable 100 cm Resistance Wire Bar */}
+                  <div className="sm:col-span-7 rounded-md border border-slate-200 bg-white p-3 flex flex-col justify-center shadow-2xs">
+                    <div className="mb-2 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-slate-800">
+                        100 sm Reoxord / Ko‘prik Simi (Jokeyni suring)
+                      </span>
+                      <span className="font-mono font-bold text-[#1E3A8A]">
+                        l = {(subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm).toFixed(1)} sm
+                      </span>
+                    </div>
+                    <div
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const cm = Math.min(99, Math.max(1, Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(1))));
+                        if (subMode === "wheatstone_meter_bridge") setJockeyCm(cm);
+                        else setSliderCm(cm);
+                      }}
+                      className="relative h-9 cursor-crosshair rounded border border-slate-300 bg-slate-50"
+                      title="Nol nuqtani topish uchun istalgan santimetrga bosing"
+                    >
+                      <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 bg-amber-600/80 rounded-full" />
+                      {[0, 25, 50, 75, 100].map((mark) => (
+                        <div
+                          key={mark}
+                          style={{ left: `${mark}%` }}
+                          className="absolute top-0 bottom-0 border-l border-slate-300"
+                        />
+                      ))}
+                      <div
+                        style={{
+                          left: `${subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm}%`,
+                        }}
+                        className="absolute top-0 bottom-0 w-2.5 -translate-x-1/2 rounded bg-[#1E3A8A] shadow-xs"
+                      />
+                    </div>
+                    <div className="mt-1.5 flex justify-between font-mono text-[10px] text-slate-500">
+                      <span>0 sm</span>
+                      <span>25 sm</span>
+                      <span>50 sm</span>
+                      <span>75 sm</span>
+                      <span>100 sm</span>
+                    </div>
                   </div>
                 </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi (Jokey holati):</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    value={subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (subMode === "wheatstone_meter_bridge") setJockeyCm(val);
+                      else setSliderCm(val);
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {(subMode === "wheatstone_meter_bridge" ? jockeyCm : sliderCm).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
 
                 {/* Summary metrics */}
                 <div className="grid grid-cols-2 gap-2.5 sm:col-span-7">
@@ -814,7 +889,6 @@ export function ElectromagnetismLab() {
                     </>
                   )}
                 </div>
-              </div>
 
               {subMode === "wheatstone_meter_bridge" && sweepCurve.length > 0 && (
                 <ScientificChart

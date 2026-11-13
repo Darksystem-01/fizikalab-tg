@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, RefreshCw, FileText } from "lucide-react";
+import { Plus, RefreshCw, FileText, Pause, Play, RotateCcw } from "lucide-react";
 import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { ParamInput } from "@/components/ParamInput";
@@ -42,6 +42,9 @@ export function AtomicNuclearLab() {
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<MeasurementRow[]>([]);
   const [academicModalOpen, setAcademicModalOpen] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -114,6 +117,21 @@ export function AtomicNuclearLab() {
   useEffect(() => {
     simulate(false);
   }, [simulate]);
+
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = performance.now();
+    const cycleDurMs = 3000;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      setProgress((p) => (p + dt / cycleDurMs) % 1);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
 
   function handleSelectScenario(sc: ScenarioDefinition) {
     setActiveScenarioId(sc.id);
@@ -438,87 +456,183 @@ export function AtomicNuclearLab() {
 
         {/* Right: Quantum Visual Apparatus & Telemetry */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <span className="text-xs font-bold text-slate-900 uppercase tracking-wide">
-                Kvant Atom & Yadro Vizualizatsiyasi
-              </span>
-              <span className="font-mono text-xs font-semibold text-[#1E3A8A]">
-                {subMode === "photoelectric"
-                  ? `λ = ${photonWavelengthNm} nm · A = ${workFunctionEv} eV`
-                  : subMode === "bohr_spectra"
-                  ? `Vodorod: n=${finalStateN2} → n=${initialStateN1}`
-                  : `Yadro: Z=${atomicNumberZ}, A=${massNumberA}`}
-              </span>
+          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  Jonli Kvant Fotoeffekt va Yadro Tajriba Stendi
+                </h3>
+                <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                  λ = <strong className="text-[#1E3A8A]">{photonWavelengthNm} nm</strong> · hν ={" "}
+                  <strong className="text-[#1E3A8A]">{(1239.84 / (photonWavelengthNm || 1)).toFixed(2)} eV</strong> · A ={" "}
+                  <strong>{workFunctionEv} eV</strong> · Ek ={" "}
+                  <strong className="text-[#15803D]">
+                    {Math.max(0, 1239.84 / (photonWavelengthNm || 1) - workFunctionEv).toFixed(2)} eV
+                  </strong> ·{" "}
+                  <span className={`font-sans font-semibold ${1239.84 / (photonWavelengthNm || 1) >= workFunctionEv ? "text-emerald-700" : "text-amber-700"}`}>
+                    [{1239.84 / (photonWavelengthNm || 1) >= workFunctionEv ? "Fotoeffekt kuzatilmoqda" : "Fotoeffekt yo‘q (hν < A)"}]
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setRealisticView((v) => !v)}
+                  className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                    realisticView
+                      ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                      : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {realisticView ? "🎨 Realistik Stend" : "📐 Akademik To‘r"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPlaying((p) => !p)}
+                  className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                >
+                  {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                  {playing ? "Pauza" : "O‘ynatish"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProgress(0);
+                    setPlaying(true);
+                  }}
+                  className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Qayta
+                </button>
+              </div>
             </div>
 
             {/* Interactive SVG Apparatus */}
-            <div className="relative mt-4 flex justify-center bg-slate-950 rounded-lg p-4">
-              <svg viewBox="0 0 400 220" className="h-56 w-full max-w-md">
+            <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+              <svg viewBox="0 0 440 230" className="h-60 w-full select-none">
+                <defs>
+                  {/* Vacuum Tube Glass Glow */}
+                  <linearGradient id="glassTubeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#0F172A" />
+                    <stop offset="50%" stopColor="#1E293B" />
+                    <stop offset="100%" stopColor="#0F172A" />
+                  </linearGradient>
+
+                  {/* UV Light Beam Gradient */}
+                  <linearGradient id="uvBeamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#A855F7" />
+                    <stop offset="50%" stopColor="#38BDF8" />
+                    <stop offset="100%" stopColor="#FBBF24" />
+                  </linearGradient>
+                </defs>
+
                 {subMode === "bohr_spectra" ? (
                   /* Bohr Model visualization */
                   <g>
                     {/* Nucleus */}
-                    <circle cx="200" cy="110" r="14" fill="#EF4444" stroke="#DC2626" strokeWidth="2" />
-                    <text x="200" y="114" fill="#FFFFFF" fontSize="9" fontWeight="bold" textAnchor="middle">+e</text>
+                    <circle cx="220" cy="115" r="15" fill="#EF4444" stroke="#DC2626" strokeWidth="2" />
+                    <text x="220" y="119" fill="#FFFFFF" fontSize="9.5" fontWeight="bold" textAnchor="middle">+Ze</text>
                     
                     {/* Orbits */}
-                    <circle cx="200" cy="110" r="35" fill="none" stroke="#334155" strokeDasharray="3 3" />
-                    <circle cx="200" cy="110" r="60" fill="none" stroke="#475569" strokeDasharray="3 3" />
-                    <circle cx="200" cy="110" r="85" fill="none" stroke="#64748B" strokeDasharray="3 3" />
+                    <circle cx="220" cy="115" r="38" fill="none" stroke="#CBD5E1" strokeDasharray="3 3" />
+                    <circle cx="220" cy="115" r="66" fill="none" stroke="#94A3B8" strokeDasharray="3 3" />
+                    <circle cx="220" cy="115" r="94" fill="none" stroke="#64748B" strokeDasharray="3 3" />
 
                     {/* Orbit labels */}
-                    <text x="238" y="105" fill="#64748B" fontSize="8" fontFamily="monospace">n=1</text>
-                    <text x="263" y="105" fill="#64748B" fontSize="8" fontFamily="monospace">n=2</text>
-                    <text x="288" y="105" fill="#64748B" fontSize="8" fontFamily="monospace">n=3</text>
+                    <text x="262" y="110" fill="#64748B" fontSize="8.5" fontFamily="monospace">n=1</text>
+                    <text x="290" y="110" fill="#64748B" fontSize="8.5" fontFamily="monospace">n=2</text>
+                    <text x="318" y="110" fill="#64748B" fontSize="8.5" fontFamily="monospace">n=3</text>
 
-                    {/* Transition arrow */}
-                    <path d="M 200,25 A 85,85 0 0,1 260,110" fill="none" stroke="#38BDF8" strokeWidth="2" />
+                    {/* Rotating Electron on Orbit 2 */}
+                    {(() => {
+                      const eAngle = progress * Math.PI * 2;
+                      const ex = 220 + 66 * Math.cos(eAngle);
+                      const ey = 115 + 66 * Math.sin(eAngle);
+                      return (
+                        <>
+                          <circle cx={ex} cy={ey} r="5" fill="#0284C7" stroke="#FFFFFF" strokeWidth="1.5" />
+                          <circle cx={ex} cy={ey} r="8" fill="#38BDF8" fillOpacity="0.3" />
+                        </>
+                      );
+                    })()}
+
                     {/* Emitted Photon Wave */}
-                    <path d="M 260,110 Q 280,100 300,110 T 340,110" fill="none" stroke="#F59E0B" strokeWidth="2.5" />
-                    <text x="320" y="95" fill="#F59E0B" fontSize="9" fontWeight="bold" fontFamily="monospace">hν (Foton)</text>
-
-                    {/* Electron */}
-                    <circle cx="260" cy="110" r="5" fill="#38BDF8" stroke="#FFFFFF" strokeWidth="1" />
+                    <path
+                      d="M 286,115 Q 310,105 330,115 T 370,115"
+                      fill="none"
+                      stroke="#F59E0B"
+                      strokeWidth="2.5"
+                    />
+                    <text x="345" y="100" fill="#D97706" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                      hν (Foton)
+                    </text>
                   </g>
                 ) : (
                   /* Phototube or General Radiation Apparatus */
                   <g>
                     {/* Phototube glass envelope */}
-                    <rect x="80" y="40" width="240" height="130" rx="20" fill="#0F172A" stroke="#334155" strokeWidth="2.5" />
+                    <rect x="90" y="35" width="260" height="135" rx="22" fill="url(#glassTubeGrad)" stroke="#334155" strokeWidth="2.5" />
                     
                     {/* Photocathode plate */}
-                    <rect x="110" y="60" width="8" height="90" fill="#94A3B8" rx="2" />
-                    <text x="114" y="165" fill="#94A3B8" fontSize="8" textAnchor="middle">Katod (-)</text>
+                    <rect x="120" y="55" width="8" height="95" fill="#94A3B8" stroke="#E2E8F0" rx="2" />
+                    <text x="124" y="165" fill="#94A3B8" fontSize="8.5" textAnchor="middle" fontWeight="bold">Katod (-)</text>
 
                     {/* Anode collector */}
-                    <rect x="280" y="60" width="8" height="90" fill="#64748B" rx="2" />
-                    <text x="284" y="165" fill="#94A3B8" fontSize="8" textAnchor="middle">Anod (+)</text>
+                    <rect x="310" y="55" width="8" height="95" fill="#64748B" stroke="#94A3B8" rx="2" />
+                    <text x="314" y="165" fill="#94A3B8" fontSize="8.5" textAnchor="middle" fontWeight="bold">Anod (+)</text>
 
-                    {/* Incident Light Photons */}
-                    <line x1="30" y1="70" x2="108" y2="85" stroke="#F59E0B" strokeWidth="2.5" strokeDasharray="4 2" />
-                    <line x1="30" y1="100" x2="108" y2="105" stroke="#F59E0B" strokeWidth="2.5" strokeDasharray="4 2" />
-                    <line x1="30" y1="130" x2="108" y2="125" stroke="#F59E0B" strokeWidth="2.5" strokeDasharray="4 2" />
-                    <text x="45" y="60" fill="#FBBF24" fontSize="9" fontWeight="bold">hν Nurlar</text>
+                    {/* Incident Light Photons from Source */}
+                    <line x1="25" y1="65" x2="118" y2="80" stroke="url(#uvBeamGrad)" strokeWidth="3" strokeDasharray="4 2" />
+                    <line x1="25" y1="95" x2="118" y2="102" stroke="url(#uvBeamGrad)" strokeWidth="3" strokeDasharray="4 2" />
+                    <line x1="25" y1="125" x2="118" y2="125" stroke="url(#uvBeamGrad)" strokeWidth="3" strokeDasharray="4 2" />
+                    <text x="42" y="52" fill="#9333EA" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                      UV Chiroq (λ={photonWavelengthNm}nm)
+                    </text>
 
                     {/* Emitted Photoelectrons flying towards anode */}
-                    {[...Array(6)].map((_, i) => (
-                      <g key={i}>
-                        <circle cx={135 + i * 24} cy={75 + (i * 12)} r="3" fill="#38BDF8" />
-                        <line x1={130 + i * 24} y1={75 + (i * 12)} x2={134 + i * 24} y2={75 + (i * 12)} stroke="#38BDF8" strokeWidth="1" />
-                      </g>
-                    ))}
-                    <text x="200" y="70" fill="#38BDF8" fontSize="8" fontFamily="monospace">e⁻ (Fotoelektronlar)</text>
+                    {1239.84 / (photonWavelengthNm || 1) >= workFunctionEv &&
+                      [...Array(8)].map((_, i) => {
+                        const flightFrac = (progress + i * 0.125) % 1;
+                        const ex = 132 + flightFrac * 174;
+                        const ey = 68 + ((i * 19) % 70);
+                        return (
+                          <g key={i}>
+                            <circle cx={ex} cy={ey} r="3.2" fill="#38BDF8" stroke="#FFFFFF" strokeWidth="0.8" />
+                            <line x1={ex - 5} y1={ey} x2={ex} y2={ey} stroke="#38BDF8" strokeWidth="1.2" />
+                          </g>
+                        );
+                      })}
 
-                    {/* Voltmeter circuit */}
-                    <path d="M 114,150 L 114,195 L 200,195 M 284,150 L 284,195 L 200,195" fill="none" stroke="#475569" strokeWidth="2" />
-                    <circle cx="200" cy="195" r="14" fill="#1E293B" stroke="#64748B" strokeWidth="1.5" />
-                    <text x="200" y="199" fill="#38BDF8" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                      V
+                    {/* Voltmeter / Microammeter circuit */}
+                    <path d="M 124,150 L 124,200 L 220,200 M 314,150 L 314,200 L 220,200" fill="none" stroke="#475569" strokeWidth="2" />
+                    <circle cx="220" cy="200" r="16" fill="#1E293B" stroke="#64748B" strokeWidth="1.8" />
+                    <text x="220" y="204" fill="#38BDF8" fontSize="9.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                      µA
                     </text>
                   </g>
                 )}
               </svg>
+            </div>
+
+            {/* Timeline Scrubber */}
+            <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+              <span className="font-semibold">Vaqt o‘qi:</span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.005}
+                value={progress}
+                onChange={(e) => {
+                  setPlaying(false);
+                  setProgress(Number(e.target.value));
+                }}
+                className="flex-1 accent-[#1E3A8A]"
+              />
+              <span className="w-16 text-right font-mono tabular-nums">
+                {Math.round(progress * 100)}%
+              </span>
             </div>
 
             {/* Live Numerical Summary Tiles */}

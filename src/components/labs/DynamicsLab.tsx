@@ -122,6 +122,7 @@ export function DynamicsLab() {
 
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -603,12 +604,12 @@ export function DynamicsLab() {
             <>
               {/* Live Animated Apparatus Stage */}
               <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <h3 className="text-sm font-semibold text-slate-900">
-                      Jonli Mexanik Qurilma Simulyatsiyasi
+                      Jonli Dinamik Tajriba Stendi (RK4 / Nyuton Qonunlari)
                     </h3>
-                    <div className="font-mono text-[11px] text-slate-600 tabular-nums">
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
                       t = <strong className="text-[#1E3A8A]">{tCur.toFixed(2)} s</strong> ·{" "}
                       {subMode === "inclined_plane"
                         ? `s(t) = ${val0.toFixed(3)} m · v(t) = ${val1.toFixed(3)} m/s`
@@ -621,7 +622,18 @@ export function DynamicsLab() {
                         : `ω(t) = ${val0.toFixed(2)} rad/s · φ(t) = ${val1.toFixed(2)} rad`}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Stend" : "📐 Akademik To‘r"}
+                    </button>
                     <button
                       type="button"
                       onClick={() => setPlaying((p) => !p)}
@@ -644,8 +656,8 @@ export function DynamicsLab() {
                   </div>
                 </div>
 
-                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2">
-                  <svg viewBox="0 0 640 230" className="h-56 w-full">
+                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+                  <svg viewBox="0 0 640 230" className="h-56 w-full select-none">
                     <defs>
                       <marker id="dynArrBlue" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
                         <path d="M0,0 L0,6 L6,3 z" fill="#1E3A8A" />
@@ -656,6 +668,28 @@ export function DynamicsLab() {
                       <marker id="dynArrGreen" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
                         <path d="M0,0 L0,6 L6,3 z" fill="#15803D" />
                       </marker>
+
+                      {/* Brass Pendulum Bob */}
+                      <radialGradient id="brassBobGrad" cx="35%" cy="30%" r="65%">
+                        <stop offset="0%" stopColor="#FFFFFF" />
+                        <stop offset="25%" stopColor="#FEF08A" />
+                        <stop offset="60%" stopColor="#CA8A04" />
+                        <stop offset="100%" stopColor="#713F12" />
+                      </radialGradient>
+
+                      {/* Wood Incline Ramp */}
+                      <linearGradient id="woodRampGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#D97706" />
+                        <stop offset="50%" stopColor="#B45309" />
+                        <stop offset="100%" stopColor="#78350F" />
+                      </linearGradient>
+
+                      {/* Chrome Cart Gradient */}
+                      <linearGradient id="cartMetalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#F8FAFC" />
+                        <stop offset="40%" stopColor="#CBD5E1" />
+                        <stop offset="100%" stopColor="#475569" />
+                      </linearGradient>
                     </defs>
 
                     {subMode === "pendulum" && (() => {
@@ -690,7 +724,7 @@ export function DynamicsLab() {
                             />
                           )}
                           <circle cx={320} cy={24} r={4.5} fill="#0F172A" />
-                          <circle cx={bx} cy={by} r={14} fill="#1E3A8A" stroke="#FFFFFF" strokeWidth="2" />
+                          <circle cx={bx} cy={by} r={14} fill={realisticView ? "url(#brassBobGrad)" : "#1E3A8A"} stroke="#FFFFFF" strokeWidth="2" />
                           <text x={bx + 20} y={by - 2} fontSize="11" fill="#1E3A8A" fontFamily="monospace" fontWeight="700">
                             θ = {val0.toFixed(1)}°
                           </text>
@@ -930,8 +964,8 @@ export function DynamicsLab() {
                   </svg>
                 </div>
 
-                <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-600">
-                  <span className="font-semibold">Vaqt:</span>
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi:</span>
                   <input
                     type="range"
                     min={0}
@@ -944,7 +978,9 @@ export function DynamicsLab() {
                     }}
                     className="flex-1 accent-[#1E3A8A]"
                   />
-                  <span className="w-12 text-right font-mono">{Math.round(progress * 100)}%</span>
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
+                  </span>
                 </div>
               </div>
 

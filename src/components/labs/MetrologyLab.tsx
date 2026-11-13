@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, Pause, Play, RotateCcw } from "lucide-react";
 import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { MathFormula } from "@/components/MathFormula";
@@ -21,6 +21,9 @@ export function MetrologyLab() {
   const [result, setResult] = useState<MetrologyResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<MeasurementRow[]>([]);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0.5);
+  const [realisticView, setRealisticView] = useState(true);
 
   const runSimulation = useCallback(async (saveRun = false) => {
     setLoading(true);
@@ -54,6 +57,27 @@ export function MetrologyLab() {
     }, 40);
     return () => clearTimeout(timer);
   }, [runSimulation]);
+
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = performance.now();
+    const cycleDurMs = 4000;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      setProgress((p) => {
+        const next = p + dt / cycleDurMs;
+        const val = next >= 1 ? 0 : next;
+        // Smoothly vary trueValueMm around original range
+        setTrueValueMm(Number((10 + val * 35).toFixed(2)));
+        return val;
+      });
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
 
   function handleSelectScenario(sc: ScenarioDefinition) {
     setActiveScenarioId(sc.id);
@@ -254,25 +278,81 @@ export function MetrologyLab() {
         </div>
 
         {/* Instrument Visualization + Backend Output */}
-        <div className="border border-slate-200 bg-white p-4 lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Qurilma Shkalasi va Real Vaqtli O‘lchov Ko‘rsatkichi
-            </h3>
-            {result && (
-              <span className="font-mono text-xs font-bold text-blue-900">
-                Tuzatilgan qiymat: {result.correctedReadingMm} mm
-              </span>
-            )}
+        <div className="rounded-lg border border-slate-200 bg-white p-4 lg:col-span-8 space-y-4 shadow-xs">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900">
+                Jonli Metrologik O‘lchov Stendi (Verniy & Mikrometr)
+              </h3>
+              {result && (
+                <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                  L_haqiqiy = <strong className="text-[#1E3A8A]">{trueValueMm.toFixed(2)} mm</strong> · MSR ={" "}
+                  <strong>{result.mainScaleReadingMm} mm</strong> · VSR ={" "}
+                  <strong>{result.secondaryDivision} div</strong> · e₀ ={" "}
+                  <strong>{zeroErrorMm.toFixed(2)} mm</strong> · L_tuzatilgan ={" "}
+                  <strong className="text-[#15803D]">{result.correctedReadingMm} mm</strong>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setRealisticView((v) => !v)}
+                className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                  realisticView
+                    ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                {realisticView ? "🎨 Realistik Asbob" : "📐 Shkala To‘ri"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPlaying((p) => !p)}
+                className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+              >
+                {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                {playing ? "Pauza" : "O‘ynatish"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setProgress(0);
+                  setTrueValueMm(24.64);
+                }}
+                className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Qayta
+              </button>
+            </div>
           </div>
 
           {/* Interactive Technical SVG Apparatus */}
-          <div className="border border-slate-200 bg-slate-50 p-3">
-            <svg viewBox="0 0 640 210" className="w-full h-auto bg-white border border-slate-200">
+          <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+            <svg viewBox="0 0 640 210" className="w-full h-auto select-none bg-white border border-slate-200">
+              <defs>
+                <linearGradient id="caliperSteel" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#F8FAFC" />
+                  <stop offset="50%" stopColor="#E2E8F0" />
+                  <stop offset="100%" stopColor="#CBD5E1" />
+                </linearGradient>
+                <linearGradient id="vernierSlider" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#EFF6FF" />
+                  <stop offset="50%" stopColor="#DBEAFE" />
+                  <stop offset="100%" stopColor="#BFDBFE" />
+                </linearGradient>
+              </defs>
+
               {mode === "vernier" && (
                 <g>
                   {/* Fixed Jaw + Main Scale */}
-                  <path d="M40 30 H600 V85 H95 V160 L75 185 L40 160 Z" fill="#F1F5F9" stroke="#334155" strokeWidth={1.5} />
+                  <path
+                    d="M40 30 H600 V85 H95 V160 L75 185 L40 160 Z"
+                    fill={realisticView ? "url(#caliperSteel)" : "#F1F5F9"}
+                    stroke="#334155"
+                    strokeWidth={1.5}
+                  />
                   {/* Main scale ticks (0..maxScaleMm) */}
                   {Array.from({ length: 51 }).map((_, tick) => {
                     const mmVal = (tick / 50) * maxScaleMm;
@@ -306,6 +386,7 @@ export function MetrologyLab() {
                     fill="#DBEAFE"
                     stroke="#1E3A8A"
                     strokeWidth={1.5}
+                    rx={2}
                   />
                   <text
                     x={95 + shiftPx / 2}
@@ -314,13 +395,20 @@ export function MetrologyLab() {
                     fontSize={10}
                     fill="#1E3A8A"
                     fontFamily="monospace"
+                    fontWeight="700"
                   >
                     {trueValueMm.toFixed(2)} mm
                   </text>
 
                   {/* Sliding Vernier Jaw */}
                   <g transform={`translate(${shiftPx}, 0)`}>
-                    <path d="M95 85 H260 V135 H125 V160 L105 185 L95 160 Z" fill="#E2E8F0" fillOpacity={0.92} stroke="#1E3A8A" strokeWidth={1.5} />
+                    <path
+                      d="M95 85 H260 V135 H125 V160 L105 185 L95 160 Z"
+                      fill={realisticView ? "url(#vernierSlider)" : "#E2E8F0"}
+                      fillOpacity={0.92}
+                      stroke="#1E3A8A"
+                      strokeWidth={1.5}
+                    />
                     {Array.from({ length: 11 }).map((_, idx) => {
                       const vx = 95 + idx * 9.4;
                       return (
@@ -341,10 +429,10 @@ export function MetrologyLab() {
               {mode === "micrometer" && (
                 <g>
                   {/* U-frame */}
-                  <path d="M70 115 C70 190 220 190 220 115" fill="none" stroke="#334155" strokeWidth={14} />
+                  <path d="M70 115 C70 190 220 190 220 115" fill="none" stroke="#1E3A8A" strokeWidth={14} />
                   {/* Anvil & Spindle */}
                   <rect x={65} y={85} width={28} height={22} fill="#CBD5E1" stroke="#334155" />
-                  <rect x={93} y={83} width={Math.max(8, Math.min(90, trueValueMm * 3.5))} height={26} fill="#DBEAFE" stroke="#1E3A8A" />
+                  <rect x={93} y={83} width={Math.max(8, Math.min(90, trueValueMm * 3.5))} height={26} fill="#DBEAFE" stroke="#1E3A8A" rx={2} />
                   <rect x={93 + Math.max(8, Math.min(90, trueValueMm * 3.5))} y={86} width={110} height={20} fill="#E2E8F0" stroke="#334155" />
                   {/* Sleeve */}
                   <rect x={250} y={70} width={220} height={52} fill="#F8FAFC" stroke="#334155" strokeWidth={1.5} />
@@ -356,9 +444,9 @@ export function MetrologyLab() {
                     </g>
                   ))}
                   {/* Thimble */}
-                  <rect x={260 + microShiftPx} y={62} width={120} height={68} fill="#E2E8F0" stroke="#1E3A8A" strokeWidth={1.5} />
+                  <rect x={260 + microShiftPx} y={62} width={120} height={68} fill="#E2E8F0" stroke="#1E3A8A" strokeWidth={1.5} rx={2} />
                   <text x={320 + microShiftPx} y={100} textAnchor="middle" fontSize={11} fill="#1E3A8A" fontFamily="monospace" fontWeight="bold">
-                    {result ? `÷${result.secondaryDivision}` : ""}
+                    {result ? `div: ${result.secondaryDivision}` : ""}
                   </text>
                 </g>
               )}
@@ -374,7 +462,7 @@ export function MetrologyLab() {
                   {/* Central micrometer screw */}
                   <line x1={320} y1={30} x2={320} y2={Math.max(92, 136 - Math.min(28, trueValueMm * 3))} stroke="#B91C1C" strokeWidth={2.5} />
                   <line x1={180} y1={138} x2={460} y2={138} stroke="#94A3B8" strokeDasharray="4 4" />
-                  <text x={335} y={132} fontSize={11} fill="#B91C1C" fontFamily="monospace">
+                  <text x={335} y={132} fontSize={11} fill="#B91C1C" fontFamily="monospace" fontWeight="700">
                     h = {trueValueMm.toFixed(2)} mm
                   </text>
                   <text x={320} y={175} textAnchor="middle" fontSize={11} fill="#334155" fontFamily="monospace">
@@ -383,6 +471,26 @@ export function MetrologyLab() {
                 </g>
               )}
             </svg>
+          </div>
+
+          {/* Timeline Scrubber */}
+          <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+            <span className="font-semibold">O‘lchov o‘qi:</span>
+            <input
+              type="range"
+              min={1}
+              max={maxScaleMm}
+              step={0.02}
+              value={trueValueMm}
+              onChange={(e) => {
+                setPlaying(false);
+                setTrueValueMm(Number(e.target.value));
+              }}
+              className="flex-1 accent-[#1E3A8A]"
+            />
+            <span className="w-20 text-right font-mono tabular-nums">
+              {trueValueMm.toFixed(2)} mm
+            </span>
           </div>
 
           {/* Numeric Results Grid */}

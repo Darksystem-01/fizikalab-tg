@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Pause, Play, Plus, RefreshCw, RotateCcw, Trash2 } from "lucide-react";
 import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { MathFormula } from "@/components/MathFormula";
@@ -57,6 +57,9 @@ export function StaticsLab() {
   const [result, setResult] = useState<StaticsResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<MeasurementRow[]>([]);
+  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [realisticView, setRealisticView] = useState(true);
 
   const simulate = useCallback(
     async (saveRun = false) => {
@@ -114,6 +117,21 @@ export function StaticsLab() {
     }, 40);
     return () => clearTimeout(timer);
   }, [simulate]);
+
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = performance.now();
+    const cycleDurMs = 3000;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      setProgress((p) => (p + dt / cycleDurMs) % 1);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
 
   function recordRow() {
     if (!result) return;
@@ -617,150 +635,341 @@ export function StaticsLab() {
           {/* Submode 1: Force Table SVG */}
           {subMode === "force_table" && result && (
             <>
-              <div className="border border-slate-200 bg-white p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-900">
-                    360° Kuchlar Stoli Vektor Sxemasi
-                  </span>
-                  <span
-                    className={`border px-2 py-0.5 text-xs font-semibold ${
-                      result.summary.inEquilibrium
-                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                        : "border-amber-300 bg-amber-50 text-amber-800"
-                    }`}
-                  >
-                    {result.summary.inEquilibrium
-                      ? "Tizim muvozanatda (|R| < 0.05 N)"
-                      : `Muvozanatda emas (|R| = ${result.summary.resultantMagnitudeN} N)`}
+              <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      Jonli 360° Kuchlar Stoli va Vektorlar Muvozanati Stendi
+                    </h3>
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                      ΣFx = <strong className="text-[#1E3A8A]">{Number(result.summary.sumFxN).toFixed(2)} N</strong> · ΣFy ={" "}
+                      <strong className="text-[#1E3A8A]">{Number(result.summary.sumFyN).toFixed(2)} N</strong> · |R| ={" "}
+                      <strong className="text-[#B91C1C]">{Number(result.summary.resultantMagnitudeN).toFixed(2)} N</strong> · F_eq ={" "}
+                      <strong className="text-[#15803D]">{Number(result.summary.equilibrantMagnitudeN).toFixed(2)} N</strong> ·{" "}
+                      <span className={`font-sans font-semibold ${result.summary.inEquilibrium ? "text-emerald-700" : "text-amber-700"}`}>
+                        [{result.summary.inEquilibrium ? "Tizim muvozanatda" : "Muvozanatda emas"}]
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Stend" : "📐 Akademik To‘r"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaying((p) => !p)}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                    >
+                      {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                      {playing ? "Pauza" : "O‘ynatish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProgress(0);
+                        setPlaying(true);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Qayta
+                    </button>
+                  </div>
+                </div>
+
+                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+                  <svg viewBox="0 0 540 320" className="h-72 w-full select-none">
+                    <defs>
+                      <marker id="statArrBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L7,3 z" fill="#1E3A8A" />
+                      </marker>
+                      <marker id="statArrRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L7,3 z" fill="#B91C1C" />
+                      </marker>
+                      <marker id="statArrGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L7,3 z" fill="#15803D" />
+                      </marker>
+
+                      {/* Cast iron rim gradient */}
+                      <radialGradient id="tableRimGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="85%" stopColor="#334155" />
+                        <stop offset="94%" stopColor="#475569" />
+                        <stop offset="97%" stopColor="#1E293B" />
+                        <stop offset="100%" stopColor="#0F172A" />
+                      </radialGradient>
+
+                      {/* Table surface gradient */}
+                      <radialGradient id="tableSurfaceGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="#FFFFFF" />
+                        <stop offset="80%" stopColor="#F8FAFC" />
+                        <stop offset="100%" stopColor="#F1F5F9" />
+                      </radialGradient>
+
+                      {/* Brass Central Ring Gradient */}
+                      <linearGradient id="brassRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FEF08A" />
+                        <stop offset="50%" stopColor="#CA8A04" />
+                        <stop offset="100%" stopColor="#854D0E" />
+                      </linearGradient>
+
+                      {/* Weight Stack Gradient */}
+                      <linearGradient id="weightMetalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#64748B" />
+                        <stop offset="50%" stopColor="#94A3B8" />
+                        <stop offset="100%" stopColor="#475569" />
+                      </linearGradient>
+                    </defs>
+
+                    {(() => {
+                      const cx = 270;
+                      const cy = 160;
+                      const tableR = 125;
+                      const rMag = Number(result.summary.resultantMagnitudeN ?? 0);
+                      const rAng = Number(result.summary.resultantAngleDeg ?? 0);
+                      const rRad = (rAng * Math.PI) / 180;
+
+                      // Subtle dynamic damped oscillation of center ring when unbalanced
+                      const oscAmp = result.summary.inEquilibrium ? 0.3 : Math.min(18, rMag * 2.8);
+                      const oscVal = Math.sin(progress * Math.PI * 4) * oscAmp;
+                      const pullDist = result.summary.inEquilibrium ? 0 : Math.min(42, rMag * 7) + oscVal;
+                      const ringX = cx + pullDist * Math.cos(rRad);
+                      const ringY = cy - pullDist * Math.sin(rRad);
+
+                      return (
+                        <>
+                          {/* Cast iron Outer Ring Table */}
+                          <circle cx={cx} cy={cy} r={tableR + 14} fill="url(#tableRimGrad)" stroke="#0F172A" strokeWidth="2" />
+                          <circle cx={cx} cy={cy} r={tableR} fill="url(#tableSurfaceGrad)" stroke="#CBD5E1" strokeWidth="1.5" />
+
+                          {/* Concentric Newton/Degree rings */}
+                          {[0.33, 0.66, 1].map((f) => (
+                            <circle
+                              key={f}
+                              cx={cx}
+                              cy={cy}
+                              r={tableR * f}
+                              fill="none"
+                              stroke="#E2E8F0"
+                              strokeDasharray="3 3"
+                            />
+                          ))}
+
+                          {/* Coordinate axes */}
+                          <line x1={cx - tableR - 4} y1={cy} x2={cx + tableR + 4} y2={cy} stroke="#CBD5E1" strokeWidth="1.2" />
+                          <line x1={cx} y1={cy - tableR - 4} x2={cx} y2={cy + tableR + 4} stroke="#CBD5E1" strokeWidth="1.2" />
+
+                          {/* 360 degree radial ticks */}
+                          {Array.from({ length: 36 }).map((_, i) => {
+                            const deg = i * 10;
+                            const rad = (deg * Math.PI) / 180;
+                            const isMajor = deg % 30 === 0;
+                            const r1 = tableR - (isMajor ? 9 : 5);
+                            const r2 = tableR;
+                            return (
+                              <g key={deg}>
+                                <line
+                                  x1={cx + r1 * Math.cos(rad)}
+                                  y1={cy - r1 * Math.sin(rad)}
+                                  x2={cx + r2 * Math.cos(rad)}
+                                  y2={cy - r2 * Math.sin(rad)}
+                                  stroke={isMajor ? "#334155" : "#94A3B8"}
+                                  strokeWidth={isMajor ? 1.5 : 0.8}
+                                />
+                                {isMajor && (
+                                  <text
+                                    x={cx + (tableR + 7) * Math.cos(rad)}
+                                    y={cy - (tableR + 7) * Math.sin(rad) + 3}
+                                    textAnchor="middle"
+                                    fontSize="8"
+                                    fill="#475569"
+                                    fontFamily="monospace"
+                                    fontWeight="600"
+                                  >
+                                    {deg}°
+                                  </text>
+                                )}
+                              </g>
+                            );
+                          })}
+
+                          {/* Pulleys & Strings at each force angle */}
+                          {components.map((c, idx) => {
+                            const rad = (c.angleDeg * Math.PI) / 180;
+                            const pulleyX = cx + tableR * Math.cos(rad);
+                            const pulleyY = cy - tableR * Math.sin(rad);
+                            const vecLen = Math.min(tableR - 15, Math.max(25, (c.magnitudeN / maxForce) * (tableR - 20)));
+                            const vecX = ringX + vecLen * Math.cos(rad);
+                            const vecY = ringY - vecLen * Math.sin(rad);
+
+                            return (
+                              <g key={idx}>
+                                {/* Cord from ring to pulley */}
+                                <line
+                                  x1={ringX}
+                                  y1={ringY}
+                                  x2={pulleyX}
+                                  y2={pulleyY}
+                                  stroke="#475569"
+                                  strokeWidth="1.2"
+                                  strokeDasharray="2 2"
+                                />
+
+                                {/* Realistic brass Pulley clamp on rim */}
+                                {realisticView && (
+                                  <g>
+                                    <circle cx={pulleyX} cy={pulleyY} r="6.5" fill="#CA8A04" stroke="#713F12" strokeWidth="1" />
+                                    <circle cx={pulleyX} cy={pulleyY} r="2" fill="#FEF08A" />
+                                  </g>
+                                )}
+
+                                {/* Force Vector arrow */}
+                                <line
+                                  x1={ringX}
+                                  y1={ringY}
+                                  x2={vecX}
+                                  y2={vecY}
+                                  stroke="#1E3A8A"
+                                  strokeWidth="2.5"
+                                  markerEnd="url(#statArrBlue)"
+                                />
+
+                                {/* Force Label badge */}
+                                <rect
+                                  x={vecX + 6 * Math.cos(rad) - 22}
+                                  y={vecY - 6 * Math.sin(rad) - 8}
+                                  width="44"
+                                  height="16"
+                                  rx="3"
+                                  fill="#FFFFFF"
+                                  fillOpacity="0.92"
+                                  stroke="#1E3A8A"
+                                  strokeWidth="0.8"
+                                />
+                                <text
+                                  x={vecX + 6 * Math.cos(rad)}
+                                  y={vecY - 6 * Math.sin(rad) + 3}
+                                  fontSize="9.5"
+                                  fontWeight="700"
+                                  fill="#1E3A8A"
+                                  textAnchor="middle"
+                                  fontFamily="monospace"
+                                >
+                                  {c.label}:{c.magnitudeN}N
+                                </text>
+                              </g>
+                            );
+                          })}
+
+                          {/* Resultant Force R Vector (if not in equilibrium) */}
+                          {rMag > 0.05 && (
+                            <>
+                              {(() => {
+                                const eAng = Number(result.summary.equilibrantAngleDeg ?? 0);
+                                const eRad = (eAng * Math.PI) / 180;
+                                const scaleR = Math.min(tableR - 15, (rMag / maxForce) * (tableR - 20));
+                                const rx2 = ringX + scaleR * Math.cos(rRad);
+                                const ry2 = ringY - scaleR * Math.sin(rRad);
+                                const ex2 = ringX + scaleR * Math.cos(eRad);
+                                const ey2 = ringY - scaleR * Math.sin(eRad);
+
+                                return (
+                                  <>
+                                    <line
+                                      x1={ringX}
+                                      y1={ringY}
+                                      x2={rx2}
+                                      y2={ry2}
+                                      stroke="#B91C1C"
+                                      strokeWidth="2.6"
+                                      strokeDasharray="4 2"
+                                      markerEnd="url(#statArrRed)"
+                                    />
+                                    <text
+                                      x={rx2 + 10 * Math.cos(rRad)}
+                                      y={ry2 - 10 * Math.sin(rRad) + 3}
+                                      fontSize="10"
+                                      fontWeight="bold"
+                                      fill="#B91C1C"
+                                      textAnchor="middle"
+                                      fontFamily="monospace"
+                                    >
+                                      R = {rMag.toFixed(2)}N ({rAng.toFixed(1)}°)
+                                    </text>
+
+                                    {/* Equilibrant Force Vector (Green) */}
+                                    <line
+                                      x1={ringX}
+                                      y1={ringY}
+                                      x2={ex2}
+                                      y2={ey2}
+                                      stroke="#15803D"
+                                      strokeWidth="2.0"
+                                      strokeDasharray="3 3"
+                                      markerEnd="url(#statArrGreen)"
+                                    />
+                                    <text
+                                      x={ex2 + 10 * Math.cos(eRad)}
+                                      y={ey2 - 10 * Math.sin(eRad) + 3}
+                                      fontSize="9"
+                                      fontWeight="bold"
+                                      fill="#15803D"
+                                      textAnchor="middle"
+                                      fontFamily="monospace"
+                                    >
+                                      F_eq ({eAng.toFixed(1)}°)
+                                    </text>
+                                  </>
+                                );
+                              })()}
+                            </>
+                          )}
+
+                          {/* Center Post Pin */}
+                          <circle cx={cx} cy={cy} r="3" fill="#64748B" />
+
+                          {/* Dynamic Balancing Ring */}
+                          <circle
+                            cx={ringX}
+                            cy={ringY}
+                            r="11"
+                            fill="none"
+                            stroke="url(#brassRingGrad)"
+                            strokeWidth="3.5"
+                          />
+                          <circle cx={ringX} cy={ringY} r="2" fill="#CA8A04" />
+                        </>
+                      );
+                    })()}
+                  </svg>
+                </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi:</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
                   </span>
                 </div>
-                <svg viewBox="0 0 420 300" className="h-72 w-full border border-slate-100 bg-white">
-                  <defs>
-                    <marker
-                      id="arrBlue"
-                      markerWidth="8"
-                      markerHeight="8"
-                      refX="6"
-                      refY="3"
-                      orient="auto"
-                    >
-                      <path d="M0,0 L0,6 L7,3 z" fill="#1E3A8A" />
-                    </marker>
-                    <marker
-                      id="arrRed"
-                      markerWidth="8"
-                      markerHeight="8"
-                      refX="6"
-                      refY="3"
-                      orient="auto"
-                    >
-                      <path d="M0,0 L0,6 L7,3 z" fill="#B91C1C" />
-                    </marker>
-                    <marker
-                      id="arrGreen"
-                      markerWidth="8"
-                      markerHeight="8"
-                      refX="6"
-                      refY="3"
-                      orient="auto"
-                    >
-                      <path d="M0,0 L0,6 L7,3 z" fill="#15803D" />
-                    </marker>
-                  </defs>
 
-                  <circle cx={210} cy={150} r={115} fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1.5" />
-                  <circle cx={210} cy={150} r={75} fill="none" stroke="#E2E8F0" strokeDasharray="3 3" />
-                  <circle cx={210} cy={150} r={35} fill="none" stroke="#E2E8F0" strokeDasharray="3 3" />
-                  <line x1={85} y1={150} x2={335} y2={150} stroke="#CBD5E1" />
-                  <line x1={210} y1={25} x2={210} y2={275} stroke="#CBD5E1" />
-
-                  {[0, 90, 180, 270].map((deg) => {
-                    const rad = (deg * Math.PI) / 180;
-                    const tx = 210 + 128 * Math.cos(rad);
-                    const ty = 150 - 128 * Math.sin(rad);
-                    return (
-                      <text
-                        key={deg}
-                        x={tx}
-                        y={ty + 3}
-                        textAnchor="middle"
-                        fontSize="10"
-                        fill="#475569"
-                        fontFamily="monospace"
-                      >
-                        {deg}°
-                      </text>
-                    );
-                  })}
-
-                  {components.map((c, idx) => {
-                    const scale = (c.magnitudeN / maxForce) * 100;
-                    const rad = (c.angleDeg * Math.PI) / 180;
-                    const x2 = 210 + scale * Math.cos(rad);
-                    const y2 = 150 - scale * Math.sin(rad);
-                    return (
-                      <g key={idx}>
-                        <line
-                          x1={210}
-                          y1={150}
-                          x2={x2}
-                          y2={y2}
-                          stroke="#1E3A8A"
-                          strokeWidth="2.2"
-                          markerEnd="url(#arrBlue)"
-                        />
-                        <text
-                          x={x2 + 10 * Math.cos(rad)}
-                          y={y2 - 10 * Math.sin(rad)}
-                          fontSize="10"
-                          fontWeight="600"
-                          fill="#1E3A8A"
-                          textAnchor="middle"
-                        >
-                          {c.label} ({c.magnitudeN}N)
-                        </text>
-                      </g>
-                    );
-                  })}
-
-                  {Number(result.summary.resultantMagnitudeN ?? 0) > 0.05 && (
-                    <>
-                      {(() => {
-                        const rMag = Number(result.summary.resultantMagnitudeN);
-                        const rAng = Number(result.summary.resultantAngleDeg);
-                        const eAng = Number(result.summary.equilibrantAngleDeg);
-                        const scale = (rMag / maxForce) * 100;
-                        const rRad = (rAng * Math.PI) / 180;
-                        const eRad = (eAng * Math.PI) / 180;
-                        return (
-                          <>
-                            <line
-                              x1={210}
-                              y1={150}
-                              x2={210 + scale * Math.cos(rRad)}
-                              y2={150 - scale * Math.sin(rRad)}
-                              stroke="#B91C1C"
-                              strokeWidth="2.4"
-                              strokeDasharray="4 2"
-                              markerEnd="url(#arrRed)"
-                            />
-                            <line
-                              x1={210}
-                              y1={150}
-                              x2={210 + scale * Math.cos(eRad)}
-                              y2={150 - scale * Math.sin(eRad)}
-                              stroke="#15803D"
-                              strokeWidth="2.0"
-                              strokeDasharray="2 2"
-                              markerEnd="url(#arrGreen)"
-                            />
-                          </>
-                        );
-                      })()}
-                    </>
-                  )}
-                  <circle cx={210} cy={150} r={4} fill="#0F172A" />
-                </svg>
                 <div className="mt-2 flex flex-wrap gap-4 text-xs text-slate-600">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 bg-[#1E3A8A]" /> Qo&apos;yilgan kuchlar (Fi)
@@ -806,81 +1015,157 @@ export function StaticsLab() {
           {/* Submode 2: Beam Moments */}
           {subMode === "beam_moments" && result && (
             <>
-              <div className="border border-slate-200 bg-white p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-900">
-                    Balka Tayanchlari va Yuklanish Sxemasi
-                  </span>
-                  <span
-                    className={`border px-2 py-0.5 text-xs font-semibold ${
-                      result.summary.stable
-                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                        : "border-red-300 bg-red-50 text-red-800"
-                    }`}
-                  >
-                    {result.summary.stable
-                      ? "Barqaror muvozanat (RA ≥ 0, RB ≥ 0)"
-                      : "Ag'darilish xavfi (manfiy tayanch reaksiyasi)"}
+              <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      Jonli Balka Muvozanati va Kuch Momentlari Stendi
+                    </h3>
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                      L = <strong className="text-[#1E3A8A]">{beamLengthM.toFixed(1)} m</strong> · RA ={" "}
+                      <strong className="text-[#1E3A8A]">{String(result.summary.reactionAN)} N</strong> · RB ={" "}
+                      <strong className="text-[#1E3A8A]">{String(result.summary.reactionBN)} N</strong> · ΣW ={" "}
+                      <strong>{String(result.summary.totalLoadN)} N</strong> ·{" "}
+                      <span className={`font-sans font-semibold ${result.summary.stable ? "text-emerald-700" : "text-red-700"}`}>
+                        [{result.summary.stable ? "Barqaror muvozanat" : "Ag‘darilish xavfi"}]
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Balka" : "📐 Akademik To‘r"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaying((p) => !p)}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                    >
+                      {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                      {playing ? "Pauza" : "O‘ynatish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProgress(0);
+                        setPlaying(true);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Qayta
+                    </button>
+                  </div>
+                </div>
+                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+                  <svg viewBox="0 0 600 160" className="h-44 w-full select-none">
+                    {(() => {
+                      const x0 = 50;
+                      const w = 500;
+                      const toPx = (m: number) => x0 + (m / Math.max(0.5, beamLengthM)) * w;
+                      const pxA = toPx(supportAM);
+                      const pxB = toPx(supportBM);
+                      // Damped subtle tilt vibration if unstable
+                      const tiltDeg = result.summary.stable ? 0 : Math.sin(progress * Math.PI * 4) * 3.5;
+                      return (
+                        <g transform={`rotate(${tiltDeg}, ${(pxA + pxB) / 2}, 77)`}>
+                          {/* Realistic steel beam gradient */}
+                          <rect x={x0} y={70} width={w} height={14} fill="#CBD5E1" stroke="#334155" strokeWidth="1.5" rx="1" />
+                          <line x1={x0} y1={77} x2={x0 + w} y2={77} stroke="#94A3B8" strokeDasharray="4 2" />
+
+                          {/* Support A with hinge */}
+                          <polygon
+                            points={`${pxA},84 ${pxA - 14},114 ${pxA + 14},114`}
+                            fill="#1E3A8A"
+                            stroke="#0F172A"
+                            strokeWidth="1.2"
+                          />
+                          <circle cx={pxA} cy={85} r={3} fill="#FEF08A" />
+                          <text x={pxA} y={130} textAnchor="middle" fontSize="10.5" fill="#1E3A8A" fontWeight="700" fontFamily="monospace">
+                            RA = {String(result.summary.reactionAN)} N
+                          </text>
+
+                          {/* Support B with roller */}
+                          <polygon
+                            points={`${pxB},84 ${pxB - 14},114 ${pxB + 14},114`}
+                            fill="#1E3A8A"
+                            stroke="#0F172A"
+                            strokeWidth="1.2"
+                          />
+                          <circle cx={pxB} cy={85} r={3} fill="#FEF08A" />
+                          <text x={pxB} y={130} textAnchor="middle" fontSize="10.5" fill="#1E3A8A" fontWeight="700" fontFamily="monospace">
+                            RB = {String(result.summary.reactionBN)} N
+                          </text>
+
+                          {/* Point loads */}
+                          {loads.map((ld, i) => {
+                            const px = toPx(ld.positionM);
+                            return (
+                              <g key={i}>
+                                <line
+                                  x1={px}
+                                  y1={20}
+                                  x2={px}
+                                  y2={68}
+                                  stroke="#B91C1C"
+                                  strokeWidth="2.5"
+                                  markerEnd="url(#statArrRed)"
+                                />
+                                <rect
+                                  x={px - 22}
+                                  y={6}
+                                  width={44}
+                                  height={15}
+                                  rx={3}
+                                  fill="#FFFFFF"
+                                  stroke="#B91C1C"
+                                  strokeWidth="1"
+                                />
+                                <text
+                                  x={px}
+                                  y={17}
+                                  textAnchor="middle"
+                                  fontSize="9.5"
+                                  fill="#B91C1C"
+                                  fontWeight="700"
+                                  fontFamily="monospace"
+                                >
+                                  {ld.label}: {ld.massKg}kg
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </g>
+                      );
+                    })()}
+                  </svg>
+                </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi:</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
                   </span>
                 </div>
-                <svg viewBox="0 0 600 160" className="h-40 w-full border border-slate-100 bg-white">
-                  {(() => {
-                    const x0 = 50;
-                    const w = 500;
-                    const toPx = (m: number) => x0 + (m / Math.max(0.5, beamLengthM)) * w;
-                    const pxA = toPx(supportAM);
-                    const pxB = toPx(supportBM);
-                    return (
-                      <>
-                        {/* Beam */}
-                        <rect x={x0} y={70} width={w} height={14} fill="#CBD5E1" stroke="#334155" />
-                        {/* Support A */}
-                        <polygon
-                          points={`${pxA},84 ${pxA - 12},110 ${pxA + 12},110`}
-                          fill="#1E3A8A"
-                        />
-                        <text x={pxA} y={128} textAnchor="middle" fontSize="11" fill="#1E3A8A" fontWeight="600">
-                          RA = {String(result.summary.reactionAN)} N
-                        </text>
-                        {/* Support B */}
-                        <polygon
-                          points={`${pxB},84 ${pxB - 12},110 ${pxB + 12},110`}
-                          fill="#1E3A8A"
-                        />
-                        <text x={pxB} y={128} textAnchor="middle" fontSize="11" fill="#1E3A8A" fontWeight="600">
-                          RB = {String(result.summary.reactionBN)} N
-                        </text>
-                        {/* Point loads */}
-                        {loads.map((ld, i) => {
-                          const px = toPx(ld.positionM);
-                          return (
-                            <g key={i}>
-                              <line
-                                x1={px}
-                                y1={24}
-                                x2={px}
-                                y2={68}
-                                stroke="#B91C1C"
-                                strokeWidth="2.5"
-                              />
-                              <polygon points={`${px},70 ${px - 5},60 ${px + 5},60`} fill="#B91C1C" />
-                              <text
-                                x={px}
-                                y={18}
-                                textAnchor="middle"
-                                fontSize="10"
-                                fill="#B91C1C"
-                                fontWeight="600"
-                              >
-                                {ld.label}: {ld.massKg}kg
-                              </text>
-                            </g>
-                          );
-                        })}
-                      </>
-                    );
-                  })()}
-                </svg>
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -931,27 +1216,63 @@ export function StaticsLab() {
           {subMode === "pulley_wheel" && result && (
             <>
               <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-xs">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-900">
-                    {mechanismType === "pulley"
-                      ? `Polispast (Bloklar tizimi, n = ${pulleyStrands} ip)`
-                      : `G‘ildirak va O‘q mexanizmi (R = ${wheelRadiusM} m, r = ${axleRadiusM} m)`}
-                  </span>
-                  <span
-                    className={`rounded border px-2 py-0.5 text-xs font-semibold ${
-                      result.summary.canLift
-                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                        : "border-red-300 bg-red-50 text-red-800"
-                    }`}
-                  >
-                    {result.summary.canLift ? "Ko‘tarish mumkin" : "Kuch yetarli emas"}
-                  </span>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {mechanismType === "pulley"
+                        ? `Jonli Polispast Tajriba Stendi (n = ${pulleyStrands} ip)`
+                        : `Jonli G‘ildirak va O‘q Mexanizmi Stendi`}
+                    </h3>
+                    <div className="mt-0.5 font-mono text-[11px] text-slate-600 tabular-nums">
+                      P = <strong className="text-[#1E3A8A]">{String(result.summary.loadForceN)} N</strong> · F_amaliy ={" "}
+                      <strong className="text-[#B91C1C]">{appliedForceN} N</strong> · F_ideal ={" "}
+                      <strong className="text-[#15803D]">{String(result.summary.idealEffortN)} N</strong> · η ={" "}
+                      <strong>{String(result.summary.efficiencyPct)}%</strong> ·{" "}
+                      <span className={`font-sans font-semibold ${result.summary.canLift ? "text-emerald-700" : "text-red-700"}`}>
+                        [{result.summary.canLift ? "Yuk ko‘tarilmoqda" : "Kuch yetarli emas"}]
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setRealisticView((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                        realisticView
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {realisticView ? "🎨 Realistik Blok" : "📐 Akademik To‘r"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlaying((p) => !p)}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 cursor-pointer"
+                    >
+                      {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                      {playing ? "Pauza" : "O‘ynatish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProgress(0);
+                        setPlaying(true);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Qayta
+                    </button>
+                  </div>
                 </div>
-                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2">
-                  <svg viewBox="0 0 600 210" className="h-48 w-full">
+
+                <div className="lab-grid overflow-hidden rounded-md border border-slate-200 p-2 bg-slate-50/50">
+                  <svg viewBox="0 0 600 210" className="h-48 w-full select-none">
                     {mechanismType === "pulley" ? (() => {
                       const n = Math.min(8, Math.max(1, pulleyStrands));
-                      const liftShift = result.summary.canLift ? -12 : 8;
+                      const liftFrac = Math.sin(progress * Math.PI);
+                      const liftShift = (result.summary.canLift ? -1 : 0.4) * liftFrac * 32;
                       return (
                         <>
                           <rect x={200} y={16} width={200} height={8} rx={2} fill="#334155" />
@@ -971,8 +1292,8 @@ export function StaticsLab() {
                             {loadMassKg} kg
                           </text>
                           {/* Applied effort rope */}
-                          <line x1={322} y1={46} x2={410} y2={136} stroke="#B91C1C" strokeWidth="2.4" />
-                          <text x={420} y={140} fontSize="11" fill="#B91C1C" fontFamily="monospace" fontWeight="700">
+                          <line x1={322} y1={46} x2={410} y2={136 - liftShift} stroke="#B91C1C" strokeWidth="2.4" />
+                          <text x={420} y={140 - liftShift} fontSize="11" fill="#B91C1C" fontFamily="monospace" fontWeight="700">
                             F = {appliedForceN} N
                           </text>
                         </>
@@ -980,11 +1301,16 @@ export function StaticsLab() {
                     })() : (() => {
                       const rOuter = 68;
                       const rInner = Math.max(14, Math.min(54, (axleRadiusM / Math.max(0.02, wheelRadiusM)) * rOuter));
+                      const rotDeg = progress * 360;
                       return (
                         <>
-                          <circle cx={260} cy={105} r={rOuter} fill="#EFF6FF" stroke="#1E3A8A" strokeWidth="3.5" />
-                          <circle cx={260} cy={105} r={rInner} fill="#DBEAFE" stroke="#334155" strokeWidth="2.5" />
-                          <circle cx={260} cy={105} r={4} fill="#0F172A" />
+                          <g transform={`translate(260, 105) rotate(${rotDeg})`}>
+                            <circle cx={0} cy={0} r={rOuter} fill="#EFF6FF" stroke="#1E3A8A" strokeWidth="3.5" />
+                            <circle cx={0} cy={0} r={rInner} fill="#DBEAFE" stroke="#334155" strokeWidth="2.5" />
+                            <line x1={-rOuter} y1={0} x2={rOuter} y2={0} stroke="#1E3A8A" strokeWidth="1.5" />
+                            <line x1={0} y1={-rOuter} x2={0} y2={rOuter} stroke="#1E3A8A" strokeWidth="1.5" />
+                            <circle cx={0} cy={0} r={4} fill="#0F172A" />
+                          </g>
                           {/* Load hanging from inner axle */}
                           <line x1={260 - rInner} y1={105} x2={260 - rInner} y2={160} stroke="#334155" strokeWidth="2" />
                           <rect x={260 - rInner - 20} y={160} width={40} height={26} rx={3} fill="#1E3A8A" />
@@ -1006,6 +1332,25 @@ export function StaticsLab() {
                       );
                     })()}
                   </svg>
+                </div>
+
+                <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-600">
+                  <span className="font-semibold">Vaqt o‘qi:</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.005}
+                    value={progress}
+                    onChange={(e) => {
+                      setPlaying(false);
+                      setProgress(Number(e.target.value));
+                    }}
+                    className="flex-1 accent-[#1E3A8A]"
+                  />
+                  <span className="w-16 text-right font-mono tabular-nums">
+                    {Math.round(progress * 100)}%
+                  </span>
                 </div>
               </div>
 
