@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isAdminOrDarksystem } from "@/lib/auth";
 import { getDb, writeAuditLog, type DbAcademicGroup } from "@/lib/db";
 
-export async function GET() {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "teacher" && user.role !== "admin")) {
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
+  if (!user || (user.role !== "teacher" && !isAdminOrDarksystem(user))) {
     return NextResponse.json({ error: "Ruxsat yo‘q" }, { status: 403 });
   }
 
   const db = await getDb();
   const groups =
-    user.role === "admin"
+    isAdminOrDarksystem(user)
       ? await db.queryAll(
           `SELECT g.*, u.full_name AS teacher_name
            FROM academic_groups g
@@ -30,8 +30,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "teacher" && user.role !== "admin")) {
+  const user = await getSessionUser(req);
+  if (!user || (user.role !== "teacher" && !isAdminOrDarksystem(user))) {
     return NextResponse.json(
       { error: "Faqat ustoz yoki administrator guruh yarata oladi." },
       { status: 403 }
@@ -85,8 +85,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "teacher" && user.role !== "admin")) {
+  const user = await getSessionUser(req);
+  if (!user || (user.role !== "teacher" && !isAdminOrDarksystem(user))) {
     return NextResponse.json({ error: "Ruxsat yo‘q" }, { status: 403 });
   }
 
@@ -104,7 +104,7 @@ export async function DELETE(req: Request) {
   if (!grp) {
     return NextResponse.json({ error: "Guruh topilmadi" }, { status: 404 });
   }
-  if (user.role !== "admin" && grp.teacher_id !== user.userId) {
+  if (!isAdminOrDarksystem(user) && grp.teacher_id !== user.userId) {
     return NextResponse.json(
       { error: "Faqat o‘zingiz yaratgan guruhni o‘chira olasiz." },
       { status: 403 }

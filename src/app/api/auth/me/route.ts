@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
 import {
   getSessionUser,
+  rotateSessionToken,
   SESSION_COOKIE_NAME,
+  getSessionCookieOptions,
+  getSessionClearCookieOptions,
   shouldRotateSession,
-  signSessionToken,
   type UserRole,
 } from "@/lib/auth";
 
-export async function GET() {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ user: null }, { status: 401 });
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
+  if (!user || !user.sessionId) {
+    const res = NextResponse.json({ user: null }, { status: 401 });
+    res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
+    return res;
   }
 
   const isDarksystem = user.role === "darksystem" || user.role === "admin";
@@ -28,22 +32,20 @@ export async function GET() {
 
   // Auto-rotate session token every 30 seconds
   if (shouldRotateSession(user)) {
-    const freshToken = signSessionToken({
-      userId: Number(user.userId),
-      email: clientUser.email,
-      fullName: clientUser.fullName,
-      role: clientUser.role as UserRole,
-      studentGroup: user.studentGroup,
-      university: user.university,
-      faculty: user.faculty,
-    });
-    res.cookies.set(SESSION_COOKIE_NAME, freshToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    const freshToken = await rotateSessionToken(
+      user.sessionId,
+      {
+        userId: Number(user.userId),
+        email: clientUser.email,
+        fullName: clientUser.fullName,
+        role: clientUser.role as UserRole,
+        studentGroup: user.studentGroup,
+        university: user.university,
+        faculty: user.faculty,
+      },
+      req
+    );
+    res.cookies.set(SESSION_COOKIE_NAME, freshToken, getSessionCookieOptions());
   }
 
   return res;

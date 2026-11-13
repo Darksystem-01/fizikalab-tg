@@ -81,6 +81,30 @@ export interface DbAuditLog {
   created_at: string;
 }
 
+export interface DbActiveSession {
+  session_id: string;
+  user_id: number;
+  client_fingerprint: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+  last_seen_at: string;
+  expires_at: string;
+  is_revoked: number;
+}
+
+export interface CreateActiveSessionParams {
+  sessionId: string;
+  userId: number;
+  clientFingerprint: string;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  createdAt?: string | Date;
+  lastSeenAt?: string | Date;
+  expiresAt: string | Date | number;
+  isRevoked?: number | boolean;
+}
+
 export type DbBackendKind = "postgres" | "sqlite-local" | "sqlite-tmp";
 
 export function getPostgresUrl(): string {
@@ -377,6 +401,17 @@ async function ensureSchemaAndSeed() {
           details TEXT NOT NULL,
           created_at TEXT NOT NULL
         )`,
+        `CREATE TABLE IF NOT EXISTS active_sessions (
+          session_id TEXT PRIMARY KEY,
+          user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+          client_fingerprint TEXT NOT NULL,
+          ip_address TEXT,
+          user_agent TEXT,
+          created_at TEXT NOT NULL,
+          last_seen_at TEXT NOT NULL,
+          expires_at TEXT NOT NULL,
+          is_revoked INTEGER NOT NULL DEFAULT 0
+        )`,
       ]
     : [
         `CREATE TABLE IF NOT EXISTS users (
@@ -448,11 +483,29 @@ async function ensureSchemaAndSeed() {
           details TEXT NOT NULL,
           created_at TEXT NOT NULL
         )`,
+        `CREATE TABLE IF NOT EXISTS active_sessions (
+          session_id TEXT PRIMARY KEY,
+          user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+          client_fingerprint TEXT NOT NULL,
+          ip_address TEXT,
+          user_agent TEXT,
+          created_at TEXT NOT NULL,
+          last_seen_at TEXT NOT NULL,
+          expires_at TEXT NOT NULL,
+          is_revoked INTEGER NOT NULL DEFAULT 0
+        )`,
       ];
 
   for (const stmt of schemaStatements) {
     await adapter.execute(stmt);
   }
+
+  await adapter.execute(
+    `CREATE INDEX IF NOT EXISTS idx_active_sessions_user_id ON active_sessions(user_id)`
+  );
+  await adapter.execute(
+    `CREATE INDEX IF NOT EXISTS idx_active_sessions_expires_at ON active_sessions(expires_at)`
+  );
 
   await migrateExistingTables(adapter, isPg);
 
@@ -652,3 +705,149 @@ export async function writeAuditLog(
     // Non-blocking audit log
   }
 }
+
+function normalizeIsoDate(d: string | number | Date | undefined, fallback: string): string {
+  if (!d) return fallback;
+  if (typeof d === "string") return d;
+  if (typeof d === "number") return new Date(d).toISOString();
+  if (d instanceof Date) return d.toISOString();
+  return fallback;
+}
+
+/**
+ * Inserts or updates an active session record in the database.
+ * Supports dual dialect (SQLite and PostgreSQL) via ON CONFLICT DO UPDATE.
+ */
+export async function createActiveSession(
+  params: CreateActiveSessionParams
+): Promise<DbActiveSession> {
+  if (!params.sessionId || !params.userId || !params.clientFingerprint) {
+    throw new Error("Missing required session parameters (sessionId, userId, clientFingerprint)");
+  }
+
+  const db = await getDb();
+  const now = new Date().toISOString();
+  const createdAt = normalizeIsoDate(params.createdAt, now);
+  const lastSeenAt = normalizeIsoDate(params.lastSeenAt, createdAt);
+  const expiresAt = normalizeIsoDate(params.expiresAt, now);
+  const ipAddress = params.ipAddress ?? null;
+  const userAgent = params.userAgent ? String(params.userAgent).slice(0, 512) : null;
+  const isRevoked = params.isRevoked ? 1 : 0;
+
+  const sql = `
+    INSERT INTO active_sessions (
+      session_id, user_id, client_fingerprint, ip_address, user_agent,
+      created_at, last_seen_at, expires_at, is_revoked
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    ON CONFLICT(session_id) DO UPDATE SET
+      user_id = EXCLUDED.user_id,
+      client_fingerprint = EXCLUDED.client_fingerprint,
+      ip_address = EXCLUDED.ip_address,
+      user_agent = EXCLUDED.user_agent,
+      last_seen_at = EXCLUDED.last_seen_at,
+      expires_at = EXCLUDED.expires_at,
+      is_revoked = EXCLUDED.is_revoked
+  `;
+
+  await db.execute(sql, [
+    params.sessionId,
+    params.userId,
+    params.clientFingerprint,
+    ipAddress,
+    userAgent,
+    createdAt,
+    lastSeenAt,
+    expiresAt,
+    isRevoked,
+  ]);
+
+  return {
+    session_id: params.sessionId,
+    user_id: params.userId,
+    client_fingerprint: params.clientFingerprint,
+    ip_address: ipAddress,
+    user_agent: userAgent,
+    created_at: createdAt,
+    last_seen_at: lastSeenAt,
+    expires_at: expiresAt,
+    is_revoked: isRevoked,
+  };
+}
+
+/**
+ * Retrieves an active session by sessionId and verifies that it is not revoked or expired.
+ * Set options.includeRevokedOrExpired = true to bypass the validity check.
+ */
+export async function getActiveSession(
+  sessionId: string,
+  options?: { includeRevokedOrExpired?: boolean }
+): Promise<DbActiveSession | null> {
+  if (!sessionId || typeof sessionId !== "string") return null;
+  const db = await getDb();
+  const session = await db.queryOne<DbActiveSession>(
+    "SELECT * FROM active_sessions WHERE session_id = $1",
+    [sessionId]
+  );
+  if (!session) return null;
+
+  if (!options?.includeRevokedOrExpired) {
+    if (session.is_revoked !== 0) return null;
+    const expTime = new Date(session.expires_at).getTime();
+    if (isNaN(expTime) || expTime <= Date.now()) return null;
+  }
+
+  return session;
+}
+
+/**
+ * Updates the last_seen_at timestamp for a valid, non-revoked session.
+ */
+export async function touchActiveSession(
+  sessionId: string,
+  lastSeenAt?: string | Date
+): Promise<boolean> {
+  if (!sessionId || typeof sessionId !== "string") return false;
+  const db = await getDb();
+  const now = normalizeIsoDate(lastSeenAt, new Date().toISOString());
+  await db.execute(
+    "UPDATE active_sessions SET last_seen_at = $1 WHERE session_id = $2 AND is_revoked = 0",
+    [now, sessionId]
+  );
+  return true;
+}
+
+/**
+ * Revokes a single session by sessionId.
+ */
+export async function revokeSession(sessionId: string): Promise<boolean> {
+  if (!sessionId || typeof sessionId !== "string") return false;
+  const db = await getDb();
+  await db.execute(
+    "UPDATE active_sessions SET is_revoked = 1 WHERE session_id = $1",
+    [sessionId]
+  );
+  return true;
+}
+
+/**
+ * Revokes all active sessions for a specific user (e.g. on ban or password change).
+ */
+export async function revokeAllUserSessions(userId: number): Promise<boolean> {
+  if (!userId || typeof userId !== "number") return false;
+  const db = await getDb();
+  await db.execute(
+    "UPDATE active_sessions SET is_revoked = 1 WHERE user_id = $1 AND is_revoked = 0",
+    [userId]
+  );
+  return true;
+}
+
+/**
+ * Prunes expired sessions from the database.
+ */
+export async function cleanupExpiredSessions(nowIso?: string | Date): Promise<void> {
+  const db = await getDb();
+  const threshold = normalizeIsoDate(nowIso, new Date().toISOString());
+  await db.execute("DELETE FROM active_sessions WHERE expires_at < $1", [threshold]);
+}
+

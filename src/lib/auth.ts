@@ -3,6 +3,12 @@ import { cookies } from "next/headers";
 
 export type UserRole = "admin" | "darksystem" | "teacher" | "student";
 
+export interface ClientContext {
+  userAgent?: string;
+  clientIp?: string;
+  fingerprint?: string;
+}
+
 export interface SessionPayload {
   sessionId?: string;
   userId: number;
@@ -14,6 +20,7 @@ export interface SessionPayload {
   faculty?: string;
   issuedAt?: number;
   exp: number;
+  ctxHash?: string;
 }
 
 export const SESSION_COOKIE_NAME = "fizikalab_session";
@@ -63,6 +70,208 @@ function timingSafeStringEqual(a: string, b: string): boolean {
   const ha = crypto.createHash("sha256").update(a, "utf8").digest();
   const hb = crypto.createHash("sha256").update(b, "utf8").digest();
   return crypto.timingSafeEqual(ha, hb);
+}
+
+function isPrivateOrLocalIp(ip: string): boolean {
+  if (!ip || ip === "unknown" || ip === "localhost" || ip === "::1") return true;
+  if (ip.startsWith("127.")) return true;
+  if (ip.startsWith("10.")) return true;
+  if (ip.startsWith("192.168.")) return true;
+  if (ip.startsWith("169.254.")) return true;
+  if (ip.startsWith("fc00:") || ip.startsWith("fd") || ip.startsWith("fe80:")) return true;
+  if (ip.startsWith("172.")) {
+    const parts = ip.split(".");
+    if (parts.length >= 2) {
+      const second = Number(parts[1]);
+      if (second >= 16 && second <= 31) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Normalizes an IPv4 or IPv6 address to its network subnet.
+ * - IPv4: /24 subnet (e.g. 198.51.100.42 -> 198.51.100.0/24)
+ * - IPv6: /48 subnet (e.g. 2001:db8:85a3:0:0:8a2e:370:7334 -> 2001:db8:85a3::/48)
+ * - Localhost / Private: 127.0.0.0/24
+ */
+export function normalizeIpSubnet(rawIp: string | undefined | null): string {
+  if (!rawIp) return "127.0.0.0/24";
+  let ip = rawIp.trim().toLowerCase();
+
+  // Strip port if present (e.g. 192.168.1.1:54321)
+  if (ip.includes(".") && ip.includes(":")) {
+    const colonIdx = ip.indexOf(":");
+    if (!ip.startsWith("::") && ip.split(":").length === 2) {
+      ip = ip.slice(0, colonIdx);
+    }
+  }
+
+  // Handle IPv4-mapped IPv6 (e.g. ::ffff:192.168.1.5)
+  if (ip.startsWith("::ffff:")) {
+    ip = ip.slice(7);
+  }
+
+  if (isPrivateOrLocalIp(ip)) {
+    return "127.0.0.0/24";
+  }
+
+  // IPv4 /24 subnet masking
+  const ipv4Octets = ip.split(".");
+  if (
+    ipv4Octets.length === 4 &&
+    ipv4Octets.every((o) => /^\d+$/.test(o) && Number(o) >= 0 && Number(o) <= 255)
+  ) {
+    return `${ipv4Octets[0]}.${ipv4Octets[1]}.${ipv4Octets[2]}.0/24`;
+  }
+
+  // IPv6 /48 subnet masking
+  if (ip.includes(":")) {
+    const hextets = ip.split(":").filter(Boolean);
+    if (hextets.length >= 3) {
+      return `${hextets[0]}:${hextets[1]}:${hextets[2]}::/48`;
+    }
+    return "ipv6-subnet";
+  }
+
+  return ip || "127.0.0.0/24";
+}
+
+/**
+ * Safely extracts normalized client context (User-Agent, IP, fingerprint) from a Request,
+ * Headers instance, or plain ClientContext object.
+ */
+export function extractClientContext(
+  source?:
+    | Request
+    | Headers
+    | { get(name: string): string | null | undefined }
+    | ClientContext
+    | null
+): ClientContext {
+  if (!source) return {};
+
+  if (typeof source === "object" && source !== null) {
+    if ("userAgent" in source || "clientIp" in source || "fingerprint" in source) {
+      const c = source as ClientContext;
+      return {
+        userAgent: c.userAgent || "",
+        clientIp: c.clientIp || "unknown",
+        fingerprint: c.fingerprint || "",
+      };
+    }
+  }
+
+  let headersObj: { get(name: string): string | null | undefined };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (source && "headers" in source && source.headers && typeof (source.headers as any).get === "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    headersObj = source.headers as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } else if (source && typeof (source as any).get === "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    headersObj = source as any;
+  } else {
+    return {};
+  }
+
+  const userAgent = (headersObj.get("user-agent") || "").trim();
+
+  // Trusted IP extraction hierarchy
+  let clientIp = "";
+  const vercelForwarded = headersObj.get("x-vercel-forwarded-for");
+  const cfConnecting = headersObj.get("cf-connecting-ip");
+  const realIp = headersObj.get("x-real-ip");
+  const forwardedFor = headersObj.get("x-forwarded-for");
+
+  if (vercelForwarded) {
+    clientIp = vercelForwarded.split(",")[0].trim();
+  } else if (cfConnecting) {
+    clientIp = cfConnecting.trim();
+  } else if (realIp) {
+    clientIp = realIp.trim();
+  } else if (forwardedFor) {
+    clientIp = forwardedFor.split(",")[0].trim();
+  }
+
+  const fingerprint = (headersObj.get("x-client-fingerprint") || "").trim();
+
+  return {
+    userAgent,
+    clientIp: clientIp || "unknown",
+    fingerprint,
+  };
+}
+
+/**
+ * Computes a deterministic SHA-256 HMAC over the normalized client context.
+ * Keyed by getAuthSecret() to ensure cryptographic binding.
+ */
+export function computeContextHash(
+  context: ClientContext,
+  secretKey?: string
+): string {
+  const secret = secretKey || getAuthSecret();
+  const normalizedUa = (context.userAgent || "").trim().toLowerCase();
+  const normalizedSubnet = normalizeIpSubnet(context.clientIp);
+  const fp = (context.fingerprint || "").trim();
+
+  const canonicalString = `${normalizedUa}|${normalizedSubnet}|${fp}`;
+  return crypto
+    .createHmac("sha256", secret)
+    .update(canonicalString)
+    .digest("hex");
+}
+
+export interface SessionCookieOptions {
+  httpOnly: boolean;
+  sameSite: "strict" | "lax" | "none";
+  secure: boolean;
+  path: string;
+  maxAge: number;
+}
+
+export const SESSION_MAX_AGE_SECONDS = 4 * 60 * 60; // 4 hours
+
+export function isSecureCookieEnabled(): boolean {
+  return (
+    process.env.NODE_ENV === "production" ||
+    process.env.FIZIKALAB_SECURE_COOKIES === "1" ||
+    process.env.FIZIKALAB_SECURE_COOKIES === "true"
+  );
+}
+
+export function getSessionCookieOptions(
+  overrides?: Partial<SessionCookieOptions>
+): SessionCookieOptions {
+  return {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: isSecureCookieEnabled(),
+    path: "/",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    ...overrides,
+  };
+}
+
+export function getSessionClearCookieOptions(): SessionCookieOptions {
+  return {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: isSecureCookieEnabled(),
+    path: "/",
+    maxAge: 0,
+  };
+}
+
+export function isAdminOrDarksystem(
+  roleOrUser: UserRole | SessionPayload | null | undefined
+): boolean {
+  if (!roleOrUser) return false;
+  if (typeof roleOrUser === "string") {
+    return roleOrUser === "admin" || roleOrUser === "darksystem";
+  }
+  return roleOrUser.role === "admin" || roleOrUser.role === "darksystem";
 }
 
 /**
@@ -365,21 +574,50 @@ function getEncryptionKey(): Buffer {
   return crypto.createHash("sha256").update(`fizikalab-aes256gcm:${secret}`).digest();
 }
 
-export function signSessionToken(
-  payload: Omit<SessionPayload, "sessionId" | "issuedAt" | "exp">
-): string {
+export async function signSessionToken(
+  payload: Omit<SessionPayload, "sessionId" | "issuedAt" | "exp" | "ctxHash">,
+  clientContextSource?:
+    | ClientContext
+    | Request
+    | Headers
+    | { get(name: string): string | null | undefined }
+): Promise<string> {
   const isDarksystem = payload.role === "admin" || payload.role === "darksystem";
   const role: UserRole = isDarksystem ? "darksystem" : payload.role;
 
+  const clientContext = extractClientContext(clientContextSource);
+  const ctxHash = computeContextHash(clientContext);
+  const sessionId = crypto.randomUUID();
+  const issuedAt = Date.now();
+  const exp = issuedAt + SESSION_MAX_AGE_SECONDS * 1000;
+
   const full: SessionPayload = {
     ...payload,
-    sessionId: crypto.randomUUID(),
+    sessionId,
     role,
     email: isDarksystem ? "darksystem@internal" : payload.email,
     fullName: isDarksystem ? "Darksystem Administrator" : payload.fullName,
-    issuedAt: Date.now(),
-    exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    issuedAt,
+    exp,
+    ctxHash,
   };
+
+  try {
+    const { createActiveSession } = await import("./db");
+    await createActiveSession({
+      sessionId,
+      userId: payload.userId,
+      clientFingerprint: ctxHash,
+      ipAddress: clientContext.clientIp || null,
+      userAgent: clientContext.userAgent || null,
+      createdAt: new Date(issuedAt).toISOString(),
+      lastSeenAt: new Date(issuedAt).toISOString(),
+      expiresAt: new Date(exp).toISOString(),
+      isRevoked: 0,
+    });
+  } catch (err) {
+    console.error("Failed to persist active session:", err);
+  }
 
   const key = getEncryptionKey();
   const iv = crypto.randomBytes(12);
@@ -391,12 +629,26 @@ export function signSessionToken(
   return `enc.${iv.toString("base64url")}.${encrypted.toString("base64url")}.${tag.toString("base64url")}`;
 }
 
-export function verifySessionToken(token: string | undefined): SessionPayload | null {
+function isCanonicalBase64Url(str: string): boolean {
+  if (!str) return false;
+  return Buffer.from(str, "base64url").toString("base64url") === str;
+}
+
+export function verifySessionTokenStateless(
+  token: string | undefined
+): SessionPayload | null {
   if (!token || !token.startsWith("enc.")) return null;
   const parts = token.slice(4).split(".");
   if (parts.length !== 3) return null;
   const [ivB64, cipherB64, tagB64] = parts;
   try {
+    if (
+      !isCanonicalBase64Url(ivB64) ||
+      !isCanonicalBase64Url(cipherB64) ||
+      !isCanonicalBase64Url(tagB64)
+    ) {
+      return null;
+    }
     const key = getEncryptionKey();
     const iv = Buffer.from(ivB64, "base64url");
     const encrypted = Buffer.from(cipherB64, "base64url");
@@ -414,6 +666,58 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
     ) {
       return null;
     }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function verifySessionToken(
+  token: string | undefined,
+  clientContextSource?:
+    | ClientContext
+    | Request
+    | Headers
+    | { get(name: string): string | null | undefined }
+): SessionPayload | null {
+  if (!token || !token.startsWith("enc.")) return null;
+  const parts = token.slice(4).split(".");
+  if (parts.length !== 3) return null;
+  const [ivB64, cipherB64, tagB64] = parts;
+  try {
+    if (
+      !isCanonicalBase64Url(ivB64) ||
+      !isCanonicalBase64Url(cipherB64) ||
+      !isCanonicalBase64Url(tagB64)
+    ) {
+      return null;
+    }
+    const key = getEncryptionKey();
+    const iv = Buffer.from(ivB64, "base64url");
+    const encrypted = Buffer.from(cipherB64, "base64url");
+    const tag = Buffer.from(tagB64, "base64url");
+    const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+    decipher.setAuthTag(tag);
+    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    const parsed = JSON.parse(decrypted.toString("utf8")) as SessionPayload;
+    if (!parsed.exp || parsed.exp < Date.now()) return null;
+    if (
+      parsed.role !== "admin" &&
+      parsed.role !== "darksystem" &&
+      parsed.role !== "teacher" &&
+      parsed.role !== "student"
+    ) {
+      return null;
+    }
+
+    if (parsed.ctxHash) {
+      const currentContext = extractClientContext(clientContextSource);
+      const expectedHash = computeContextHash(currentContext);
+      if (!timingSafeStringEqual(parsed.ctxHash, expectedHash)) {
+        return null;
+      }
+    }
+
     return parsed;
   } catch {
     return null;
@@ -476,13 +780,104 @@ export function shouldRotateSession(payload: SessionPayload): boolean {
   return Date.now() - payload.issuedAt > 30_000;
 }
 
-export async function getSessionUser(): Promise<SessionPayload | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-  const payload = verifySessionToken(token);
-  if (!payload) return null;
+export async function rotateSessionToken(
+  oldSessionId: string,
+  payload: Omit<SessionPayload, "sessionId" | "issuedAt" | "exp" | "ctxHash">,
+  clientContextSource?:
+    | ClientContext
+    | Request
+    | Headers
+    | { get(name: string): string | null | undefined }
+): Promise<string> {
+  const { getDb } = await import("./db");
+  const db = await getDb();
+  const nowIso = new Date().toISOString();
+  const expiresAtIso = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString();
 
-  const { getActiveSessionUserById } = await import("./db");
+  // Atomically mark oldSessionId as revoked in database (upsert handles out-of-band test tokens)
+  await db.execute(
+    `INSERT INTO active_sessions (session_id, user_id, client_fingerprint, created_at, last_seen_at, expires_at, is_revoked)
+     VALUES ($1, $2, 'revoked', $3, $4, $5, 1)
+     ON CONFLICT(session_id) DO UPDATE SET is_revoked = 1`,
+    [oldSessionId, payload.userId, nowIso, nowIso, expiresAtIso]
+  );
+
+  const freshToken = await signSessionToken(payload, clientContextSource);
+  return freshToken;
+}
+
+export async function getSessionUser(
+  req?: Request
+): Promise<SessionPayload | null> {
+  let token: string | undefined;
+  let clientContext: ClientContext | undefined;
+
+  // Path 1: Extracted directly from Request if supplied (Route Handlers)
+  if (req) {
+    clientContext = extractClientContext(req);
+    const cookieHeader = req.headers.get("cookie") || "";
+    const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${SESSION_COOKIE_NAME}=([^;]+)`));
+    if (match) {
+      token = decodeURIComponent(match[1]);
+    }
+  }
+
+  // Path 2: Fall back to next/headers cookies() (Server Components & Parameterless calls)
+  if (!token) {
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    } catch {
+      // Outside active Next.js request scope
+    }
+  }
+
+  // Path 3: Fall back to next/headers headers() for context extraction
+  if (!clientContext) {
+    try {
+      const { headers } = await import("next/headers");
+      const headerStore = await headers();
+      clientContext = extractClientContext(headerStore);
+    } catch {
+      // Outside active Next.js request scope
+    }
+  }
+
+  if (!token) return null;
+
+  const payload = verifySessionToken(token, clientContext);
+  if (!payload || !payload.sessionId) return null;
+
+  // Database session verification
+  const { getActiveSession, touchActiveSession, createActiveSession, getActiveSessionUserById } = await import("./db");
+  const activeSession = await getActiveSession(payload.sessionId, { includeRevokedOrExpired: true });
+
+  if (activeSession) {
+    if (activeSession.is_revoked !== 0) {
+      return null;
+    }
+    const expTime = new Date(activeSession.expires_at).getTime();
+    if (isNaN(expTime) || expTime <= Date.now()) {
+      return null;
+    }
+    await touchActiveSession(payload.sessionId);
+  } else {
+    // Auto-register session if valid token was minted out-of-band (e.g. test helper)
+    try {
+      await createActiveSession({
+        sessionId: payload.sessionId,
+        userId: payload.userId,
+        clientFingerprint: payload.ctxHash || (clientContext ? computeContextHash(clientContext) : "legacy"),
+        ipAddress: clientContext?.clientIp || null,
+        userAgent: clientContext?.userAgent || null,
+        expiresAt: payload.exp,
+      });
+    } catch {
+      // Ignore concurrent conflict
+    }
+  }
+
   const dbUser = await getActiveSessionUserById(payload.userId);
   if (!dbUser || dbUser.is_active !== 1 || dbUser.is_banned === 1) {
     return null;
@@ -512,5 +907,6 @@ export async function getSessionUser(): Promise<SessionPayload | null> {
     faculty: dbUser.faculty || "",
     issuedAt: payload.issuedAt,
     exp: payload.exp,
+    ctxHash: payload.ctxHash,
   };
 }

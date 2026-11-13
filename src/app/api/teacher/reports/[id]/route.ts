@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isAdminOrDarksystem } from "@/lib/auth";
 import { getDb, writeAuditLog } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "teacher" && user.role !== "admin")) {
+  const user = await getSessionUser(req);
+  if (!user || (user.role !== "teacher" && !isAdminOrDarksystem(user))) {
     return NextResponse.json(
       { error: "Faqat ustoz yoki administrator hisobotni baholay oladi." },
       { status: 403 }

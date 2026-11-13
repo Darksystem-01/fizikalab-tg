@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isAdminOrDarksystem } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
-export async function GET() {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "teacher" && user.role !== "admin")) {
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
+  if (!user || (user.role !== "teacher" && !isAdminOrDarksystem(user))) {
     return NextResponse.json(
       { error: "Faqat ustozlar va administrator uchun ruxsat etilgan." },
       { status: 403 }
@@ -14,7 +14,7 @@ export async function GET() {
   const db = await getDb();
 
   const groups =
-    user.role === "admin"
+    isAdminOrDarksystem(user)
       ? await db.queryAll(
           `SELECT g.*, u.full_name AS teacher_name
            FROM academic_groups g
@@ -38,7 +38,7 @@ export async function GET() {
   );
 
   const assignments =
-    user.role === "admin"
+    isAdminOrDarksystem(user)
       ? await db.queryAll(
           `SELECT a.*, u.full_name AS creator_name
            FROM assignments a

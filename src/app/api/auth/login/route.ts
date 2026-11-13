@@ -5,6 +5,7 @@ import {
   isConfiguredAdminEmail,
   performDummyPasswordCheck,
   SESSION_COOKIE_NAME,
+  getSessionCookieOptions,
   signSessionToken,
   verifyConfiguredAdminCredentials,
   verifyPassword,
@@ -26,13 +27,23 @@ export async function POST(req: Request) {
     const email = rawEmail.includes("@") ? sanitizeEmail(rawEmail) : rawEmail.toLowerCase();
     const password = body.password || "";
 
+    const ipRl = checkRateLimit(`login_ip:${ip}`, 40, 5 * 60 * 1000);
+    if (!ipRl.allowed) {
+      return NextResponse.json(
+        {
+          error: `Juda ko‘p urinish. ${ipRl.retryAfterSec} soniyadan keyin qayta urinib ko‘ring.`,
+        },
+        { status: 429, headers: { "Retry-After": String(ipRl.retryAfterSec) } }
+      );
+    }
+
     const rl = checkRateLimit(`login:${ip}:${email}`, 20, 5 * 60 * 1000);
     if (!rl.allowed) {
       return NextResponse.json(
         {
           error: `Juda ko‘p urinish. ${rl.retryAfterSec} soniyadan keyin qayta urinib ko‘ring.`,
         },
-        { status: 429 }
+        { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } }
       );
     }
 
@@ -111,7 +122,7 @@ export async function POST(req: Request) {
     const clientEmail = isDarksystem ? "darksystem@internal" : user.email;
     const clientFullName = isDarksystem ? "Darksystem Administrator" : user.full_name;
 
-    const token = signSessionToken({
+    const token = await signSessionToken({
       userId: user.id,
       email: clientEmail,
       fullName: clientFullName,
@@ -119,7 +130,7 @@ export async function POST(req: Request) {
       studentGroup: user.student_group,
       university: user.university || "",
       faculty: user.faculty || "",
-    });
+    }, req);
 
     await writeAuditLog(
       user.id,
@@ -138,13 +149,7 @@ export async function POST(req: Request) {
         faculty: user.faculty || "",
       },
     });
-    res.cookies.set(SESSION_COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
     return res;
   } catch {
     return NextResponse.json(

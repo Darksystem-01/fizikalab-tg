@@ -9,6 +9,8 @@ import {
 import {
   isConfiguredAdminEmail,
   SESSION_COOKIE_NAME,
+  getSessionCookieOptions,
+  getSessionClearCookieOptions,
   signGoogleOnboardingToken,
   signSessionToken,
 } from "@/lib/auth";
@@ -46,13 +48,7 @@ export async function GET(req: Request) {
         "Google orqali kirish bekor qilindi yoki xatolik yuz berdi."
       )}`
     );
-    res.cookies.set(SESSION_COOKIE_NAME, "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 0,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
     return res;
   }
 
@@ -60,13 +56,18 @@ export async function GET(req: Request) {
     const res = NextResponse.redirect(
       `${baseUrl}/?google_error=${encodeURIComponent("Google avtorizatsiya kodi topilmadi.")}`
     );
-    res.cookies.set(SESSION_COOKIE_NAME, "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 0,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
+    return res;
+  }
+
+  const stateParam = url.searchParams.get("state");
+  const stateCookie = req.headers.get("cookie")?.match(/(?:^|;\s*)fizikalab_oauth_state=([^;]+)/)?.[1];
+  if (stateCookie && stateParam && stateCookie !== stateParam) {
+    const res = NextResponse.redirect(
+      `${baseUrl}/?google_error=${encodeURIComponent("Xavfsizlik xatoligi: OAuth state mos kelmadi.")}`
+    );
+    res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
+    res.cookies.set("fizikalab_oauth_state", "", { ...getSessionClearCookieOptions(), maxAge: 0 });
     return res;
   }
 
@@ -148,13 +149,7 @@ export async function GET(req: Request) {
         "Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring."
       )}`
     );
-    res.cookies.set(SESSION_COOKIE_NAME, "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 0,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
     return res;
   }
 
@@ -172,13 +167,7 @@ export async function GET(req: Request) {
           "Hisobingiz administrator tomonidan bloklangan."
         )}`
       );
-      res.cookies.set(SESSION_COOKIE_NAME, "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 0,
-      });
+      res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
       return res;
     }
 
@@ -188,13 +177,7 @@ export async function GET(req: Request) {
           "Administrator paneliga Google orqali kirish taqiqlangan. Iltimos, elektron pochta va maxfiy parolingizni kiritib kiring."
         )}`
       );
-      res.cookies.set(SESSION_COOKIE_NAME, "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 0,
-      });
+      res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
       return res;
     }
 
@@ -210,7 +193,7 @@ export async function GET(req: Request) {
     const clientEmail = existing.email;
     const clientFullName = existing.full_name;
 
-    const token = signSessionToken({
+    const token = await signSessionToken({
       userId: existing.id,
       email: clientEmail,
       fullName: clientFullName,
@@ -218,7 +201,7 @@ export async function GET(req: Request) {
       studentGroup: existing.student_group,
       university: existing.university || "",
       faculty: existing.faculty || "",
-    });
+    }, req);
 
     await writeAuditLog(
       existing.id,
@@ -229,13 +212,7 @@ export async function GET(req: Request) {
     const redirectPath = clientRole === "teacher" ? "/teacher" : "/labs/metrology";
 
     const res = NextResponse.redirect(`${baseUrl}${redirectPath}`, { status: 302 });
-    res.cookies.set(SESSION_COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
     return res;
   }
 
@@ -255,20 +232,8 @@ export async function GET(req: Request) {
 
   const res = NextResponse.redirect(onboardingUrl.toString(), { status: 302 });
   // Store onboarding ticket in secure cookie as well as URL parameter
-  res.cookies.set("fizikalab_google_onboarding", onboardingToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 30 * 60,
-  });
+  res.cookies.set("fizikalab_google_onboarding", onboardingToken, getSessionCookieOptions({ maxAge: 30 * 60 }));
   // Clear any existing session cookie so onboarding is completely fresh
-  res.cookies.set(SESSION_COOKIE_NAME, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
+  res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
   return res;
 }

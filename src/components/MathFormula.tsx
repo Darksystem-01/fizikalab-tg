@@ -3,6 +3,15 @@
 import katex from "katex";
 import { useMemo } from "react";
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export function MathFormula({
   tex,
   display = false,
@@ -19,7 +28,7 @@ export function MathFormula({
         throwOnError: false,
       });
     } catch {
-      return tex;
+      return escapeHtml(tex);
     }
   }, [tex, display]);
 

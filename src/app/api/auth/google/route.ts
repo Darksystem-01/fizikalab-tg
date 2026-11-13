@@ -10,6 +10,8 @@ import {
   hashPassword,
   isConfiguredAdminEmail,
   SESSION_COOKIE_NAME,
+  getSessionCookieOptions,
+  getSessionClearCookieOptions,
   signSessionToken,
   verifyGoogleOnboardingToken,
 } from "@/lib/auth";
@@ -270,7 +272,7 @@ export async function POST(req: Request) {
       const clientEmail = existing.email;
       const clientFullName = existing.full_name;
 
-      const token = signSessionToken({
+      const token = await signSessionToken({
         userId: existing.id,
         email: clientEmail,
         fullName: clientFullName,
@@ -278,7 +280,7 @@ export async function POST(req: Request) {
         studentGroup: existing.student_group,
         university: existing.university || "",
         faculty: existing.faculty || "",
-      });
+      }, req);
 
       await writeAuditLog(
         existing.id,
@@ -298,13 +300,7 @@ export async function POST(req: Request) {
         },
       });
 
-      res.cookies.set(SESSION_COOKIE_NAME, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60,
-      });
+      res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
 
       return res;
     }
@@ -368,7 +364,7 @@ export async function POST(req: Request) {
 
     const newUserId = Number(inserted.lastInsertId);
 
-    const token = signSessionToken({
+    const token = await signSessionToken({
       userId: newUserId,
       email: cleanEmail,
       fullName: googleName,
@@ -376,7 +372,7 @@ export async function POST(req: Request) {
       studentGroup,
       university: matchedUni.name,
       faculty,
-    });
+    }, req);
 
     await writeAuditLog(
       newUserId,
@@ -399,21 +395,9 @@ export async function POST(req: Request) {
       { status: 201 }
     );
 
-    res.cookies.set(SESSION_COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
 
-    res.cookies.set("fizikalab_google_onboarding", "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 0,
-    });
+    res.cookies.set("fizikalab_google_onboarding", "", getSessionClearCookieOptions());
 
     return res;
   } catch (err) {

@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isAdminOrDarksystem } from "@/lib/auth";
 import { getDb, writeAuditLog } from "@/lib/db";
 
-export async function GET() {
-  const user = await getSessionUser();
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
   if (!user) {
     return NextResponse.json({ error: "Autentifikatsiya talab qilinadi" }, { status: 401 });
   }
 
   const db = await getDb();
-  if (user.role === "admin" || user.role === "teacher") {
+  if (isAdminOrDarksystem(user) || user.role === "teacher") {
     const assignments = await db.queryAll(
       `SELECT a.*, u.full_name AS creator_name
        FROM assignments a
@@ -34,8 +34,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const user = await getSessionUser();
-  if (!user || (user.role !== "admin" && user.role !== "teacher")) {
+  const user = await getSessionUser(req);
+  if (!user || (!isAdminOrDarksystem(user) && user.role !== "teacher")) {
     return NextResponse.json(
       { error: "Faqat ustoz yoki administrator laboratoriya topshirig‘i yarata oladi." },
       { status: 403 }

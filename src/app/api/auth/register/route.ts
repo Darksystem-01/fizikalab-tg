@@ -3,6 +3,7 @@ import {
   hashPassword,
   isConfiguredAdminEmail,
   SESSION_COOKIE_NAME,
+  getSessionCookieOptions,
   signSessionToken,
 } from "@/lib/auth";
 import { getDb, writeAuditLog, type DbUser } from "@/lib/db";
@@ -120,7 +121,7 @@ export async function POST(req: Request) {
       `Yangi talaba: ${email} (${matchedUni.name} / ${faculty} / ${studentGroup})`
     );
 
-    const token = signSessionToken({
+    const token = await signSessionToken({
       userId: newId,
       email,
       fullName,
@@ -128,7 +129,7 @@ export async function POST(req: Request) {
       studentGroup,
       university: matchedUni.name,
       faculty,
-    });
+    }, req);
 
     const res = NextResponse.json(
       {
@@ -144,13 +145,7 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-    res.cookies.set(SESSION_COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
     return res;
   } catch {
     return NextResponse.json(

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser, hashPassword, isConfiguredAdminEmail } from "@/lib/auth";
-import { getDb, writeAuditLog, type DbUser } from "@/lib/db";
+import { getDb, writeAuditLog, revokeAllUserSessions, type DbUser } from "@/lib/db";
 import { validateAndSanitizeEmail } from "@/lib/emailValidation";
 
 export async function POST(req: Request) {
@@ -121,6 +121,9 @@ export async function PATCH(req: Request) {
       "UPDATE users SET is_banned = $1, is_active = $2 WHERE id = $3",
       [isBannedInt, isActiveInt, target.id]
     );
+    if (body.isBanned) {
+      await revokeAllUserSessions(target.id);
+    }
     await writeAuditLog(
       Number(admin.userId),
       body.isBanned ? "ADMIN_BAN_USER" : "ADMIN_UNBAN_USER",
@@ -133,6 +136,7 @@ export async function PATCH(req: Request) {
       hashPassword(body.newPassword),
       target.id,
     ]);
+    await revokeAllUserSessions(target.id);
     await writeAuditLog(
       Number(admin.userId),
       "ADMIN_RESET_PASSWORD",
@@ -158,7 +162,7 @@ export async function PATCH(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const admin = await getSessionUser();
+  const admin = await getSessionUser(req);
   if (!admin || (admin.role !== "admin" && admin.role !== "darksystem")) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -181,6 +185,7 @@ export async function DELETE(req: Request) {
     );
   }
 
+  await revokeAllUserSessions(target.id);
   await db.execute("DELETE FROM users WHERE id = $1", [target.id]);
   await writeAuditLog(
     Number(admin.userId),
