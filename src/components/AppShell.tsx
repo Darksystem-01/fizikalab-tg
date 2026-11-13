@@ -16,6 +16,8 @@ import {
   Scale,
   ShieldCheck,
   Sparkles,
+  Thermometer,
+  Radiation,
   Wrench,
   X,
   Zap,
@@ -39,6 +41,8 @@ const NAV_ITEMS = [
   { href: "/labs/statics", label: "4. Statika & Muvozanat", icon: Scale },
   { href: "/labs/electromagnetism", label: "5. Elektromagnetizm", icon: Zap },
   { href: "/labs/optics", label: "6. Geometrik & To‘lqin Optika", icon: Sparkles },
+  { href: "/labs/thermodynamics", label: "7. Molekulyar & Termodinamika", icon: Thermometer },
+  { href: "/labs/atomic", label: "8. Atom & Yadro Fizikasi", icon: Radiation },
 ];
 
 const SECONDARY_ITEMS = [

@@ -7,9 +7,12 @@ import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { EmResult, EmSubMode } from "@/lib/physics/electromagnetism";
 
 export function ElectromagnetismLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("em-01");
   const [subMode, setSubMode] = useState<EmSubMode>("wheatstone_meter_bridge");
 
   // Wheatstone & Meter bridge
@@ -266,8 +269,28 @@ export function ElectromagnetismLab() {
   const galvMa = Number(result?.summary?.galvanometerCurrentMa ?? 0);
   const needleAngleDeg = Math.max(-45, Math.min(45, galvMa * 1.2));
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.subMode === "string") {
+      setSubMode(p.subMode as EmSubMode);
+    }
+    if (typeof p.supplyV === "number") setSupplyV(p.supplyV);
+    if (typeof p.rKnownOhm === "number") setRKnownOhm(p.rKnownOhm);
+    if (typeof p.rUnknownOhm === "number") setRUnknownOhm(p.rUnknownOhm);
+    if (typeof p.jockeyCm === "number") setJockeyCm(p.jockeyCm);
+    if (typeof p.vPeakV === "number") setVPeakV(p.vPeakV);
+    if (typeof p.freqHz === "number") setFreqHz(p.freqHz);
+  }
+
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="electromagnetism"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-2 border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
           {[

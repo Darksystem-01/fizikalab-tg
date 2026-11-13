@@ -10,6 +10,11 @@ import { simulateKinematics, type KinematicsInput } from "@/lib/physics/kinemati
 import { simulateMetrology, type VernierInput } from "@/lib/physics/metrology";
 import { simulateOptics, type OpticsInput } from "@/lib/physics/optics";
 import { simulateStatics, type StaticsInput } from "@/lib/physics/statics";
+import {
+  simulateThermodynamics,
+  type ThermodynamicsInput,
+} from "@/lib/physics/thermodynamics";
+import { simulateAtomic, type AtomicInput } from "@/lib/physics/atomic";
 
 export type LabKey =
   | "metrology"
@@ -17,7 +22,9 @@ export type LabKey =
   | "dynamics"
   | "statics"
   | "electromagnetism"
-  | "optics";
+  | "optics"
+  | "thermodynamics"
+  | "atomic";
 
 export async function POST(req: Request) {
   try {
@@ -55,6 +62,14 @@ export async function POST(req: Request) {
         break;
       case "optics":
         result = simulateOptics(body.params as unknown as OpticsInput);
+        break;
+      case "thermodynamics":
+        result = simulateThermodynamics(
+          body.params as unknown as ThermodynamicsInput
+        );
+        break;
+      case "atomic":
+        result = simulateAtomic(body.params as unknown as AtomicInput);
         break;
       default:
         return NextResponse.json(

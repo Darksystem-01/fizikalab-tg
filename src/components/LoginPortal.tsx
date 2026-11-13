@@ -130,11 +130,32 @@ export function LoginPortal() {
       .catch(() => {});
   }, []);
 
+  // Client-side hydration sync for URL parameters
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("google_onboarding") === "1") {
+      setPendingGoogleUser({
+        email: p.get("email") || "",
+        fullName: p.get("name") || "",
+        googleId: p.get("google_id") || "",
+        onboardingToken: p.get("token") || "",
+      });
+      if (p.get("name")) {
+        setFullName(p.get("name") || "");
+      }
+    }
+    if (p.get("google_error")) {
+      setError(p.get("google_error"));
+    }
+  }, []);
+
   const processGoogleAuth = useCallback(
     async (payload: {
       credential?: string;
       accessToken?: string;
       onboardingToken?: string;
+      fullName?: string;
       university?: string;
       faculty?: string;
       studentGroup?: string;
@@ -160,12 +181,12 @@ export function LoginPortal() {
           setPendingGoogleUser({
             credential: payload.credential,
             accessToken: payload.accessToken,
-            onboardingToken: payload.onboardingToken,
+            onboardingToken: data.onboardingToken || payload.onboardingToken,
             email: data.email,
             fullName: data.fullName || "",
             googleId: data.googleId || "",
           });
-          if (data.fullName) {
+          if (data.fullName && !fullName) {
             setFullName(data.fullName);
           }
           setLoading(false);
@@ -242,6 +263,7 @@ export function LoginPortal() {
       credential: pendingGoogleUser.credential,
       accessToken: pendingGoogleUser.accessToken,
       onboardingToken: pendingGoogleUser.onboardingToken,
+      fullName: fullName.trim(),
       university,
       faculty,
       studentGroup: studentGroup.trim(),

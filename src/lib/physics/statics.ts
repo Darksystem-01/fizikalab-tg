@@ -13,7 +13,13 @@ export interface BeamLoad {
 }
 
 export interface StaticsInput {
-  subMode: "force_table" | "beam_moments" | "pulley_wheel";
+  subMode:
+    | "force_table"
+    | "beam_moments"
+    | "pulley_wheel"
+    | "buoyancy"
+    | "ladder_friction"
+    | "truss";
   forces?: ForceVector[];
   beamLengthM?: number;
   beamMassKg?: number;
@@ -26,6 +32,20 @@ export interface StaticsInput {
   wheelRadiusM?: number;
   axleRadiusM?: number;
   mechanismType?: "pulley" | "wheel_axle";
+  // Buoyancy
+  bodyMassKg?: number;
+  bodyVolumeM3?: number;
+  fluidDensityKgM3?: number;
+  // Ladder friction
+  ladderLengthM?: number;
+  ladderMassKg?: number;
+  muFloor?: number;
+  muWall?: number;
+  ladderAngleDeg?: number;
+  // Truss
+  trussSpanM?: number;
+  trussHeightM?: number;
+  trussLoadN?: number;
 }
 
 export interface StaticsResult {
@@ -150,6 +170,106 @@ export function simulateStatics(input: StaticsInput): StaticsResult {
         L,
         loads,
       },
+    };
+  }
+
+  if (input.subMode === "buoyancy") {
+    const mBody = Math.max(0.01, input.bodyMassKg ?? 5.0);
+    const vBody = Math.max(1e-6, input.bodyVolumeM3 ?? 0.008);
+    const rhoFluid = Math.max(10, input.fluidDensityKgM3 ?? 1000); // water = 1000 kg/m^3
+    const rhoBody = mBody / vBody;
+
+    const gravityForceN = mBody * CODATA.g;
+    const maxBuoyancyN = rhoFluid * CODATA.g * vBody;
+    const isFloating = rhoBody < rhoFluid;
+    const submergedFraction = Math.min(1.0, rhoBody / rhoFluid);
+    const actualBuoyancyN = isFloating ? gravityForceN : maxBuoyancyN;
+    const apparentWeightN = Math.max(0, gravityForceN - actualBuoyancyN);
+
+    return {
+      subMode: "buoyancy",
+      summary: {
+        bodyMassKg: roundTo(mBody, 3),
+        bodyVolumeLiters: roundTo(vBody * 1000, 3),
+        bodyDensityKgM3: roundTo(rhoBody, 1),
+        fluidDensityKgM3: roundTo(rhoFluid, 1),
+        gravityForceN: roundTo(gravityForceN, 3),
+        buoyancyForceN: roundTo(actualBuoyancyN, 3),
+        apparentWeightN: roundTo(apparentWeightN, 3),
+        submergedVolumePct: roundTo(submergedFraction * 100, 2),
+        isFloating,
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "ladder_friction") {
+    const L = Math.max(0.5, input.ladderLengthM ?? 4.0);
+    const m = Math.max(1, input.ladderMassKg ?? 15.0);
+    const muF = Math.max(0.01, input.muFloor ?? 0.4);
+    const muW = Math.max(0, input.muWall ?? 0.0);
+    const thetaDeg = Math.min(89, Math.max(1, input.ladderAngleDeg ?? 60));
+    const thetaRad = degToRad(thetaDeg);
+
+    // Critical minimum angle before slip: tan(theta_c) = (1 - muF * muW) / (2 * muF)
+    const tanThetaC = (1 - muF * muW) / (2 * muF);
+    const criticalAngleDeg = radToDeg(Math.atan(tanThetaC));
+    const isStable = thetaDeg >= criticalAngleDeg;
+
+    const weightN = m * CODATA.g;
+    // Normal at wall: N_w = (m * g * cos(theta)) / (2 * sin(theta)) = (m*g) / (2 * tan(theta))
+    const normalWallN = weightN / (2 * Math.tan(thetaRad));
+    const normalFloorN = weightN;
+    const frictionFloorN = normalWallN;
+    const maxFloorFrictionN = muF * normalFloorN;
+
+    return {
+      subMode: "ladder_friction",
+      summary: {
+        ladderLengthM: roundTo(L, 2),
+        ladderMassKg: roundTo(m, 1),
+        ladderAngleDeg: roundTo(thetaDeg, 1),
+        criticalAngleDeg: roundTo(criticalAngleDeg, 2),
+        isStable,
+        floorFrictionN: roundTo(frictionFloorN, 3),
+        maxFloorFrictionN: roundTo(maxFloorFrictionN, 3),
+        wallNormalForceN: roundTo(normalWallN, 3),
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "truss") {
+    const span = Math.max(1, input.trussSpanM ?? 6.0);
+    const height = Math.max(0.5, input.trussHeightM ?? 2.5);
+    const loadN = Math.max(10, input.trussLoadN ?? 5000);
+
+    // Symmetric equilateral/triangular truss with central vertical load at apex
+    const reactionA = loadN / 2;
+    const reactionB = loadN / 2;
+    const memberAngleRad = Math.atan(height / (span / 2));
+    const memberAngleDeg = radToDeg(memberAngleRad);
+
+    // Method of joints:
+    // Joint A: N_bottom + N_top * cos(theta) = 0, R_A + N_top * sin(theta) = 0
+    // -> N_top = -R_A / sin(theta) (compression)
+    // -> N_bottom = -N_top * cos(theta) = R_A / tan(theta) (tension)
+    const compressionTopChordN = reactionA / Math.sin(memberAngleRad);
+    const tensionBottomChordN = reactionA / Math.tan(memberAngleRad);
+
+    return {
+      subMode: "truss",
+      summary: {
+        trussSpanM: roundTo(span, 2),
+        trussHeightM: roundTo(height, 2),
+        apexLoadN: roundTo(loadN, 1),
+        reactionAN: roundTo(reactionA, 1),
+        reactionBN: roundTo(reactionB, 1),
+        chordAngleDeg: roundTo(memberAngleDeg, 2),
+        topChordCompressionN: roundTo(compressionTopChordN, 2),
+        bottomChordTensionN: roundTo(tensionBottomChordN, 2),
+      },
+      details: {},
     };
   }
 

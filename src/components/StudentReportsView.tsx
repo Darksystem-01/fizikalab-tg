@@ -36,6 +36,8 @@ const LAB_NAMES: Record<string, string> = {
   statics: "4. Statika & Muvozanat",
   electromagnetism: "5. Elektromagnetizm",
   optics: "6. Geometrik & To'lqin Optika",
+  thermodynamics: "7. Molekulyar & Termodinamika",
+  atomic: "8. Atom & Yadro Fizikasi",
 };
 
 export function StudentReportsView() {

@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "test:regression": "node --test tests/physics-and-api.test.mjs",
+    "test:security": "node --test tests/security-verification.test.mjs",
+    "test:stress": "node --test tests/stress-concurrency.test.mjs",
+    "test:challenger": "node --test tests/empirical-challenger-m1.mjs",
+    "test:e2e": "node --test tests/e2e-8chapters-verification.test.mjs"
   },
   "dependencies": {
     "@types/katex": "^0.16.8",

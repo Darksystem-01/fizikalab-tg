@@ -4,7 +4,10 @@ export type OpticsSubMode =
   | "optical_bench"
   | "prism_slab"
   | "microscope_telescope"
-  | "diffraction_interference";
+  | "diffraction_interference"
+  | "newton_rings"
+  | "polarization"
+  | "thin_film";
 
 export interface OpticsInput {
   subMode: OpticsSubMode;
@@ -31,6 +34,17 @@ export interface OpticsInput {
   slitWidthUm?: number; // a
   numSlits?: number; // N (2 for double slit, >2 for grating)
   screenDistanceM?: number;
+  // Newton's Rings
+  lensCurvatureRadiusM?: number;
+  ringOrder?: number;
+  ringType?: "dark" | "bright";
+  // Polarization
+  polarizerAngleDeg?: number;
+  initialIntensityW_M2?: number;
+  mediumRefractiveIndex?: number;
+  // Thin film
+  filmThicknessNm?: number;
+  filmRefractiveIndex?: number;
 }
 
 export interface OpticsResult {
@@ -205,6 +219,85 @@ export function simulateOptics(input: OpticsInput): OpticsResult {
         objectiveMag: roundTo(mObj, 3),
         eyepieceMag: roundTo(mEye, 3),
         totalMagnification: roundTo(totalMag, 2),
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "newton_rings") {
+    const R = Math.max(0.1, input.lensCurvatureRadiusM ?? 5.0); // 5 m radius of curvature
+    const lambdaNm = Math.min(1000, Math.max(300, input.wavelengthNm ?? 589)); // Sodium yellow 589 nm
+    const lambdaM = lambdaNm * 1e-9;
+    const mOrder = Math.max(1, Math.min(50, input.ringOrder ?? 5));
+
+    // Reflected dark ring radius: r_m = sqrt(m * R * lambda)
+    const rDarkM = Math.sqrt(mOrder * R * lambdaM);
+    // Reflected bright ring radius: r_m = sqrt((m - 0.5) * R * lambda)
+    const rBrightM = Math.sqrt((mOrder - 0.5) * R * lambdaM);
+
+    const ringList: { order: number; darkRadiusMm: number; brightRadiusMm: number }[] = [];
+    for (let k = 1; k <= Math.min(10, mOrder + 3); k++) {
+      ringList.push({
+        order: k,
+        darkRadiusMm: roundTo(Math.sqrt(k * R * lambdaM) * 1000, 3),
+        brightRadiusMm: roundTo(Math.sqrt((k - 0.5) * R * lambdaM) * 1000, 3),
+      });
+    }
+
+    return {
+      subMode: "newton_rings",
+      summary: {
+        lensCurvatureRadiusM: roundTo(R, 2),
+        wavelengthNm: roundTo(lambdaNm, 1),
+        ringOrder: mOrder,
+        darkRingRadiusMm: roundTo(rDarkM * 1000, 3),
+        brightRingRadiusMm: roundTo(rBrightM * 1000, 3),
+        darkRingDiameterMm: roundTo(2 * rDarkM * 1000, 3),
+        brightRingDiameterMm: roundTo(2 * rBrightM * 1000, 3),
+      },
+      details: { ringList },
+    };
+  }
+
+  if (input.subMode === "polarization") {
+    const thetaDeg = Math.min(360, Math.max(0, input.polarizerAngleDeg ?? 45));
+    const thetaRad = degToRad(thetaDeg);
+    const I0 = Math.max(1, input.initialIntensityW_M2 ?? 100);
+    const n = Math.max(1.0, input.mediumRefractiveIndex ?? 1.54); // glass
+
+    // Malus's Law: I = I0 * cos^2(theta)
+    const transmittedIntensity = I0 * Math.pow(Math.cos(thetaRad), 2);
+    // Brewster's angle: tan(theta_B) = n
+    const brewsterAngleDeg = radToDeg(Math.atan(n));
+
+    return {
+      subMode: "polarization",
+      summary: {
+        polarizerAngleDeg: roundTo(thetaDeg, 1),
+        initialIntensityW_M2: roundTo(I0, 2),
+        transmittedIntensityW_M2: roundTo(transmittedIntensity, 3),
+        transmissionFractionPct: roundTo(Math.pow(Math.cos(thetaRad), 2) * 100, 2),
+        refractiveIndex: roundTo(n, 3),
+        brewsterAngleDeg: roundTo(brewsterAngleDeg, 2),
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "thin_film") {
+    const dNm = Math.max(10, input.filmThicknessNm ?? 100);
+    const n = Math.max(1.0, input.filmRefractiveIndex ?? 1.38); // MgF2 coating
+    // Anti-reflective destructive interference at normal incidence: 2 * n * d = (m - 0.5) * lambda
+    // For m = 1: lambda = 4 * n * d
+    const lambdaAntiReflectiveNm = 4 * n * dNm;
+
+    return {
+      subMode: "thin_film",
+      summary: {
+        filmThicknessNm: roundTo(dNm, 1),
+        filmRefractiveIndex: roundTo(n, 3),
+        optimalAntiReflectiveWavelengthNm: roundTo(lambdaAntiReflectiveNm, 1),
+        opticalPathDifferenceNm: roundTo(2 * n * dNm, 1),
       },
       details: {},
     };

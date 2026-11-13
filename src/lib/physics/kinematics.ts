@@ -1,18 +1,35 @@
 import { CODATA, degToRad, roundTo } from "./constants";
 
 export interface KinematicsInput {
-  mode: "projectile" | "freefall" | "air_track";
-  v0: number; // m/s
-  angleDeg: number; // degrees
-  y0: number; // m
-  massKg: number; // kg
-  gravity: number; // m/s^2
-  airDrag: boolean;
-  dragCoeff: number; // Cd (dimensionless, ~0.47 for sphere)
-  areaM2: number; // cross-sectional area m^2
-  airDensity: number; // kg/m^3
+  mode:
+    | "projectile"
+    | "freefall"
+    | "air_track"
+    | "circular"
+    | "relative"
+    | "rocket";
+  v0?: number; // m/s
+  angleDeg?: number; // degrees
+  y0?: number; // m
+  massKg?: number; // kg
+  gravity?: number; // m/s^2
+  airDrag?: boolean;
+  dragCoeff?: number; // Cd (dimensionless, ~0.47 for sphere)
+  areaM2?: number; // cross-sectional area m^2
+  airDensity?: number; // kg/m^3
   accelX?: number; // m/s^2 for 1D air track
   durationS?: number; // s for 1D air track
+  // Circular motion
+  radiusM?: number;
+  angularSpeedRadS?: number;
+  angularAccelRadS2?: number;
+  // Relative motion
+  vRelXMs?: number;
+  vRelYMs?: number;
+  // Rocket equation
+  exhaustSpeedMs?: number;
+  initialMassKg?: number;
+  finalMassKg?: number;
 }
 
 export interface KinematicsPoint {
@@ -48,6 +65,175 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
   const m = Math.max(0.001, input.massKg ?? 1);
   const y0 = Math.max(0, input.y0 ?? 0);
   const v0 = Math.max(0, input.v0 ?? 0);
+
+  // Singularity guard: zero velocity at ground level
+  if (v0 === 0 && y0 === 0 && input.mode !== "circular" && input.mode !== "air_track" && input.mode !== "relative" && input.mode !== "rocket") {
+    return {
+      mode: input.mode,
+      flightTimeS: 0,
+      maxHeightM: 0,
+      rangeM: 0,
+      impactSpeedMs: 0,
+      vacuumRangeM: 0,
+      vacuumMaxHeightM: 0,
+      vacuumFlightTimeS: 0,
+      energyLostPct: 0,
+      points: [
+        {
+          t: 0,
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          speed: 0,
+          at: 0,
+          an: 0,
+          curvatureRadius: 0,
+          kineticEnergy: 0,
+          potentialEnergy: 0,
+          totalEnergy: 0,
+        },
+      ],
+    };
+  }
+
+  // Circular motion: a_c = v^2 / r = omega^2 * r
+  if (input.mode === "circular") {
+    const r = Math.max(0.01, input.radiusM ?? 1.5);
+    const omega0 = Math.max(0, input.angularSpeedRadS ?? (v0 > 0 ? v0 / r : 4.0));
+    const alpha = input.angularAccelRadS2 ?? 0;
+    const T = Math.min(300, Math.max(0.1, input.durationS ?? 5));
+    const steps = 100;
+    const dt = T / steps;
+    const points: KinematicsPoint[] = [];
+
+    for (let i = 0; i <= steps; i++) {
+      const t = i * dt;
+      const omega = omega0 + alpha * t;
+      const theta = omega0 * t + 0.5 * alpha * t * t;
+      const v = omega * r;
+      const at = alpha * r;
+      const an = omega * omega * r;
+      const K = 0.5 * m * v * v;
+      points.push({
+        t: roundTo(t, 4),
+        x: roundTo(r * Math.cos(theta), 4),
+        y: roundTo(r * Math.sin(theta), 4),
+        vx: roundTo(-v * Math.sin(theta), 4),
+        vy: roundTo(v * Math.cos(theta), 4),
+        speed: roundTo(Math.abs(v), 4),
+        at: roundTo(at, 4),
+        an: roundTo(an, 4),
+        curvatureRadius: roundTo(r, 4),
+        kineticEnergy: roundTo(K, 4),
+        potentialEnergy: 0,
+        totalEnergy: roundTo(K, 4),
+      });
+    }
+
+    const last = points[points.length - 1];
+    return {
+      mode: "circular",
+      flightTimeS: roundTo(T, 4),
+      maxHeightM: roundTo(r, 4),
+      rangeM: roundTo(2 * Math.PI * r * ((omega0 * T) / (2 * Math.PI)), 4),
+      impactSpeedMs: last.speed,
+      vacuumRangeM: roundTo(2 * Math.PI * r, 4),
+      vacuumMaxHeightM: roundTo(r, 4),
+      vacuumFlightTimeS: roundTo(T, 4),
+      energyLostPct: 0,
+      points,
+    };
+  }
+
+  // Relative motion
+  if (input.mode === "relative") {
+    const vRelX = input.vRelXMs ?? 15;
+    const vRelY = input.vRelYMs ?? 5;
+    const vRel = Math.hypot(vRelX, vRelY);
+    const T = Math.max(1, input.durationS ?? 10);
+    const steps = 50;
+    const dt = T / steps;
+    const points: KinematicsPoint[] = [];
+
+    for (let i = 0; i <= steps; i++) {
+      const t = i * dt;
+      points.push({
+        t: roundTo(t, 4),
+        x: roundTo(vRelX * t, 4),
+        y: roundTo(vRelY * t, 4),
+        vx: roundTo(vRelX, 4),
+        vy: roundTo(vRelY, 4),
+        speed: roundTo(vRel, 4),
+        at: 0,
+        an: 0,
+        curvatureRadius: 0,
+        kineticEnergy: roundTo(0.5 * m * vRel * vRel, 4),
+        potentialEnergy: 0,
+        totalEnergy: roundTo(0.5 * m * vRel * vRel, 4),
+      });
+    }
+
+    const last = points[points.length - 1];
+    return {
+      mode: "relative",
+      flightTimeS: roundTo(T, 4),
+      maxHeightM: last.y,
+      rangeM: last.x,
+      impactSpeedMs: roundTo(vRel, 4),
+      vacuumRangeM: last.x,
+      vacuumMaxHeightM: last.y,
+      vacuumFlightTimeS: roundTo(T, 4),
+      energyLostPct: 0,
+      points,
+    };
+  }
+
+  // Tsiolkovsky rocket equation: Delta v = v_ex * ln(m0 / mf)
+  if (input.mode === "rocket") {
+    const vex = Math.max(100, input.exhaustSpeedMs ?? 2500); // 2500 m/s
+    const m0 = Math.max(10, input.initialMassKg ?? 1000); // 1000 kg
+    const mf = Math.max(1, Math.min(m0 * 0.99, input.finalMassKg ?? 200)); // 200 kg
+    const deltaV = vex * Math.log(m0 / mf);
+    const T = Math.max(1, input.durationS ?? 60);
+    const steps = 60;
+    const dt = T / steps;
+    const points: KinematicsPoint[] = [];
+
+    for (let i = 0; i <= steps; i++) {
+      const t = i * dt;
+      const currentM = m0 - ((m0 - mf) * t) / T;
+      const v = vex * Math.log(m0 / currentM);
+      points.push({
+        t: roundTo(t, 4),
+        x: 0,
+        y: roundTo(0.5 * v * t, 4),
+        vx: 0,
+        vy: roundTo(v, 4),
+        speed: roundTo(v, 4),
+        at: roundTo(vex * ((m0 - mf) / (T * currentM)), 4),
+        an: 0,
+        curvatureRadius: 0,
+        kineticEnergy: roundTo(0.5 * currentM * v * v, 4),
+        potentialEnergy: roundTo(currentM * g * 0.5 * v * t, 4),
+        totalEnergy: roundTo(0.5 * currentM * v * v, 4),
+      });
+    }
+
+    const last = points[points.length - 1];
+    return {
+      mode: "rocket",
+      flightTimeS: roundTo(T, 4),
+      maxHeightM: last.y,
+      rangeM: 0,
+      impactSpeedMs: roundTo(deltaV, 4),
+      vacuumRangeM: 0,
+      vacuumMaxHeightM: last.y,
+      vacuumFlightTimeS: roundTo(T, 4),
+      energyLostPct: 0,
+      points,
+    };
+  }
 
   if (input.mode === "air_track") {
     const ax = input.accelX ?? 1.5;
@@ -90,7 +276,8 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
     };
   }
 
-  const theta = input.mode === "freefall" ? -Math.PI / 2 : degToRad(input.angleDeg);
+  const theta =
+    input.mode === "freefall" ? -Math.PI / 2 : degToRad(input.angleDeg ?? 45);
   const vx0 = input.mode === "freefall" ? 0 : v0 * Math.cos(theta);
   const vy0 = input.mode === "freefall" ? 0 : v0 * Math.sin(theta);
 

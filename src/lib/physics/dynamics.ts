@@ -5,7 +5,9 @@ export type DynamicsSubMode =
   | "pendulum"
   | "hooke_spring"
   | "collision"
-  | "flywheel";
+  | "flywheel"
+  | "rolling"
+  | "gyroscope";
 
 export interface DynamicsInput {
   subMode: DynamicsSubMode;
@@ -31,6 +33,13 @@ export interface DynamicsInput {
   flywheelInertiaKgM2?: number;
   axleRadiusM?: number;
   fallHeightM?: number;
+  // Rolling motion
+  rollingShape?: "solid_sphere" | "solid_cylinder" | "hollow_cylinder" | "hollow_sphere";
+  radiusM?: number;
+  // Gyroscope
+  gyroMassKg?: number;
+  spinSpeedRadS?: number;
+  pivotDistanceM?: number;
 }
 
 export interface DynamicsResult {
@@ -118,11 +127,12 @@ export function simulateDynamics(input: DynamicsInput): DynamicsResult {
 
   if (input.subMode === "pendulum") {
     const L = Math.max(0.1, input.pendulumLengthM ?? 1.0);
-    const theta0Deg = Math.min(165, Math.max(1, input.initialAngleDeg ?? 15));
+    const theta0Deg = Math.min(179.5, Math.max(0.1, input.initialAngleDeg ?? 15));
     const theta0 = degToRad(theta0Deg);
     const T0 = 2 * Math.PI * Math.sqrt(L / g);
 
-    const dt = T0 / 120;
+    const stepsPerCycle = theta0Deg > 150 ? 360 : 120;
+    const dt = T0 / stepsPerCycle;
     const totalTime = T0 * 2.5;
     let theta = theta0;
     let omega = 0;
@@ -301,6 +311,83 @@ export function simulateDynamics(input: DynamicsInput): DynamicsResult {
         { label: "x1(t) [m]", points: x1Series },
         { label: "x2(t) [m]", points: x2Series },
       ],
+    };
+  }
+
+  if (input.subMode === "rolling") {
+    const shape = input.rollingShape ?? "solid_sphere";
+    let beta = 2 / 5; // solid sphere I = 2/5 m R^2
+    if (shape === "solid_cylinder") beta = 1 / 2;
+    else if (shape === "hollow_cylinder") beta = 1.0;
+    else if (shape === "hollow_sphere") beta = 2 / 3;
+
+    const thetaDeg = Math.min(85, Math.max(1, input.angleDeg ?? 25));
+    const thetaRad = degToRad(thetaDeg);
+    const L = Math.max(0.1, input.planeLengthM ?? 2.0);
+    const m = Math.max(0.01, input.mass1Kg ?? 1.0);
+    const R = Math.max(0.005, input.radiusM ?? 0.05);
+
+    // a = g * sin(theta) / (1 + beta)
+    const accel = (g * Math.sin(thetaRad)) / (1 + beta);
+    const travelTimeS = Math.sqrt((2 * L) / accel);
+    const finalSpeedMs = accel * travelTimeS;
+    const finalOmegaRadS = finalSpeedMs / R;
+    const kTrans = 0.5 * m * finalSpeedMs * finalSpeedMs;
+    const kRot = 0.5 * (beta * m * R * R) * finalOmegaRadS * finalOmegaRadS;
+
+    const posSeries: { x: number; y: number }[] = [];
+    const velSeries: { x: number; y: number }[] = [];
+    for (let i = 0; i <= 60; i++) {
+      const t = (travelTimeS * i) / 60;
+      posSeries.push({ x: roundTo(t, 4), y: roundTo(0.5 * accel * t * t, 4) });
+      velSeries.push({ x: roundTo(t, 4), y: roundTo(accel * t, 4) });
+    }
+
+    return {
+      subMode: "rolling",
+      summary: {
+        rollingShape: shape,
+        inertiaCoeffBeta: roundTo(beta, 3),
+        accelerationMs2: roundTo(accel, 4),
+        finalSpeedMs: roundTo(finalSpeedMs, 4),
+        finalAngularSpeedRadS: roundTo(finalOmegaRadS, 3),
+        travelTimeS: roundTo(travelTimeS, 4),
+        translationalKineticJ: roundTo(kTrans, 4),
+        rotationalKineticJ: roundTo(kRot, 4),
+        totalMechanicalEnergyJ: roundTo(kTrans + kRot, 4),
+      },
+      series: [
+        { label: "s(t) [m]", points: posSeries },
+        { label: "v(t) [m/s]", points: velSeries },
+      ],
+    };
+  }
+
+  if (input.subMode === "gyroscope") {
+    const M = Math.max(0.05, input.gyroMassKg ?? 1.5);
+    const R = Math.max(0.01, input.radiusM ?? 0.08);
+    const d = Math.max(0.01, input.pivotDistanceM ?? 0.12);
+    const omegaSpin = Math.max(1, input.spinSpeedRadS ?? 120);
+
+    // I = 0.5 * M * R^2 (flywheel disc)
+    const I_disc = 0.5 * M * R * R;
+    const spinAngularMomentum = I_disc * omegaSpin;
+    const torque = M * g * d;
+    const omegaPrecession = torque / spinAngularMomentum;
+    const precessionPeriodS = (2 * Math.PI) / omegaPrecession;
+
+    return {
+      subMode: "gyroscope",
+      summary: {
+        gyroMassKg: roundTo(M, 3),
+        discInertiaKgM2: roundTo(I_disc, 5),
+        spinSpeedRadS: roundTo(omegaSpin, 2),
+        spinAngularMomentumKgM2S: roundTo(spinAngularMomentum, 4),
+        torqueNm: roundTo(torque, 4),
+        precessionSpeedRadS: roundTo(omegaPrecession, 4),
+        precessionPeriodS: roundTo(precessionPeriodS, 3),
+      },
+      series: [],
     };
   }
 

@@ -1,13 +1,36 @@
 import { roundTo } from "./constants";
 
 export interface VernierInput {
-  mode: "vernier" | "micrometer" | "spherometer";
-  trueValueMm: number;
+  mode:
+    | "vernier"
+    | "micrometer"
+    | "spherometer"
+    | "density"
+    | "young_modulus"
+    | "regression";
+  trueValueMm?: number;
   leastCountMm?: number; // 0.02, 0.05, 0.1 for vernier; 0.01 for micrometer/spherometer
   zeroErrorMm?: number;
   legSpacingMm?: number; // For spherometer (l)
   sampleCount?: number;
   noiseSigmaMm?: number;
+  // Density and indirect measurement
+  massG?: number;
+  deltaMassG?: number;
+  dim1Mm?: number;
+  deltaDim1Mm?: number;
+  dim2Mm?: number;
+  deltaDim2Mm?: number;
+  dim3Mm?: number;
+  deltaDim3Mm?: number;
+  shape?: "block" | "cylinder" | "sphere";
+  // Young's modulus
+  wireLengthM?: number;
+  wireDiameterMm?: number;
+  loadMassKg?: number;
+  elongationMm?: number;
+  // Regression
+  points?: { x: number; y: number }[];
 }
 
 export interface MetrologyResult {
@@ -22,6 +45,8 @@ export interface MetrologyResult {
   spherometerUncertaintyMm?: number;
   samples: number[];
   stats: StatisticalSummary;
+  summary?: Record<string, number | string | boolean>;
+  details?: Record<string, unknown>;
 }
 
 export interface StatisticalSummary {
@@ -160,10 +185,129 @@ function seededGaussian(seed: number): number {
 
 export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult {
   const mode = input.mode;
+
+  // Extended Mode 1: Density & Error Propagation
+  if (mode === "density") {
+    const shape = input.shape ?? "cylinder";
+    const massG = Math.max(0.01, input.massG ?? 85.4);
+    const dMassG = Math.max(0.001, input.deltaMassG ?? 0.05);
+
+    let volumeCm3 = 1;
+    let relVolUncertainty = 0;
+    if (shape === "cylinder") {
+      const dMm = Math.max(0.1, input.dim1Mm ?? 20.0);
+      const hMm = Math.max(0.1, input.dim2Mm ?? 35.0);
+      const dDMm = Math.max(0.005, input.deltaDim1Mm ?? 0.02);
+      const dHMm = Math.max(0.005, input.deltaDim2Mm ?? 0.02);
+      // V = pi/4 * d^2 * h (in cm^3, so / 1000)
+      volumeCm3 = (Math.PI / 4) * Math.pow(dMm / 10, 2) * (hMm / 10);
+      relVolUncertainty = Math.sqrt(4 * Math.pow(dDMm / dMm, 2) + Math.pow(dHMm / hMm, 2));
+    } else if (shape === "sphere") {
+      const dMm = Math.max(0.1, input.dim1Mm ?? 25.0);
+      const dDMm = Math.max(0.005, input.deltaDim1Mm ?? 0.01);
+      volumeCm3 = (Math.PI / 6) * Math.pow(dMm / 10, 3);
+      relVolUncertainty = 3 * (dDMm / dMm);
+    } else {
+      // block: a * b * c
+      const aMm = Math.max(0.1, input.dim1Mm ?? 20);
+      const bMm = Math.max(0.1, input.dim2Mm ?? 30);
+      const cMm = Math.max(0.1, input.dim3Mm ?? 40);
+      const da = Math.max(0.005, input.deltaDim1Mm ?? 0.02);
+      const db = Math.max(0.005, input.deltaDim2Mm ?? 0.02);
+      const dc = Math.max(0.005, input.deltaDim3Mm ?? 0.02);
+      volumeCm3 = (aMm / 10) * (bMm / 10) * (cMm / 10);
+      relVolUncertainty = Math.sqrt(Math.pow(da / aMm, 2) + Math.pow(db / bMm, 2) + Math.pow(dc / cMm, 2));
+    }
+
+    const densityG_Cm3 = massG / volumeCm3;
+    const relMassUncertainty = dMassG / massG;
+    const totalRelUncertainty = Math.sqrt(Math.pow(relMassUncertainty, 2) + Math.pow(relVolUncertainty, 2));
+    const absDensityUncertainty = densityG_Cm3 * totalRelUncertainty;
+
+    return {
+      mode,
+      mainScaleReadingMm: 0,
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: roundTo(densityG_Cm3, 4),
+      zeroErrorMm: 0,
+      correctedReadingMm: roundTo(densityG_Cm3, 4),
+      samples: [roundTo(densityG_Cm3, 4)],
+      stats: computeStatistics([densityG_Cm3]),
+      summary: {
+        shape,
+        massG: roundTo(massG, 3),
+        volumeCm3: roundTo(volumeCm3, 4),
+        densityG_Cm3: roundTo(densityG_Cm3, 4),
+        densityKg_M3: roundTo(densityG_Cm3 * 1000, 1),
+        relativeUncertaintyPct: roundTo(totalRelUncertainty * 100, 3),
+        absoluteUncertaintyG_Cm3: roundTo(absDensityUncertainty, 4),
+      },
+    };
+  }
+
+  // Extended Mode 2: Young's Modulus
+  if (mode === "young_modulus") {
+    const L = Math.max(0.1, input.wireLengthM ?? 2.0); // 2 m
+    const dMm = Math.max(0.05, input.wireDiameterMm ?? 0.5); // 0.5 mm
+    const M = Math.max(0.1, input.loadMassKg ?? 5.0); // 5 kg
+    const deltaLMm = Math.max(0.001, input.elongationMm ?? 1.25); // 1.25 mm
+    const g = 9.80665;
+
+    const rM = (dMm / 2) * 1e-3;
+    const areaM2 = Math.PI * rM * rM;
+    const forceN = M * g;
+    const deltaLM = deltaLMm * 1e-3;
+    const E = (forceN * L) / (areaM2 * deltaLM); // Pa
+
+    return {
+      mode,
+      mainScaleReadingMm: 0,
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: roundTo(E / 1e9, 3),
+      zeroErrorMm: 0,
+      correctedReadingMm: roundTo(E / 1e9, 3),
+      samples: [roundTo(E / 1e9, 3)],
+      stats: computeStatistics([E / 1e9]),
+      summary: {
+        youngModulusGPa: roundTo(E / 1e9, 2),
+        appliedForceN: roundTo(forceN, 2),
+        crossSectionAreaMm2: roundTo(areaM2 * 1e6, 4),
+        stressMPa: roundTo((forceN / areaM2) / 1e6, 2),
+        strain: roundTo(deltaLM / L, 6),
+      },
+    };
+  }
+
+  // Extended Mode 3: Regression
+  if (mode === "regression" && input.points && input.points.length >= 2) {
+    const reg = computeLinearRegression(input.points);
+    return {
+      mode,
+      mainScaleReadingMm: roundTo(reg.slope, 4),
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: roundTo(reg.slope, 4),
+      zeroErrorMm: 0,
+      correctedReadingMm: roundTo(reg.slope, 4),
+      samples: input.points.map((p) => p.y),
+      stats: computeStatistics(input.points.map((p) => p.y)),
+      summary: {
+        slope: reg.slope,
+        intercept: reg.intercept,
+        rSquared: reg.rSquared,
+        slopeUncertainty: reg.slopeUncertainty,
+      },
+      details: { reg },
+    };
+  }
+
   const leastCountMm =
     mode === "vernier" ? input.leastCountMm ?? 0.02 : 0.01;
   const zeroErrorMm = input.zeroErrorMm ?? 0;
-  const rawTrue = Math.max(0, input.trueValueMm + zeroErrorMm);
+  const trueVal = input.trueValueMm ?? 24.64;
+  const rawTrue = Math.max(0, trueVal + zeroErrorMm);
 
   let mainScaleReadingMm = 0;
   let secondaryDivision = 0;
@@ -198,9 +342,9 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
   const sigma = input.noiseSigmaMm ?? leastCountMm * 0.8;
   const samples: number[] = [];
   for (let i = 0; i < count; i++) {
-    const noise = seededGaussian(input.trueValueMm * 100 + i * 7.3) * sigma;
+    const noise = seededGaussian(trueVal * 100 + i * 7.3) * sigma;
     const quantized =
-      Math.round((input.trueValueMm + noise) / leastCountMm) * leastCountMm;
+      Math.round((trueVal + noise) / leastCountMm) * leastCountMm;
     samples.push(roundTo(Math.max(0, quantized), 4));
   }
 
@@ -210,7 +354,8 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
   let spherometerUncertaintyMm: number | undefined;
   if (mode === "spherometer") {
     const l = Math.max(5, input.legSpacingMm ?? 40);
-    const h = Math.max(0.01, correctedReadingMm);
+    // Plano-flat guard: if h is very close to 0, clamp to 0.001 and calculate
+    const h = Math.max(0.001, correctedReadingMm);
     spherometerRadiusMm = roundTo((l * l) / (6 * h) + h / 2, 4);
     // Error propagation: dR/dh = -l^2/(6h^2) + 1/2
     const dRdh = Math.abs(-(l * l) / (6 * h * h) + 0.5);

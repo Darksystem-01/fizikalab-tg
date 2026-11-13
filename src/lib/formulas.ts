@@ -5,7 +5,8 @@ export type FormulaSection =
   | "Termodinamika"
   | "Elektromagnetizm"
   | "Optika"
-  | "Noaniqliklar";
+  | "Noaniqliklar"
+  | "Atom va Yadro Fizikasi";
 
 export interface FormulaEntry {
   id: string;
@@ -893,6 +894,135 @@ export const FORMULA_CATALOG: FormulaEntry[] = [
     latex: "L = \\text{MSR} + \\text{VSR}\\cdot\\text{LC}, \\quad R_{\\text{sph}} = \\frac{l^2}{6h} + \\frac{h}{2}",
     description: "Nonius shkala o‘qilishi va sferometr yordamida sfera egrilik radiusini hisoblash.",
     source: "fizika_qurilmalari_.pdf / Lab 1",
+  },
+  // ======================== 8. ATOM VA YADRO FIZIKASI (16) ========================
+  {
+    id: "atom-1",
+    section: "Atom va Yadro Fizikasi",
+    title: "Eynshteynning fotoeffekt tenglamasi",
+    latex: "h\\nu = A_{\\text{chiq}} + K_{\\max} = \\phi + \\frac{1}{2}m_e v_{\\max}^2",
+    description: "Tushayotgan foton energiyasi elektronning chiqish ishi va uning maksimal kinetik energiyasiga sarflanishi.",
+    source: "Halliday & Resnick / Irodov",
+  },
+  {
+    id: "atom-2",
+    section: "Atom va Yadro Fizikasi",
+    title: "Fotoeffektning qizil chegarasi",
+    latex: "\\nu_0 = \\frac{\\phi}{h}, \\quad \\lambda_0 = \\frac{hc}{\\phi}",
+    description: "Fotoelektronlar emissiyasi yuz berishi mumkin bo‘lgan minimal chegaraviy chastota va maksimal to‘lqin uzunligi.",
+    source: "Savelyev / Physics-Guide",
+  },
+  {
+    id: "atom-3",
+    section: "Atom va Yadro Fizikasi",
+    title: "Ushlab qoluvchi potensial",
+    latex: "e V_{\\text{stop}} = h\\nu - \\phi = K_{\\max}",
+    description: "Fototokni to‘liq to‘xtatish uchun zarur bo‘lgan teskari tormozlovchi kuchlanish.",
+    source: "Irodov",
+  },
+  {
+    id: "atom-4",
+    section: "Atom va Yadro Fizikasi",
+    title: "Kompton sochilishida to‘lqin uzunligi siljishi",
+    latex: "\\Delta\\lambda = \\lambda' - \\lambda = \\lambda_C (1 - \\cos\\theta)",
+    description: "Foton erkin elektrondan sochilganda to‘lqin uzunligining burchakka bog‘liq ortishi.",
+    source: "Halliday & Resnick",
+  },
+  {
+    id: "atom-5",
+    section: "Atom va Yadro Fizikasi",
+    title: "Kompton to‘lqin uzunligi",
+    latex: "\\lambda_C = \\frac{h}{m_e c} \\approx 2.426 \\times 10^{-12}\\text{ m} = 2.426\\text{ pm}",
+    description: "Elektronning tinchlik massasi orqali aniqlanadigan fundamental kvant masshtabi.",
+    source: "CODATA 2022",
+  },
+  {
+    id: "atom-6",
+    section: "Atom va Yadro Fizikasi",
+    title: "Borning birinchi postulati (Burchak impuls kvantlanishi)",
+    latex: "L_n = m_e v_n r_n = n \\hbar = n \\frac{h}{2\\pi}, \\quad n = 1, 2, 3, \\dots",
+    description: "Elektron atomda faqat statsionar diskret orbitalarda nurlanmasdan harakatlanishi.",
+    source: "Savelyev / Bohr 1913",
+  },
+  {
+    id: "atom-7",
+    section: "Atom va Yadro Fizikasi",
+    title: "Bor orbitalari radiusi",
+    latex: "r_n = \\frac{n^2 a_0}{Z}, \\quad a_0 = \\frac{4\\pi \\varepsilon_0 \\hbar^2}{m_e e^2} \\approx 0.529\\text{ \\AA}",
+    description: "Vodorodsimon atomlarda statsionar elektron orbitalari radiusining kvant soni kvadratiga proporsional ortishi.",
+    source: "Sivukhin / College Physics",
+  },
+  {
+    id: "atom-8",
+    section: "Atom va Yadro Fizikasi",
+    title: "Vodorod atomining energetik sathlari",
+    latex: "E_n = -\\frac{Z^2 R_y}{n^2} = -\\frac{13.606\\text{ eV} \\cdot Z^2}{n^2}",
+    description: "Asosiy va uyg‘ongan energetik sathlar energiyasi.",
+    source: "Halliday & Resnick",
+  },
+  {
+    id: "atom-9",
+    section: "Atom va Yadro Fizikasi",
+    title: "Ridberg umumlashtirilgan formulasi",
+    latex: "\\frac{1}{\\lambda} = R_\\infty Z^2 \\left( \\frac{1}{n_1^2} - \\frac{1}{n_2^2} \\right), \\quad n_2 > n_1",
+    description: "Atom spektral seriyalari (Layman, Balmer, Pashen) chiziqlarining to‘lqin uzunliklari.",
+    source: "Rydberg 1890 / Sivukhin",
+  },
+  {
+    id: "atom-10",
+    section: "Atom va Yadro Fizikasi",
+    title: "De-Broyl to‘lqin uzunligi",
+    latex: "\\lambda_{\\text{dB}} = \\frac{h}{p} = \\frac{h}{m v} = \\frac{h}{\\sqrt{2 m K}}",
+    description: "Har qanday impulsga ega moddiy zarraga mos keluvchi to‘lqin xususiyati.",
+    source: "de Broglie 1924",
+  },
+  {
+    id: "atom-11",
+    section: "Atom va Yadro Fizikasi",
+    title: "Geyzenberg noaniqliklar munosabati",
+    latex: "\\Delta x \\cdot \\Delta p_x \\ge \\frac{\\hbar}{2}, \\quad \\Delta E \\cdot \\Delta t \\ge \\frac{\\hbar}{2}",
+    description: "Zarraning koordinatasi va impulsini bir vaqtda cheksiz aniqlik bilan o‘lchashning fundamental kvant chegarasi.",
+    source: "Heisenberg 1927",
+  },
+  {
+    id: "atom-12",
+    section: "Atom va Yadro Fizikasi",
+    title: "Radioaktiv yemirilishning eksponensial qonuni",
+    latex: "N(t) = N_0 e^{-\\lambda t} = N_0 \\left(\\frac{1}{2}\\right)^{t / T_{1/2}}",
+    description: "Vaqt o‘tishi bilan parchalanmagan radioaktiv yadrolar sonining kamayish qonuniyati.",
+    source: "Rutherford & Soddy 1902",
+  },
+  {
+    id: "atom-13",
+    section: "Atom va Yadro Fizikasi",
+    title: "Yarim yemirilish davri va aktivlik",
+    latex: "T_{1/2} = \\frac{\\ln 2}{\\lambda} \\approx \\frac{0.693}{\\lambda}, \\quad A(t) = -\\frac{dN}{dt} = \\lambda N(t)",
+    description: "Radioaktiv preparatning aktivligi va yarim yemirilish davri bog‘lanishi.",
+    source: "Savelyev",
+  },
+  {
+    id: "atom-14",
+    section: "Atom va Yadro Fizikasi",
+    title: "Atom yadrosi massa nuqsoni",
+    latex: "\\Delta m = \\left[ Z m_p + (A - Z) m_n \\right] - M_{\\text{yadro}}",
+    description: "Yadroni tashkil etuvchi erkin nuklonlar massalari yig‘indisi bilan bog‘langan yadro massasi orasidagi farq.",
+    source: "Irodov",
+  },
+  {
+    id: "atom-15",
+    section: "Atom va Yadro Fizikasi",
+    title: "Yadro to‘liq bog‘lanish energiyasi va solishtirma bog‘lanish",
+    latex: "E_b = \\Delta m \\cdot c^2 = \\Delta m\\text{ [u]} \\times 931.494\\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
+    description: "Yadroni alohida nuklonlarga ajratish uchun sarflanadigan minimal energiya va bitta nuklonga to‘g‘ri keluvchi energiya.",
+    source: "Weizsäcker / Halliday & Resnick",
+  },
+  {
+    id: "atom-16",
+    section: "Atom va Yadro Fizikasi",
+    title: "Gamma nurlanishning Buger-Lambert zaiflashuv qonuni",
+    latex: "I(x) = I_0 e^{-\\mu x}, \\quad \\text{HVL} = d_{1/2} = \\frac{\\ln 2}{\\mu}",
+    description: "Moddadan o‘tayotgan gamma fotonlar intensivligining qatlam qalinligiga eksponensial bog‘liq kamayishi va yarim yutuvchi qatlam.",
+    source: "Sivukhin / Radiation Physics",
   },
 ];
 

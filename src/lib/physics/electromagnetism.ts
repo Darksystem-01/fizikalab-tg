@@ -5,7 +5,10 @@ export type EmSubMode =
   | "potentiometer"
   | "rlc_oscilloscope"
   | "rc_rl_transient"
-  | "em_fields_faraday";
+  | "em_fields_faraday"
+  | "hall_effect"
+  | "thomson_em"
+  | "transformer";
 
 export interface PointCharge {
   qMicroC: number;
@@ -47,6 +50,19 @@ export interface EmInput {
   magnetVelocityMs?: number;
   solenoidCurrentA?: number;
   solenoidTurnsPerM?: number;
+  // Hall effect
+  hallCurrentA?: number;
+  magneticFieldT?: number;
+  carrierDensityM3?: number;
+  slabThicknessM?: number;
+  // Thomson e/m
+  accelVoltageV?: number;
+  trajectoryRadiusM?: number;
+  // Transformer
+  primaryVoltageV?: number;
+  primaryTurns?: number;
+  secondaryTurns?: number;
+  loadResistanceOhm?: number;
 }
 
 export interface EmResult {
@@ -338,6 +354,83 @@ export function simulateElectromagnetism(input: EmInput): EmResult {
         ),
       },
       details: { curve },
+    };
+  }
+
+  if (input.subMode === "hall_effect") {
+    const I = Math.max(0.001, input.hallCurrentA ?? 2.5); // 2.5 A
+    const B = Math.max(0.001, input.magneticFieldT ?? 0.85); // 0.85 T
+    const n = Math.max(1e18, input.carrierDensityM3 ?? 1.1e21); // Semiconductor carrier density
+    const t = Math.max(1e-6, input.slabThicknessM ?? 0.0005); // 0.5 mm
+
+    // Hall coefficient: R_H = 1 / (n * e)
+    const RH = 1 / (n * CODATA.e);
+    // Hall voltage: V_H = (I * B) / (n * e * t) = (R_H * I * B) / t
+    const vHallV = (I * B) / (n * CODATA.e * t);
+
+    return {
+      subMode: "hall_effect",
+      summary: {
+        hallCurrentA: roundTo(I, 3),
+        magneticFieldT: roundTo(B, 3),
+        slabThicknessMm: roundTo(t * 1000, 3),
+        carrierDensityM3: n,
+        hallCoefficientM3_C: RH,
+        hallVoltageMv: roundTo(vHallV * 1000, 4),
+        hallVoltageMicroV: roundTo(vHallV * 1e6, 2),
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "thomson_em") {
+    const V = Math.max(10, input.accelVoltageV ?? 250); // 250 V
+    const B = Math.max(1e-5, input.magneticFieldT ?? 0.0015); // 1.5 mT
+    const r = Math.max(0.005, input.trajectoryRadiusM ?? 0.045); // 4.5 cm
+
+    // e/m = 2*V / (B^2 * r^2)
+    const specificCharge = (2 * V) / (B * B * r * r);
+    const theoreticalEm = CODATA.e / CODATA.m_e; // ~1.75882e11 C/kg
+    const discrepancyPct = Math.abs((specificCharge - theoreticalEm) / theoreticalEm) * 100;
+
+    return {
+      subMode: "thomson_em",
+      summary: {
+        accelVoltageV: roundTo(V, 1),
+        magneticFieldMt: roundTo(B * 1000, 3),
+        circularRadiusCm: roundTo(r * 100, 2),
+        specificCharge_10_11_C_Kg: roundTo(specificCharge / 1e11, 4),
+        theoreticalSpecificCharge_10_11: roundTo(theoreticalEm / 1e11, 4),
+        discrepancyPct: roundTo(discrepancyPct, 3),
+      },
+      details: {},
+    };
+  }
+
+  if (input.subMode === "transformer") {
+    const Vp = Math.max(1, input.primaryVoltageV ?? 220);
+    const Np = Math.max(1, input.primaryTurns ?? 800);
+    const Ns = Math.max(1, input.secondaryTurns ?? 80);
+    const Rload = Math.max(1, input.loadResistanceOhm ?? 10);
+
+    const ratioK = Ns / Np;
+    const Vs = Vp * ratioK;
+    const Is = Vs / Rload;
+    const Ip = Is * ratioK;
+    const powerWatts = Vs * Is;
+
+    return {
+      subMode: "transformer",
+      summary: {
+        primaryVoltageV: roundTo(Vp, 1),
+        secondaryVoltageV: roundTo(Vs, 2),
+        transformationRatio: roundTo(ratioK, 4),
+        primaryCurrentA: roundTo(Ip, 3),
+        secondaryCurrentA: roundTo(Is, 3),
+        loadPowerW: roundTo(powerWatts, 2),
+        efficiencyPct: 98.5,
+      },
+      details: { primaryTurns: Np, secondaryTurns: Ns },
     };
   }
 

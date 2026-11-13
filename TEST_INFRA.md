@@ -1,110 +1,121 @@
-# Test Infrastructure & Methodology: fizika-lab Security Verification
+# Automated Test Infrastructure & 4-Tier Testing Philosophy
 
-## 1. Philosophy & Testing Principles
+## 1. Overview & Test Architecture
 
-The testing infrastructure for `fizika-lab` is built upon strict automated security verification principles:
+The **Fizika-Lab** platform utilizes Node.js native test runner (`node:test`) and strict assertion library (`node:assert/strict`) for rapid, dependency-free, and high-fidelity end-to-end verification. Tests execute against the running Next.js HTTP production boundary, ensuring that server-side routing, cryptographic token validation, database operations, and physical numerical algorithms are verified exactly as deployed.
 
-1. **Opaque-Box & Network-Boundary Testing**:
-   - Tests execute against a running production instance of the Next.js server via standard HTTP requests (`fetch`), cookies, and headers.
-   - Tests do not mock internal module methods, do not inspect private database tables, and do not access internal crypto keys.
-   - All assertions evaluate purely observable network contracts: HTTP status codes, response headers, `Set-Cookie` directives, response bodies, and stateful side-effects.
-
-2. **Requirement-Driven Assertions**:
-   - Every assertion is grounded in the security requirements defined in `ORIGINAL_REQUEST.md` (R1: Session Security & Replay Prevention, R2: Access Control & Privilege Escalation, R3: Vulnerability Hardening & Rate Limiting, R4: Automated Security Verification).
-   - Authoritative specifications discovered in `handoff.md` and `PROJECT.md` define the exact contract boundaries and expected error responses.
-
-3. **Zero Coupling with Implementation Internals**:
-   - Tests remain agnostic of database engine choice (SQLite fallback vs PostgreSQL), crypto implementation libraries, or internal folder refactorings.
-   - Any compliant implementation that satisfies the HTTP interface contracts passes the test suite.
-
-4. **Progressive Red-Team Baseline**:
-   - Before security hardening milestones (M1–M3) are implemented, certain Tier 4 tests (such as Burp Suite proxy replay detection, rotated token reuse rejection, and rate limit enforcement) objectively demonstrate existing vulnerabilities (red-team baseline).
-   - As builders complete implementation milestones, tests transition from failing to passing, providing objective evidence of hardening.
+### Core Architecture Principles
+1. **Opaque-Box Requirement Verification**: Tests interact strictly via public HTTP endpoints (`fetch`), valid session cookies, and standard API payloads. No internal state bypassing or mock facades are permitted.
+2. **Deterministic Physical Benchmarks**: Simulation telemetry and solver computations are evaluated against authoritative analytical physics benchmarks (Irodov, Savelyev, Halliday & Resnick, CODATA 2022).
+3. **Strict Concurrency Discipline**: The test runner enforces `--test-concurrency=1` sequentially across all test files. This eliminates `SQLITE_BUSY` file locking contention when running against file-backed SQLite (`data/fizika_lab.db`).
+4. **Port Isolation**: Standalone test runners isolate production server instances across dedicated loopback ports:
+   - `3197`: End-to-End 8-Chapter Verification (`tests/e2e-8chapters-verification.test.mjs`)
+   - `3198`: Security Verification & Challenger (`tests/security-verification.test.mjs`, `tests/empirical-challenger-m1.mjs`)
+   - `3199`: Physics & API Baseline, Stress Concurrency (`tests/physics-and-api.test.mjs`, `tests/stress-concurrency.test.mjs`)
 
 ---
 
-## 2. Feature Inventory & 4-Tier Test Breakdown
+## 2. The 4-Tier Testing Methodology
 
-The test suite in `tests/security-verification.test.mjs` is structured into 4 distinct testing tiers:
+```
++--------------------------------------------------------------------------+
+|                  TIER 4: Security & Adversarial Defense                  |
+|  - AES-256-GCM token tampering     - Horizontal IDOR isolation           |
+|  - Stealth 404 route concealment   - Context-bound session hijacking     |
++--------------------------------------------------------------------------+
+                                    ^
++--------------------------------------------------------------------------+
+|               TIER 3: Multi-Actor Educational Lifecycle                  |
+|  - Student simulation & analysis   - Teacher inspection & grading        |
+|  - Discrepancy comparison          - Formal protocol PDF generation      |
++--------------------------------------------------------------------------+
+                                    ^
++--------------------------------------------------------------------------+
+|          TIER 2: Precision Analytical Solvers & Boundary Limits          |
+|  - 8-Chapter physical benchmarks   - Extreme boundary parameter inputs   |
+|  - Zero calculation discrepancies  - Singularity & numerical guards      |
++--------------------------------------------------------------------------+
+                                    ^
++--------------------------------------------------------------------------+
+|                  TIER 1: Feature & Route Availability                    |
+|  - All 8 chapter lab routes (200)  - `/api/physics/simulate` keys        |
+|  - Student report recording        - PDF document generation HTTP 200    |
++--------------------------------------------------------------------------+
+```
 
-### Tier 1: Feature Coverage (Core User Journeys & Baseline Regression)
-Validates that fundamental application workflows continue to operate seamlessly under production configurations:
-- **T1.1: Health Probe & Security Headers**: Non-leakage health check (`GET /api/health`), verification of `X-Frame-Options: DENY` and `X-Content-Type-Options: nosniff`.
-- **T1.2: Student Lifecycle**: Registration with accredited university catalog validation, session cookie acquisition, execution of 6 physics simulation engines, and lab report submission.
-- **T1.3: Teacher Lifecycle**: Provisioning by administrator, academic group creation, lab assignment publication, and student report grading.
-- **T1.4: Sole Administrator Lifecycle**: Configured credential login against `ADMIN_SECRET` / HMAC, darksystem access, stealth route verification, student banning, and account deletion.
-- **T1.5: Google OAuth Student Onboarding**: Multi-step student registration workflow requiring university and faculty completion.
+### Tier 1: Feature Journeys & Route Availability
+- **Objective**: Ensure all user-facing interfaces, simulation APIs, reporting mechanisms, and document export services are accessible without unhandled runtime exceptions.
+- **Scope**:
+  - Verification of all 8 laboratory routes (`/labs/metrology`, `/labs/kinematics`, `/labs/dynamics`, `/labs/statics`, `/labs/electromagnetism`, `/labs/optics`, `/labs/thermodynamics`, `/labs/atomic` / `/labs/atomic-nuclear`) returning HTTP 200 for authenticated students.
+  - Verification of simulation dispatch endpoint (`POST /api/physics/simulate`) accepting valid parameter payloads across all 8 chapter keys.
+  - Verification of statistical analysis (`POST /api/physics/analyze`) and report submission (`POST /api/reports`).
+  - Verification of PDF export endpoint returning HTTP 200 and binary `%PDF-` document structure.
 
-### Tier 2: Boundary & Negative Testing
-Validates error handling, input validation, and resilience against edge cases:
-- **T2.1: Authentication Input Boundaries**: Empty fields, short passwords (<6 characters), fake/unregistered universities, mismatched faculty-university pairings, disposable email domains (`tempmail.com`), and CRLF injection payloads in email headers.
-- **T2.2: Physics Simulation Extremes**: Zero velocities, boundary angles (0°, 90°), empty statistical arrays (`values: []`), single data point regressions, and zero-error vernier measurements.
-- **T2.3: Malformed Payloads & Non-Numeric Identifiers**: Invalid JSON bodies and non-numeric route parameters (`/api/teacher/reports/abc`) returning graceful 400 Bad Request responses without unhandled 500 server crashes.
+### Tier 2: Analytical Benchmarks & Boundary Conditions
+- **Objective**: Mathematically prove that physical simulation outputs match university-level analytical equations with zero numerical error across normal and extreme parameter ranges.
+- **Scope**:
+  - **Metrology**: Vernier caliper and micrometer least-count resolution, error propagation, sample mean, standard error, and Student's t-distribution confidence intervals.
+  - **Kinematics**: 2D ballistic trajectory range $R = \frac{v_0^2 \sin 2\theta}{g}$, flight time, apex height, and RK4 aerodynamic drag convergence.
+  - **Dynamics**: Inclined plane acceleration $a = g(\sin\theta - \mu\cos\theta)$, nonlinear pendulum period vs small-angle approximation $T_0 = 2\pi\sqrt{L/g}$, damped oscillator critical damping factor, 1D momentum & energy conservation.
+  - **Statics**: Vector force table equilibrium $\sum \vec{F} = \vec{0}$, simply supported beam torque balance $\sum \tau = 0$, mechanical advantage of compound pulleys.
+  - **Electromagnetism**: Wheatstone bridge null balance $R_x = R_3 \frac{R_2}{R_1}$, series RLC resonant frequency $\omega_0 = 1/\sqrt{LC}$, RC transient charging $V(t) = V_0(1 - e^{-t/RC})$.
+  - **Optics**: Thin lens formula $\frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i}$, linear magnification $M = -d_i/d_o$, Snell's law, Cauchy dispersion across spectral lines, total internal reflection (TIR) critical angle.
+  - **Thermodynamics**: Ideal gas law $PV = \nu RT$, Carnot engine efficiency $\eta = 1 - \frac{T_C}{T_H}$, Van der Waals real gas equation $(P + \frac{an^2}{V^2})(V - nb) = nRT$, Maxwell-Boltzmann characteristic molecular speeds ($v_{\text{mp}}, v_{\text{avg}}, v_{\text{rms}}$), adiabatic Poisson expansion $PV^\gamma = \text{const}$.
+  - **Atomic & Nuclear**: Photoelectric stopping potential $V_s = \frac{hf - \phi}{e}$, de Broglie wavelength $\lambda = \frac{h}{p}$, Rydberg hydrogen spectral series $\frac{1}{\lambda} = R_H(\frac{1}{n_1^2} - \frac{1}{n_2^2})$, radioactive decay $N(t) = N_0 e^{-\lambda t}$, nuclear binding energy mass defect $\Delta m c^2$, gamma radiation attenuation $I = I_0 e^{-\mu x}$.
+  - **Boundary Edge Cases**: Zero velocities, grazing angles (0°, 90°), minimal masses, focal point singularity guards ($d_o \to f$), critical damping factor transitions, total internal reflection boundary.
 
-### Tier 3: Cross-Feature State & Concurrency Interactions
-Validates state synchronization, multi-actor collaboration, and session revocation:
-- **T3.1: Mid-Session Account Banning & Instant Revocation**: Real-time invalidation of active session tokens when an administrator bans a user, immediately rejecting subsequent calls with HTTP 401.
-- **T3.2: Multi-Actor Collaborative Workflow**: Student submits report $\rightarrow$ Teacher inspects and grades report $\rightarrow$ Student verifies score and feedback in their own dashboard.
-- **T3.3: Automatic Token Rotation Handoff**: Token rotation trigger on `/api/auth/me` when token age exceeds 30 seconds, verifying the client can seamlessly continue requests with the refreshed token.
-- **T3.4: Teacher Horizontal Group Isolation**: Multi-tenant isolation ensuring Teacher B cannot inspect, alter, or delete groups owned by Teacher A (HTTP 403 Forbidden).
+### Tier 3: Multi-Actor Educational Lifecycle
+- **Objective**: Validate the full interactive lifecycle across student and teacher roles.
+- **Scope**:
+  1. Student authenticates and executes laboratory experiments.
+  2. Student records experimental measurements and runs statistical regression / error propagation.
+  3. Student submits formal laboratory report to assigned teacher/group.
+  4. Teacher authenticates, inspects submitted measurements, views analytical discrepancy against theoretical benchmarks.
+  5. Teacher submits grade (0–100) and qualitative feedback.
+  6. Student verifies updated grade status and triggers PDF export of the evaluated report.
 
-### Tier 4: Real-World Security & Attack Scenarios
-Simulates realistic adversarial attack vectors matching OWASP Top 10 and enterprise penetration testing standards:
-- **T4.1: Burp Suite Session Replay Simulation**: Interception and replay of legitimate session cookies from mismatched client contexts (altered `User-Agent` and `X-Forwarded-For` network IP), asserting strict HTTP 401 Unauthorized rejection.
-- **T4.2: Cookie Tampering & Cryptographic Integrity**: Bit-flipping and byte tampering of AES-256-GCM ciphertext, initialization vector (IV), and authentication tag, asserting strict decryption rejection (HTTP 401).
-- **T4.3: Token Rotation Reuse Attack**: Capturing an initial token (`token_v1`), completing rotation to `token_v2`, and attempting to replay superseded `token_v1`, asserting rejection with HTTP 401.
-- **T4.4: Role Header Injection & Privilege Escalation**: Submitting spoofed role headers (`X-User-Role: admin`, `X-Role: darksystem`, `Role: admin`, `X-Forwarded-User: admin`) from a student session against protected `/darksystem` endpoints, asserting stealth HTTP 404 concealment.
-- **T4.5: Anti-Admin OAuth Hijacking Defense**: Attempting to authenticate the administrator identity via Google OAuth, asserting HTTP 403 Forbidden.
-- **T4.6: Credential Stuffing & Brute Force Rate Limiting**: Burst of rapid failed login attempts triggering HTTP 429 Too Many Requests with exponential backoff / retry headers.
-- **T4.7: Stored & Reflected XSS Payload Defense**: Submitting malicious script tags (`<script>alert('XSS')</script>`, `<img src=x onerror=...>`) in report titles, student names, and group names, asserting HTML escaping or sanitization.
-- **T4.8: Information Disclosure Reconnaissance Defense**: Probing non-existent and administrative endpoints to ensure zero leakage of stack traces, internal database details, or admin credentials.
+### Tier 4: Security Verification & Non-Regression
+- **Objective**: Guarantee defense-in-depth, zero security regressions, and stealth concealment.
+- **Scope**:
+  - Unauthenticated access to `/labs/*`, `/api/reports`, `/api/physics/simulate` strictly redirects or rejects (HTTP 401/307).
+  - Stealth 404 concealment on darksystem endpoints (`/darksystem`, `/api/darksystem/*`, `/admin`, `/api/admin/*`) for unauthorized actors.
+  - Horizontal IDOR prevention across teacher group and evaluation entities.
+  - Cryptographic token tampering rejection: AES-256-GCM ciphertext, IV, or authentication tag manipulation immediately rejected.
+  - Role escalation prevention: Client-supplied headers (e.g. `X-User-Role: admin`) completely ignored.
 
 ---
 
-## 3. Test Runner Commands & Lifecycle Management
+## 3. Test Suites Inventory & Execution
 
-### Test Architecture & Server Management
-Tests use the Node.js native test runner (`node:test`) and strict assertions (`node:assert/strict`).
-The test files manage the Next.js server lifecycle independently:
-- **Port Allocation**:
-  - `tests/physics-and-api.test.mjs` runs on port **3199**.
-  - `tests/security-verification.test.mjs` runs on port **3198** (configurable via `TEST_BASE_URL`).
-- **Server Spawning**:
-  - `test.before`: Spawns `npx next start -p <port> -H 127.0.0.1` in production mode (`NODE_ENV=production`) with configured test secrets.
-  - Health probe: Polls `GET /api/health` with exponential backoff until the server responds with 200 OK before executing test cases.
-- **Teardown**:
-  - `test.after`: Gracefully terminates the child process with `SIGTERM` and cleans up temporary resources.
+| Suite File | Primary Focus | Port | Cases |
+|------------|---------------|------|-------|
+| `tests/e2e-8chapters-verification.test.mjs` | 4-Tier 8-Chapter Comprehensive Verification | 3197 | 15+ |
+| `tests/physics-and-api.test.mjs` | Baseline Physics Solvers & API Regression | 3199 | 4 |
+| `tests/security-verification.test.mjs` | Multi-tier RBAC, Session Security, Auth Defense | 3198 | 21 |
+| `tests/stress-concurrency.test.mjs` | High-Concurrency Races, SQLite Resilience | 3199 | 4 |
+| `tests/empirical-challenger-m1.mjs` | Token Tampering, Subnet Roaming, Replay Defense | 3198 | 38 |
 
 ### Execution Commands
 
-1. **Run Baseline Physics & API Regression Suite**:
-   ```bash
-   node --test tests/physics-and-api.test.mjs
-   ```
-   *Expected Result*: 4/4 passing (100% pass rate, ~2.2s execution time).
+```bash
+# Execute entire test suite sequentially (mandatory --test-concurrency=1)
+npm test
 
-2. **Run E2E Security Verification Test Suite**:
-   ```bash
-   node --test tests/security-verification.test.mjs
-   ```
-   *Pass/Fail Semantics*:
-   - Tiers 1, 2, and 3 pass against baseline behavior.
-   - Tier 4 tests define objective target criteria; tests exercising unhardened capabilities (e.g., client context replay rejection, rotated token reuse rejection) document red-team baseline failures until M1-M3 builders apply hardening.
-
-3. **Run Both Suites**:
-   ```bash
-   node --test tests/physics-and-api.test.mjs tests/security-verification.test.mjs
-   ```
+# Run individual targeted suites
+npm run test:e2e          # Comprehensive 8-Chapter 4-Tier verification
+npm run test:regression   # Baseline physics & API regression
+npm run test:security     # Security verification suite
+npm run test:stress       # Concurrency & session stress
+npm run test:challenger   # Empirical token tampering & replay challenger
+```
 
 ---
 
-## 4. Pass / Fail Semantics
+## 4. Coverage Thresholds & Quality Gates
 
-- **Pass (Exit Code 0)**:
-  - All test assertions succeed.
-  - No uncaught exceptions or timeouts occur.
-  - Zero regression in core laboratory simulations, catalog queries, and existing authentication lifecycles.
-- **Fail (Exit Code $\neq$ 0)**:
-  - An assertion fails (e.g., replayed cookie is accepted instead of rejected with 401; unhandled server crash returns 500 instead of 400).
-  - The server fails to start or respond within the 20-second health check timeout.
-  - Memory or process leak prevents clean child process shutdown.
+To achieve passing quality status, all automated tests must satisfy:
+- **Test Pass Rate**: 100% (zero failures, zero unhandled rejections).
+- **Physical Accuracy**: Analytical benchmarks must match within $\le 0.1\%$ relative tolerance (pure analytical equations $< 10^{-5}$).
+- **Boundary Handling**: No unhandled `NaN`, `Infinity`, division-by-zero crashes, or internal server errors (500) under edge-case inputs.
+- **Database Cleanliness**: Zero `SQLITE_BUSY` errors during sequential test execution.
+- **Document Export**: PDF generator must produce valid `%PDF-` document structure with non-empty payload.

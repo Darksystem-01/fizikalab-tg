@@ -13,6 +13,7 @@ import {
   getSessionCookieOptions,
   getSessionClearCookieOptions,
   signSessionToken,
+  signGoogleOnboardingToken,
   verifyGoogleOnboardingToken,
 } from "@/lib/auth";
 import { validateAndSanitizeEmail } from "@/lib/emailValidation";
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
         googleId: string;
         emailVerified: boolean;
       };
+      fullName?: string;
       university?: string;
       faculty?: string;
       studentGroup?: string;
@@ -312,14 +314,24 @@ export async function POST(req: Request) {
 
     if (!university || !faculty || !studentGroup) {
       // Tell client that Google identity is verified but academic profile must be completed
-      return NextResponse.json({
+      const onbToken = signGoogleOnboardingToken({
+        email: cleanEmail,
+        fullName: googleName,
+        googleId: googleId || "",
+      });
+
+      const res = NextResponse.json({
         needsAcademicProfile: true,
         email: cleanEmail,
         fullName: googleName,
         googleId,
+        onboardingToken: onbToken,
         message:
           "Google hisobingiz muvaffaqiyatli tasdiqlandi. Laboratoriya jurnaliga biriktirish uchun Universitet, Fakultet va Guruhingizni tanlang.",
       });
+
+      res.cookies.set("fizikalab_google_onboarding", onbToken, getSessionCookieOptions({ maxAge: 30 * 60 }));
+      return res;
     }
 
     // Validate university & faculty against official catalog
@@ -344,6 +356,10 @@ export async function POST(req: Request) {
     }
 
     // Create student account
+    const effectiveFullName =
+      body.fullName && body.fullName.trim().length >= 2
+        ? body.fullName.trim()
+        : googleName;
     const dummyPass = crypto.randomBytes(32).toString("hex");
     const now = new Date().toISOString();
 
@@ -351,7 +367,7 @@ export async function POST(req: Request) {
       `INSERT INTO users (full_name, email, password_hash, role, student_group, university, faculty, is_active, is_banned, google_id, created_at)
        VALUES ($1, $2, $3, 'student', $4, $5, $6, 1, 0, $7, $8) RETURNING id`,
       [
-        googleName,
+        effectiveFullName,
         cleanEmail,
         hashPassword(dummyPass),
         studentGroup,
@@ -367,7 +383,7 @@ export async function POST(req: Request) {
     const token = await signSessionToken({
       userId: newUserId,
       email: cleanEmail,
-      fullName: googleName,
+      fullName: effectiveFullName,
       role: "student",
       studentGroup,
       university: matchedUni.name,

@@ -7,6 +7,8 @@ import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { OpticsResult, OpticsSubMode } from "@/lib/physics/optics";
 
 function wavelengthToColor(nm: number): string {
@@ -20,6 +22,7 @@ function wavelengthToColor(nm: number): string {
 }
 
 export function OpticsLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("opt-01");
   const [subMode, setSubMode] = useState<OpticsSubMode>("optical_bench");
 
   // Optical bench
@@ -215,8 +218,27 @@ export function OpticsLab() {
       | { angleDeg: number; screenMm: number; intensity: number }[]
       | undefined) ?? [];
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.subMode === "string") {
+      setSubMode(p.subMode as OpticsSubMode);
+    }
+    if (typeof p.focalLengthCm === "number") setFocalLengthCm(p.focalLengthCm);
+    if (typeof p.objectDistanceCm === "number") setObjectDistanceCm(p.objectDistanceCm);
+    if (typeof p.wavelengthNm === "number") setWavelengthNm(p.wavelengthNm);
+    if (typeof p.prismApexDeg === "number") setPrismApexDeg(p.prismApexDeg);
+    if (typeof p.incidenceDeg === "number") setIncidenceDeg(p.incidenceDeg);
+  }
+
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="optics"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
           {[

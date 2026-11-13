@@ -7,6 +7,8 @@ import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { StaticsResult } from "@/lib/physics/statics";
 
 interface ForceItem {
@@ -22,6 +24,7 @@ interface BeamLoadItem {
 }
 
 export function StaticsLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("stat-01");
   const [subMode, setSubMode] = useState<"force_table" | "beam_moments" | "pulley_wheel">(
     "force_table"
   );
@@ -182,8 +185,29 @@ export function StaticsLab() {
   const momentSeries =
     (result?.details?.momentSeries as { x: number; y: number }[] | undefined) ?? [];
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.subMode === "string") {
+      if (p.subMode === "force_table" || p.subMode === "beam_moments" || p.subMode === "pulley_wheel") {
+        setSubMode(p.subMode);
+      }
+    }
+    if (Array.isArray(p.forces)) setForces(p.forces as any);
+    if (typeof p.beamLengthM === "number") setBeamLengthM(p.beamLengthM);
+    if (typeof p.beamMassKg === "number") setBeamMassKg(p.beamMassKg);
+    if (typeof p.loadMassKg === "number") setLoadMassKg(p.loadMassKg);
+    if (typeof p.pulleyStrands === "number") setPulleyStrands(p.pulleyStrands);
+  }
+
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="statics"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-2 border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
           {[

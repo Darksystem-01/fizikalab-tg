@@ -7,6 +7,8 @@ import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { DynamicsResult, DynamicsSubMode } from "@/lib/physics/dynamics";
 
 interface MetricFormatSpec {
@@ -95,6 +97,7 @@ function formatMetricValue(key: string, val: number | string | boolean): { label
 }
 
 export function DynamicsLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("dyn-01");
   const [subMode, setSubMode] = useState<DynamicsSubMode>("inclined_plane");
   const [mass1Kg, setMass1Kg] = useState(3.0);
   const [mass2Kg, setMass2Kg] = useState(1.2);
@@ -242,6 +245,23 @@ export function DynamicsLab() {
     ]);
   }
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.subMode === "string") {
+      if (p.subMode === "incline_plane") setSubMode("inclined_plane");
+      else if (p.subMode === "pendulum" || p.subMode === "hooke_spring" || p.subMode === "collision" || p.subMode === "flywheel") {
+        setSubMode(p.subMode as DynamicsSubMode);
+      }
+    }
+    if (typeof p.massKg === "number") setMass1Kg(p.massKg);
+    if (typeof p.m1Kg === "number") setMass1Kg(p.m1Kg);
+    if (typeof p.m2Kg === "number") setMass2Kg(p.m2Kg);
+    if (typeof p.angleDeg === "number") setAngleDeg(p.angleDeg);
+    if (typeof p.frictionCoeff === "number") setMuKinetic(p.frictionCoeff);
+    if (typeof p.springConstantNm === "number") setSpringK(p.springConstantNm);
+  }
+
   const pts0 = result?.series?.[0]?.points ?? [];
   const pts1 = result?.series?.[1]?.points ?? [];
   const idx = pts0.length > 0 ? Math.min(pts0.length - 1, Math.floor(progress * (pts0.length - 1))) : 0;
@@ -251,6 +271,12 @@ export function DynamicsLab() {
 
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="dynamics"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
           {[

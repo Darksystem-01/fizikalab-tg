@@ -7,9 +7,12 @@ import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { KinematicsResult } from "@/lib/physics/kinematics";
 
 export function KinematicsLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("kin-01");
   const [mode, setMode] = useState<"projectile" | "freefall" | "air_track">("projectile");
   const [v0, setV0] = useState(25);
   const [angleDeg, setAngleDeg] = useState(45);
@@ -92,6 +95,23 @@ export function KinematicsLab() {
     return () => cancelAnimationFrame(raf);
   }, [playing, result]);
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.subMode === "string") {
+      if (p.subMode === "projectile" || p.subMode === "freefall" || p.subMode === "air_track") {
+        setMode(p.subMode);
+      }
+    }
+    if (typeof p.v0 === "number") setV0(p.v0);
+    if (typeof p.angleDeg === "number") setAngleDeg(p.angleDeg);
+    if (typeof p.initialHeightM === "number") setY0(p.initialHeightM);
+    if (typeof p.heightM === "number") setY0(p.heightM);
+    if (typeof p.massKg === "number") setMassKg(p.massKg);
+    if (typeof p.dragCoeff === "number") setDragCoeff(p.dragCoeff);
+    if (typeof p.airResistance === "boolean") setAirDrag(p.airResistance);
+  }
+
   function recordRow() {
     if (!result) return;
     setRows((prev) => [
@@ -119,6 +139,12 @@ export function KinematicsLab() {
 
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="kinematics"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
           {[

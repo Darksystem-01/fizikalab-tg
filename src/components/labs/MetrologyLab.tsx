@@ -6,9 +6,12 @@ import { LabFormulaStrip } from "@/components/LabFormulaStrip";
 import { LabReportPanel, type MeasurementRow } from "@/components/LabReportPanel";
 import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
+import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { MetrologyResult } from "@/lib/physics/metrology";
 
 export function MetrologyLab() {
+  const [activeScenarioId, setActiveScenarioId] = useState("met-01");
   const [mode, setMode] = useState<"vernier" | "micrometer" | "spherometer">("vernier");
   const [trueValueMm, setTrueValueMm] = useState(24.64);
   const [leastCountMm, setLeastCountMm] = useState(0.02);
@@ -52,6 +55,16 @@ export function MetrologyLab() {
     return () => clearTimeout(timer);
   }, [runSimulation]);
 
+  function handleSelectScenario(sc: ScenarioDefinition) {
+    setActiveScenarioId(sc.id);
+    const p = sc.defaultParams as Record<string, unknown>;
+    if (typeof p.mode === "string") setMode(p.mode as any);
+    if (typeof p.trueValueMm === "number") setTrueValueMm(p.trueValueMm);
+    if (typeof p.leastCountMm === "number") setLeastCountMm(p.leastCountMm);
+    if (typeof p.zeroErrorMm === "number") setZeroErrorMm(p.zeroErrorMm);
+    if (typeof p.legSpacingMm === "number") setLegSpacingMm(p.legSpacingMm);
+  }
+
   function recordRow() {
     if (!result) return;
     const primary =
@@ -90,6 +103,12 @@ export function MetrologyLab() {
 
   return (
     <div className="space-y-4">
+      <ScenarioCatalogSelector
+        chapter="metrology"
+        activeScenarioId={activeScenarioId}
+        onSelectScenario={handleSelectScenario}
+      />
+
       {/* Mode selector bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap gap-1.5">
