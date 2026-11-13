@@ -7,13 +7,17 @@ export interface VernierInput {
     | "spherometer"
     | "density"
     | "young_modulus"
-    | "regression";
+    | "regression"
+    | "gum_advanced"
+    | "monte_carlo_gum"
+    | "york_regression";
   trueValueMm?: number;
   leastCountMm?: number; // 0.02, 0.05, 0.1 for vernier; 0.01 for micrometer/spherometer
   zeroErrorMm?: number;
   legSpacingMm?: number; // For spherometer (l)
   sampleCount?: number;
   noiseSigmaMm?: number;
+
   // Density and indirect measurement
   massG?: number;
   deltaMassG?: number;
@@ -24,13 +28,27 @@ export interface VernierInput {
   dim3Mm?: number;
   deltaDim3Mm?: number;
   shape?: "block" | "cylinder" | "sphere";
+
   // Young's modulus
   wireLengthM?: number;
   wireDiameterMm?: number;
   loadMassKg?: number;
   elongationMm?: number;
+
   // Regression
   points?: { x: number; y: number }[];
+
+  // GUM Uncertainty Budget
+  typeAValues?: number[]; // series of repeated observations
+  typeBUncertainties?: { name: string; halfWidth: number; distribution: "rectangular" | "triangular" | "normal" | "u_shaped" }[];
+  confidenceLevelPct?: number; // 95% or 99%
+
+  // Monte Carlo GUM
+  mcSampleCount?: number; // e.g. 10000
+  mcModel?: "sum" | "product" | "pendulum_g" | "density";
+
+  // York Regression (Errors in both x and y)
+  yorkPoints?: { x: number; y: number; sx: number; sy: number; rxy?: number }[];
 }
 
 export interface MetrologyResult {
@@ -47,6 +65,7 @@ export interface MetrologyResult {
   stats: StatisticalSummary;
   summary?: Record<string, number | string | boolean>;
   details?: Record<string, unknown>;
+  curves?: { label: string; points: { x: number; y: number }[] }[];
 }
 
 export interface StatisticalSummary {
@@ -98,160 +117,396 @@ export function computeStatistics(values: number[]): StatisticalSummary {
 
   return {
     n,
-    mean: roundTo(mean, 6),
-    variance: roundTo(variance, 8),
-    stdDev: roundTo(stdDev, 6),
-    stdError: roundTo(stdError, 6),
-    min: roundTo(min, 6),
-    max: roundTo(max, 6),
-    relativeErrorPct: roundTo(relativeErrorPct, 4),
+    mean: roundTo(mean, 5),
+    variance: roundTo(variance, 6),
+    stdDev: roundTo(stdDev, 5),
+    stdError: roundTo(stdError, 5),
+    min: roundTo(min, 5),
+    max: roundTo(max, 5),
+    relativeErrorPct: roundTo(relativeErrorPct, 3),
   };
 }
 
-export function computeLinearRegression(
-  points: { x: number; y: number }[]
-): LinearRegressionResult {
+export function computeLinearRegression(points: { x: number; y: number }[]): LinearRegressionResult {
   const n = points.length;
   if (n < 2) {
     return {
       slope: 0,
-      intercept: points[0]?.y ?? 0,
+      intercept: 0,
       slopeUncertainty: 0,
       interceptUncertainty: 0,
-      rSquared: 1,
-      fittedPoints: points.map((p) => ({ ...p, yFit: p.y, residual: 0 })),
+      rSquared: 0,
+      fittedPoints: [],
     };
   }
 
-  const meanX = points.reduce((s, p) => s + p.x, 0) / n;
-  const meanY = points.reduce((s, p) => s + p.y, 0) / n;
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+  let sumYY = 0;
 
-  let sxx = 0;
-  let syy = 0;
-  let sxy = 0;
   for (const p of points) {
-    const dx = p.x - meanX;
-    const dy = p.y - meanY;
-    sxx += dx * dx;
-    syy += dy * dy;
-    sxy += dx * dy;
+    sumX += p.x;
+    sumY += p.y;
+    sumXY += p.x * p.y;
+    sumXX += p.x * p.x;
+    sumYY += p.y * p.y;
   }
 
-  const slope = sxx > 1e-15 ? sxy / sxx : 0;
-  const intercept = meanY - slope * meanX;
+  const denom = n * sumXX - sumX * sumX;
+  if (Math.abs(denom) < 1e-12) {
+    return {
+      slope: 0,
+      intercept: sumY / n,
+      slopeUncertainty: 0,
+      interceptUncertainty: 0,
+      rSquared: 0,
+      fittedPoints: points.map((p) => ({ ...p, yFit: sumY / n, residual: p.y - sumY / n })),
+    };
+  }
 
-  let sse = 0;
+  const slope = (n * sumXY - sumX * sumY) / denom;
+  const intercept = (sumY - slope * sumX) / n;
+
+  // Residual variance and uncertainties
+  let ssRes = 0;
+  let ssTot = 0;
+  const meanY = sumY / n;
   const fittedPoints = points.map((p) => {
     const yFit = slope * p.x + intercept;
     const residual = p.y - yFit;
-    sse += residual * residual;
+    ssRes += residual * residual;
+    ssTot += (p.y - meanY) * (p.y - meanY);
     return {
-      x: roundTo(p.x, 6),
-      y: roundTo(p.y, 6),
-      yFit: roundTo(yFit, 6),
-      residual: roundTo(residual, 6),
+      x: roundTo(p.x, 4),
+      y: roundTo(p.y, 4),
+      yFit: roundTo(yFit, 4),
+      residual: roundTo(residual, 4),
     };
   });
 
-  const s2 = n > 2 ? sse / (n - 2) : 0;
-  const slopeUncertainty = sxx > 1e-15 ? Math.sqrt(s2 / sxx) : 0;
-  const interceptUncertainty =
-    sxx > 1e-15
-      ? Math.sqrt(s2 * (1 / n + (meanX * meanX) / sxx))
-      : 0;
-  const rSquared = syy > 1e-15 ? Math.max(0, 1 - sse / syy) : 1;
+  const s2 = n > 2 ? ssRes / (n - 2) : 0;
+  const slopeUncertainty = Math.sqrt((n * s2) / denom);
+  const interceptUncertainty = Math.sqrt((s2 * sumXX) / denom);
+  const rSquared = ssTot > 0 ? Math.max(0, 1 - ssRes / ssTot) : 1;
 
   return {
-    slope: roundTo(slope, 6),
-    intercept: roundTo(intercept, 6),
-    slopeUncertainty: roundTo(slopeUncertainty, 6),
-    interceptUncertainty: roundTo(interceptUncertainty, 6),
-    rSquared: roundTo(rSquared, 6),
+    slope: roundTo(slope, 5),
+    intercept: roundTo(intercept, 5),
+    slopeUncertainty: roundTo(slopeUncertainty, 5),
+    interceptUncertainty: roundTo(interceptUncertainty, 5),
+    rSquared: roundTo(rSquared, 4),
     fittedPoints,
   };
 }
 
-/**
- * Deterministic Box-Muller pseudo-random normal sample using a seed so repeated requests
- * are reproducible when seeded or realistic when unseeded.
- */
 function seededGaussian(seed: number): number {
-  const s1 = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
-  const s2 = Math.sin((seed + 1) * 93.9898 + 19.133) * 24634.6345;
-  const u1 = Math.max(1e-7, s1 - Math.floor(s1));
-  const u2 = s2 - Math.floor(s2);
-  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  const x = Math.sin(seed) * 10000;
+  const u1 = Math.max(1e-6, x - Math.floor(x));
+  const y = Math.sin(seed + 1.618) * 10000;
+  const u2 = y - Math.floor(y);
+  return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
 }
 
-export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult {
-  const mode = input.mode;
+export function simulateMetrology(input: VernierInput): MetrologyResult {
+  const mode = input.mode ?? "vernier";
 
-  // Extended Mode 1: Density & Error Propagation
-  if (mode === "density") {
-    const shape = input.shape ?? "cylinder";
-    const massG = Math.max(0.01, input.massG ?? 85.4);
-    const dMassG = Math.max(0.001, input.deltaMassG ?? 0.05);
+  // =========================================================================
+  // GUM ADVANCED COMBINED UNCERTAINTY EVALUATION
+  // =========================================================================
+  if (mode === "gum_advanced") {
+    const rawObs = input.typeAValues && input.typeAValues.length > 0 ? input.typeAValues : [24.62, 24.65, 24.64, 24.63, 24.66, 24.64];
+    const statsA = computeStatistics(rawObs);
+    const uA = statsA.stdError; // Type A standard uncertainty
+    const nuA = Math.max(1, statsA.n - 1);
 
-    let volumeCm3 = 1;
-    let relVolUncertainty = 0;
-    if (shape === "cylinder") {
-      const dMm = Math.max(0.1, input.dim1Mm ?? 20.0);
-      const hMm = Math.max(0.1, input.dim2Mm ?? 35.0);
-      const dDMm = Math.max(0.005, input.deltaDim1Mm ?? 0.02);
-      const dHMm = Math.max(0.005, input.deltaDim2Mm ?? 0.02);
-      // V = pi/4 * d^2 * h (in cm^3, so / 1000)
-      volumeCm3 = (Math.PI / 4) * Math.pow(dMm / 10, 2) * (hMm / 10);
-      relVolUncertainty = Math.sqrt(4 * Math.pow(dDMm / dMm, 2) + Math.pow(dHMm / hMm, 2));
-    } else if (shape === "sphere") {
-      const dMm = Math.max(0.1, input.dim1Mm ?? 25.0);
-      const dDMm = Math.max(0.005, input.deltaDim1Mm ?? 0.01);
-      volumeCm3 = (Math.PI / 6) * Math.pow(dMm / 10, 3);
-      relVolUncertainty = 3 * (dDMm / dMm);
-    } else {
-      // block: a * b * c
-      const aMm = Math.max(0.1, input.dim1Mm ?? 20);
-      const bMm = Math.max(0.1, input.dim2Mm ?? 30);
-      const cMm = Math.max(0.1, input.dim3Mm ?? 40);
-      const da = Math.max(0.005, input.deltaDim1Mm ?? 0.02);
-      const db = Math.max(0.005, input.deltaDim2Mm ?? 0.02);
-      const dc = Math.max(0.005, input.deltaDim3Mm ?? 0.02);
-      volumeCm3 = (aMm / 10) * (bMm / 10) * (cMm / 10);
-      relVolUncertainty = Math.sqrt(Math.pow(da / aMm, 2) + Math.pow(db / bMm, 2) + Math.pow(dc / cMm, 2));
+    // Type B components
+    const defaultTypeB = [
+      { name: "Asbob xatoligi (Linear kalibrlash)", halfWidth: 0.02, distribution: "rectangular" as const },
+      { name: "Harorat effekti (Delta T = 2K)", halfWidth: 0.015, distribution: "triangular" as const },
+      { name: "Operator ko'rish xatoligi (Parallaks)", halfWidth: 0.01, distribution: "rectangular" as const },
+    ];
+    const typeBList = input.typeBUncertainties && input.typeBUncertainties.length > 0 ? input.typeBUncertainties : defaultTypeB;
+
+    let sumU2B = 0;
+    const typeBBudget = typeBList.map((tb) => {
+      let div = Math.sqrt(3); // rectangular
+      if (tb.distribution === "triangular") div = Math.sqrt(6);
+      else if (tb.distribution === "normal") div = 2.0; // k=2
+      else if (tb.distribution === "u_shaped") div = Math.sqrt(2);
+      const uVal = tb.halfWidth / div;
+      sumU2B += uVal * uVal;
+      return {
+        name: tb.name,
+        distribution: tb.distribution,
+        halfWidthMm: tb.halfWidth,
+        standardUncertaintyMm: roundTo(uVal, 5),
+      };
+    });
+
+    // Combined uncertainty
+    const uC = Math.sqrt(uA * uA + sumU2B);
+
+    // Welch-Satterthwaite effective degrees of freedom:
+    // nu_eff = u_c^4 / (u_A^4 / nu_A + sum(u_B_i^4 / nu_B_i)) where nu_B -> inf for reliable bounds
+    const nuEff = Math.round(Math.pow(uC, 4) / (Math.pow(uA, 4) / nuA));
+
+    // Coverage factor k for 95.45% (approx 2.0, or Student t adjustment)
+    const kFactor = nuEff > 30 ? 2.0 : nuEff > 10 ? 2.23 : 2.57;
+    const UExpanded = kFactor * uC;
+    const relativeExpandedPct = (UExpanded / Math.abs(statsA.mean)) * 100;
+
+    return {
+      mode,
+      mainScaleReadingMm: Math.floor(statsA.mean),
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: statsA.mean,
+      zeroErrorMm: 0,
+      correctedReadingMm: statsA.mean,
+      samples: rawObs,
+      stats: statsA,
+      summary: {
+        meanValueMm: statsA.mean,
+        typeAUncertaintyMm: roundTo(uA, 5),
+        typeBCombinedUncertaintyMm: roundTo(Math.sqrt(sumU2B), 5),
+        combinedStandardUncertaintyMm: roundTo(uC, 5),
+        effectiveDegreesOfFreedomNuEff: nuEff,
+        coverageFactorK: roundTo(kFactor, 2),
+        expandedUncertaintyUMm: roundTo(UExpanded, 5),
+        relativeExpandedUncertaintyPct: roundTo(relativeExpandedPct, 3),
+        confidenceIntervalFormatted: `(${statsA.mean} ± ${roundTo(UExpanded, 4)}) mm (P=95%)`,
+      },
+      details: { typeBBudget },
+    };
+  }
+
+  // =========================================================================
+  // MONTE CARLO GUM SUPPLEMENT 1 EVALUATION
+  // =========================================================================
+  if (mode === "monte_carlo_gum") {
+    const N_trials = Math.min(20000, Math.max(1000, input.mcSampleCount ?? 10000));
+    const meanX = input.trueValueMm ?? 25.0;
+    const sigmaA = input.noiseSigmaMm ?? 0.025;
+    const halfWidthB = 0.015;
+
+    const trialResults: number[] = [];
+    for (let i = 0; i < N_trials; i++) {
+      // Gaussian Type A + Rectangular Type B
+      const drawA = meanX + seededGaussian(i * 1.337) * sigmaA;
+      const drawB = (Math.sin(i * 3.71) * 2 - 1) * halfWidthB;
+      trialResults.push(drawA + drawB);
     }
 
-    const densityG_Cm3 = massG / volumeCm3;
-    const relMassUncertainty = dMassG / massG;
-    const totalRelUncertainty = Math.sqrt(Math.pow(relMassUncertainty, 2) + Math.pow(relVolUncertainty, 2));
-    const absDensityUncertainty = densityG_Cm3 * totalRelUncertainty;
+    trialResults.sort((a, b) => a - b);
+    const mcMean = trialResults.reduce((a, b) => a + b, 0) / N_trials;
+    const mcVariance = trialResults.reduce((a, b) => a + (b - mcMean) ** 2, 0) / (N_trials - 1);
+    const mcStdDev = Math.sqrt(mcVariance);
+
+    // 95% Coverage interval: [2.5% quantile, 97.5% quantile]
+    const idxLow = Math.floor(N_trials * 0.025);
+    const idxHigh = Math.floor(N_trials * 0.975);
+    const lowBound = trialResults[idxLow];
+    const highBound = trialResults[idxHigh];
+    const halfWidth95 = (highBound - lowBound) / 2;
+
+    // Empirical Histogram (25 bins)
+    const numBins = 25;
+    const binWidth = (highBound - lowBound) / numBins;
+    const histPoints: { x: number; y: number }[] = [];
+    for (let b = 0; b < numBins; b++) {
+      const binMid = lowBound + (b + 0.5) * binWidth;
+      const count = trialResults.filter((v) => v >= lowBound + b * binWidth && v < lowBound + (b + 1) * binWidth).length;
+      histPoints.push({ x: roundTo(binMid, 4), y: count });
+    }
+
+    return {
+      mode,
+      mainScaleReadingMm: Math.floor(mcMean),
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: roundTo(mcMean, 4),
+      zeroErrorMm: 0,
+      correctedReadingMm: roundTo(mcMean, 4),
+      samples: trialResults.slice(0, 10),
+      stats: computeStatistics(trialResults.slice(0, 50)),
+      summary: {
+        monteCarloTrials: N_trials,
+        mcMeanMm: roundTo(mcMean, 5),
+        mcStandardDeviationMm: roundTo(mcStdDev, 5),
+        coverageInterval95LowMm: roundTo(lowBound, 5),
+        coverageInterval95HighMm: roundTo(highBound, 5),
+        coverageIntervalHalfWidthMm: roundTo(halfWidth95, 5),
+        relativeCoverageIntervalPct: roundTo((halfWidth95 / mcMean) * 100, 3),
+      },
+      details: {},
+      curves: [{ label: "Monte-Karlo Taqsirlanish Gistogrammasi", points: histPoints }],
+    };
+  }
+
+  // =========================================================================
+  // YORK WEIGHTED TOTAL LEAST SQUARES REGRESSION
+  // =========================================================================
+  if (mode === "york_regression") {
+    const rawPts = input.yorkPoints && input.yorkPoints.length >= 3 ? input.yorkPoints : [
+      { x: 1.0, y: 2.15, sx: 0.05, sy: 0.08 },
+      { x: 2.0, y: 4.10, sx: 0.05, sy: 0.09 },
+      { x: 3.0, y: 6.02, sx: 0.06, sy: 0.11 },
+      { x: 4.0, y: 8.12, sx: 0.07, sy: 0.12 },
+      { x: 5.0, y: 9.95, sx: 0.08, sy: 0.15 },
+    ];
+
+    // Iterative York 1968 algorithm:
+    // Initial guess from ordinary least squares:
+    const ols = computeLinearRegression(rawPts.map((p) => ({ x: p.x, y: p.y })));
+    let bSlope = ols.slope;
+    let aIntercept = ols.intercept;
+
+    for (let iter = 0; iter < 15; iter++) {
+      let sumW = 0;
+      let sumWX = 0;
+      let sumWY = 0;
+
+      const weights = rawPts.map((p) => {
+        const wx = 1 / Math.max(1e-8, p.sx * p.sx);
+        const wy = 1 / Math.max(1e-8, p.sy * p.sy);
+        const r = p.rxy ?? 0;
+        const W_i = (wx * wy) / (wx + bSlope * bSlope * wy - 2 * bSlope * r * Math.sqrt(wx * wy));
+        sumW += W_i;
+        sumWX += W_i * p.x;
+        sumWY += W_i * p.y;
+        return { ...p, W_i };
+      });
+
+      const xBar = sumWX / sumW;
+      const yBar = sumWY / sumW;
+
+      let top = 0;
+      let bot = 0;
+      for (const p of weights) {
+        const u = p.x - xBar;
+        const v = p.y - yBar;
+        const wx = 1 / Math.max(1e-8, p.sx * p.sx);
+        const wy = 1 / Math.max(1e-8, p.sy * p.sy);
+        const r = p.rxy ?? 0;
+        const alpha = (2 * p.W_i * p.W_i) / (wx * wy);
+        top += p.W_i * p.W_i * (u * (v / wy - r * u / Math.sqrt(wx * wy)));
+        bot += p.W_i * p.W_i * (u * (u / wx - r * v / Math.sqrt(wx * wy)));
+      }
+
+      const nextB = top / (bot || 1e-6);
+      aIntercept = yBar - nextB * xBar;
+      if (Math.abs(nextB - bSlope) < 1e-6) {
+        bSlope = nextB;
+        break;
+      }
+      bSlope = nextB;
+    }
+
+    // Goodness of fit Chi^2
+    let chi2 = 0;
+    for (const p of rawPts) {
+      const res = p.y - (bSlope * p.x + aIntercept);
+      const varTotal = p.sy * p.sy + bSlope * bSlope * p.sx * p.sx;
+      chi2 += (res * res) / varTotal;
+    }
+    const degFreedom = rawPts.length - 2;
+    const mswd = chi2 / Math.max(1, degFreedom);
+
+    return {
+      mode,
+      mainScaleReadingMm: roundTo(bSlope, 4),
+      secondaryDivision: 0,
+      leastCountMm: 0.01,
+      rawReadingMm: roundTo(bSlope, 4),
+      zeroErrorMm: 0,
+      correctedReadingMm: roundTo(bSlope, 4),
+      samples: rawPts.map((p) => p.y),
+      stats: computeStatistics(rawPts.map((p) => p.y)),
+      summary: {
+        yorkBestFitSlope: roundTo(bSlope, 5),
+        yorkBestFitIntercept: roundTo(aIntercept, 5),
+        chiSquared: roundTo(chi2, 3),
+        degreesOfFreedom: degFreedom,
+        mswdReducedChi2: roundTo(mswd, 3),
+        goodFitQuality: mswd >= 0.5 && mswd <= 2.0,
+      },
+      details: {},
+    };
+  }
+
+  // =========================================================================
+  // DENSITY OF SOLIDS
+  // =========================================================================
+  if (mode === "density") {
+    const mass = Math.max(0.1, input.massG ?? 85.4);
+    const dMass = Math.max(0.001, input.deltaMassG ?? 0.05);
+    const shape = input.shape ?? "cylinder";
+
+    let vol = 0;
+    let relVolUncert = 0;
+
+    if (shape === "block") {
+      const a = Math.max(1, input.dim1Mm ?? 30);
+      const da = Math.max(0.01, input.deltaDim1Mm ?? 0.02);
+      const b = Math.max(1, input.dim2Mm ?? 20);
+      const db = Math.max(0.01, input.deltaDim2Mm ?? 0.02);
+      const c = Math.max(1, input.dim3Mm ?? 15);
+      const dc = Math.max(0.01, input.deltaDim3Mm ?? 0.02);
+      vol = a * b * c;
+      relVolUncert = Math.sqrt((da / a) ** 2 + (db / b) ** 2 + (dc / c) ** 2);
+    } else if (shape === "cylinder") {
+      const d = Math.max(1, input.dim1Mm ?? 20);
+      const dd = Math.max(0.01, input.deltaDim1Mm ?? 0.02);
+      const h = Math.max(1, input.dim2Mm ?? 35);
+      const dh = Math.max(0.01, input.deltaDim2Mm ?? 0.02);
+      const r = d / 2;
+      vol = Math.PI * r * r * h;
+      relVolUncert = Math.sqrt((2 * (dd / d)) ** 2 + (dh / h) ** 2);
+    } else {
+      const d = Math.max(1, input.dim1Mm ?? 25);
+      const dd = Math.max(0.01, input.deltaDim1Mm ?? 0.02);
+      const r = d / 2;
+      vol = (4 / 3) * Math.PI * r * r * r;
+      relVolUncert = 3 * (dd / d);
+    }
+
+    const volCm3 = vol / 1000;
+    const density = mass / volCm3;
+    const relMassUncert = dMass / mass;
+    const relDensityUncert = Math.sqrt(relMassUncert ** 2 + relVolUncert ** 2);
+    const absDensityUncert = density * relDensityUncert;
 
     return {
       mode,
       mainScaleReadingMm: 0,
       secondaryDivision: 0,
       leastCountMm: 0.01,
-      rawReadingMm: roundTo(densityG_Cm3, 4),
+      rawReadingMm: roundTo(density, 4),
       zeroErrorMm: 0,
-      correctedReadingMm: roundTo(densityG_Cm3, 4),
-      samples: [roundTo(densityG_Cm3, 4)],
-      stats: computeStatistics([densityG_Cm3]),
+      correctedReadingMm: roundTo(density, 4),
+      samples: [roundTo(density, 4)],
+      stats: computeStatistics([density]),
       summary: {
+        densityG_Cm3: roundTo(density, 3),
+        densityKg_M3: roundTo(density * 1000, 1),
+        uncertaintyG_Cm3: roundTo(absDensityUncert, 4),
+        relativeUncertaintyPct: roundTo(relDensityUncert * 100, 2),
+        volumeCm3: roundTo(volCm3, 3),
         shape,
-        massG: roundTo(massG, 3),
-        volumeCm3: roundTo(volumeCm3, 4),
-        densityG_Cm3: roundTo(densityG_Cm3, 4),
-        densityKg_M3: roundTo(densityG_Cm3 * 1000, 1),
-        relativeUncertaintyPct: roundTo(totalRelUncertainty * 100, 3),
-        absoluteUncertaintyG_Cm3: roundTo(absDensityUncertainty, 4),
       },
     };
   }
 
-  // Extended Mode 2: Young's Modulus
+  // =========================================================================
+  // YOUNG'S MODULUS
+  // =========================================================================
   if (mode === "young_modulus") {
-    const L = Math.max(0.1, input.wireLengthM ?? 2.0); // 2 m
-    const dMm = Math.max(0.05, input.wireDiameterMm ?? 0.5); // 0.5 mm
-    const M = Math.max(0.1, input.loadMassKg ?? 5.0); // 5 kg
-    const deltaLMm = Math.max(0.001, input.elongationMm ?? 1.25); // 1.25 mm
+    const L = Math.max(0.1, input.wireLengthM ?? 2.0);
+    const dMm = Math.max(0.05, input.wireDiameterMm ?? 0.5);
+    const M = Math.max(0.1, input.loadMassKg ?? 5.0);
+    const deltaLMm = Math.max(0.001, input.elongationMm ?? 1.25);
     const g = 9.80665;
 
     const rM = (dMm / 2) * 1e-3;
@@ -280,7 +535,9 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
     };
   }
 
-  // Extended Mode 3: Regression
+  // =========================================================================
+  // REGRESSION
+  // =========================================================================
   if (mode === "regression" && input.points && input.points.length >= 2) {
     const reg = computeLinearRegression(input.points);
     return {
@@ -303,6 +560,9 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
     };
   }
 
+  // =========================================================================
+  // VERNIER CALIPER, MICROMETER, SPHEROMETER CORE SIMULATION
+  // =========================================================================
   const leastCountMm =
     mode === "vernier" ? input.leastCountMm ?? 0.02 : 0.01;
   const zeroErrorMm = input.zeroErrorMm ?? 0;
@@ -352,20 +612,24 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
 
   let spherometerRadiusMm: number | undefined;
   let spherometerUncertaintyMm: number | undefined;
-  let surfaceType: string | undefined;
+
   if (mode === "spherometer") {
     const l = Math.max(5, input.legSpacingMm ?? 40);
-    if (trueVal === 0 || correctedReadingMm <= 1e-4) {
-      spherometerRadiusMm = 999999;
-      spherometerUncertaintyMm = 0;
-      surfaceType = "Plano-flat (R -> inf)";
+    const h = correctedReadingMm;
+    if (h > 1e-4) {
+      const R = (l * l) / (6 * h) + h / 2;
+      spherometerRadiusMm = roundTo(R, 2);
+      const dl = 0.1;
+      const dh = leastCountMm;
+      const dR = Math.sqrt(
+        ((l / (3 * h)) * dl) ** 2 +
+          ((-((l * l) / (6 * h * h)) + 0.5) * dh) ** 2
+      );
+      spherometerUncertaintyMm = roundTo(dR, 2);
     } else {
-      const h = Math.max(0.001, correctedReadingMm);
-      spherometerRadiusMm = roundTo((l * l) / (6 * h) + h / 2, 4);
-      const dRdh = Math.abs(-(l * l) / (6 * h * h) + 0.5);
-      const dh = Math.max(leastCountMm, stats.stdError);
-      spherometerUncertaintyMm = roundTo(dRdh * dh, 4);
-      surfaceType = spherometerRadiusMm > 0 ? "Spherical" : "Plano-flat (R -> inf)";
+      // Plano-flat surface guard: when h -> 0, curvature radius R -> infinity
+      spherometerRadiusMm = 1e6;
+      spherometerUncertaintyMm = 0;
     }
   }
 
@@ -382,10 +646,15 @@ export function simulateMetrology(input: MetrologyInputCompat): MetrologyResult 
     samples,
     stats,
     summary: {
-      surfaceType: surfaceType ?? (mode === "spherometer" ? "Spherical" : "Measurement"),
-      spherometerRadiusMm: spherometerRadiusMm ?? 0,
-      correctedReadingMm,
-      meanReadingMm: stats.mean,
+      measuredValueMm: correctedReadingMm,
+      sampleMeanMm: stats.mean,
+      sampleStdDevMm: stats.stdDev,
+      standardErrorMm: stats.stdError,
+      relativeErrorPct: stats.relativeErrorPct,
+      ...(spherometerRadiusMm !== undefined && {
+        radiusOfCurvatureMm: spherometerRadiusMm,
+        radiusUncertaintyMm: spherometerUncertaintyMm ?? 0,
+      }),
     },
   };
 }
@@ -403,5 +672,5 @@ export function studentsTPrime(
     return { tPrime: 0, consistent: Math.abs(meanA - meanB) < 1e-9 };
   }
   const tPrime = Math.abs(meanA - meanB) / denom;
-  return { tPrime: roundTo(tPrime, 4), consistent: tPrime <= 2.0 };
+  return { tPrime: roundTo(tPrime, 4), consistent: tPrime < 2.0 };
 }

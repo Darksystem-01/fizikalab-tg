@@ -9,7 +9,11 @@ export type ThermoSubMode =
   | "real_gas"
   | "heat_transfer"
   | "calorimetry"
-  | "fluid_surface";
+  | "fluid_surface"
+  | "rankine_cycle"
+  | "peng_robinson_eos"
+  | "blackbody_planck_radiation"
+  | "transient_conduction_1d";
 
 export interface ThermodynamicsInput {
   subMode: ThermoSubMode;
@@ -45,6 +49,36 @@ export interface ThermodynamicsInput {
   tColdK?: number;
   compressionRatio?: number; // r = V1 / V2
   cutoffRatio?: number; // rc = V3 / V2 for Diesel
+
+  // Rankine steam cycle
+  boilerPressureMpa?: number;
+  condenserPressureKpa?: number;
+  turbineInletTempC?: number;
+  turbineIsentropicEfficiency?: number;
+  pumpIsentropicEfficiency?: number;
+  netPowerOutputMw?: number;
+
+  // Peng-Robinson Cubic EOS
+  criticalTempK?: number;
+  criticalPressureMpa?: number;
+  acentricFactor?: number;
+  fluidCompound?: "methane" | "ethane" | "propane" | "co2" | "water" | "nitrogen" | "custom";
+
+  // Planck radiation & Radiative exchange
+  emitterTempK?: number;
+  absorberTempK?: number;
+  emitterEmissivity?: number;
+  absorberEmissivity?: number;
+  surfaceAreaM2?: number;
+
+  // Transient 1D Conduction PDE
+  slabThicknessM?: number;
+  thermalDiffusivityM2_S?: number;
+  convectionCoeffW_M2K?: number;
+  initialTempC?: number;
+  ambientFluidTempC?: number;
+  simulationTimeS?: number;
+  gridNodesCount?: number;
 
   // Real Gas Van der Waals
   gasPreset?: "custom" | "helium" | "nitrogen" | "co2" | "water_vapor" | "argon";
@@ -144,6 +178,14 @@ export function simulateThermodynamics(input: ThermodynamicsInput): Thermodynami
     case "viscosity_transport" as any:
     case "surface_tension" as any:
       return simulateFluidSurface(input);
+    case "rankine_cycle":
+      return simulateRankineCycle(input);
+    case "peng_robinson_eos":
+      return simulatePengRobinsonEos(input);
+    case "blackbody_planck_radiation":
+      return simulateBlackbodyPlanck(input);
+    case "transient_conduction_1d":
+      return simulateTransientConduction1D(input);
     default:
       return simulateGasLaws(input);
   }
@@ -791,3 +833,436 @@ function simulateFluidSurface(input: ThermodynamicsInput): ThermodynamicsResult 
     },
   };
 }
+
+/**
+ * 8. Rankine Steam Power Cycle with Superheat & Isentropic Efficiencies
+ */
+function simulateRankineCycle(input: ThermodynamicsInput): ThermodynamicsResult {
+  const pBoilerMpa = Math.max(0.5, Math.min(22.0, input.boilerPressureMpa ?? 4.0));
+  const pCondKpa = Math.max(2.0, Math.min(100.0, input.condenserPressureKpa ?? 10.0));
+  const tTurbineC = Math.max(250, Math.min(650, input.turbineInletTempC ?? 500));
+  const etaTurbine = Math.max(0.5, Math.min(1.0, input.turbineIsentropicEfficiency ?? 0.88));
+  const etaPump = Math.max(0.5, Math.min(1.0, input.pumpIsentropicEfficiency ?? 0.85));
+  const powerMw = Math.max(1.0, input.netPowerOutputMw ?? 100.0);
+
+  // Approximate steam thermodynamic properties based on IAPWS correlations
+  // Condenser saturation state (P in kPa)
+  const tSatCondC = 99.63 * Math.pow(pCondKpa / 101.325, 0.28);
+  const hfCondKj = 4.184 * tSatCondC; // Enthalpy of saturated liquid
+  const hfgCondKj = 2501.3 - 2.36 * tSatCondC; // Latent heat of vaporization
+  const hgCondKj = hfCondKj + hfgCondKj;
+  const sfCondKj = (4.184 * Math.log((tSatCondC + 273.15) / 273.15));
+  const sfgCondKj = hfgCondKj / (tSatCondC + 273.15);
+
+  // Boiler saturation state (P in MPa)
+  const pBoilerKpa = pBoilerMpa * 1000;
+  const tSatBoilerC = 99.63 * Math.pow(pBoilerKpa / 101.325, 0.28);
+  const hfBoilerKj = 4.184 * tSatBoilerC;
+  const hfgBoilerKj = 2501.3 - 2.36 * tSatBoilerC;
+  const hgBoilerKj = hfBoilerKj + hfgBoilerKj;
+  const sgBoilerKj = (4.184 * Math.log((tSatBoilerC + 273.15) / 273.15)) + (hfgBoilerKj / (tSatBoilerC + 273.15));
+
+  // State 1: Saturated liquid entering pump
+  const h1 = hfCondKj;
+  const s1 = sfCondKj;
+  const vf = 0.00101; // m^3/kg
+
+  // State 2: Compressed liquid leaving pump
+  const wPumpIsentropicKj = vf * (pBoilerKpa - pCondKpa); // kJ/kg
+  const wPumpActualKj = wPumpIsentropicKj / etaPump;
+  const h2 = h1 + wPumpActualKj;
+  const s2 = s1; // approx
+
+  // State 3: Superheated steam entering turbine
+  const cpSuperheat = 2.15; // kJ/(kg*K)
+  const superheatDt = Math.max(0, tTurbineC - tSatBoilerC);
+  const h3 = hgBoilerKj + cpSuperheat * superheatDt;
+  const s3 = sgBoilerKj + cpSuperheat * Math.log((tTurbineC + 273.15) / (tSatBoilerC + 273.15));
+
+  // State 4: Exhaust steam entering condenser
+  // Isentropic expansion: s4s = s3
+  const x4s = Math.max(0, Math.min(1.0, (s3 - sfCondKj) / sfgCondKj));
+  const h4s = hfCondKj + x4s * hfgCondKj;
+  const wTurbineIsentropicKj = h3 - h4s;
+  const wTurbineActualKj = wTurbineIsentropicKj * etaTurbine;
+  const h4 = h3 - wTurbineActualKj;
+  const x4Actual = Math.max(0, Math.min(1.0, (h4 - hfCondKj) / hfgCondKj));
+
+  // Performance metrics
+  const qInKj = h3 - h2;
+  const qOutKj = h4 - h1;
+  const wNetKj = wTurbineActualKj - wPumpActualKj;
+  const thermalEfficiency = wNetKj / qInKj;
+  const backWorkRatio = wPumpActualKj / wTurbineActualKj;
+  const massFlowKgS = (powerMw * 1000) / wNetKj;
+  const sscKgKwh = 3600 / wNetKj; // Specific Steam Consumption
+
+  // Carnot efficiency between extreme temperatures
+  const carnotEfficiency = 1 - (tSatCondC + 273.15) / (tTurbineC + 273.15);
+
+  // Generate T-s diagram points
+  const tsPoints: { x: number; y: number }[] = [
+    { x: roundTo(s1, 3), y: roundTo(tSatCondC, 1) }, // 1
+    { x: roundTo(s2, 3), y: roundTo(tSatCondC + 1.5, 1) }, // 2
+    { x: roundTo(sfCondKj + 0.5, 3), y: roundTo(tSatBoilerC, 1) }, // boiling onset
+    { x: roundTo(sgBoilerKj, 3), y: roundTo(tSatBoilerC, 1) }, // dry saturated
+    { x: roundTo(s3, 3), y: roundTo(tTurbineC, 1) }, // 3 superheat
+    { x: roundTo(s3 + 0.25, 3), y: roundTo(tSatCondC, 1) }, // 4 actual
+    { x: roundTo(s1, 3), y: roundTo(tSatCondC, 1) }, // back to 1
+  ];
+
+  return {
+    subMode: "rankine_cycle",
+    summary: {
+      thermalEfficiencyPct: roundTo(thermalEfficiency * 100, 2),
+      carnotEfficiencyPct: roundTo(carnotEfficiency * 100, 2),
+      netWorkOutputKj_Kg: roundTo(wNetKj, 2),
+      turbineWorkKj_Kg: roundTo(wTurbineActualKj, 2),
+      pumpWorkKj_Kg: roundTo(wPumpActualKj, 3),
+      heatInputKj_Kg: roundTo(qInKj, 2),
+      steamMassFlowRateKg_S: roundTo(massFlowKgS, 2),
+      specificSteamConsumptionKg_Kwh: roundTo(sscKgKwh, 3),
+      exhaustVaporQualityPct: roundTo(x4Actual * 100, 1),
+      backWorkRatioPct: roundTo(backWorkRatio * 100, 3),
+    },
+    details: {
+      boilerPressureMpa: pBoilerMpa,
+      condenserPressureKpa: pCondKpa,
+      turbineInletTempC: tTurbineC,
+      condenserSaturationTempC: roundTo(tSatCondC, 1),
+      boilerSaturationTempC: roundTo(tSatBoilerC, 1),
+      h1_kJ_kg: roundTo(h1, 1),
+      h2_kJ_kg: roundTo(h2, 1),
+      h3_kJ_kg: roundTo(h3, 1),
+      h4_kJ_kg: roundTo(h4, 1),
+    },
+    series: [
+      { label: "Rankine T-s sikli", points: tsPoints },
+    ],
+  };
+}
+
+/**
+ * 9. Peng-Robinson Modern Cubic Equation of State & Fugacity
+ */
+export const PR_COMPOUNDS: Record<string, { Tc: number; Pc: number; omega: number; M: number; nameUz: string }> = {
+  methane: { Tc: 190.56, Pc: 4.599, omega: 0.0115, M: 0.01604, nameUz: "Metan (CH4)" },
+  ethane: { Tc: 305.32, Pc: 4.872, omega: 0.0995, M: 0.03007, nameUz: "Etan (C2H6)" },
+  propane: { Tc: 369.83, Pc: 4.248, omega: 0.1523, M: 0.04410, nameUz: "Propan (C3H8)" },
+  co2: { Tc: 304.13, Pc: 7.377, omega: 0.2239, M: 0.04401, nameUz: "Karbonat angidrid (CO2)" },
+  water: { Tc: 647.10, Pc: 22.064, omega: 0.3443, M: 0.01802, nameUz: "Suv (H2O)" },
+  nitrogen: { Tc: 126.20, Pc: 3.396, omega: 0.0372, M: 0.02801, nameUz: "Azot (N2)" },
+};
+
+function simulatePengRobinsonEos(input: ThermodynamicsInput): ThermodynamicsResult {
+  const compoundKey = input.fluidCompound ?? "methane";
+  const compound = PR_COMPOUNDS[compoundKey] ?? PR_COMPOUNDS.methane;
+  const Tc = input.criticalTempK ?? compound.Tc;
+  const PcMpa = input.criticalPressureMpa ?? compound.Pc;
+  const omega = input.acentricFactor ?? compound.omega;
+  const PcPa = PcMpa * 1e6;
+
+  const T = Math.max(50, input.t1K ?? input.temperatureK ?? Tc * 0.95);
+  const PPa = Math.max(1e4, input.p1Pa ?? (input.pressureKPa ? input.pressureKPa * 1000 : PcPa * 0.5));
+  const R = CODATA.R;
+
+  // PR EOS parameters
+  const Tr = T / Tc;
+  const Pr = PPa / PcPa;
+  const aTc = 0.45724 * (R * R * Tc * Tc) / PcPa;
+  const b = 0.07780 * (R * Tc) / PcPa;
+  const kappa = 0.37464 + 1.54226 * omega - 0.26992 * omega * omega;
+  const alpha = Math.pow(1 + kappa * (1 - Math.sqrt(Tr)), 2);
+  const a = aTc * alpha;
+
+  // Dimensionless cubic coefficients: Z^3 + c2*Z^2 + c1*Z + c0 = 0
+  const A = (a * PPa) / (R * R * T * T);
+  const B = (b * PPa) / (R * T);
+  const c2 = -(1 - B);
+  const c1 = A - 3 * B * B - 2 * B;
+  const c0 = -(A * B - B * B - B * B * B);
+
+  // Analytical cubic root solver
+  const Q = (3 * c1 - c2 * c2) / 9;
+  const R_param = (9 * c2 * c1 - 27 * c0 - 2 * c2 * c2 * c2) / 54;
+  const D = Q * Q * Q + R_param * R_param; // Discriminant
+
+  let zRoots: number[] = [];
+  if (D < 0) {
+    // 3 real roots
+    const theta = Math.acos(Math.max(-1, Math.min(1, R_param / Math.sqrt(-Q * Q * Q))));
+    const sqrtNegQ = 2 * Math.sqrt(-Q);
+    const z1 = sqrtNegQ * Math.cos(theta / 3) - c2 / 3;
+    const z2 = sqrtNegQ * Math.cos((theta + 2 * Math.PI) / 3) - c2 / 3;
+    const z3 = sqrtNegQ * Math.cos((theta + 4 * Math.PI) / 3) - c2 / 3;
+    zRoots = [z1, z2, z3].filter(z => z > B).sort((x, y) => x - y);
+  } else {
+    // 1 real root
+    const S = Math.cbrt(R_param + Math.sqrt(D));
+    const T_cubic = Math.cbrt(R_param - Math.sqrt(D));
+    const z1 = S + T_cubic - c2 / 3;
+    if (z1 > B) zRoots = [z1];
+  }
+
+  const zVapor = zRoots.length > 0 ? zRoots[zRoots.length - 1] : 1.0;
+  const zLiquid = zRoots.length > 1 ? zRoots[0] : zVapor;
+  const hasPhaseCoexistence = zRoots.length >= 3;
+
+  // Fugacity coefficients
+  const calcLnPhi = (Z: number) => {
+    if (Z <= B) return 0;
+    const term1 = Z - 1;
+    const term2 = -Math.log(Z - B);
+    const term3 = -(A / (2 * Math.SQRT2 * B)) * Math.log((Z + (1 + Math.SQRT2) * B) / (Z + (1 - Math.SQRT2) * B));
+    return term1 + term2 + term3;
+  };
+
+  const lnPhiVapor = calcLnPhi(zVapor);
+  const phiVapor = Math.exp(lnPhiVapor);
+  const lnPhiLiquid = hasPhaseCoexistence ? calcLnPhi(zLiquid) : lnPhiVapor;
+  const phiLiquid = Math.exp(lnPhiLiquid);
+
+  const molarVolumeM3Mol = (zVapor * R * T) / PPa;
+  const molarVolumeLiquidM3Mol = (zLiquid * R * T) / PPa;
+
+  // Generate P-v isotherm points
+  const isothermPoints: { x: number; y: number }[] = [];
+  const idealPoints: { x: number; y: number }[] = [];
+  const vMin = b * 1.15;
+  const vMax = Math.max(vMin * 20, molarVolumeM3Mol * 4);
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const v = vMin * Math.pow(vMax / vMin, i / steps);
+    const pPR = (R * T) / (v - b) - a / (v * (v + b) + b * (v - b));
+    const pIdeal = (R * T) / v;
+    if (pPR > 0 && pPR < PcPa * 4) {
+      isothermPoints.push({ x: roundTo(v * 1e3, 3), y: roundTo(pPR / 1e6, 3) });
+    }
+    if (pIdeal > 0 && pIdeal < PcPa * 4) {
+      idealPoints.push({ x: roundTo(v * 1e3, 3), y: roundTo(pIdeal / 1e6, 3) });
+    }
+  }
+
+  return {
+    subMode: "peng_robinson_eos",
+    summary: {
+      compressibilityZ_Vapor: roundTo(zVapor, 4),
+      compressibilityZ_Liquid: roundTo(zLiquid, 4),
+      fugacityCoefficientVapor: roundTo(phiVapor, 4),
+      fugacityCoefficientLiquid: roundTo(phiLiquid, 4),
+      molarVolumeVaporL_Mol: roundTo(molarVolumeM3Mol * 1000, 3),
+      molarVolumeLiquidL_Mol: roundTo(molarVolumeLiquidM3Mol * 1000, 3),
+      phaseState: hasPhaseCoexistence ? "Ikki fazali (Suyuqlik + Bug')" : Tr > 1.0 ? "Superkritik flyuid" : "Bir fazali gaz",
+      reducedTemperatureTr: roundTo(Tr, 3),
+      reducedPressurePr: roundTo(Pr, 3),
+    },
+    details: {
+      compoundName: compound.nameUz,
+      criticalTempK: Tc,
+      criticalPressureMpa: PcMpa,
+      acentricFactor: omega,
+      parameterA_Pa_M6_Mol2: roundTo(a, 4),
+      parameterB_M3_Mol: roundTo(b, 7),
+    },
+    series: [
+      { label: "Peng-Robinson P-v izotermasi (MPa)", points: isothermPoints },
+      { label: "Ideal gaz P-v izotermasi (MPa)", points: idealPoints },
+    ],
+  };
+}
+
+/**
+ * 10. Planck Blackbody Spectral Radiance & Radiative Exchange
+ */
+function simulateBlackbodyPlanck(input: ThermodynamicsInput): ThermodynamicsResult {
+  const T1 = Math.max(10, Math.min(6000, input.emitterTempK ?? (input.temperatureK ?? 1200))); // K
+  const T2 = Math.max(5, Math.min(5000, input.absorberTempK ?? (input.ambientTempK ?? 300))); // K
+  const eps1 = Math.max(0.01, Math.min(1.0, input.emitterEmissivity ?? (input.emissivity ?? 0.85)));
+  const eps2 = Math.max(0.01, Math.min(1.0, input.absorberEmissivity ?? 0.80));
+  const area = Math.max(1e-4, input.surfaceAreaM2 ?? (input.areaM2 ?? 1.0));
+
+  // Wien's Displacement Law: lambda_max * T = b_wien = 2.897771955e-3 m*K
+  const bWien = 2.897771955e-3;
+  const lambdaMaxM = bWien / T1;
+  const lambdaMaxUm = lambdaMaxM * 1e6;
+
+  // Stefan-Boltzmann Law: E_b = sigma * T^4
+  const sigmaSB = CODATA.sigma_SB; // 5.670374419e-8 W/(m^2*K^4)
+  const emissivePowerBlackbodyW_M2 = sigmaSB * Math.pow(T1, 4);
+  const actualEmissivePowerW_M2 = eps1 * emissivePowerBlackbodyW_M2;
+  const totalEmittedPowerW = actualEmissivePowerW_M2 * area;
+
+  // Radiative exchange between two grey surfaces
+  const epsEffective = 1 / (1 / eps1 + 1 / eps2 - 1);
+  const netRadiativeFluxW_M2 = epsEffective * sigmaSB * (Math.pow(T1, 4) - Math.pow(T2, 4));
+  const netRadiativeHeatFlowW = netRadiativeFluxW_M2 * area;
+
+  // Linearized radiation heat transfer coefficient
+  const hrLinearW_M2K = epsEffective * sigmaSB * (T1 + T2) * (T1 * T1 + T2 * T2);
+
+  // Planck Spectral Radiance curve: B_lambda(lambda, T) = (2hc^2 / lambda^5) / (exp(hc/(lambda*k*T)) - 1)
+  const h = CODATA.h;
+  const c = CODATA.c;
+  const kB = CODATA.k_B;
+  const c1 = 2 * h * c * c; // 1.19104e-16 W*m^2/sr
+  const c2Const = (h * c) / kB; // 0.0143877 m*K
+
+  const planckPoints: { x: number; y: number }[] = [];
+  const planckPointsCold: { x: number; y: number }[] = [];
+  const minLamUm = Math.max(0.1, lambdaMaxUm * 0.1);
+  const maxLamUm = Math.max(5.0, lambdaMaxUm * 8.0);
+  const stepCount = 80;
+
+  let visibleFluxIntegral = 0;
+  for (let i = 0; i <= stepCount; i++) {
+    const lamUm = minLamUm + (i / stepCount) * (maxLamUm - minLamUm);
+    const lamM = lamUm * 1e-6;
+    const exponent = c2Const / (lamM * T1);
+    const expCold = c2Const / (lamM * T2);
+
+    const bLam = exponent < 70 ? (c1 / Math.pow(lamM, 5)) / (Math.exp(exponent) - 1) : 0;
+    const bLamCold = expCold < 70 ? (c1 / Math.pow(lamM, 5)) / (Math.exp(expCold) - 1) : 0;
+
+    // Convert to kW / (m^2 * sr * um)
+    const bLamKwUm = (bLam * 1e-6) / 1000;
+    const bLamColdKwUm = (bLamCold * 1e-6) / 1000;
+    planckPoints.push({ x: roundTo(lamUm, 3), y: roundTo(bLamKwUm, 3) });
+    planckPointsCold.push({ x: roundTo(lamUm, 3), y: roundTo(bLamColdKwUm, 3) });
+
+    // Integrate visible spectrum (0.38 - 0.75 um)
+    if (lamUm >= 0.38 && lamUm <= 0.75) {
+      visibleFluxIntegral += Math.PI * bLam * ((maxLamUm - minLamUm) / stepCount) * 1e-6;
+    }
+  }
+
+  const visibleFractionPct = Math.min(100, (visibleFluxIntegral / Math.max(1, emissivePowerBlackbodyW_M2)) * 100);
+
+  return {
+    subMode: "blackbody_planck_radiation",
+    summary: {
+      wienPeakWavelengthUm: roundTo(lambdaMaxUm, 3),
+      blackbodyEmissivePowerKw_M2: roundTo(emissivePowerBlackbodyW_M2 / 1000, 2),
+      actualEmissivePowerKw_M2: roundTo(actualEmissivePowerW_M2 / 1000, 2),
+      totalEmittedPowerKw: roundTo(totalEmittedPowerW / 1000, 2),
+      netRadiativeFluxKw_M2: roundTo(netRadiativeFluxW_M2 / 1000, 2),
+      netRadiativeHeatFlowKw: roundTo(netRadiativeHeatFlowW / 1000, 2),
+      linearRadiationCoeffW_M2K: roundTo(hrLinearW_M2K, 2),
+      visibleEmissionFractionPct: roundTo(visibleFractionPct, 2),
+    },
+    details: {
+      emitterTempK: T1,
+      absorberTempK: T2,
+      emitterEmissivity: eps1,
+      absorberEmissivity: eps2,
+      effectiveEmissivity: roundTo(epsEffective, 4),
+      surfaceAreaM2: area,
+    },
+    series: [
+      { label: `Plank nurlanishi T=${T1} K (kW/(m²·sr·µm))`, points: planckPoints },
+      { label: `Yutiluvchi T=${T2} K (kW/(m²·sr·µm))`, points: planckPointsCold },
+    ],
+  };
+}
+
+/**
+ * 11. 1D Transient Heat Conduction (Fourier PDE Finite Difference Solver)
+ */
+function simulateTransientConduction1D(input: ThermodynamicsInput): ThermodynamicsResult {
+  const L = Math.max(0.005, Math.min(0.5, input.slabThicknessM ?? (input.thicknessM ?? 0.05))); // 5 cm slab
+  const alpha = Math.max(1e-7, Math.min(1e-3, input.thermalDiffusivityM2_S ?? 1.2e-5)); // Steel ~ 1.2e-5 m^2/s
+  const k = Math.max(0.1, input.thermalConductivityW_MK ?? (input.thermalConductivity ?? 45.0)); // Steel 45 W/mK
+  const h = Math.max(1.0, input.convectionCoeffW_M2K ?? 150.0); // Convection 150 W/m^2K
+  const T0 = input.initialTempC ?? 300.0; // Initial temperature °C
+  const Tinf = input.ambientFluidTempC ?? 25.0; // Cooling fluid °C
+  const tFinal = Math.max(1.0, input.simulationTimeS ?? 120.0); // 120 s
+
+  // Dimensionless numbers
+  const Bi = (h * L) / k; // Biot number
+  const Fo = (alpha * tFinal) / (L * L); // Fourier number
+
+  // Spatial discretization (N nodes from centerline x=0 to surface x=L)
+  const N = Math.max(10, Math.min(50, input.gridNodesCount ?? 25));
+  const dx = L / (N - 1);
+
+  // Stability criterion for explicit FTCS: dt <= dx^2 / (2 * alpha * (1 + Bi*dx/L))
+  const dtMax = (dx * dx) / (2.2 * alpha * (1 + (Bi * dx) / L));
+  const numSteps = Math.min(2000, Math.max(50, Math.ceil(tFinal / dtMax)));
+  const dt = tFinal / numSteps;
+  const F_coeff = (alpha * dt) / (dx * dx);
+
+  let T = new Float64Array(N);
+  for (let i = 0; i < N; i++) T[i] = T0;
+
+  // Record profile snapshots at 0%, 20%, 50%, 100% time
+  const snapshotFractions = [0.0, 0.2, 0.5, 1.0];
+  const snapshotSteps = snapshotFractions.map(f => Math.round(f * numSteps));
+  const profiles: { label: string; points: { x: number; y: number }[] }[] = [];
+  const centerlineHistory: { x: number; y: number }[] = [];
+
+  for (let step = 0; step <= numSteps; step++) {
+    const currentTime = step * dt;
+
+    if (step % Math.max(1, Math.floor(numSteps / 40)) === 0) {
+      centerlineHistory.push({ x: roundTo(currentTime, 1), y: roundTo(T[0], 2) });
+    }
+
+    const snapIdx = snapshotSteps.indexOf(step);
+    if (snapIdx !== -1) {
+      const snapPoints = Array.from(T).map((val, idx) => ({
+        x: roundTo((idx * dx) * 100, 2), // cm
+        y: roundTo(val, 2), // °C
+      }));
+      profiles.push({
+        label: `T(x) t=${roundTo(currentTime, 1)} s (${Math.round(snapshotFractions[snapIdx] * 100)}%)`,
+        points: snapPoints,
+      });
+    }
+
+    // Time-stepping FTCS update
+    const T_next = new Float64Array(N);
+    // Symmetry boundary at centerline x=0: dT/dx = 0 -> T[-1] = T[1]
+    T_next[0] = T[0] + 2 * F_coeff * (T[1] - T[0]);
+
+    // Interior nodes
+    for (let i = 1; i < N - 1; i++) {
+      T_next[i] = T[i] + F_coeff * (T[i + 1] - 2 * T[i] + T[i - 1]);
+    }
+
+    // Convection boundary at surface x=L: -k dT/dx = h(T_N - Tinf)
+    // T_N = (2*F*T_{N-1} + (1 - 2*F - 2*F*Bi*(dx/L))*T_N + 2*F*Bi*(dx/L)*Tinf)
+    const gamma = (h * dx) / k;
+    T_next[N - 1] = T[N - 1] + 2 * F_coeff * (T[N - 2] - T[N - 1] - gamma * (T[N - 1] - Tinf));
+
+    T = T_next;
+  }
+
+  const surfaceTempFinal = T[N - 1];
+  const centerTempFinal = T[0];
+
+  return {
+    subMode: "transient_conduction_1d",
+    summary: {
+      biotNumber: roundTo(Bi, 4),
+      fourierNumber: roundTo(Fo, 4),
+      lumpedCapacitanceValid: Bi < 0.1,
+      centerlineTempFinalC: roundTo(centerTempFinal, 2),
+      surfaceTempFinalC: roundTo(surfaceTempFinal, 2),
+      slabThicknessMm: roundTo(L * 1000, 1),
+      coolingSpanS: tFinal,
+      convectionCoeffW_M2K: h,
+    },
+    details: {
+      thermalConductivityW_MK: k,
+      thermalDiffusivityM2_S: alpha,
+      initialTempC: T0,
+      ambientTempC: Tinf,
+      gridNodes: N,
+      timeStepS: roundTo(dt, 5),
+    },
+    series: [
+      ...profiles,
+      { label: "Markaziy nuqta harorati T(t) (°C)", points: centerlineHistory },
+    ],
+  };
+}
+

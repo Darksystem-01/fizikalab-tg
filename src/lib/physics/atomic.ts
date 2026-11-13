@@ -8,7 +8,11 @@ export type AtomicSubMode =
   | "franck_hertz"
   | "decay_kinetics"
   | "nuclear_binding"
-  | "radiation_attenuation";
+  | "radiation_attenuation"
+  | "moseley_xray"
+  | "stern_gerlach"
+  | "general_bateman_decay"
+  | "alpha_decay_geiger_nuttall";
 
 export interface AtomicInput {
   subMode: AtomicSubMode;
@@ -48,6 +52,28 @@ export interface AtomicInput {
   halfLifeParentS?: number;
   halfLifeDaughterS?: number;
   initialParentAtoms?: number;
+
+  // Moseley X-ray characteristic lines
+  anodeMaterialZ?: number;
+  anodeVoltageKv?: number;
+  targetElement?: "Cu" | "Mo" | "W" | "Fe" | "Ag" | string;
+
+  // Stern-Gerlach spatial quantization
+  bFieldGradientT_M?: number;
+  magnetLengthM?: number;
+  driftDistanceM?: number;
+  ovenTempK?: number;
+  atomMassAmu?: number;
+
+  // General Bateman decay chain
+  decayChainPreset?: "u238_series" | "radon_progeny" | "mo99_tc99m" | "custom";
+  decaySimulationTimeS?: number;
+  initialParentQuantity?: number;
+
+  // Alpha decay & Geiger-Nuttall
+  parentZ?: number;
+  parentA?: number;
+  alphaEnergyMev?: number;
 
   // Nuclear binding & mass defect
   massNumberA?: number; // A
@@ -111,6 +137,14 @@ export function simulateAtomic(input: AtomicInput): AtomicResult {
     case "radiation_attenuation":
     case "attenuation" as any:
       return simulateRadiationAttenuation(input);
+    case "moseley_xray":
+      return simulateMoseleyXray(input);
+    case "stern_gerlach":
+      return simulateSternGerlach(input);
+    case "general_bateman_decay":
+      return simulateGeneralBatemanDecay(input);
+    case "alpha_decay_geiger_nuttall":
+      return simulateAlphaDecayGeigerNuttall(input);
     default:
       return simulatePhotoelectric(input);
   }
@@ -672,3 +706,420 @@ function simulateRadiationAttenuation(input: AtomicInput): AtomicResult {
     ],
   };
 }
+
+/**
+ * 9. Moseley's Law & Characteristic X-ray Spectrometry
+ */
+export const XRAY_TARGETS: Record<string, { Z: number; nameUz: string; KalphaKev: number; KbetaKev: number }> = {
+  Cu: { Z: 29, nameUz: "Mis (Cu, Z=29)", KalphaKev: 8.048, KbetaKev: 8.905 },
+  Mo: { Z: 42, nameUz: "Molibden (Mo, Z=42)", KalphaKev: 17.479, KbetaKev: 19.608 },
+  W: { Z: 74, nameUz: "Volfram (W, Z=74)", KalphaKev: 59.318, KbetaKev: 67.244 },
+  Fe: { Z: 26, nameUz: "Temir (Fe, Z=26)", KalphaKev: 6.404, KbetaKev: 7.058 },
+  Ag: { Z: 47, nameUz: "Kumush (Ag, Z=47)", KalphaKev: 22.163, KbetaKev: 24.942 },
+};
+
+function simulateMoseleyXray(input: AtomicInput): AtomicResult {
+  const targetKey = input.targetElement ?? "Cu";
+  const target = XRAY_TARGETS[targetKey] ?? XRAY_TARGETS.Cu;
+  const Z = input.anodeMaterialZ ?? target.Z;
+  const vKv = Math.max(5.0, Math.min(150.0, input.anodeVoltageKv ?? 30.0));
+  const vVolts = vKv * 1000;
+
+  // Duane-Hunt law: lambda_min = hc / (e * V)
+  const lambdaMinM = (CODATA.h * CODATA.c) / (CODATA.e * vVolts);
+  const lambdaMinNm = lambdaMinM * 1e9;
+  const maxPhotonEnergyKev = vKv;
+
+  // Moseley's Law: nu = R_inf * c * (Z - sigma)^2 * (1/n1^2 - 1/n2^2)
+  // For K_alpha (n=2 -> n=1), sigma_K = 1.0: nu_Kalpha = (3/4) * R_inf * c * (Z - 1)^2
+  const sigmaK = 1.0;
+  const nuKalpha = (3 / 4) * RYDBERG_M * CODATA.c * Math.pow(Z - sigmaK, 2);
+  const lambdaKalphaNm = (CODATA.c / nuKalpha) * 1e9;
+  const energyKalphaEv = (CODATA.h * nuKalpha) / CODATA.e;
+  const energyKalphaKev = energyKalphaEv / 1000;
+
+  // K_beta (n=3 -> n=1): nu_Kbeta = (8/9) * R_inf * c * (Z - 1)^2
+  const nuKbeta = (8 / 9) * RYDBERG_M * CODATA.c * Math.pow(Z - sigmaK, 2);
+  const lambdaKbetaNm = (CODATA.c / nuKbeta) * 1e9;
+  const energyKbetaKev = ((CODATA.h * nuKbeta) / CODATA.e) / 1000;
+
+  // L_alpha (n=3 -> n=2), sigma_L = 7.4: nu_Lalpha = (5/36) * R_inf * c * (Z - 7.4)^2
+  const sigmaL = 7.4;
+  const nuLalpha = (5 / 36) * RYDBERG_M * CODATA.c * Math.pow(Math.max(1, Z - sigmaL), 2);
+  const lambdaLalphaNm = (CODATA.c / nuLalpha) * 1e9;
+  const energyLalphaKev = ((CODATA.h * nuLalpha) / CODATA.e) / 1000;
+
+  // Characteristic line excitation threshold: V_tube must exceed excitation potential
+  const isKExcited = maxPhotonEnergyKev >= energyKalphaKev;
+
+  // Continuous bremsstrahlung spectrum + characteristic peaks
+  const spectrumPoints: { x: number; y: number }[] = [];
+  const maxWavelengthNm = Math.max(lambdaMinNm * 6, lambdaKalphaNm * 1.5);
+  const steps = 80;
+  const dLam = (maxWavelengthNm - lambdaMinNm) / steps;
+
+  for (let i = 0; i <= steps; i++) {
+    const lam = lambdaMinNm + i * dLam;
+    // Kramers continuous bremsstrahlung intensity: I(lambda) ~ (lambda/lambda_min - 1) / lambda^2
+    const ratio = lam / lambdaMinNm;
+    let intensity = ratio > 1 ? (ratio - 1) / (lam * lam) : 0;
+
+    // Superimpose sharp Gaussian peaks if excited
+    if (isKExcited) {
+      const peakKalpha = 15.0 * Math.exp(-Math.pow((lam - lambdaKalphaNm) / 0.005, 2));
+      const peakKbeta = 5.0 * Math.exp(-Math.pow((lam - lambdaKbetaNm) / 0.005, 2));
+      intensity += peakKalpha + peakKbeta;
+    }
+
+    spectrumPoints.push({ x: roundTo(lam, 4), y: roundTo(intensity, 2) });
+  }
+
+  // Moseley linear graph: sqrt(nu) vs Z across nearby elements
+  const moseleyPoints: { x: number; y: number }[] = [];
+  for (let zVal = 20; zVal <= 80; zVal += 5) {
+    const nuVal = (3 / 4) * RYDBERG_M * CODATA.c * Math.pow(zVal - sigmaK, 2);
+    moseleyPoints.push({ x: zVal, y: roundTo(Math.sqrt(nuVal) / 1e8, 3) });
+  }
+
+  return {
+    subMode: "moseley_xray",
+    summary: {
+      targetElement: target.nameUz,
+      atomicNumberZ: Z,
+      tubeVoltageKv: vKv,
+      duaneHuntCutoffNm: roundTo(lambdaMinNm, 5),
+      kAlphaWavelengthNm: roundTo(lambdaKalphaNm, 5),
+      kAlphaEnergyKev: roundTo(energyKalphaKev, 3),
+      kBetaWavelengthNm: roundTo(lambdaKbetaNm, 5),
+      kBetaEnergyKev: roundTo(energyKbetaKev, 3),
+      lAlphaEnergyKev: roundTo(energyLalphaKev, 3),
+      isKSeriesExcited: isKExcited,
+      moseleySlopeFactor: roundTo(Math.sqrt((3 / 4) * RYDBERG_M * CODATA.c), 2),
+    },
+    details: {
+      screeningConstantSigmaK: sigmaK,
+      screeningConstantSigmaL: sigmaL,
+      maxContinuousPhotonEnergyKev: maxPhotonEnergyKev,
+    },
+    series: [
+      { label: `Rentgen nurlanish spektri I(λ) [${target.nameUz}, ${vKv} kV]`, points: spectrumPoints },
+      { label: "Mozli qonuni: √ν vs Z (×10⁸ s⁻¹/²)", points: moseleyPoints },
+    ],
+  };
+}
+
+/**
+ * 10. Stern-Gerlach Quantum Spatial Quantization
+ */
+function simulateSternGerlach(input: AtomicInput): AtomicResult {
+  const bGrad = Math.max(0.1, Math.min(100.0, input.bFieldGradientT_M ?? 12.0)); // T/m
+  const L1 = Math.max(0.01, Math.min(0.5, input.magnetLengthM ?? 0.05)); // 5 cm
+  const L2 = Math.max(0.01, Math.min(1.0, input.driftDistanceM ?? 0.20)); // 20 cm
+  const T = Math.max(100, Math.min(1500, input.ovenTempK ?? 400)); // 400 K for Silver oven
+  const amuMass = Math.max(1.0, input.atomMassAmu ?? 107.868); // Silver 107.87 u
+  const massKg = amuMass * 1.6605390666e-27;
+
+  // Mean thermal atom velocity from Maxwell-Boltzmann oven beam
+  const vThermal = Math.sqrt((3 * CODATA.k_B * T) / massKg);
+
+  // Bohr magneton: mu_B = e * hbar / (2 * m_e) = 9.2740100783e-24 J/T
+  const muB = (CODATA.e * (CODATA.h / (2 * Math.PI))) / (2 * CODATA.m_e);
+  // Electron spin g-factor: g_s approx 2.0023193
+  const gs = 2.0023193;
+  // Effective magnetic moment along z: mu_z = +/- (1/2) * g_s * mu_B
+  const muZ = 0.5 * gs * muB;
+
+  // Force in magnetic field gradient: F_z = mu_z * (dB_z / dz)
+  const forceZ = muZ * bGrad;
+  const accelZ = forceZ / massKg;
+
+  // Time in magnet and drift region
+  const t1 = L1 / vThermal;
+  const t2 = L2 / vThermal;
+
+  // Deflection at exit of magnet: z1 = 0.5 * a * t1^2
+  const z1 = 0.5 * accelZ * t1 * t1;
+  // Transverse velocity at exit: v_z = a * t1
+  const vZ = accelZ * t1;
+  // Deflection during drift: z2 = v_z * t2
+  const z2 = vZ * t2;
+
+  // Total deflection for spin-up / spin-down component
+  const zTotalM = z1 + z2;
+  const zTotalMm = zTotalM * 1000;
+  const totalBeamSeparationMm = 2 * zTotalMm;
+
+  // Quantum vs Classical beam profiles at detector
+  const quantumPoints: { x: number; y: number }[] = [];
+  const classicalPoints: { x: number; y: number }[] = [];
+  const rangeMm = Math.max(3.0, zTotalMm * 2.5);
+  const steps = 100;
+
+  for (let i = 0; i <= steps; i++) {
+    const zPos = -rangeMm + (2 * rangeMm * i) / steps;
+    // Quantum: two sharp peaks at +/- zTotalMm
+    const peakUp = Math.exp(-Math.pow((zPos - zTotalMm) / (zTotalMm * 0.15), 2));
+    const peakDown = Math.exp(-Math.pow((zPos + zTotalMm) / (zTotalMm * 0.15), 2));
+    const qIntensity = peakUp + peakDown;
+
+    // Classical: continuous smear between -zTotalMm and +zTotalMm
+    const cIntensity = Math.abs(zPos) <= zTotalMm ? 1.0 / (Math.PI * Math.sqrt(Math.max(0.001, Math.pow(zTotalMm, 2) - Math.pow(zPos, 2)))) : 0;
+
+    quantumPoints.push({ x: roundTo(zPos, 3), y: roundTo(qIntensity, 3) });
+    classicalPoints.push({ x: roundTo(zPos, 3), y: roundTo(Math.min(3.0, cIntensity * zTotalMm), 3) });
+  }
+
+  return {
+    subMode: "stern_gerlach",
+    summary: {
+      atomThermalVelocityMs: roundTo(vThermal, 1),
+      beamSeparationMm: roundTo(totalBeamSeparationMm, 3),
+      spinUpDeflectionMm: roundTo(zTotalMm, 3),
+      spinDownDeflectionMm: roundTo(-zTotalMm, 3),
+      magneticFieldGradientT_M: bGrad,
+      magneticForceN: roundTo(forceZ * 1e23, 3) + "e-23 N",
+      atomMassAmu: amuMass,
+      ovenTemperatureK: T,
+      spatialQuantizationDemonstrated: true,
+    },
+    details: {
+      magnetLengthCm: L1 * 100,
+      driftDistanceCm: L2 * 100,
+      magnetTransitTimeMicroS: roundTo(t1 * 1e6, 2),
+      driftTransitTimeMicroS: roundTo(t2 * 1e6, 2),
+      bohrMagnetonJ_T: muB,
+    },
+    series: [
+      { label: "Kvant fazoviy ajralish (Ikki cho'qqi)", points: quantumPoints },
+      { label: "Klassik uzluksiz tarqalish gipotezasi", points: classicalPoints },
+    ],
+  };
+}
+
+/**
+ * 11. Generalized Bateman Equations for Multi-Stage Decay Chains
+ */
+export const BATEMAN_PRESETS: Record<string, { title: string; nuclides: { name: string; halfLifeS: number }[] }> = {
+  radon_progeny: {
+    title: "Radon va uning qisqa umrli mahsulotlari (Rn-222 -> Po-218 -> Pb-214 -> Bi-214)",
+    nuclides: [
+      { name: "²²²Rn", halfLifeS: 3.8235 * 86400 }, // 3.82 days
+      { name: "²¹⁸Po", halfLifeS: 183.0 }, // 3.05 min
+      { name: "²¹⁴Pb", halfLifeS: 1608.0 }, // 26.8 min
+      { name: "²¹⁴Bi", halfLifeS: 1194.0 }, // 19.9 min
+    ],
+  },
+  mo99_tc99m: {
+    title: "Tibbiy radioizotop generatori: Mo-99 -> Tc-99m -> Tc-99",
+    nuclides: [
+      { name: "⁹⁹Mo", halfLifeS: 65.94 * 3600 }, // 65.94 hours
+      { name: "⁹⁹ᵐTc", halfLifeS: 6.007 * 3600 }, // 6.01 hours
+      { name: "⁹⁹Tc", halfLifeS: 2.111e5 * 365.25 * 86400 }, // 211,100 years
+    ],
+  },
+  u238_series: {
+    title: "Uran-238 zanjirining dastlabki bo'g'inlari: U-238 -> Th-234 -> Pa-234m -> U-234",
+    nuclides: [
+      { name: "²³⁸U", halfLifeS: 4.468e9 * 365.25 * 86400 }, // 4.468e9 years
+      { name: "²³⁴Th", halfLifeS: 24.1 * 86400 }, // 24.1 days
+      { name: "²³⁴ᵐPa", halfLifeS: 70.2 }, // 1.17 min
+      { name: "²³⁴U", halfLifeS: 2.455e5 * 365.25 * 86400 }, // 2.455e5 years
+    ],
+  },
+};
+
+function simulateGeneralBatemanDecay(input: AtomicInput): AtomicResult {
+  const presetKey = input.decayChainPreset ?? "mo99_tc99m";
+  const preset = BATEMAN_PRESETS[presetKey] ?? BATEMAN_PRESETS.mo99_tc99m;
+  const nuclides = preset.nuclides;
+  const n = nuclides.length;
+
+  const N0 = Math.max(1e6, input.initialParentQuantity ?? 1e12); // Initial parent nuclei
+  const lambdas = nuclides.map(nc => Math.LN2 / nc.halfLifeS);
+
+  // Time span: scale to ~ 4 * half-life of 2nd or slowest relevant nuclide
+  const scaleT = Math.min(nuclides[0].halfLifeS * 4, (nuclides[1]?.halfLifeS ?? 3600) * 8);
+  const tTotal = Math.max(60, input.decaySimulationTimeS ?? scaleT);
+
+  // Time of maximum daughter activity (for 2-stage Bateman): t_max = ln(lambda2/lambda1) / (lambda2 - lambda1)
+  const l1 = lambdas[0];
+  const l2 = lambdas[1];
+  let tMaxDaughterS = 0;
+  if (l2 && Math.abs(l1 - l2) > 1e-18) {
+    tMaxDaughterS = Math.log(l2 / l1) / (l2 - l1);
+  }
+
+  // Equilibrium characterization
+  let equilibriumType = "Muvozanatsiz";
+  if (l1 < l2 * 1e-4) {
+    equilibriumType = "Asriy muvozanat (Secular Equilibrium: T1 >> T2)";
+  } else if (l1 < l2) {
+    equilibriumType = "O'tkinchi muvozanat (Transient Equilibrium: T1 > T2)";
+  } else {
+    equilibriumType = "Muvozanat mavjud emas (T1 < T2)";
+  }
+
+  // Exact Bateman multi-stage solver
+  // N_i(t) = N0 * sum_{j=1}^i [ prod_{k=1}^{i-1} lambda_k * exp(-lambda_j * t) / prod_{p=1, p!=j}^i (lambda_p - lambda_j) ]
+  const steps = 60;
+  const series: { label: string; points: { x: number; y: number }[] }[] = nuclides.map(nc => ({
+    label: `${nc.name} faolligi A(t) [Bq]`,
+    points: [],
+  }));
+
+  for (let s = 0; s <= steps; s++) {
+    const t = (s / steps) * tTotal;
+    const tHours = t / 3600;
+
+    for (let i = 0; i < n; i++) {
+      let Ni = 0;
+      if (i === 0) {
+        Ni = N0 * Math.exp(-lambdas[0] * t);
+      } else {
+        // Multi-stage Bateman sum
+        let sum = 0;
+        for (let j = 0; j <= i; j++) {
+          let denom = 1;
+          for (let p = 0; p <= i; p++) {
+            if (p !== j) {
+              denom *= (lambdas[p] - lambdas[j]);
+            }
+          }
+          if (denom !== 0) {
+            sum += Math.exp(-lambdas[j] * t) / denom;
+          }
+        }
+        let prodL = 1;
+        for (let k = 0; k < i; k++) {
+          prodL *= lambdas[k];
+        }
+        Ni = N0 * prodL * sum;
+      }
+      const activityBq = Math.max(0, lambdas[i] * Ni);
+      series[i].points.push({ x: roundTo(tHours, 2), y: roundTo(activityBq, 2) });
+    }
+  }
+
+  return {
+    subMode: "general_bateman_decay",
+    summary: {
+      chainTitle: preset.title,
+      parentNuclide: nuclides[0].name,
+      daughterNuclide: nuclides[1]?.name ?? "N/A",
+      equilibriumType,
+      daughterPeakActivityTimeHours: roundTo(tMaxDaughterS / 3600, 2),
+      daughterPeakActivityTimeS: roundTo(tMaxDaughterS, 1),
+      initialParentActivityBq: roundTo(lambdas[0] * N0, 2),
+      parentHalfLifeHours: roundTo(nuclides[0].halfLifeS / 3600, 2),
+      daughterHalfLifeHours: roundTo((nuclides[1]?.halfLifeS ?? 0) / 3600, 2),
+      nuclideCountInChain: n,
+    },
+    details: {
+      nuclides: nuclides.map(nc => ({ name: nc.name, halfLifeS: nc.halfLifeS, lambda_s1: Math.LN2 / nc.halfLifeS })),
+      simulationSpanHours: roundTo(tTotal / 3600, 2),
+      initialAtoms: N0,
+    },
+    series,
+  };
+}
+
+/**
+ * 12. Alpha Decay & Gamow Tunneling / Geiger-Nuttall Law
+ */
+export const ALPHA_EMITTERS: Record<string, { name: string; Z: number; A: number; EalphaMev: number; halfLifeS: number }> = {
+  U238: { name: "Uran-238 (²³⁸U)", Z: 92, A: 238, EalphaMev: 4.198, halfLifeS: 1.41e17 },
+  U235: { name: "Uran-235 (²³⁵U)", Z: 92, A: 235, EalphaMev: 4.678, halfLifeS: 2.22e16 },
+  Ra226: { name: "Radiy-226 (²²⁶Ra)", Z: 88, A: 226, EalphaMev: 4.784, halfLifeS: 5.05e10 },
+  Rn222: { name: "Radon-222 (²²²Rn)", Z: 86, A: 222, EalphaMev: 5.489, halfLifeS: 3.30e5 },
+  Po218: { name: "Poloniy-218 (²¹⁸Po)", Z: 84, A: 218, EalphaMev: 6.002, halfLifeS: 183.0 },
+  Po214: { name: "Poloniy-214 (²¹⁴Po)", Z: 84, A: 214, EalphaMev: 7.687, halfLifeS: 1.64e-4 },
+  Po212: { name: "Poloniy-212 (²¹²Po)", Z: 84, A: 212, EalphaMev: 8.784, halfLifeS: 2.99e-7 },
+};
+
+function simulateAlphaDecayGeigerNuttall(input: AtomicInput): AtomicResult {
+  const Z = Math.max(80, Math.min(100, input.parentZ ?? 92)); // e.g. Uranium
+  const A = Math.max(200, Math.min(250, input.parentA ?? 238));
+  const EalphaMev = Math.max(3.5, Math.min(10.0, input.alphaEnergyMev ?? 4.2));
+
+  // Nuclear radius: R = r0 * A^(1/3)
+  const r0 = 1.25e-15; // 1.25 fm
+  const R = r0 * Math.cbrt(A); // m
+
+  // Daughter nucleus: Z_d = Z - 2
+  const Zd = Z - 2;
+  const mAlphaKg = 6.64465723e-27; // kg (4.0015 u)
+  const eCharge = CODATA.e;
+  const eps0 = 8.8541878128e-12;
+
+  // Coulomb barrier height at nuclear surface: V_C = 2 * Zd * e^2 / (4 * pi * eps0 * R)
+  const VC_Joules = (2 * Zd * Math.pow(eCharge, 2)) / (4 * Math.PI * eps0 * R);
+  const VC_Mev = VC_Joules / (1e6 * eCharge);
+
+  // Kinetic energy of alpha particle in Joules
+  const EalphaJ = EalphaMev * 1e6 * eCharge;
+  const vAlpha = Math.sqrt((2 * EalphaJ) / mAlphaKg);
+
+  // Outer classical turning point: b0 = 2 * Zd * e^2 / (4 * pi * eps0 * E_alpha)
+  const b0 = (2 * Zd * Math.pow(eCharge, 2)) / (4 * Math.PI * eps0 * EalphaJ);
+  const x0 = Math.min(0.999, R / b0);
+
+  // Gamow factor G via WKB approximation:
+  // G = (2*Zd*e^2 / (4*pi*eps0*hbar*v_alpha)) * [ arccos(sqrt(x0)) - sqrt(x0*(1-x0)) ]
+  const hbar = CODATA.h / (2 * Math.PI);
+  const prefactor = (2 * Zd * Math.pow(eCharge, 2)) / (4 * Math.PI * eps0 * hbar * vAlpha);
+  const bracket = Math.acos(Math.sqrt(x0)) - Math.sqrt(x0 * (1 - x0));
+  const gamowFactorG = prefactor * bracket;
+
+  // Barrier penetration probability P = exp(-2 * G)
+  const log10P = -2 * gamowFactorG * Math.LOG10E;
+  const P = Math.exp(-2 * Math.min(300, gamowFactorG));
+
+  // Assault frequency inside nuclear potential well: nu_0 = v_inside / (2 * R) ~ 1e21 s^-1
+  const nuAssault = 1.0e21; // s^-1
+  const decayConstantLambda = nuAssault * P;
+  const log10HalfLifeS = Math.log10(Math.LN2 / nuAssault) - log10P;
+  const halfLifeS = Math.pow(10, Math.min(25, Math.max(-10, log10HalfLifeS)));
+
+  // Geiger-Nuttall empirical line: log10(T1/2) vs 1/sqrt(E) across known alpha emitters
+  const gnPoints: { x: number; y: number }[] = [];
+  const modelCurvePoints: { x: number; y: number }[] = [];
+
+  Object.values(ALPHA_EMITTERS).forEach(emitter => {
+    const invSqrtE = 1 / Math.sqrt(emitter.EalphaMev);
+    gnPoints.push({ x: roundTo(invSqrtE, 4), y: roundTo(Math.log10(emitter.halfLifeS), 2) });
+  });
+
+  for (let eVal = 4.0; eVal <= 9.0; eVal += 0.5) {
+    const invE = 1 / Math.sqrt(eVal);
+    // Geiger-Nuttall empirical linear fit: log10(T1/2) ~ 1.61 * Zd / sqrt(E) - 28.9
+    const logT = 1.61 * (Zd / Math.sqrt(eVal)) - 48.0;
+    modelCurvePoints.push({ x: roundTo(invE, 4), y: roundTo(logT, 2) });
+  }
+
+  return {
+    subMode: "alpha_decay_geiger_nuttall",
+    summary: {
+      parentNuclide: `Z=${Z}, A=${A}`,
+      alphaEnergyMev: roundTo(EalphaMev, 3),
+      coulombBarrierHeightMev: roundTo(VC_Mev, 2),
+      gamowFactorG: roundTo(gamowFactorG, 2),
+      barrierTunnelingProbability: `10^(${roundTo(log10P, 1)})`,
+      calculatedHalfLifeLog10S: roundTo(log10HalfLifeS, 2),
+      calculatedHalfLifeS: halfLifeS > 1e10 ? halfLifeS.toExponential(2) : roundTo(halfLifeS, 3),
+      nuclearRadiusFm: roundTo(R * 1e15, 2),
+      outerTurningPointFm: roundTo(b0 * 1e15, 1),
+      alphaVelocityMs: roundTo(vAlpha, 1),
+    },
+    details: {
+      parentAtomicNumberZ: Z,
+      daughterAtomicNumberZd: Zd,
+      assaultFrequencyHz: nuAssault,
+      wkbPrefactor: roundTo(prefactor, 2),
+    },
+    series: [
+      { label: "Geyger-Nettoll qonuni (Tajriba ma'lumotlari: log₁₀(T₁/₂) vs 1/√E)", points: gnPoints },
+      { label: "Gamov kvant tunnel modeli nazariyasi", points: modelCurvePoints },
+    ],
+  };
+}
+
