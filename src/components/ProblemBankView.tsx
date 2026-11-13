@@ -9,6 +9,7 @@ import {
   checkProblemAnswer,
 } from "@/lib/physics/problems";
 import { MathFormula } from "@/components/MathFormula";
+import { MathText } from "@/components/MathText";
 import {
   Search,
   Filter,
@@ -283,9 +284,9 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                 {/* Body */}
                 <div className="p-4 space-y-3">
                   <h3 className="text-sm font-semibold text-slate-900">{prob.title}</h3>
-                  <p className="text-xs leading-relaxed text-slate-700 whitespace-pre-line">
-                    {prob.statement}
-                  </p>
+                  <div className="text-xs leading-relaxed text-slate-700 whitespace-pre-line">
+                    <MathText text={prob.statement} />
+                  </div>
 
                   {/* Given variables badge tags */}
                   <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
@@ -293,11 +294,12 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                     {Object.entries(prob.given).map(([k, item]) => (
                       <span
                         key={k}
-                        className="inline-flex items-center gap-1 border border-slate-200 bg-slate-50 px-2 py-0.5 text-slate-800 font-mono"
+                        className="inline-flex items-center gap-1.5 border border-slate-200 bg-slate-50 px-2 py-0.5 text-slate-800 text-xs"
                       >
-                        <span>{item.symbol} =</span>
-                        <strong className="text-slate-900">{item.value}</strong>
-                        <span>{item.unit}</span>
+                        <MathFormula tex={item.symbol} display={false} />
+                        <span className="text-slate-400">=</span>
+                        <strong className="text-slate-900 font-mono">{item.value}</strong>
+                        <span className="text-slate-600">{item.unit}</span>
                       </span>
                     ))}
                   </div>
@@ -315,8 +317,11 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                   {/* Student Answer Input & Verification */}
                   <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 pt-3">
                     <div className="flex items-center gap-2">
-                      <label className="text-xs font-semibold text-slate-700">
-                        Javobingiz ({prob.targetSymbol}, {prob.targetUnit}):
+                      <label className="text-xs font-semibold text-slate-700 flex items-center gap-1">
+                        <span>Javobingiz</span>
+                        <span>(</span>
+                        <MathFormula tex={prob.targetSymbol} display={false} />
+                        <span>, {prob.targetUnit}):</span>
                       </label>
                       <input
                         type="text"
@@ -327,8 +332,8 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleCheckAnswer(prob);
                         }}
-                        placeholder={`Masalan: ${prob.correctAnswer}`}
-                        className="w-32 border border-slate-300 px-2.5 py-1 text-xs font-mono text-slate-900 focus:border-[#1E3A8A] focus:outline-none"
+                        placeholder="Javobni kiriting..."
+                        className="w-36 border border-slate-300 px-2.5 py-1 text-xs font-mono text-slate-900 focus:border-[#1E3A8A] focus:outline-none"
                       />
                       <span className="text-xs font-mono text-slate-500">{prob.targetUnit}</span>
                     </div>
@@ -406,7 +411,7 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                         {prob.hints.map((h, i) => (
                           <div key={i} className="flex items-start gap-1.5">
                             <span className="font-bold">•</span>
-                            <span>{h}</span>
+                            <MathText text={h} />
                           </div>
                         ))}
                       </div>
@@ -438,13 +443,27 @@ export function ProblemBankView({ initialChapter }: { initialChapter?: PhysicsCh
                           Masalaning to‘liq analitik yechimi:
                         </div>
                         {prob.stepByStepSolution.map((step, sIdx) => (
-                          <div key={sIdx} className="leading-relaxed font-mono text-[11px]">
-                            {step}
+                          <div key={sIdx} className="leading-relaxed text-xs py-0.5">
+                            <MathText text={step} />
                           </div>
                         ))}
-                        <div className="pt-2 text-right text-[11px] font-bold text-slate-900 border-t border-slate-200">
-                          To‘g‘ri javob: {prob.targetSymbol} = {prob.correctAnswer} {prob.targetUnit} (±{prob.tolerancePct}%)
-                        </div>
+                        {isSolved ? (
+                          <div className="pt-2 flex items-center justify-between text-xs font-bold text-emerald-800 border-t border-slate-200">
+                            <span className="text-slate-500 font-normal">Tekshiruv natijasi:</span>
+                            <span className="flex items-center gap-1">
+                              <span>To‘g‘ri javob:</span>
+                              <MathFormula tex={prob.targetSymbol} display={false} />
+                              <span>= {prob.correctAnswer} {prob.targetUnit} (±{prob.tolerancePct}%)</span>
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="pt-2 flex items-center justify-between text-xs text-slate-600 border-t border-slate-200">
+                            <span className="text-slate-500">Eslatma:</span>
+                            <span className="text-amber-800 bg-amber-50 px-2 py-0.5 border border-amber-200 text-[11px] font-medium">
+                              Yechim formulalari ko‘rsatildi. Yakuniy sonli natijani hisoblab maydonga kiriting!
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

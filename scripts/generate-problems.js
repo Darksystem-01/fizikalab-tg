@@ -37,7 +37,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Arithmetic mean & standard error
     const n = 5 + (i % 6);
     const baseVal = 24.5 + (i * 0.3);
     const deltas = [-0.04, 0.02, -0.01, 0.03, 0.00, 0.02, -0.03, 0.01, 0.04, -0.02].slice(0, n);
@@ -54,7 +53,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
       difficulty: i < 15 ? "oson" : i < 35 ? "o'rta" : "murakkab",
       title: `Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#${i})`,
-      statement: `Talaba mikrometr yordamida po‘lat silindr diametrini ${n} marta o‘lchadi: [${samples.join(", ")}] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.`,
+      statement: `Talaba mikrometr yordamida po‘lat silindr diametrini $n = ${n}$ marta o‘lchadi: $[${samples.join(", ")}]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.`,
       given: {
         n: { value: n, unit: "marta", symbol: "n", labelUz: "O‘lchashlar soni" },
         sum_x: { value: roundTo(samples.reduce((a, b) => a + b, 0), 3), unit: "mm", symbol: "\\sum x_i", labelUz: "O‘lchovlar yig‘indisi" },
@@ -66,27 +65,22 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 0.5,
       formulaLatex: "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
       stepByStepSolution: [
-        `1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = ${samples.reduce((a, b) => a + b, 0).toFixed(3)} mm.`,
-        `2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{${samples.reduce((a, b) => a + b, 0).toFixed(3)}}{${n}} = ${mean.toFixed(4)} mm.`,
-        `3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = ${stdDev.toFixed(4)} mm.`,
-        `4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = ${stdErr.toFixed(4)} mm.`,
+        `1. O‘lchovlar yig‘indisi: $\\sum x_i = ${samples.reduce((a, b) => a + b, 0).toFixed(3)}$ mm.`,
+        `2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{${samples.reduce((a, b) => a + b, 0).toFixed(3)}}{${n}} = ${mean.toFixed(4)}$ mm.`,
+        `3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{${sumSq.toFixed(5)}}{${n - 1}}} = ${stdDev.toFixed(4)}$ mm.`,
+        `4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = ${stdErr.toFixed(4)}$ mm.`,
       ],
       hints: ["Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.", "Standart og‘ishni hisoblashda erkinlik darajasi n-1 ekanligini unutmang."],
       simulationPresetId: "met-01",
     };
   } else if (subType === 1) {
-    // Relative uncertainty of cylinder density
-    const m = roundTo(120 + i * 2.5, 2); // grams
+    const m = roundTo(120 + i * 2.5, 2);
     const dm = 0.05;
-    const d = roundTo(20 + (i % 10) * 0.8, 2); // mm
+    const d = roundTo(20 + (i % 10) * 0.8, 2);
     const dd = 0.02;
-    const h = roundTo(45 + (i % 8) * 1.2, 2); // mm
+    const h = roundTo(45 + (i % 8) * 1.2, 2);
     const dh = 0.05;
 
-    // Density = m / (pi * (d/2)^2 * h) = 4m / (pi * d^2 * h)
-    const vM3 = Math.PI * Math.pow(d * 1e-3 / 2, 2) * (h * 1e-3);
-    const mKg = m * 1e-3;
-    const rhoKgM3 = mKg / vM3;
     const epsM = dm / m;
     const epsD = dd / d;
     const epsH = dh / h;
@@ -99,7 +93,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Bilvosita o‘lchashlar xatoligi",
       difficulty: "o'rta",
       title: `Silindr zichligining nisbiy xatoligini aniqlash (#${i})`,
-      statement: `Tsilindrsimon namuna massasi m = ${m} ± ${dm} g, diametri d = ${d} ± ${dd} mm va balandligi h = ${h} ± ${dh} mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.`,
+      statement: `Tsilindrsimon namuna massasi $m = ${m} \\pm ${dm}$ g, diametri $d = ${d} \\pm ${dd}$ mm va balandligi $h = ${h} \\pm ${dh}$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.`,
       given: {
         m: { value: m, unit: "g", symbol: "m", labelUz: "Massa" },
         d: { value: d, unit: "mm", symbol: "d", labelUz: "Diametr" },
@@ -112,20 +106,18 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 2.0,
       formulaLatex: "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
       stepByStepSolution: [
-        `1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.`,
-        `2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{${dm}}{${m}} = ${(epsM * 100).toFixed(3)}\\%.`,
-        `3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{${dd}}{${d}} = ${(2 * epsD * 100).toFixed(3)}\\%.`,
-        `4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{${dh}}{${h}} = ${(epsH * 100).toFixed(3)}\\%.`,
-        `5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = ${epsRhoPct}\\%.`,
+        `1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.`,
+        `2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{${dm}}{${m}} = ${(epsM * 100).toFixed(3)}\\%$.`,
+        `3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = ${(2 * epsD * 100).toFixed(3)}\\%$.`,
+        `4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{${dh}}{${h}} = ${(epsH * 100).toFixed(3)}\\%$.`,
+        `5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{${(epsM * 100).toFixed(2)}^2 + ${(2 * epsD * 100).toFixed(2)}^2 + ${(epsH * 100).toFixed(2)}^2} = ${epsRhoPct}\\%$.`,
       ],
-      hints: ["Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."],
+      hints: ["Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."],
       simulationPresetId: "met-05",
     };
   } else if (subType === 2) {
-    // Spherometer curvature radius
-    const l = roundTo(40 + (i % 15) * 1.5, 1); // mm
-    const h = roundTo(2.1 + (i % 10) * 0.15, 3); // mm
-    // R = l^2 / (6h) + h/2
+    const l = roundTo(40 + (i % 15) * 1.5, 1);
+    const h = roundTo(2.1 + (i % 10) * 0.15, 3);
     const R = roundTo((l * l) / (6 * h) + h / 2, 2);
 
     prob = {
@@ -135,7 +127,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Sferometr yordamida egrilik radiusini aniqlash",
       difficulty: "o'rta",
       title: `Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#${i})`,
-      statement: `Sferometrning oyoqlari orasidagi o‘rtacha masofa l = ${l} mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = ${h} mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.`,
+      statement: `Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = ${l}$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = ${h}$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.`,
       given: {
         l: { value: l, unit: "mm", symbol: "l", labelUz: "Oyoqlar oralig‘i" },
         h: { value: h, unit: "mm", symbol: "h", labelUz: "Ko‘tarilish balandligi" },
@@ -147,16 +139,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "R = \\frac{l^2}{6h} + \\frac{h}{2}",
       stepByStepSolution: [
-        `1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.`,
-        `2. Birinchi had: \\frac{(${l})^2}{6 \\cdot ${h}} = \\frac{${(l * l).toFixed(1)}}{${(6 * h).toFixed(3)}} = ${((l * l) / (6 * h)).toFixed(2)} mm.`,
-        `3. Ikkinchi had: \\frac{h}{2} = ${(h / 2).toFixed(3)} mm.`,
-        `4. To‘liq egrilik radiusi: R = ${R} mm.`,
+        `1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.`,
+        `2. Bosh had: $\\frac{l^2}{6h} = \\frac{${(l * l).toFixed(1)}}{${(6 * h).toFixed(3)}} = ${((l * l) / (6 * h)).toFixed(2)}$ mm.`,
+        `3. Geometrik tuzatma: $\\frac{h}{2} = ${(h / 2).toFixed(3)}$ mm.`,
+        `4. To‘liq egrilik radiusi: $R = ${((l * l) / (6 * h)).toFixed(2)} + ${(h / 2).toFixed(3)} = ${R}$ mm.`,
       ],
-      hints: ["Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."],
+      hints: ["Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."],
       simulationPresetId: "met-21",
     };
   } else if (subType === 3) {
-    // Vernier caliper reading calculation
     const mainScale = 18 + (i % 25);
     const secondaryDiv = (i * 3) % 20;
     const leastCount = 0.05;
@@ -170,7 +161,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Shtangensirkul shkalasi va nonius hisobi",
       difficulty: "oson",
       title: `Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#${i})`,
-      statement: `Shtangensirkulning asosiy shkalasi ${mainScale} mm ni ko‘rsatmoqda. Nonius shkalasining ${secondaryDiv}-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati ${leastCount} mm va nol xatoligi ${zeroError > 0 ? "+" + zeroError : "0"} mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.`,
+      statement: `Shtangensirkulning asosiy shkalasi $x_{asosiy} = ${mainScale}$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = ${secondaryDiv}$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = ${leastCount}$ mm va nol xatoligi $\\Delta_0 = ${zeroError}$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.`,
       given: {
         x_main: { value: mainScale, unit: "mm", symbol: "x_{asosiy}", labelUz: "Asosiy shkala" },
         k: { value: secondaryDiv, unit: "bo‘linma", symbol: "k", labelUz: "Nonius bo‘linmasi" },
@@ -184,18 +175,17 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 0.5,
       formulaLatex: "x = x_{asosiy} + k \\cdot c - \\Delta_0",
       stepByStepSolution: [
-        `1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = ${secondaryDiv} \\times ${leastCount} = ${(secondaryDiv * leastCount).toFixed(2)} mm.`,
-        `2. Xom o‘lchov: x_{xom} = ${mainScale} + ${(secondaryDiv * leastCount).toFixed(2)} = ${(mainScale + secondaryDiv * leastCount).toFixed(2)} mm.`,
-        `3. Nol xatoligini ayiramiz: x = ${(mainScale + secondaryDiv * leastCount).toFixed(2)} - ${zeroError} = ${measuredVal} mm.`,
+        `1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = ${secondaryDiv} \\times ${leastCount} = ${(secondaryDiv * leastCount).toFixed(2)}$ mm.`,
+        `2. Xom ko‘rsatkich: $x_{xom} = ${mainScale} + ${(secondaryDiv * leastCount).toFixed(2)} = ${(mainScale + secondaryDiv * leastCount).toFixed(2)}$ mm.`,
+        `3. Asbob nol xatosini hisobga olamiz: $x = ${(mainScale + secondaryDiv * leastCount).toFixed(2)} - ${zeroError} = ${measuredVal}$ mm.`,
       ],
       hints: ["Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."],
       simulationPresetId: "met-02",
     };
   } else {
-    // Thermal expansion error
-    const l0 = roundTo(1000 + i * 20, 1); // mm
-    const alpha = 1.2e-5; // 1/K for steel
-    const dt = 15 + (i % 12); // degC
+    const l0 = roundTo(1000 + i * 20, 1);
+    const alpha = 1.2e-5;
+    const dt = 15 + (i % 12);
     const deltaL = roundTo(l0 * alpha * dt, 4);
 
     prob = {
@@ -205,7 +195,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
       difficulty: "o'rta",
       title: `Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#${i})`,
-      statement: `Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = ${l0} mm. Laboratoriya harorati ${20 + dt} °C ga ko‘tarilganda (\\Delta T = ${dt} °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.`,
+      statement: `Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = ${l0}$ mm. Laboratoriya harorati $${20 + dt} ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = ${dt}$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.`,
       given: {
         L_0: { value: l0, unit: "mm", symbol: "L_0", labelUz: "Boshlang‘ich uzunlik" },
         alpha: { value: alpha, unit: "1/K", symbol: "\\alpha", labelUz: "Chiziqli kengayish koeffitsienti" },
@@ -218,9 +208,9 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
       stepByStepSolution: [
-        `1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.`,
-        `2. Qiymatlarni qo‘yamiz: \\Delta L = ${l0} \\times 1.2 \\times 10^{-5} \\times ${dt}.`,
-        `3. Hisoblash natijasi: \\Delta L = ${deltaL} mm.`,
+        `1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.`,
+        `2. $\\Delta L = ${l0} \\times (1.2 \\times 10^{-5}) \\times ${dt}$.`,
+        `3. Hisoblash natijasi: $\\Delta L = ${deltaL}$ mm.`,
       ],
       hints: ["Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."],
       simulationPresetId: "met-15",
@@ -239,7 +229,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Projectile Range & Max Height
     const v0 = roundTo(20 + i * 1.5, 1);
     const angleDeg = 30 + ((i * 7) % 35);
     const angleRad = (angleDeg * Math.PI) / 180;
@@ -253,7 +242,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Gorizontga burchak ostida otilgan jism harakati",
       difficulty: i < 15 ? "oson" : "o'rta",
       title: `Gorizontga ${angleDeg}° burchak ostida otilgan jismning uchish masofasi (#${i})`,
-      statement: `Jism gorizontga nisbatan \\alpha = ${angleDeg}° burchak ostida v_0 = ${v0} m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).`,
+      statement: `Jism gorizontga nisbatan $\\alpha = ${angleDeg}^\\circ$ burchak ostida $v_0 = ${v0}$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).`,
       given: {
         v_0: { value: v0, unit: "m/s", symbol: "v_0", labelUz: "Boshlang‘ich tezlik" },
         alpha: { value: angleDeg, unit: "°", symbol: "\\alpha", labelUz: "Otilish burchagi" },
@@ -266,16 +255,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
       stepByStepSolution: [
-        `1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.`,
-        `2. Burchak argumenti: 2\\alpha = ${2 * angleDeg}°, \\sin(${2 * angleDeg}°) = ${Math.sin(2 * angleRad).toFixed(4)}.`,
-        `3. Hisoblash: L = \\frac{(${v0})^2 \\times ${Math.sin(2 * angleRad).toFixed(4)}}{9.81} = ${range} m.`,
-        `4. Ma’lumot uchun: Maksimal balandlik H_{max} = ${maxH} m.`,
+        `1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.`,
+        `2. Burchak argumenti: $2\\alpha = ${2 * angleDeg}^\\circ$, $\\sin(${2 * angleDeg}^\\circ) = ${Math.sin(2 * angleRad).toFixed(4)}$.`,
+        `3. Hisoblash: $L = \\frac{(${v0})^2 \\times ${Math.sin(2 * angleRad).toFixed(4)}}{9.81} = ${range}$ m.`,
+        `4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = ${maxH}$ m.`,
       ],
       hints: ["Uchish masofasi 45 gradusda maksimal qiymatga erishadi."],
       simulationPresetId: "kin-01",
     };
   } else if (subType === 1) {
-    // Centripetal acceleration
     const r = roundTo(0.2 + (i % 20) * 0.05, 3);
     const rpm = 300 + i * 30;
     const omega = (rpm * 2 * Math.PI) / 60;
@@ -287,8 +275,8 @@ for (let i = 1; i <= 50; i++) {
       chapterNameUz: "Kinematika",
       topic: "Aylana bo‘ylab tekis harakat",
       difficulty: "oson",
-      title: `Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#${i})`,
-      statement: `Radiusi R = ${r} m bo‘lgan disksimon maxovik n = ${rpm} ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.`,
+      title: `Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#${i})`,
+      statement: `Radiusi $R = ${r}$ m bo‘lgan disk $n = ${rpm}$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.`,
       given: {
         R: { value: r, unit: "m", symbol: "R", labelUz: "Aylanish radiusi" },
         n: { value: rpm, unit: "ayl/min", symbol: "n", labelUz: "Aylanishlar chastotasi" },
@@ -300,18 +288,16 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
       stepByStepSolution: [
-        `1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times ${rpm}}{60} = ${omega.toFixed(2)} rad/s.`,
-        `2. Markazga intilma tezlanish: a_n = \\omega^2 R = (${omega.toFixed(2)})^2 \\times ${r} = ${an} m/s².`,
+        `1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times ${rpm}}{60} = ${omega.toFixed(2)}$ rad/s.`,
+        `2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (${omega.toFixed(2)})^2 \\times ${r} = ${an}$ m/s².`,
       ],
       hints: ["Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."],
       simulationPresetId: "kin-11",
     };
   } else if (subType === 2) {
-    // Relative velocity: boat crossing river
     const vRiver = roundTo(1.5 + (i % 8) * 0.3, 2);
     const vBoat = roundTo(3.0 + (i % 6) * 0.4, 2);
     const width = roundTo(120 + i * 5, 0);
-    // Crossing time t = width / vBoat (if steered perpendicular)
     const tCross = roundTo(width / vBoat, 2);
     const drift = roundTo(vRiver * tCross, 2);
 
@@ -322,7 +308,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Tezliklarni qo‘shish va nisbiy harakat",
       difficulty: "o'rta",
       title: `Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#${i})`,
-      statement: `Kengligi d = ${width} m bo‘lgan daryoning oqim tezligi u = ${vRiver} m/s. Qayiq suvga nisbatan doimiy v = ${vBoat} m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?`,
+      statement: `Kengligi $d = ${width}$ m bo‘lgan daryoning oqim tezligi $u = ${vRiver}$ m/s. Qayiq suvga nisbatan $v = ${vBoat}$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?`,
       given: {
         d: { value: width, unit: "m", symbol: "d", labelUz: "Daryo kengligi" },
         u: { value: vRiver, unit: "m/s", symbol: "u", labelUz: "Daryo oqim tezligi" },
@@ -335,14 +321,13 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "t = \\frac{d}{v}, \\quad x = u \\cdot t",
       stepByStepSolution: [
-        `1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{${width}}{${vBoat}} = ${tCross} s.`,
-        `2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = ${vRiver} \\times ${tCross} = ${drift} m.`,
+        `1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{${width}}{${vBoat}} = ${tCross}$ s.`,
+        `2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = ${vRiver} \\times ${tCross} = ${drift}$ m.`,
       ],
       hints: ["Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."],
       simulationPresetId: "kin-15",
     };
   } else if (subType === 3) {
-    // Kinematic braking distance
     const v0Kmh = 60 + (i % 15) * 5;
     const v0Ms = v0Kmh / 3.6;
     const a = roundTo(3.5 + (i % 7) * 0.5, 2);
@@ -355,7 +340,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
       difficulty: "oson",
       title: `Avtomobilning tormozlanish masofasini aniqlash (#${i})`,
-      statement: `Avtomobil v_0 = ${v0Kmh} km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = ${a} m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?`,
+      statement: `Avtomobil $v_0 = ${v0Kmh}$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = ${a}$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?`,
       given: {
         v_0: { value: v0Kmh, unit: "km/soat", symbol: "v_0", labelUz: "Boshlang‘ich tezlik" },
         a: { value: a, unit: "m/s²", symbol: "a", labelUz: "Sekinlanish tezlanishi" },
@@ -365,16 +350,15 @@ for (let i = 1; i <= 50; i++) {
       targetUnit: "m",
       correctAnswer: sBrake,
       tolerancePct: 1.0,
-      formulaLatex: "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+      formulaLatex: "S = \\frac{v_0^2}{2a}",
       stepByStepSolution: [
-        `1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{${v0Kmh}}{3.6} = ${v0Ms.toFixed(2)} m/s.`,
-        `2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(${v0Ms.toFixed(2)})^2}{2 \\times ${a}} = ${sBrake} m.`,
+        `1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{${v0Kmh}}{3.6} = ${v0Ms.toFixed(2)}$ m/s.`,
+        `2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(${v0Ms.toFixed(2)})^2}{2 \\times ${a}} = ${sBrake}$ m.`,
       ],
       hints: ["Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."],
       simulationPresetId: "kin-05",
     };
   } else {
-    // Circular motion tangential and normal acceleration
     const r = roundTo(1.5 + (i % 10) * 0.2, 2);
     const eps = roundTo(2.0 + (i % 5) * 0.5, 2);
     const t = roundTo(1.5 + (i % 6) * 0.5, 1);
@@ -390,7 +374,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Aylana bo‘ylab tekis tezlanuvchan harakat",
       difficulty: "murakkab",
       title: `Nuqtaning to‘liq tezlanishini hisoblash (#${i})`,
-      statement: `Tinch turgan g‘ildirak \\varepsilon = ${eps} rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = ${t} s o‘tgach, aylanish o‘qidan R = ${r} m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.`,
+      statement: `Tinch turgan g‘ildirak $\\varepsilon = ${eps}$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = ${t}$ s o‘tgach, o‘qdan $R = ${r}$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.`,
       given: {
         epsilon: { value: eps, unit: "rad/s²", symbol: "\\varepsilon", labelUz: "Burchak tezlanish" },
         t: { value: t, unit: "s", symbol: "t", labelUz: "Vaqt" },
@@ -403,10 +387,10 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
       stepByStepSolution: [
-        `1. Tangensial tezlanish: a_\\tau = \\varepsilon R = ${eps} \\times ${r} = ${at} m/s².`,
-        `2. t = ${t} s dagi burchak tezlik: \\omega = \\varepsilon t = ${eps} \\times ${t} = ${omega.toFixed(2)} rad/s.`,
-        `3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (${omega.toFixed(2)})^2 \\times ${r} = ${an} m/s².`,
-        `4. To‘liq tezlanish: a = \\sqrt{${at}^2 + ${an}^2} = ${aTotal} m/s².`,
+        `1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = ${eps} \\times ${r} = ${at}$ m/s².`,
+        `2. Burchak tezlik: $\\omega = \\varepsilon t = ${eps} \\times ${t} = ${omega.toFixed(2)}$ rad/s.`,
+        `3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (${omega.toFixed(2)})^2 \\times ${r} = ${an}$ m/s².`,
+        `4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{${at}^2 + ${an}^2} = ${aTotal}$ m/s².`,
       ],
       hints: ["Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."],
       simulationPresetId: "kin-25",
@@ -425,7 +409,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Incline Plane with friction
     const m = roundTo(2.0 + (i % 10) * 0.5, 1);
     const thetaDeg = 25 + (i % 20);
     const thetaRad = (thetaDeg * Math.PI) / 180;
@@ -439,7 +422,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Qiya tekislikdagi ishqalanishli harakat",
       difficulty: "o'rta",
       title: `Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#${i})`,
-      statement: `Gorizontga nisbatan \\alpha = ${thetaDeg}° burchak ostida qiyalangan tekislikda massasi m = ${m} kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = ${mu} bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).`,
+      statement: `Gorizontga nisbatan $\\alpha = ${thetaDeg}^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = ${m}$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = ${mu}$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).`,
       given: {
         m: { value: m, unit: "kg", symbol: "m", labelUz: "Jism massasi" },
         alpha: { value: thetaDeg, unit: "°", symbol: "\\alpha", labelUz: "Qiyalik burchagi" },
@@ -453,16 +436,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
       stepByStepSolution: [
-        `1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.`,
-        `2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).`,
-        `3. Qiymatlar: \\sin(${thetaDeg}°) = ${Math.sin(thetaRad).toFixed(4)}, \\cos(${thetaDeg}°) = ${Math.cos(thetaRad).toFixed(4)}.`,
-        `4. a = 9.81 \\times (${Math.sin(thetaRad).toFixed(4)} - ${mu} \\times ${Math.cos(thetaRad).toFixed(4)}) = ${a} m/s².`,
+        `1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.`,
+        `2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.`,
+        `3. Qiymatlar: $\\sin(${thetaDeg}^\\circ) = ${Math.sin(thetaRad).toFixed(4)}, \\cos(${thetaDeg}^\\circ) = ${Math.cos(thetaRad).toFixed(4)}$.`,
+        `4. $a = 9.81 \\times (${Math.sin(thetaRad).toFixed(4)} - ${mu} \\times ${Math.cos(thetaRad).toFixed(4)}) = ${a}$ m/s².`,
       ],
       hints: ["Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."],
       simulationPresetId: "dyn-01",
     };
   } else if (subType === 1) {
-    // Atwood machine
     const m1 = roundTo(1.0 + (i % 5) * 0.2, 2);
     const m2 = roundTo(m1 + 0.5 + (i % 6) * 0.1, 2);
     const a = roundTo(((m2 - m1) / (m1 + m2)) * CODATA.g, 3);
@@ -475,7 +457,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Bog‘langan jismlar harakati (Atvud mashinasi)",
       difficulty: "o'rta",
       title: `Atvud mashinasida ipning taranglik kuchi (#${i})`,
-      statement: `Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = ${m1} kg va m_2 = ${m2} kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).`,
+      statement: `Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = ${m1}$ kg va $m_2 = ${m2}$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).`,
       given: {
         m1: { value: m1, unit: "kg", symbol: "m_1", labelUz: "Yengil yuk massasi" },
         m2: { value: m2, unit: "kg", symbol: "m_2", labelUz: "Og‘ir yuk massasi" },
@@ -488,20 +470,18 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
       stepByStepSolution: [
-        `1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.`,
-        `2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = ${a} m/s².`,
-        `3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times ${m1} \\times ${m2}}{${(m1 + m2).toFixed(2)}} \\times 9.81 = ${T} N.`,
+        `1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.`,
+        `2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = ${a}$ m/s².`,
+        `3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times ${m1} \\times ${m2}}{${(m1 + m2).toFixed(2)}} \\times 9.81 = ${T}$ N.`,
       ],
       hints: ["Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."],
       simulationPresetId: "dyn-11",
     };
   } else if (subType === 2) {
-    // Inelastic collision
-    const m1 = roundTo(1000 + i * 50, 0); // kg
-    const v1 = roundTo(15 + (i % 10) * 1.5, 1); // m/s
-    const m2 = roundTo(1200 + (i % 8) * 100, 0); // kg
+    const m1 = roundTo(1000 + i * 50, 0);
+    const v1 = roundTo(15 + (i % 10) * 1.5, 1);
+    const m2 = roundTo(1200 + (i % 8) * 100, 0);
     const vCommon = roundTo((m1 * v1) / (m1 + m2), 3);
-    const lostEnergy = roundTo((0.5 * m1 * v1 * v1) - (0.5 * (m1 + m2) * vCommon * vCommon), 1);
 
     prob = {
       id,
@@ -510,7 +490,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
       difficulty: "oson",
       title: `Noelastik to‘qnashuvdan keyingi umumiy tezlik (#${i})`,
-      statement: `Massasi m_1 = ${m1} kg bo‘lgan vagon v_1 = ${v1} m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = ${m2} kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.`,
+      statement: `Massasi $m_1 = ${m1}$ kg bo‘lgan vagon $v_1 = ${v1}$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = ${m2}$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.`,
       given: {
         m1: { value: m1, unit: "kg", symbol: "m_1", labelUz: "1-vagon massasi" },
         v1: { value: v1, unit: "m/s", symbol: "v_1", labelUz: "1-vagon tezligi" },
@@ -523,15 +503,13 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
       stepByStepSolution: [
-        `1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.`,
-        `2. u = \\frac{${m1} \\times ${v1}}{${m1} + ${m2}} = \\frac{${(m1 * v1).toFixed(0)}}{${m1 + m2}} = ${vCommon} m/s.`,
-        `3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = ${lostEnergy} J.`,
+        `1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.`,
+        `2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{${m1} \\times ${v1}}{${m1 + m2}} = ${vCommon}$ m/s.`,
       ],
       hints: ["Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."],
       simulationPresetId: "dyn-16",
     };
   } else if (subType === 3) {
-    // Spring oscillator period and frequency
     const m = roundTo(0.2 + (i % 15) * 0.05, 3);
     const k = roundTo(50 + i * 5, 1);
     const T = roundTo(2 * Math.PI * Math.sqrt(m / k), 4);
@@ -544,7 +522,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
       difficulty: "oson",
       title: `Prujinaga osilgan yukning tebranish davri (#${i})`,
-      statement: `Bikrligi k = ${k} N/m bo‘lgan yengil elastik prujinaga massasi m = ${m} kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.`,
+      statement: `Bikrligi $k = ${k}$ N/m bo‘lgan elastik prujinaga massasi $m = ${m}$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.`,
       given: {
         k: { value: k, unit: "N/m", symbol: "k", labelUz: "Prujina bikrligi" },
         m: { value: m, unit: "kg", symbol: "m", labelUz: "Yuk massasi" },
@@ -556,14 +534,13 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "T = 2\\pi \\sqrt{\\frac{m}{k}}",
       stepByStepSolution: [
-        `1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{${k}}{${m}}} = ${omega} rad/s.`,
-        `2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{${m}}{${k}}} = ${T} s.`,
+        `1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{${k}}{${m}}} = ${omega}$ rad/s.`,
+        `2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{${m}}{${k}}} = ${T}$ s.`,
       ],
       hints: ["Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."],
       simulationPresetId: "dyn-21",
     };
   } else {
-    // Work and kinetic energy theorem
     const m = roundTo(1200 + i * 20, 0);
     const v1Ms = (36 + (i % 10) * 5) / 3.6;
     const v2Ms = (72 + (i % 10) * 5) / 3.6;
@@ -577,7 +554,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Kinetik energiya va bajarilgan ish teoremasi",
       difficulty: "o'rta",
       title: `Avtomobilni tezlatish uchun dvigatel bajargan ish (#${i})`,
-      statement: `Massasi m = ${m} kg bo‘lgan avtomobil o‘z tezligini v_1 = ${(v1Ms * 3.6).toFixed(0)} km/soat dan v_2 = ${(v2Ms * 3.6).toFixed(0)} km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.`,
+      statement: `Massasi $m = ${m}$ kg bo‘lgan avtomobil tezligini $v_1 = ${(v1Ms * 3.6).toFixed(0)}$ km/soat dan $v_2 = ${(v2Ms * 3.6).toFixed(0)}$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.`,
       given: {
         m: { value: m, unit: "kg", symbol: "m", labelUz: "Massa" },
         v1: { value: roundTo(v1Ms * 3.6, 0), unit: "km/soat", symbol: "v_1", labelUz: "Boshlang‘ich tezlik" },
@@ -590,9 +567,9 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
       stepByStepSolution: [
-        `1. Tezliklarni m/s ga aylantiramiz: v_1 = ${v1Ms.toFixed(2)} m/s, v_2 = ${v2Ms.toFixed(2)} m/s.`,
-        `2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{${m}}{2} [(${v2Ms.toFixed(2)})^2 - (${v1Ms.toFixed(2)})^2].`,
-        `3. A = ${(0.5 * m).toFixed(0)} \\times ${(v2Ms * v2Ms - v1Ms * v1Ms).toFixed(2)} = ${workJ} J = ${workKJ} kJ.`,
+        `1. SI birliklariga o‘tkazamiz: $v_1 = ${v1Ms.toFixed(2)}$ m/s, $v_2 = ${v2Ms.toFixed(2)}$ m/s.`,
+        `2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.`,
+        `3. $A = \\frac{${m}}{2} [(${v2Ms.toFixed(2)})^2 - (${v1Ms.toFixed(2)})^2] = ${workJ}$ J = ${workKJ}$ kJ.`,
       ],
       hints: ["Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."],
       simulationPresetId: "dyn-07",
@@ -611,7 +588,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Lever Equilibrium (Moments rule)
     const f1 = 100 + i * 10;
     const d1 = roundTo(0.8 + (i % 8) * 0.1, 2);
     const d2 = roundTo(0.2 + (i % 6) * 0.05, 2);
@@ -624,7 +600,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Momentlar qoidasi va richag muvozanati",
       difficulty: "oson",
       title: `Richagni muvozanatda tutib turuvchi kuch (#${i})`,
-      statement: `Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = ${d1} m masofada F_1 = ${f1} N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = ${d2} m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?`,
+      statement: `Vaznsiz richagning birinchi yelkasiga $d_1 = ${d1}$ m masofada $F_1 = ${f1}$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = ${d2}$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?`,
       given: {
         F1: { value: f1, unit: "N", symbol: "F_1", labelUz: "1-yelkaga qo‘yilgan kuch" },
         d1: { value: d1, unit: "m", symbol: "d_1", labelUz: "1-kuch yelkasi" },
@@ -637,18 +613,16 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
       stepByStepSolution: [
-        `1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.`,
-        `2. F_1 d_1 = F_2 d_2.`,
-        `3. F_2 = \\frac{${f1} \\times ${d1}}{${d2}} = ${f2} N.`,
+        `1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.`,
+        `2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{${f1} \\times ${d1}}{${d2}} = ${f2}$ N.`,
       ],
       hints: ["Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."],
       simulationPresetId: "stat-01",
     };
   } else if (subType === 1) {
-    // Two-support Beam Reactions
     const L = roundTo(4.0 + (i % 5) * 0.5, 1);
-    const F = roundTo(500 + i * 25, 0); // Point load
-    const aDist = roundTo(1.0 + (i % 6) * 0.3, 2); // distance from Support A
+    const F = roundTo(500 + i * 25, 0);
+    const aDist = roundTo(1.0 + (i % 6) * 0.3, 2);
     const rB = roundTo((F * aDist) / L, 2);
     const rA = roundTo(F - rB, 2);
 
@@ -659,7 +633,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Ikki tayanchdagi balka reaksiyalari",
       difficulty: "o'rta",
       title: `Balkadagi A tayanchining reaksiya kuchini aniqlash (#${i})`,
-      statement: `Uzunligi L = ${L} m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = ${aDist} m masofada F = ${F} N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.`,
+      statement: `Uzunligi $L = ${L}$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = ${aDist}$ m masofada $F = ${F}$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.`,
       given: {
         L: { value: L, unit: "m", symbol: "L", labelUz: "Balka uzunligi" },
         F: { value: F, unit: "N", symbol: "F", labelUz: "Qo‘yilgan kuch" },
@@ -672,16 +646,14 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
       stepByStepSolution: [
-        `1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.`,
-        `2. R_A = F \\cdot \\frac{L - x}{L} = ${F} \\times \\frac{${L} - ${aDist}}{${L}}.`,
-        `3. R_A = ${F} \\times ${( (L - aDist) / L ).toFixed(3)} = ${rA} N.`,
-        `4. B tayanch reaksiyasi: R_B = ${rB} N.`,
+        `1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.`,
+        `2. $R_A = F \\cdot \\frac{L - x}{L} = ${F} \\times \\frac{${L} - ${aDist}}{${L}} = ${rA}$ N.`,
+        `3. B tayanch reaksiyasi: $R_B = F - R_A = ${rB}$ N.`,
       ],
       hints: ["Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."],
       simulationPresetId: "stat-02",
     };
   } else if (subType === 2) {
-    // Concurrent force resultant
     const f1 = roundTo(30 + (i % 10) * 4, 1);
     const f2 = roundTo(40 + (i % 8) * 5, 1);
     const angleDeg = 60 + ((i * 5) % 60);
@@ -695,11 +667,11 @@ for (let i = 1; i <= 50; i++) {
       topic: "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
       difficulty: "oson",
       title: `Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#${i})`,
-      statement: `Bitta nuqtaga burchagi \\alpha = ${angleDeg}° bo‘lgan ikkita kuch qo‘yilgan: F_1 = ${f1} N va F_2 = ${f2} N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.`,
+      statement: `Bir nuqtaga burchagi $\\alpha = ${angleDeg}^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = ${f1}$ N va $F_2 = ${f2}$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.`,
       given: {
         F1: { value: f1, unit: "N", symbol: "F_1", labelUz: "1-kuch" },
         F2: { value: f2, unit: "N", symbol: "F_2", labelUz: "2-kuch" },
-        alpha: { value: angleDeg, unit: "°", symbol: "\\alpha", labelUz: "Kuchlar orasidagi burchak" },
+        alpha: { value: angleDeg, unit: "°", symbol: "\\alpha", labelUz: "Burchak" },
       },
       targetSymbol: "R",
       targetLabelUz: "Teng ta’sir etuvchi kuch",
@@ -708,19 +680,18 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
       stepByStepSolution: [
-        `1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.`,
-        `2. \\cos(${angleDeg}°) = ${Math.cos(angleRad).toFixed(4)}.`,
-        `3. R = \\sqrt{${f1}^2 + ${f2}^2 + 2 \\times ${f1} \\times ${f2} \\times ${Math.cos(angleRad).toFixed(4)}} = ${rMag} N.`,
+        `1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.`,
+        `2. $\\cos(${angleDeg}^\\circ) = ${Math.cos(angleRad).toFixed(4)}$.`,
+        `3. $R = \\sqrt{${f1}^2 + ${f2}^2 + 2 \\times ${f1} \\times ${f2} \\times ${Math.cos(angleRad).toFixed(4)}} = ${rMag}$ N.`,
       ],
       hints: ["Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."],
       simulationPresetId: "stat-06",
     };
   } else if (subType === 3) {
-    // Pulley mechanical advantage
     const mass = roundTo(60 + i * 5, 1);
     const g = 9.81;
     const weightN = roundTo(mass * g, 1);
-    const nPulleys = 2 + (i % 4); // 2, 3, 4, 5 pulleys
+    const nPulleys = 2 + (i % 4);
     const fEffort = roundTo(weightN / nPulleys, 2);
 
     prob = {
@@ -730,7 +701,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Polispast va oddiy mexanizmlarda yutuq",
       difficulty: "oson",
       title: `Polispast tizimida yukni ko‘tarish kuchi (#${i})`,
-      statement: `Massasi m = ${mass} kg bo‘lgan yuk n = ${nPulleys} ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?`,
+      statement: `Massasi $m = ${mass}$ kg bo‘lgan yuk $n = ${nPulleys}$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).`,
       given: {
         m: { value: mass, unit: "kg", symbol: "m", labelUz: "Yuk massasi" },
         n: { value: nPulleys, unit: "tarmoq", symbol: "n", labelUz: "Ko‘taruvchi iplar soni" },
@@ -742,17 +713,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "F = \\frac{m g}{n}",
       stepByStepSolution: [
-        `1. Yukning og‘irligi: P = m g = ${mass} \\times 9.81 = ${weightN} N.`,
-        `2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{${weightN}}{${nPulleys}} = ${fEffort} N.`,
+        `1. Yukning og‘irligi: $P = m g = ${mass} \\times 9.81 = ${weightN}$ N.`,
+        `2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{${weightN}}{${nPulleys}} = ${fEffort}$ N.`,
       ],
       hints: ["Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."],
       simulationPresetId: "stat-12",
     };
   } else {
-    // Tipping angle condition
-    const width = roundTo(0.4 + (i % 8) * 0.05, 2); // b
-    const height = roundTo(0.8 + (i % 6) * 0.1, 2); // h
-    // Tipping occurs when tan(theta) = b / h
+    const width = roundTo(0.4 + (i % 8) * 0.05, 2);
+    const height = roundTo(0.8 + (i % 6) * 0.1, 2);
     const tanTheta = width / height;
     const thetaDeg = roundTo((Math.atan(tanTheta) * 180) / Math.PI, 2);
 
@@ -763,9 +732,9 @@ for (let i = 1; i <= 50; i++) {
       topic: "Jismning ag‘darilish sharti va turg‘unlik",
       difficulty: "murakkab",
       title: `Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#${i})`,
-      statement: `Asosi eni b = ${width} m va balandligi h = ${height} m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?`,
+      statement: `Asosi eni $b = ${width}$ m va balandligi $h = ${height}$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?`,
       given: {
-        b: { value: width, unit: "m", symbol: "b", labelUz: "Quti eni (tayanch bazasi)" },
+        b: { value: width, unit: "m", symbol: "b", labelUz: "Quti eni" },
         h: { value: height, unit: "m", symbol: "h", labelUz: "Quti balandligi" },
       },
       targetSymbol: "\\theta",
@@ -775,10 +744,9 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
       stepByStepSolution: [
-        `1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.`,
-        `2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.`,
-        `3. \\tan\\theta = \\frac{${width}}{${height}} = ${tanTheta.toFixed(4)}.`,
-        `4. \\theta = \\arctan(${tanTheta.toFixed(4)}) = ${thetaDeg}°.`,
+        `1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.`,
+        `2. $\\tan\\theta = \\frac{${width}}{${height}} = ${tanTheta.toFixed(4)}$.`,
+        `3. $\\theta = \\arctan(${tanTheta.toFixed(4)}) = ${thetaDeg}^\\circ$.`,
       ],
       hints: ["Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."],
       simulationPresetId: "stat-20",
@@ -797,7 +765,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Wheatstone bridge balance
     const r1 = 100 + (i % 10) * 10;
     const r2 = 200 + (i % 8) * 20;
     const r3 = 150 + (i % 6) * 15;
@@ -810,7 +777,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Uitston ko‘prigi usulida qarshilikni o‘lchash",
       difficulty: "oson",
       title: `Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#${i})`,
-      statement: `Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = ${r1} \\Omega, R_2 = ${r2} \\Omega va R_3 = ${r3} \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.`,
+      statement: `Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = ${r1} \\ \\Omega, R_2 = ${r2} \\ \\Omega$ va $R_3 = ${r3} \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.`,
       given: {
         R1: { value: r1, unit: "\\Omega", symbol: "R_1", labelUz: "1-yelka qarshiligi" },
         R2: { value: r2, unit: "\\Omega", symbol: "R_2", labelUz: "2-yelka qarshiligi" },
@@ -823,14 +790,13 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 0.5,
       formulaLatex: "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
       stepByStepSolution: [
-        `1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.`,
-        `2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = ${r3} \\times \\frac{${r2}}{${r1}} = ${rx} \\Omega.`,
+        `1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.`,
+        `2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = ${r3} \\times \\frac{${r2}}{${r1}} = ${rx} \\ \\Omega$.`,
       ],
       hints: ["Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."],
       simulationPresetId: "em-01",
     };
   } else if (subType === 1) {
-    // RLC resonance frequency
     const lMh = roundTo(10 + i * 2, 1);
     const cUf = roundTo(0.1 + (i % 10) * 0.05, 3);
     const L = lMh * 1e-3;
@@ -844,7 +810,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "RLC konturidagi elektromagnit rezonans",
       difficulty: "o'rta",
       title: `Ketma-ket RLC tebranish konturining rezonans chastotasi (#${i})`,
-      statement: `Induktivligi L = ${lMh} mGn va sig‘imi C = ${cUf} \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.`,
+      statement: `Induktivligi $L = ${lMh}$ mGn va sig‘imi $C = ${cUf} \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.`,
       given: {
         L: { value: lMh, unit: "mGn", symbol: "L", labelUz: "G‘altak induktivligi" },
         C: { value: cUf, unit: "\\mu F", symbol: "C", labelUz: "Kondensator sig‘imi" },
@@ -856,22 +822,18 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
       stepByStepSolution: [
-        `1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.`,
-        `2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.`,
-        `3. L = ${(L * 1000).toFixed(1)} \\times 10^{-3} Gn, C = ${(C * 1e6).toFixed(3)} \\times 10^{-6} F.`,
-        `4. LC = ${(L * C).toExponential(4)}, \\sqrt{LC} = ${Math.sqrt(L * C).toExponential(4)} s.`,
-        `5. f_0 = ${f0} Hz.`,
+        `1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.`,
+        `2. $L = ${lMh} \\times 10^{-3}$ Gn, $C = ${cUf} \\times 10^{-6}$ F.`,
+        `3. $\\sqrt{LC} = ${Math.sqrt(L * C).toExponential(4)}$ s.`,
+        `4. $f_0 = \\frac{1}{2\\pi \\times ${Math.sqrt(L * C).toExponential(4)}} = ${f0}$ Hz.`,
       ],
       hints: ["Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."],
       simulationPresetId: "em-07",
     };
   } else if (subType === 2) {
-    // RC circuit time constant and voltage decay
     const rKOm = roundTo(10 + (i % 10) * 5, 1);
     const cUf = roundTo(20 + (i % 8) * 10, 1);
-    const tau = roundTo(rKOm * 1e3 * (cUf * 1e-6), 3); // seconds
-    const u0 = 12.0;
-    const u1 = roundTo(u0 * Math.exp(-1), 2); // at t = tau
+    const tau = roundTo(rKOm * 1e3 * (cUf * 1e-6), 3);
 
     prob = {
       id,
@@ -880,7 +842,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
       difficulty: "o'rta",
       title: `Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#${i})`,
-      statement: `Qarshiligi R = ${rKOm} k\\Omega bo‘lgan rezistor va sig‘imi C = ${cUf} \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.`,
+      statement: `Qarshiligi $R = ${rKOm} \\ \\text{k}\\Omega$ va sig‘imi $C = ${cUf} \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.`,
       given: {
         R: { value: rKOm, unit: "k\\Omega", symbol: "R", labelUz: "Rezistor qarshiligi" },
         C: { value: cUf, unit: "\\mu F", symbol: "C", labelUz: "Kondensator sig‘imi" },
@@ -892,29 +854,27 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\tau = R \\cdot C",
       stepByStepSolution: [
-        `1. SI birliklariga o‘tkazamiz: R = ${rKOm} \\times 10^3 \\Omega, C = ${cUf} \\times 10^{-6} F.`,
-        `2. Vaqt doimiysi: \\tau = R \\cdot C = (${rKOm} \\times 10^3) \\times (${cUf} \\times 10^{-6}) = ${tau} s.`,
-        `3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi.`,
+        `1. SI birliklarida: $R = ${rKOm} \\times 10^3 \\ \\Omega, C = ${cUf} \\times 10^{-6}$ F.`,
+        `2. $\\tau = R \\cdot C = (${rKOm} \\times 10^3) \\times (${cUf} \\times 10^{-6}) = ${tau}$ s.`,
       ],
       hints: ["Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."],
       simulationPresetId: "em-11",
     };
   } else if (subType === 3) {
-    // Lorentz force
     const vKmS = 500 + i * 50;
     const vMs = vKmS * 1000;
     const bMt = roundTo(20 + (i % 10) * 5, 1);
     const bT = bMt * 1e-3;
-    const fLor = roundTo(CODATA.e * vMs * bT * 1e15, 3); // in femtonewtons
+    const fLor = roundTo(CODATA.e * vMs * bT * 1e15, 3);
 
     prob = {
       id,
       chapter: "electromagnetism",
       chapterNameUz: "Elektromagnetizm va zanjirlar",
-      topic: "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+      topic: "Magnit maydonida Lorents kuchi",
       difficulty: "o'rta",
       title: `Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#${i})`,
-      statement: `Elektron induksiyasi B = ${bMt} mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = ${vKmS} km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).`,
+      statement: `Elektron induksiyasi $B = ${bMt}$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = ${vKmS}$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).`,
       given: {
         B: { value: bMt, unit: "mTl", symbol: "B", labelUz: "Magnit induksiyasi" },
         v: { value: vKmS, unit: "km/s", symbol: "v", labelUz: "Elektron tezligi" },
@@ -927,18 +887,17 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "F_L = e \\cdot v \\cdot B \\sin\\alpha",
       stepByStepSolution: [
-        `1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.`,
-        `2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (${vMs} m/s) \\times (${bT} Tl).`,
-        `3. F_L = ${(CODATA.e * vMs * bT).toExponential(4)} N = ${fLor} fN.`,
+        `1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.`,
+        `2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (${vMs}) \\times (${bT}) = ${(CODATA.e * vMs * bT).toExponential(4)}$ N.`,
+        `3. Femtonyutonga o‘tkazamiz: $F_L = ${fLor}$ fN.`,
       ],
       hints: ["1 femtonyuton (fN) = 10^-15 N."],
       simulationPresetId: "em-21",
     };
   } else {
-    // Magnetic energy of inductor
     const lMh = roundTo(50 + i * 5, 1);
     const iA = roundTo(2.0 + (i % 8) * 0.5, 2);
-    const wInd = roundTo(0.5 * (lMh * 1e-3) * iA * iA * 1000, 2); // in mJ
+    const wInd = roundTo(0.5 * (lMh * 1e-3) * iA * iA * 1000, 2);
 
     prob = {
       id,
@@ -947,7 +906,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "G‘altak magnit maydonining energiyasi",
       difficulty: "oson",
       title: `Tokli g‘altakda to‘plangan magnit maydon energiyasi (#${i})`,
-      statement: `Induktivligi L = ${lMh} mGn bo‘lgan drosseldan I = ${iA} A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.`,
+      statement: `Induktivligi $L = ${lMh}$ mGn bo‘lgan g‘altakdan $I = ${iA}$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.`,
       given: {
         L: { value: lMh, unit: "mGn", symbol: "L", labelUz: "Induktivlik" },
         I: { value: iA, unit: "A", symbol: "I", labelUz: "Tok kuchi" },
@@ -959,11 +918,10 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "W = \\frac{1}{2} L I^2",
       stepByStepSolution: [
-        `1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.`,
-        `2. W = \\frac{1}{2} \\times (${lMh} \\times 10^{-3} Gn) \\times (${iA} A)^2 = ${(0.5 * (lMh * 1e-3) * iA * iA).toFixed(5)} J.`,
-        `3. Millijoulga o‘tkazamiz: W = ${wInd} mJ.`,
+        `1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.`,
+        `2. $W = \\frac{1}{2} \\times (${lMh} \\times 10^{-3}) \\times (${iA})^2 = ${(0.5 * (lMh * 1e-3) * iA * iA).toFixed(5)}$ J = ${wInd}$ mJ.`,
       ],
-      hints: ["Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."],
+      hints: ["G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."],
       simulationPresetId: "em-25",
     };
   }
@@ -980,9 +938,8 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Thin lens formula
-    const fLens = roundTo(15 + (i % 10) * 2, 1); // cm
-    const dObj = roundTo(fLens + 5 + (i % 12) * 2, 1); // cm (outside focal)
+    const fLens = roundTo(15 + (i % 10) * 2, 1);
+    const dObj = roundTo(fLens + 5 + (i % 12) * 2, 1);
     const fImg = roundTo((dObj * fLens) / (dObj - fLens), 2);
     const kMagnif = roundTo(fImg / dObj, 2);
 
@@ -993,7 +950,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Yupqa qavariq linzaning formulasini qo‘llash",
       difficulty: "oson",
       title: `Qavariq linzada hosil bo‘lgan tasvir masofasi (#${i})`,
-      statement: `Fokus masofasi F = ${fLens} cm bo‘lgan yig‘uvchi (qavariq) linzadan d = ${dObj} cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.`,
+      statement: `Fokus masofasi $F = ${fLens}$ cm bo‘lgan yig‘uvchi linzadan $d = ${dObj}$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.`,
       given: {
         F: { value: fLens, unit: "cm", symbol: "F", labelUz: "Fokus masofasi" },
         d: { value: dObj, unit: "cm", symbol: "d", labelUz: "Buyum masofasi" },
@@ -1005,16 +962,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
       stepByStepSolution: [
-        `1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.`,
-        `2. f = \\frac{${dObj} \\times ${fLens}}{${dObj} - ${fLens}} = \\frac{${(dObj * fLens).toFixed(1)}}{${(dObj - fLens).toFixed(1)}} = ${fImg} cm.`,
-        `3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{${fImg}}{${dObj}} = ${kMagnif}.`,
+        `1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.`,
+        `2. $f = \\frac{${dObj} \\times ${fLens}}{${dObj} - ${fLens}} = \\frac{${(dObj * fLens).toFixed(1)}}{${(dObj - fLens).toFixed(1)}} = ${fImg}$ cm.`,
+        `3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = ${kMagnif}$.`,
       ],
       hints: ["Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."],
       simulationPresetId: "opt-01",
     };
   } else if (subType === 1) {
-    // Snell's Law and Total Internal Reflection
-    const nMedium = roundTo(1.33 + (i % 6) * 0.08, 3); // water, glass, etc.
+    const nMedium = roundTo(1.33 + (i % 6) * 0.08, 3);
     const sinCrit = 1 / nMedium;
     const thetaCritDeg = roundTo((Math.asin(sinCrit) * 180) / Math.PI, 2);
 
@@ -1025,7 +981,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "To‘la ichki qaytish hodisasi va chegaraviy burchak",
       difficulty: "oson",
       title: `Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#${i})`,
-      statement: `Sindirish ko‘rsatkichi n = ${nMedium} bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.`,
+      statement: `Sindirish ko‘rsatkichi $n = ${nMedium}$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.`,
       given: {
         n: { value: nMedium, unit: "", symbol: "n", labelUz: "Muhitning sindirish ko‘rsatkichi" },
       },
@@ -1036,18 +992,17 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 0.5,
       formulaLatex: "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
       stepByStepSolution: [
-        `1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).`,
-        `2. \\sin\\theta_c = \\frac{1}{${nMedium}} = ${sinCrit.toFixed(4)}.`,
-        `3. \\theta_c = \\arcsin(${sinCrit.toFixed(4)}) = ${thetaCritDeg}°.`,
+        `1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.`,
+        `2. $\\sin\\theta_c = \\frac{1}{${nMedium}} = ${sinCrit.toFixed(4)}$.`,
+        `3. $\\theta_c = \\arcsin(${sinCrit.toFixed(4)}) = ${thetaCritDeg}^\\circ$.`,
       ],
       hints: ["To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."],
       simulationPresetId: "opt-11",
     };
   } else if (subType === 2) {
-    // Diffraction grating
     const linesPerMm = 300 + (i % 6) * 100;
-    const dMicron = roundTo(1000 / linesPerMm, 4); // d in um
-    const lambdaNm = 589; // Sodium D line
+    const dMicron = roundTo(1000 / linesPerMm, 4);
+    const lambdaNm = 589;
     const kOrder = 1 + (i % 3);
     const sinTheta = (kOrder * (lambdaNm * 1e-9)) / (dMicron * 1e-6);
     const thetaDeg = roundTo((Math.asin(sinTheta) * 180) / Math.PI, 2);
@@ -1059,7 +1014,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Difraksiya panjarasi va spektral chiziqlar",
       difficulty: "o'rta",
       title: `Difraksiya panjarasida ${kOrder}-tartibli maksimum burchagi (#${i})`,
-      statement: `1 mm uzunligida N = ${linesPerMm} ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = ${lambdaNm} nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. ${kOrder}-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.`,
+      statement: `1 mm uzunligida $N = ${linesPerMm}$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = ${lambdaNm}$ nm monoxromatik yorug‘lik tushmoqda. $k = ${kOrder}$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.`,
       given: {
         N: { value: linesPerMm, unit: "shtrix/mm", symbol: "N", labelUz: "Shtrixlar zichligi" },
         lambda: { value: lambdaNm, unit: "nm", symbol: "\\lambda", labelUz: "To‘lqin uzunligi" },
@@ -1072,15 +1027,14 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
       stepByStepSolution: [
-        `1. Panjara doimiysi: d = \\frac{10^{-3} m}{${linesPerMm}} = ${(dMicron * 1e-6).toExponential(4)} m = ${dMicron} \\mu m.`,
-        `2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{${kOrder} \\times ${lambdaNm} \\times 10^{-9}}{${(dMicron * 1e-6).toExponential(4)}} = ${sinTheta.toFixed(4)}.`,
-        `3. Og‘ish burchagi: \\theta = \\arcsin(${sinTheta.toFixed(4)}) = ${thetaDeg}°.`,
+        `1. Panjara doimiysi: $d = \\frac{10^{-3}}{${linesPerMm}} = ${dMicron} \\ \\mu\\text{m}$.`,
+        `2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{${kOrder} \\times ${lambdaNm} \\times 10^{-9}}{${(dMicron * 1e-6).toExponential(4)}} = ${sinTheta.toFixed(4)}$.`,
+        `3. $\\theta = \\arcsin(${sinTheta.toFixed(4)}) = ${thetaDeg}^\\circ$.`,
       ],
       hints: ["Avval panjara doimiysi d ni toping: d = 1 mm / N."],
       simulationPresetId: "opt-16",
     };
   } else if (subType === 3) {
-    // Malus law of polarization
     const i0 = 100.0;
     const phiDeg = 30 + ((i * 5) % 45);
     const phiRad = (phiDeg * Math.PI) / 180;
@@ -1094,9 +1048,9 @@ for (let i = 1; i <= 50; i++) {
       topic: "Yorug‘lik qutblanishi va Malyus qonuni",
       difficulty: "oson",
       title: `Qutblagich va analizator o‘qlari orasidagi intensivlik (#${i})`,
-      statement: `Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = ${phiDeg}° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?`,
+      statement: `Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = ${phiDeg}^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?`,
       given: {
-        phi: { value: phiDeg, unit: "°", symbol: "\\varphi", labelUz: "O‘qlar orasidagi burchak" },
+        phi: { value: phiDeg, unit: "°", symbol: "\\varphi", labelUz: "Burchak" },
       },
       targetSymbol: "I/I_0",
       targetLabelUz: "O‘tish foizi",
@@ -1105,15 +1059,14 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "I = I_0 \\cos^2\\varphi",
       stepByStepSolution: [
-        `1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.`,
-        `2. \\cos(${phiDeg}°) = ${cosVal.toFixed(4)}.`,
-        `3. O‘tgan intensivlik ulushi: \\cos^2(${phiDeg}°) = (${cosVal.toFixed(4)})^2 = ${(cosVal * cosVal).toFixed(4)} = ${iPassed}\\%.`,
+        `1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.`,
+        `2. $\\cos(${phiDeg}^\\circ) = ${cosVal.toFixed(4)}$.`,
+        `3. $\\frac{I}{I_0} = (${cosVal.toFixed(4)})^2 = ${iPassed}\\%$.`,
       ],
       hints: ["Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."],
       simulationPresetId: "opt-21",
     };
   } else {
-    // Brewster angle
     const n = roundTo(1.5 + (i % 6) * 0.05, 3);
     const ibDeg = roundTo((Math.atan(n) * 180) / Math.PI, 2);
 
@@ -1124,7 +1077,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
       difficulty: "oson",
       title: `Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#${i})`,
-      statement: `Sindirish ko‘rsatkichi n = ${n} bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?`,
+      statement: `Sindirish ko‘rsatkichi $n = ${n}$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?`,
       given: {
         n: { value: n, unit: "", symbol: "n", labelUz: "Sindirish ko‘rsatkichi" },
       },
@@ -1135,9 +1088,8 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 0.5,
       formulaLatex: "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
       stepByStepSolution: [
-        `1. Bryuster qonuni: \\tan(i_B) = n.`,
-        `2. i_B = \\arctan(${n}) = ${ibDeg}°.`,
-        `3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi.`,
+        `1. Bryuster qonuni: $\\tan(i_B) = n$.`,
+        `2. $i_B = \\arctan(${n}) = ${ibDeg}^\\circ$.`,
       ],
       hints: ["Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."],
       simulationPresetId: "opt-25",
@@ -1156,7 +1108,6 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Carnot engine efficiency
     const tHotC = 250 + i * 10;
     const tColdC = 20 + (i % 8) * 5;
     const Th = tHotC + 273.15;
@@ -1170,7 +1121,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Karno sikli va issiqlik dvigatelining maksimal FIKi",
       difficulty: "oson",
       title: `Ideal Karno dvigatelining termodinamik FIKini hisoblash (#${i})`,
-      statement: `Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = ${tHotC} °C, sovutgichining harorati esa t_2 = ${tColdC} °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.`,
+      statement: `Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = ${tHotC} ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = ${tColdC} ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.`,
       given: {
         t1: { value: tHotC, unit: "°C", symbol: "t_1", labelUz: "Isitgich harorati" },
         t2: { value: tColdC, unit: "°C", symbol: "t_2", labelUz: "Sovutgich harorati" },
@@ -1180,17 +1131,16 @@ for (let i = 1; i <= 50; i++) {
       targetUnit: "%",
       correctAnswer: etaPct,
       tolerancePct: 0.5,
-      formulaLatex: "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+      formulaLatex: "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
       stepByStepSolution: [
-        `1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = ${tHotC} + 273.15 = ${Th.toFixed(2)} K, T_2 = ${tColdC} + 273.15 = ${Tc.toFixed(2)} K.`,
-        `2. Karno FIKi: \\eta = \\frac{${Th.toFixed(2)} - ${Tc.toFixed(2)}}{${Th.toFixed(2)}} = \\frac{${(Th - Tc).toFixed(2)}}{${Th.toFixed(2)}} = ${( (Th - Tc) / Th ).toFixed(4)}.`,
-        `3. Foizda: \\eta = ${etaPct}\\%.`,
+        `1. Mutlaq haroratlar: $T_1 = ${tHotC} + 273.15 = ${Th.toFixed(2)}$ K, $T_2 = ${tColdC} + 273.15 = ${Tc.toFixed(2)}$ K.`,
+        `2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{${Th.toFixed(2)} - ${Tc.toFixed(2)}}{${Th.toFixed(2)}} = ${( (Th - Tc) / Th ).toFixed(4)}$.`,
+        `3. Foizda: $\\eta = ${etaPct}\\%$.`,
       ],
       hints: ["Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."],
       simulationPresetId: "therm-04",
     };
   } else if (subType === 1) {
-    // Maxwell-Boltzmann RMS speed
     const tempC = 20 + i * 5;
     const tempK = tempC + 273.15;
     const gas = i % 2 === 0 ? { name: "Azot (N2)", M: 0.028 } : { name: "Kislorod (O2)", M: 0.032 };
@@ -1203,7 +1153,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
       difficulty: "o'rta",
       title: `${gas.name} molekulalarining o‘rtacha kvadratik tezligi (#${i})`,
-      statement: `Harorati t = ${tempC} °C bo‘lgan ${gas.name} gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = ${gas.M} kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).`,
+      statement: `Harorati $t = ${tempC} ^\\circ\\text{C}$ bo‘lgan ${gas.name} gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = ${gas.M}$ kg/mol, $R = 8.314$ J/(mol·K)).`,
       given: {
         t: { value: tempC, unit: "°C", symbol: "t", labelUz: "Gaz harorati" },
         mu: { value: gas.M, unit: "kg/mol", symbol: "\\mu", labelUz: "Molyar massa" },
@@ -1215,14 +1165,13 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
       stepByStepSolution: [
-        `1. Mutlaq harorat: T = ${tempC} + 273.15 = ${tempK.toFixed(2)} K.`,
-        `2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times ${tempK.toFixed(2)}}{${gas.M}}} = \\sqrt{\\frac{${(3 * CODATA.R * tempK).toFixed(1)}}{${gas.M}}} = ${vRms} m/s.`,
+        `1. Mutlaq harorat: $T = ${tempC} + 273.15 = ${tempK.toFixed(2)}$ K.`,
+        `2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times ${tempK.toFixed(2)}}{${gas.M}}} = ${vRms}$ m/s.`,
       ],
       hints: ["Molyar massani gramm/molda emas, kg/molda olish kerak."],
       simulationPresetId: "therm-09",
     };
   } else if (subType === 2) {
-    // Ideal gas isobaric work
     const pKPa = roundTo(100 + i * 5, 0);
     const v1L = roundTo(10 + (i % 10) * 2, 1);
     const v2L = roundTo(v1L + 15 + (i % 8) * 3, 1);
@@ -1235,7 +1184,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Izobarik jarayonda gaz bajargan ish",
       difficulty: "oson",
       title: `Izobarik kengayishda gazning bajargan ishi (#${i})`,
-      statement: `Doimiy p = ${pKPa} kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = ${v1L} litrdan V_2 = ${v2L} litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.`,
+      statement: `Doimiy $p = ${pKPa}$ kPa bosim ostidagi gaz hajmi $V_1 = ${v1L}$ litrdan $V_2 = ${v2L}$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.`,
       given: {
         p: { value: pKPa, unit: "kPa", symbol: "p", labelUz: "Gaz bosimi" },
         V1: { value: v1L, unit: "L", symbol: "V_1", labelUz: "Boshlang‘ich hajm" },
@@ -1248,16 +1197,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
       stepByStepSolution: [
-        `1. SI birliklariga o‘tkazamiz: p = ${pKPa} \\times 10^3 Pa, \\Delta V = (${v2L} - ${v1L}) \\times 10^{-3} m^3 = ${(v2L - v1L).toFixed(1)} \\times 10^{-3} m^3.`,
-        `2. A = p \\cdot \\Delta V = (${pKPa} \\times 10^3) \\times [${(v2L - v1L).toFixed(1)} \\times 10^{-3}] = ${workJ} J.`,
+        `1. SI da: $p = ${pKPa} \\times 10^3$ Pa, $\\Delta V = (${v2L} - ${v1L}) \\times 10^{-3} \\text{ m}^3$.`,
+        `2. $A = p \\cdot \\Delta V = (${pKPa} \\times 10^3) \\times [${(v2L - v1L).toFixed(1)} \\times 10^{-3}] = ${workJ}$ J.`,
       ],
       hints: ["Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."],
       simulationPresetId: "therm-02",
     };
   } else if (subType === 3) {
-    // Van der Waals critical temperature
-    const a = 0.137; // N2 a parameter
-    const b = 0.0000387; // N2 b parameter
+    const a = 0.137;
+    const b = 0.0000387;
     const tcK = roundTo((8 * a) / (27 * CODATA.R * b), 2);
 
     prob = {
@@ -1267,7 +1215,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Real gazlar va Van-der-Vaals kritik parametrlari",
       difficulty: "murakkab",
       title: `Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#${i})`,
-      statement: `Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = ${a} Pa·m⁶/mol² va b = ${b} m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).`,
+      statement: `Azot gazi uchun Van-der-Vaals konstantalari $a = ${a} \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = ${b} \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).`,
       given: {
         a: { value: a, unit: "Pa·m⁶/mol²", symbol: "a", labelUz: "Ichki bosim tuzatmasi" },
         b: { value: b, unit: "m³/mol", symbol: "b", labelUz: "Molekulalar xususiy hajmi" },
@@ -1279,19 +1227,16 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "T_c = \\frac{8a}{27 R b}",
       stepByStepSolution: [
-        `1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.`,
-        `2. Surati: 8 \\times ${a} = ${(8 * a).toFixed(4)}.`,
-        `3. Maxraji: 27 \\times 8.314 \\times ${b} = ${(27 * CODATA.R * b).toFixed(6)}.`,
-        `4. T_c = \\frac{${(8 * a).toFixed(4)}}{${(27 * CODATA.R * b).toFixed(6)}} = ${tcK} K.`,
+        `1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.`,
+        `2. $T_c = \\frac{8 \\times ${a}}{27 \\times 8.314 \\times ${b}} = ${tcK}$ K.`,
       ],
       hints: ["Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."],
       simulationPresetId: "therm-10",
     };
   } else {
-    // Thermal conduction Fourier
-    const k = roundTo(1.2 + (i % 6) * 0.2, 2); // glass / brick
+    const k = roundTo(1.2 + (i % 6) * 0.2, 2);
     const area = roundTo(2.0 + (i % 8) * 0.5, 1);
-    const thickM = roundTo(0.005 + (i % 5) * 0.002, 4); // mm to m
+    const thickM = roundTo(0.005 + (i % 5) * 0.002, 4);
     const dt = 15 + (i % 10) * 2;
     const heatFlowW = roundTo((k * area * dt) / thickM, 1);
 
@@ -1302,7 +1247,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Issiqlik o‘tkazuvchanlik va Furye qonuni",
       difficulty: "o'rta",
       title: `Oyna orqali statsionar issiqlik oqimi (#${i})`,
-      statement: `Qalinligi d = ${(thickM * 1000).toFixed(1)} mm va yuzi S = ${area} m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = ${dt} °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = ${k} W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.`,
+      statement: `Qalinligi $d = ${(thickM * 1000).toFixed(1)}$ mm va yuzi $S = ${area}$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = ${dt}$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = ${k}$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.`,
       given: {
         k: { value: k, unit: "W/(m·K)", symbol: "k", labelUz: "Issiqlik o‘tkazuvchanlik" },
         S: { value: area, unit: "m²", symbol: "S", labelUz: "Yuzasi" },
@@ -1316,8 +1261,8 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
       stepByStepSolution: [
-        `1. Qalinlikni metrga o‘tkazamiz: d = ${thickM} m.`,
-        `2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{${k} \\times ${area} \\times ${dt}}{${thickM}} = ${heatFlowW} W.`,
+        `1. Metrga o‘tkazamiz: $d = ${thickM}$ m.`,
+        `2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{${k} \\times ${area} \\times ${dt}}{${thickM}} = ${heatFlowW}$ W.`,
       ],
       hints: ["Harorat gradiyenti d/Delta T bilan ifodalanadi."],
       simulationPresetId: "therm-16",
@@ -1336,9 +1281,8 @@ for (let i = 1; i <= 50; i++) {
   let prob;
 
   if (subType === 0) {
-    // Photoelectric effect stopping potential
     const lambdaNm = roundTo(250 + (i % 15) * 15, 0);
-    const workFnEv = roundTo(2.2 + (i % 6) * 0.2, 2); // e.g. Potassium / Sodium
+    const workFnEv = roundTo(2.2 + (i % 6) * 0.2, 2);
     const photonEnergyEv = (CODATA.h * CODATA.c) / (lambdaNm * 1e-9 * CODATA.e);
     const stopV = roundTo(Math.max(0, photonEnergyEv - workFnEv), 3);
 
@@ -1349,7 +1293,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Tashqi fotoeffekt va tutuvchi potensial",
       difficulty: "o'rta",
       title: `Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#${i})`,
-      statement: `Chiqish ishi A = ${workFnEv} eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = ${lambdaNm} nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).`,
+      statement: `Chiqish ishi $A = ${workFnEv}$ eV bo‘lgan metall sirtiga $\\lambda = ${lambdaNm}$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).`,
       given: {
         lambda: { value: lambdaNm, unit: "nm", symbol: "\\lambda", labelUz: "Foton to‘lqin uzunligi" },
         A: { value: workFnEv, unit: "eV", symbol: "A", labelUz: "Chiqish ishi" },
@@ -1361,19 +1305,17 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
       stepByStepSolution: [
-        `1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{${lambdaNm}} = ${photonEnergyEv.toFixed(3)} eV.`,
-        `2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.`,
-        `3. e U_0 = ${photonEnergyEv.toFixed(3)} - ${workFnEv} = ${stopV} eV.`,
-        `4. Elektron zaryadiga bo‘lganda: U_0 = ${stopV} V.`,
+        `1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{${lambdaNm}} = ${photonEnergyEv.toFixed(3)}$ eV.`,
+        `2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = ${photonEnergyEv.toFixed(3)} - ${workFnEv} = ${stopV}$ eV.`,
+        `3. Tutuvchi potensial: $U_0 = ${stopV}$ V.`,
       ],
       hints: ["Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."],
       simulationPresetId: "atom-01",
     };
   } else if (subType === 1) {
-    // Compton Scattering wavelength shift
     const thetaDeg = 60 + ((i * 12) % 120);
     const thetaRad = (thetaDeg * Math.PI) / 180;
-    const lambdaC = 2.426; // picometers
+    const lambdaC = 2.426;
     const deltaLambdaPm = roundTo(lambdaC * (1 - Math.cos(thetaRad)), 3);
 
     prob = {
@@ -1383,7 +1325,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Kompton effekti va to‘lqin uzunligi siljishi",
       difficulty: "o'rta",
       title: `Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#${i})`,
-      statement: `Rentgen fotoni erkin tinch turgan elektrondan \\theta = ${thetaDeg}° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.`,
+      statement: `Rentgen fotoni tinch turgan elektrondan $\\theta = ${thetaDeg}^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.`,
       given: {
         theta: { value: thetaDeg, unit: "°", symbol: "\\theta", labelUz: "Sochilish burchagi" },
         lambda_C: { value: 2.426, unit: "pm", symbol: "\\lambda_C", labelUz: "Kompton to‘lqin uzunligi" },
@@ -1395,17 +1337,15 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
       stepByStepSolution: [
-        `1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).`,
-        `2. \\cos(${thetaDeg}°) = ${Math.cos(thetaRad).toFixed(4)}.`,
-        `3. 1 - \\cos(${thetaDeg}°) = ${(1 - Math.cos(thetaRad)).toFixed(4)}.`,
-        `4. \\Delta\\lambda = 2.426 \\times ${(1 - Math.cos(thetaRad)).toFixed(4)} = ${deltaLambdaPm} pm.`,
+        `1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.`,
+        `2. $\\cos(${thetaDeg}^\\circ) = ${Math.cos(thetaRad).toFixed(4)}$.`,
+        `3. $\\Delta\\lambda = 2.426 \\times (1 - ${Math.cos(thetaRad).toFixed(4)}) = ${deltaLambdaPm}$ pm.`,
       ],
       hints: ["Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."],
       simulationPresetId: "atom-02",
     };
   } else if (subType === 2) {
-    // Bohr model Balmer line
-    const n2 = 3 + (i % 4); // 3 (H-alpha), 4 (H-beta), 5 (H-gamma), 6 (H-delta)
+    const n2 = 3 + (i % 4);
     const invL = CODATA.rydberg_m * (1 / 4 - 1 / (n2 * n2));
     const lamNm = roundTo((1 / invL) * 1e9, 2);
 
@@ -1416,7 +1356,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
       difficulty: "o'rta",
       title: `Vodorod atomida n = ${n2} dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#${i})`,
-      statement: `Vodorod atomidagi elektron n_2 = ${n2} statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).`,
+      statement: `Vodorod atomidagi elektron $n_2 = ${n2}$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).`,
       given: {
         n1: { value: 2, unit: "", symbol: "n_1", labelUz: "Quyi pog‘ona" },
         n2: { value: n2, unit: "", symbol: "n_2", labelUz: "Yuqori pog‘ona" },
@@ -1429,16 +1369,14 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.0,
       formulaLatex: "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
       stepByStepSolution: [
-        `1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{${n2}^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{${n2 * n2}}\\right).`,
-        `2. Qavs ichi: \\frac{1}{4} - \\frac{1}{${n2 * n2}} = ${(1 / 4 - 1 / (n2 * n2)).toFixed(4)}.`,
-        `3. 1/\\lambda = 1.0974 \\times 10^7 \\times ${(1 / 4 - 1 / (n2 * n2)).toFixed(4)} = ${invL.toExponential(4)} m^{-1}.`,
-        `4. \\lambda = \\frac{1}{${invL.toExponential(4)}} = ${(1 / invL).toExponential(4)} m = ${lamNm} nm.`,
+        `1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{${n2}^2}\\right)$.`,
+        `2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times ${(1 / 4 - 1 / (n2 * n2)).toFixed(4)} = ${invL.toExponential(4)} \\text{ m}^{-1}$.`,
+        `3. $\\lambda = ${(1 / invL).toExponential(4)}$ m = ${lamNm}$ nm.`,
       ],
       hints: ["Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."],
       simulationPresetId: "atom-04",
     };
   } else if (subType === 3) {
-    // Radioactive decay remaining fraction
     const tHalfDays = roundTo(5 + (i % 10) * 2, 1);
     const tPassedDays = roundTo(tHalfDays * (1.5 + (i % 4) * 0.5), 1);
     const lambda = Math.LN2 / tHalfDays;
@@ -1451,7 +1389,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
       difficulty: "oson",
       title: `Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#${i})`,
-      statement: `Yarim yemirilish davri T_{1/2} = ${tHalfDays} kun bo‘lgan radioaktiv izotop berilgan. t = ${tPassedDays} kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?`,
+      statement: `Yarim yemirilish davri $T_{1/2} = ${tHalfDays}$ kun bo‘lgan radioaktiv izotop berilgan. $t = ${tPassedDays}$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?`,
       given: {
         T_half: { value: tHalfDays, unit: "kun", symbol: "T_{1/2}", labelUz: "Yarim yemirilish davri" },
         t: { value: tPassedDays, unit: "kun", symbol: "t", labelUz: "O‘tgan vaqt" },
@@ -1461,23 +1399,20 @@ for (let i = 1; i <= 50; i++) {
       targetUnit: "%",
       correctAnswer: remainingPct,
       tolerancePct: 1.0,
-      formulaLatex: "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+      formulaLatex: "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
       stepByStepSolution: [
-        `1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{${tPassedDays}}{${tHalfDays}} = ${(tPassedDays / tHalfDays).toFixed(2)}.`,
-        `2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-${(tPassedDays / tHalfDays).toFixed(2)}} = ${(remainingPct / 100).toFixed(4)}.`,
+        `1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{${tPassedDays}}{${tHalfDays}} = ${(tPassedDays / tHalfDays).toFixed(2)}$.`,
+        `2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-${(tPassedDays / tHalfDays).toFixed(2)}} = ${(remainingPct / 100).toFixed(4)}$.`,
         `3. Foizda: ${remainingPct}\\%.`,
       ],
       hints: ["Har bir yarim yemirilish davrida qolgan yadrolar soni 2 barobar kamayadi."],
       simulationPresetId: "atom-07",
     };
   } else {
-    // Nuclear binding energy per nucleon (Iron-56 or Helium-4)
     const isHe4 = i % 2 === 0;
     const nucleus = isHe4
       ? { name: "Geliy-4 (^4He)", Z: 2, A: 4, massU: 4.001506 }
       : { name: "Temir-56 (^{56}Fe)", Z: 26, A: 56, massU: 55.934937 };
-    const massDefectU = (nucleus.Z * CODATA.m_p + (nucleus.A - nucleus.Z) * CODATA.m_n) / 1.6605390666e-27 - nucleus.massU;
-    // exact tabulated mass defects
     const ebPerNucleonMev = isHe4 ? 7.07 : 8.79;
 
     prob = {
@@ -1487,7 +1422,7 @@ for (let i = 1; i <= 50; i++) {
       topic: "Massa defekti va solishtirma bog‘lanish energiyasi",
       difficulty: "murakkab",
       title: `${nucleus.name} yadrosining solishtirma bog‘lanish energiyasi (#${i})`,
-      statement: `${nucleus.name} yadrosining tinchlikdagi massasi M = ${nucleus.massU} u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.`,
+      statement: `${nucleus.name} yadrosining massasi $M = ${nucleus.massU}$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.`,
       given: {
         M_nuclide: { value: nucleus.massU, unit: "u", symbol: "M", labelUz: "Yadro massasi" },
         Z: { value: nucleus.Z, unit: "", symbol: "Z", labelUz: "Protonlar soni" },
@@ -1500,10 +1435,10 @@ for (let i = 1; i <= 50; i++) {
       tolerancePct: 1.5,
       formulaLatex: "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
       stepByStepSolution: [
-        `1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = ${nucleus.Z} \\times 1.007276 + ${nucleus.A - nucleus.Z} \\times 1.008665 = ${(nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665).toFixed(6)} u.`,
-        `2. Massa defekti: \\Delta m = M_{tarkib} - ${nucleus.massU} = ${(nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665 - nucleus.massU).toFixed(6)} u.`,
-        `3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = ${( (nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665 - nucleus.massU) * 931.494 ).toFixed(2)} MeV.`,
-        `4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{${nucleus.A}} = ${ebPerNucleonMev} MeV/nuklon.`,
+        `1. Tarkibiy nuklonlar massalari: $M_{tarkib} = ${nucleus.Z} \\times 1.007276 + ${nucleus.A - nucleus.Z} \\times 1.008665 = ${(nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665).toFixed(6)}$ u.`,
+        `2. Massa defekti: $\\Delta m = M_{tarkib} - ${nucleus.massU} = ${(nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665 - nucleus.massU).toFixed(6)}$ u.`,
+        `3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = ${( (nucleus.Z * 1.007276 + (nucleus.A - nucleus.Z) * 1.008665 - nucleus.massU) * 931.494 ).toFixed(2)}$ MeV.`,
+        `4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{${nucleus.A}} = ${ebPerNucleonMev}$ MeV/nuklon.`,
       ],
       hints: ["Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."],
       simulationPresetId: "atom-10",
@@ -1607,9 +1542,9 @@ export function checkProblemAnswer(problemId: string, userAnswer: number): {
 
   let feedbackUz = "";
   if (isCorrect) {
-    feedbackUz = \`Ajoyib! Javobingiz to‘g‘ri (\${userAnswer} \${prob.targetUnit}). Xatolik \${errorPct.toFixed(2)}% (ruxsat etilgan: ±\${prob.tolerancePct}%).\`;
+    feedbackUz = \`Ajoyib! Javobingiz to‘g‘ri (\${userAnswer} \${prob.targetUnit}). Xatolik \${errorPct.toFixed(2)}% (ruxsat etilgan chegara: ±\${prob.tolerancePct}%).\`;
   } else {
-    feedbackUz = \`Noto‘g‘ri yoki noaniq javob (\${userAnswer} \${prob.targetUnit}). Kutilgan javob: \${prob.correctAnswer} \${prob.targetUnit}. Xatolik: \${errorPct.toFixed(2)}% (ruxsat: ±\${prob.tolerancePct}%).\`;
+    feedbackUz = \`Noto‘g‘ri javob (\${userAnswer} \${prob.targetUnit}). Qaytadan hisoblab ko‘ring yoki formulalardan foydalaning (Ruxsat etilgan xatolik chegarasi: ±\${prob.tolerancePct}%).\`;
   }
 
   return {
@@ -1624,4 +1559,4 @@ export function checkProblemAnswer(problemId: string, userAnswer: number): {
 `;
 
 fs.writeFileSync(path.join(__dirname, "../src/lib/physics/problems.ts"), fileContent, "utf-8");
-console.log(`Successfully generated ${problems.length} physics problems in src/lib/physics/problems.ts`);
+console.log(`Successfully regenerated ${problems.length} physics problems in src/lib/physics/problems.ts`);

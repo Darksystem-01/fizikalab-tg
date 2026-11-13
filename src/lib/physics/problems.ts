@@ -62,7 +62,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "oson",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#1)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 6 marta o‘lchadi: [24.76, 24.82, 24.79, 24.83, 24.8, 24.82] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 6$ marta o‘lchadi: $[24.76, 24.82, 24.79, 24.83, 24.8, 24.82]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 6,
@@ -84,10 +84,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 148.820 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{148.820}{6} = 24.8033 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0258 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0105 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 148.820$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{148.820}{6} = 24.8033$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00333}{5}} = 0.0258$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0105$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -102,7 +102,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#2)",
-    "statement": "Tsilindrsimon namuna massasi m = 125 ± 0.05 g, diametri d = 21.6 ± 0.02 mm va balandligi h = 47.4 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 125 \\pm 0.05$ g, diametri $d = 21.6 \\pm 0.02$ mm va balandligi $h = 47.4 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 125,
@@ -130,14 +130,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{125} = 0.040\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{21.6} = 0.185\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{47.4} = 0.105\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.22\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{125} = 0.040\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.185\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{47.4} = 0.105\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.04^2 + 0.19^2 + 0.11^2} = 0.22\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -148,7 +148,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#3)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 44.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 2.55 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 44.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 2.55$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 44.5,
@@ -170,13 +170,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(44.5)^2}{6 \\cdot 2.55} = \\frac{1980.3}{15.300} = 129.43 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.275 mm.",
-      "4. To‘liq egrilik radiusi: R = 130.7 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{1980.3}{15.300} = 129.43$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.275$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 129.43 + 1.275 = 130.7$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -187,7 +187,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#4)",
-    "statement": "Shtangensirkulning asosiy shkalasi 22 mm ni ko‘rsatmoqda. Nonius shkalasining 12-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi +0.05 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 22$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 12$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0.05$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 22,
@@ -221,9 +221,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 12 \\times 0.05 = 0.60 mm.",
-      "2. Xom o‘lchov: x_{xom} = 22 + 0.60 = 22.60 mm.",
-      "3. Nol xatoligini ayiramiz: x = 22.60 - 0.05 = 22.55 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 12 \\times 0.05 = 0.60$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 22 + 0.60 = 22.60$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 22.60 - 0.05 = 22.55$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -237,7 +237,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#5)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1100 mm. Laboratoriya harorati 40 °C ga ko‘tarilganda (\\Delta T = 20 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1100$ mm. Laboratoriya harorati $40 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 20$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1100,
@@ -265,9 +265,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1100 \\times 1.2 \\times 10^{-5} \\times 20.",
-      "3. Hisoblash natijasi: \\Delta L = 0.264 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1100 \\times (1.2 \\times 10^{-5}) \\times 20$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.264$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -281,7 +281,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "oson",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#6)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 5 marta o‘lchadi: [26.26, 26.32, 26.29, 26.33, 26.3] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 5$ marta o‘lchadi: $[26.26, 26.32, 26.29, 26.33, 26.3]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 5,
@@ -303,10 +303,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 131.500 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{131.500}{5} = 26.3000 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0274 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0123 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 131.500$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{131.500}{5} = 26.3000$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00300}{4}} = 0.0274$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0123$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -321,7 +321,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#7)",
-    "statement": "Tsilindrsimon namuna massasi m = 137.5 ± 0.05 g, diametri d = 25.6 ± 0.02 mm va balandligi h = 53.4 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 137.5 \\pm 0.05$ g, diametri $d = 25.6 \\pm 0.02$ mm va balandligi $h = 53.4 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 137.5,
@@ -349,14 +349,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{137.5} = 0.036\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{25.6} = 0.156\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{53.4} = 0.094\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.19\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{137.5} = 0.036\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.156\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{53.4} = 0.094\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.04^2 + 0.16^2 + 0.09^2} = 0.19\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -367,7 +367,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#8)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 52 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 3.3 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 52$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 3.3$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 52,
@@ -389,13 +389,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(52)^2}{6 \\cdot 3.3} = \\frac{2704.0}{19.800} = 136.57 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.650 mm.",
-      "4. To‘liq egrilik radiusi: R = 138.22 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{2704.0}{19.800} = 136.57$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.650$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 136.57 + 1.650 = 138.22$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -406,7 +406,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#9)",
-    "statement": "Shtangensirkulning asosiy shkalasi 27 mm ni ko‘rsatmoqda. Nonius shkalasining 7-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 27$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 7$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 27,
@@ -440,9 +440,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 7 \\times 0.05 = 0.35 mm.",
-      "2. Xom o‘lchov: x_{xom} = 27 + 0.35 = 27.35 mm.",
-      "3. Nol xatoligini ayiramiz: x = 27.35 - 0 = 27.35 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 7 \\times 0.05 = 0.35$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 27 + 0.35 = 27.35$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 27.35 - 0 = 27.35$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -456,7 +456,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#10)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1200 mm. Laboratoriya harorati 45 °C ga ko‘tarilganda (\\Delta T = 25 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1200$ mm. Laboratoriya harorati $45 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 25$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1200,
@@ -484,9 +484,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1200 \\times 1.2 \\times 10^{-5} \\times 25.",
-      "3. Hisoblash natijasi: \\Delta L = 0.36 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1200 \\times (1.2 \\times 10^{-5}) \\times 25$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.36$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -500,7 +500,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "oson",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#11)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 10 marta o‘lchadi: [27.76, 27.82, 27.79, 27.83, 27.8, 27.82, 27.77, 27.81, 27.84, 27.78] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 10$ marta o‘lchadi: $[27.76, 27.82, 27.79, 27.83, 27.8, 27.82, 27.77, 27.81, 27.84, 27.78]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 10,
@@ -522,10 +522,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 278.020 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{278.020}{10} = 27.8020 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0266 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0084 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 278.020$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{278.020}{10} = 27.8020$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00636}{9}} = 0.0266$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0084$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -540,7 +540,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#12)",
-    "statement": "Tsilindrsimon namuna massasi m = 150 ± 0.05 g, diametri d = 21.6 ± 0.02 mm va balandligi h = 49.8 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 150 \\pm 0.05$ g, diametri $d = 21.6 \\pm 0.02$ mm va balandligi $h = 49.8 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 150,
@@ -568,14 +568,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{150} = 0.033\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{21.6} = 0.185\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{49.8} = 0.100\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.21\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{150} = 0.033\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.185\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{49.8} = 0.100\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.03^2 + 0.19^2 + 0.10^2} = 0.21\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -586,7 +586,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#13)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 59.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 2.55 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 59.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 2.55$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 59.5,
@@ -608,13 +608,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(59.5)^2}{6 \\cdot 2.55} = \\frac{3540.3}{15.300} = 231.39 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.275 mm.",
-      "4. To‘liq egrilik radiusi: R = 232.66 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{3540.3}{15.300} = 231.39$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.275$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 231.39 + 1.275 = 232.66$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -625,7 +625,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#14)",
-    "statement": "Shtangensirkulning asosiy shkalasi 32 mm ni ko‘rsatmoqda. Nonius shkalasining 2-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 32$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 2$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 32,
@@ -659,9 +659,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 2 \\times 0.05 = 0.10 mm.",
-      "2. Xom o‘lchov: x_{xom} = 32 + 0.10 = 32.10 mm.",
-      "3. Nol xatoligini ayiramiz: x = 32.10 - 0 = 32.1 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 2 \\times 0.05 = 0.10$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 32 + 0.10 = 32.10$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 32.10 - 0 = 32.1$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -675,7 +675,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#15)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1300 mm. Laboratoriya harorati 38 °C ga ko‘tarilganda (\\Delta T = 18 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1300$ mm. Laboratoriya harorati $38 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 18$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1300,
@@ -703,9 +703,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1300 \\times 1.2 \\times 10^{-5} \\times 18.",
-      "3. Hisoblash natijasi: \\Delta L = 0.2808 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1300 \\times (1.2 \\times 10^{-5}) \\times 18$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.2808$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -719,7 +719,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "o'rta",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#16)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 9 marta o‘lchadi: [29.26, 29.32, 29.29, 29.33, 29.3, 29.32, 29.27, 29.31, 29.34] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 9$ marta o‘lchadi: $[29.26, 29.32, 29.29, 29.33, 29.3, 29.32, 29.27, 29.31, 29.34]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 9,
@@ -741,10 +741,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 263.740 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{263.740}{9} = 29.3044 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0270 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0090 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 263.740$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{263.740}{9} = 29.3044$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00582}{8}} = 0.0270$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0090$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -759,7 +759,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#17)",
-    "statement": "Tsilindrsimon namuna massasi m = 162.5 ± 0.05 g, diametri d = 25.6 ± 0.02 mm va balandligi h = 46.2 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 162.5 \\pm 0.05$ g, diametri $d = 25.6 \\pm 0.02$ mm va balandligi $h = 46.2 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 162.5,
@@ -787,14 +787,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{162.5} = 0.031\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{25.6} = 0.156\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{46.2} = 0.108\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.19\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{162.5} = 0.031\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.156\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{46.2} = 0.108\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.03^2 + 0.16^2 + 0.11^2} = 0.19\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -805,7 +805,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#18)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 44.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 3.3 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 44.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 3.3$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 44.5,
@@ -827,13 +827,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(44.5)^2}{6 \\cdot 3.3} = \\frac{1980.3}{19.800} = 100.01 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.650 mm.",
-      "4. To‘liq egrilik radiusi: R = 101.66 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{1980.3}{19.800} = 100.01$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.650$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 100.01 + 1.650 = 101.66$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -844,7 +844,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#19)",
-    "statement": "Shtangensirkulning asosiy shkalasi 37 mm ni ko‘rsatmoqda. Nonius shkalasining 17-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 37$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 17$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 37,
@@ -878,9 +878,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 17 \\times 0.05 = 0.85 mm.",
-      "2. Xom o‘lchov: x_{xom} = 37 + 0.85 = 37.85 mm.",
-      "3. Nol xatoligini ayiramiz: x = 37.85 - 0 = 37.85 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 17 \\times 0.05 = 0.85$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 37 + 0.85 = 37.85$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 37.85 - 0 = 37.85$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -894,7 +894,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#20)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1400 mm. Laboratoriya harorati 43 °C ga ko‘tarilganda (\\Delta T = 23 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1400$ mm. Laboratoriya harorati $43 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 23$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1400,
@@ -922,9 +922,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1400 \\times 1.2 \\times 10^{-5} \\times 23.",
-      "3. Hisoblash natijasi: \\Delta L = 0.3864 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1400 \\times (1.2 \\times 10^{-5}) \\times 23$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.3864$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -938,7 +938,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "o'rta",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#21)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 8 marta o‘lchadi: [30.76, 30.82, 30.79, 30.83, 30.8, 30.82, 30.77, 30.81] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 8$ marta o‘lchadi: $[30.76, 30.82, 30.79, 30.83, 30.8, 30.82, 30.77, 30.81]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 8,
@@ -960,10 +960,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 246.400 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{246.400}{8} = 30.8000 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0251 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0089 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 246.400$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{246.400}{8} = 30.8000$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00440}{7}} = 0.0251$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0089$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -978,7 +978,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#22)",
-    "statement": "Tsilindrsimon namuna massasi m = 175 ± 0.05 g, diametri d = 21.6 ± 0.02 mm va balandligi h = 52.2 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 175 \\pm 0.05$ g, diametri $d = 21.6 \\pm 0.02$ mm va balandligi $h = 52.2 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 175,
@@ -1006,14 +1006,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{175} = 0.029\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{21.6} = 0.185\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{52.2} = 0.096\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.21\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{175} = 0.029\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.185\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{52.2} = 0.096\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.03^2 + 0.19^2 + 0.10^2} = 0.21\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -1024,7 +1024,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#23)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 52 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 2.55 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 52$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 2.55$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 52,
@@ -1046,13 +1046,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(52)^2}{6 \\cdot 2.55} = \\frac{2704.0}{15.300} = 176.73 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.275 mm.",
-      "4. To‘liq egrilik radiusi: R = 178.01 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{2704.0}{15.300} = 176.73$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.275$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 176.73 + 1.275 = 178.01$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -1063,7 +1063,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#24)",
-    "statement": "Shtangensirkulning asosiy shkalasi 42 mm ni ko‘rsatmoqda. Nonius shkalasining 12-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi +0.05 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 42$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 12$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0.05$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 42,
@@ -1097,9 +1097,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 12 \\times 0.05 = 0.60 mm.",
-      "2. Xom o‘lchov: x_{xom} = 42 + 0.60 = 42.60 mm.",
-      "3. Nol xatoligini ayiramiz: x = 42.60 - 0.05 = 42.55 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 12 \\times 0.05 = 0.60$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 42 + 0.60 = 42.60$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 42.60 - 0.05 = 42.55$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -1113,7 +1113,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#25)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1500 mm. Laboratoriya harorati 36 °C ga ko‘tarilganda (\\Delta T = 16 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1500$ mm. Laboratoriya harorati $36 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 16$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1500,
@@ -1141,9 +1141,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1500 \\times 1.2 \\times 10^{-5} \\times 16.",
-      "3. Hisoblash natijasi: \\Delta L = 0.288 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1500 \\times (1.2 \\times 10^{-5}) \\times 16$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.288$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -1157,7 +1157,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "o'rta",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#26)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 7 marta o‘lchadi: [32.26, 32.32, 32.29, 32.33, 32.3, 32.32, 32.27] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 7$ marta o‘lchadi: $[32.26, 32.32, 32.29, 32.33, 32.3, 32.32, 32.27]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 7,
@@ -1179,10 +1179,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 226.090 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{226.090}{7} = 32.2986 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0267 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0101 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 226.090$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{226.090}{7} = 32.2986$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00429}{6}} = 0.0267$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0101$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -1197,7 +1197,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#27)",
-    "statement": "Tsilindrsimon namuna massasi m = 187.5 ± 0.05 g, diametri d = 25.6 ± 0.02 mm va balandligi h = 48.6 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 187.5 \\pm 0.05$ g, diametri $d = 25.6 \\pm 0.02$ mm va balandligi $h = 48.6 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 187.5,
@@ -1225,14 +1225,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{187.5} = 0.027\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{25.6} = 0.156\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{48.6} = 0.103\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.19\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{187.5} = 0.027\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.156\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{48.6} = 0.103\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.03^2 + 0.16^2 + 0.10^2} = 0.19\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -1243,7 +1243,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#28)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 59.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 3.3 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 59.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 3.3$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 59.5,
@@ -1265,13 +1265,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(59.5)^2}{6 \\cdot 3.3} = \\frac{3540.3}{19.800} = 178.80 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.650 mm.",
-      "4. To‘liq egrilik radiusi: R = 180.45 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{3540.3}{19.800} = 178.80$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.650$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 178.80 + 1.650 = 180.45$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -1282,7 +1282,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#29)",
-    "statement": "Shtangensirkulning asosiy shkalasi 22 mm ni ko‘rsatmoqda. Nonius shkalasining 7-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 22$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 7$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 22,
@@ -1316,9 +1316,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 7 \\times 0.05 = 0.35 mm.",
-      "2. Xom o‘lchov: x_{xom} = 22 + 0.35 = 22.35 mm.",
-      "3. Nol xatoligini ayiramiz: x = 22.35 - 0 = 22.35 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 7 \\times 0.05 = 0.35$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 22 + 0.35 = 22.35$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 22.35 - 0 = 22.35$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -1332,7 +1332,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#30)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1600 mm. Laboratoriya harorati 41 °C ga ko‘tarilganda (\\Delta T = 21 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1600$ mm. Laboratoriya harorati $41 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 21$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1600,
@@ -1360,9 +1360,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1600 \\times 1.2 \\times 10^{-5} \\times 21.",
-      "3. Hisoblash natijasi: \\Delta L = 0.4032 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1600 \\times (1.2 \\times 10^{-5}) \\times 21$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.4032$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -1376,7 +1376,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "o'rta",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#31)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 6 marta o‘lchadi: [33.76, 33.82, 33.79, 33.83, 33.8, 33.82] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 6$ marta o‘lchadi: $[33.76, 33.82, 33.79, 33.83, 33.8, 33.82]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 6,
@@ -1398,10 +1398,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 202.820 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{202.820}{6} = 33.8033 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0258 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0105 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 202.820$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{202.820}{6} = 33.8033$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00333}{5}} = 0.0258$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0105$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -1416,7 +1416,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#32)",
-    "statement": "Tsilindrsimon namuna massasi m = 200 ± 0.05 g, diametri d = 21.6 ± 0.02 mm va balandligi h = 45 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 200 \\pm 0.05$ g, diametri $d = 21.6 \\pm 0.02$ mm va balandligi $h = 45 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 200,
@@ -1444,14 +1444,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{200} = 0.025\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{21.6} = 0.185\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{45} = 0.111\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.22\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{200} = 0.025\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.185\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{45} = 0.111\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.03^2 + 0.19^2 + 0.11^2} = 0.22\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -1462,7 +1462,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#33)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 44.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 2.55 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 44.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 2.55$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 44.5,
@@ -1484,13 +1484,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(44.5)^2}{6 \\cdot 2.55} = \\frac{1980.3}{15.300} = 129.43 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.275 mm.",
-      "4. To‘liq egrilik radiusi: R = 130.7 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{1980.3}{15.300} = 129.43$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.275$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 129.43 + 1.275 = 130.7$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -1501,7 +1501,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#34)",
-    "statement": "Shtangensirkulning asosiy shkalasi 27 mm ni ko‘rsatmoqda. Nonius shkalasining 2-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 27$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 2$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 27,
@@ -1535,9 +1535,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 2 \\times 0.05 = 0.10 mm.",
-      "2. Xom o‘lchov: x_{xom} = 27 + 0.10 = 27.10 mm.",
-      "3. Nol xatoligini ayiramiz: x = 27.10 - 0 = 27.1 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 2 \\times 0.05 = 0.10$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 27 + 0.10 = 27.10$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 27.10 - 0 = 27.1$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -1551,7 +1551,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#35)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1700 mm. Laboratoriya harorati 46 °C ga ko‘tarilganda (\\Delta T = 26 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1700$ mm. Laboratoriya harorati $46 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 26$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1700,
@@ -1579,9 +1579,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1700 \\times 1.2 \\times 10^{-5} \\times 26.",
-      "3. Hisoblash natijasi: \\Delta L = 0.5304 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1700 \\times (1.2 \\times 10^{-5}) \\times 26$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.5304$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -1595,7 +1595,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "murakkab",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#36)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 5 marta o‘lchadi: [35.26, 35.32, 35.29, 35.33, 35.3] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 5$ marta o‘lchadi: $[35.26, 35.32, 35.29, 35.33, 35.3]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 5,
@@ -1617,10 +1617,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 176.500 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{176.500}{5} = 35.3000 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0274 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0123 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 176.500$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{176.500}{5} = 35.3000$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00300}{4}} = 0.0274$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0123$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -1635,7 +1635,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#37)",
-    "statement": "Tsilindrsimon namuna massasi m = 212.5 ± 0.05 g, diametri d = 25.6 ± 0.02 mm va balandligi h = 51 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 212.5 \\pm 0.05$ g, diametri $d = 25.6 \\pm 0.02$ mm va balandligi $h = 51 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 212.5,
@@ -1663,14 +1663,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{212.5} = 0.024\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{25.6} = 0.156\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{51} = 0.098\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.19\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{212.5} = 0.024\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.156\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{51} = 0.098\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.02^2 + 0.16^2 + 0.10^2} = 0.19\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -1681,7 +1681,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#38)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 52 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 3.3 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 52$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 3.3$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 52,
@@ -1703,13 +1703,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(52)^2}{6 \\cdot 3.3} = \\frac{2704.0}{19.800} = 136.57 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.650 mm.",
-      "4. To‘liq egrilik radiusi: R = 138.22 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{2704.0}{19.800} = 136.57$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.650$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 136.57 + 1.650 = 138.22$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -1720,7 +1720,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#39)",
-    "statement": "Shtangensirkulning asosiy shkalasi 32 mm ni ko‘rsatmoqda. Nonius shkalasining 17-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 32$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 17$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 32,
@@ -1754,9 +1754,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 17 \\times 0.05 = 0.85 mm.",
-      "2. Xom o‘lchov: x_{xom} = 32 + 0.85 = 32.85 mm.",
-      "3. Nol xatoligini ayiramiz: x = 32.85 - 0 = 32.85 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 17 \\times 0.05 = 0.85$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 32 + 0.85 = 32.85$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 32.85 - 0 = 32.85$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -1770,7 +1770,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#40)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1800 mm. Laboratoriya harorati 39 °C ga ko‘tarilganda (\\Delta T = 19 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1800$ mm. Laboratoriya harorati $39 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 19$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1800,
@@ -1798,9 +1798,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1800 \\times 1.2 \\times 10^{-5} \\times 19.",
-      "3. Hisoblash natijasi: \\Delta L = 0.4104 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1800 \\times (1.2 \\times 10^{-5}) \\times 19$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.4104$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -1814,7 +1814,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "murakkab",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#41)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 10 marta o‘lchadi: [36.76, 36.82, 36.79, 36.83, 36.8, 36.82, 36.77, 36.81, 36.84, 36.78] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 10$ marta o‘lchadi: $[36.76, 36.82, 36.79, 36.83, 36.8, 36.82, 36.77, 36.81, 36.84, 36.78]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 10,
@@ -1836,10 +1836,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 368.020 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{368.020}{10} = 36.8020 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0266 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0084 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 368.020$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{368.020}{10} = 36.8020$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00636}{9}} = 0.0266$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0084$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -1854,7 +1854,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#42)",
-    "statement": "Tsilindrsimon namuna massasi m = 225 ± 0.05 g, diametri d = 21.6 ± 0.02 mm va balandligi h = 47.4 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 225 \\pm 0.05$ g, diametri $d = 21.6 \\pm 0.02$ mm va balandligi $h = 47.4 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 225,
@@ -1882,14 +1882,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{225} = 0.022\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{21.6} = 0.185\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{47.4} = 0.105\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.21\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{225} = 0.022\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.185\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{47.4} = 0.105\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.02^2 + 0.19^2 + 0.11^2} = 0.21\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -1900,7 +1900,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#43)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 59.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 2.55 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 59.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 2.55$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 59.5,
@@ -1922,13 +1922,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(59.5)^2}{6 \\cdot 2.55} = \\frac{3540.3}{15.300} = 231.39 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.275 mm.",
-      "4. To‘liq egrilik radiusi: R = 232.66 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{3540.3}{15.300} = 231.39$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.275$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 231.39 + 1.275 = 232.66$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -1939,7 +1939,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#44)",
-    "statement": "Shtangensirkulning asosiy shkalasi 37 mm ni ko‘rsatmoqda. Nonius shkalasining 12-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi +0.05 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 37$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 12$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0.05$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 37,
@@ -1973,9 +1973,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 12 \\times 0.05 = 0.60 mm.",
-      "2. Xom o‘lchov: x_{xom} = 37 + 0.60 = 37.60 mm.",
-      "3. Nol xatoligini ayiramiz: x = 37.60 - 0.05 = 37.55 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 12 \\times 0.05 = 0.60$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 37 + 0.60 = 37.60$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 37.60 - 0.05 = 37.55$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -1989,7 +1989,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#45)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 1900 mm. Laboratoriya harorati 44 °C ga ko‘tarilganda (\\Delta T = 24 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 1900$ mm. Laboratoriya harorati $44 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 24$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 1900,
@@ -2017,9 +2017,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 1900 \\times 1.2 \\times 10^{-5} \\times 24.",
-      "3. Hisoblash natijasi: \\Delta L = 0.5472 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 1900 \\times (1.2 \\times 10^{-5}) \\times 24$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.5472$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -2033,7 +2033,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘g‘ridan-to‘g‘ri o‘lchashlar statistikasi",
     "difficulty": "murakkab",
     "title": "Silindr diametrini o‘lchash seriyasining o‘rtacha qiymati va dispersiyasi (#46)",
-    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini 9 marta o‘lchadi: [38.26, 38.32, 38.29, 38.33, 38.3, 38.32, 38.27, 38.31, 38.34] mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati va o‘rtacha kvadratik xatoligi (standart og‘ishi)ni hisoblang.",
+    "statement": "Talaba mikrometr yordamida po‘lat silindr diametrini $n = 9$ marta o‘lchadi: $[38.26, 38.32, 38.29, 38.33, 38.3, 38.32, 38.27, 38.31, 38.34]$ mm. Ushbu o‘lchovlar seriyasining o‘rtacha arifmetik qiymati $\\bar{x}$ va standart og‘ishi $S_x$ ni hisoblang.",
     "given": {
       "n": {
         "value": 9,
@@ -2055,10 +2055,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\bar{x} = \\frac{1}{n} \\sum_{i=1}^n x_i, \\quad S_x = \\sqrt{\\frac{\\sum (x_i - \\bar{x})^2}{n-1}}",
     "stepByStepSolution": [
-      "1. Barcha o‘lchovlar yig‘indisini topamiz: \\sum x_i = 344.740 mm.",
-      "2. O‘rtacha arifmetik qiymat: \\bar{x} = \\frac{344.740}{9} = 38.3044 mm.",
-      "3. O‘lchashlar dispersiyasi va standart og‘ishi: S_x = 0.0270 mm.",
-      "4. O‘rtacha qiymatning standart xatoligi: S_{\\bar{x}} = 0.0090 mm."
+      "1. O‘lchovlar yig‘indisi: $\\sum x_i = 344.740$ mm.",
+      "2. O‘rtacha arifmetik qiymat: $\\bar{x} = \\frac{344.740}{9} = 38.3044$ mm.",
+      "3. Tanlanma standart og‘ishi: $S_x = \\sqrt{\\frac{0.00582}{8}} = 0.0270$ mm.",
+      "4. O‘rtacha qiymatning standart xatoligi: $S_{\\bar{x}} = \\frac{S_x}{\\sqrt{n}} = 0.0090$ mm."
     ],
     "hints": [
       "Barcha o‘lchovlarni qo‘shib, ularning umumiy soniga bo‘ling.",
@@ -2073,7 +2073,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bilvosita o‘lchashlar xatoligi",
     "difficulty": "o'rta",
     "title": "Silindr zichligining nisbiy xatoligini aniqlash (#47)",
-    "statement": "Tsilindrsimon namuna massasi m = 237.5 ± 0.05 g, diametri d = 25.6 ± 0.02 mm va balandligi h = 53.4 ± 0.05 mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi \\varepsilon_\\rho ni foizlarda hisoblang.",
+    "statement": "Tsilindrsimon namuna massasi $m = 237.5 \\pm 0.05$ g, diametri $d = 25.6 \\pm 0.02$ mm va balandligi $h = 53.4 \\pm 0.05$ mm deb o‘lchandi. Silindr zichligining nisbiy xatoligi $\\varepsilon_\\rho$ ni foizlarda hisoblang.",
     "given": {
       "m": {
         "value": 237.5,
@@ -2101,14 +2101,14 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 2,
     "formulaLatex": "\\varepsilon_\\rho = \\sqrt{\\left(\\frac{\\Delta m}{m}\\right)^2 + \\left(2\\frac{\\Delta d}{d}\\right)^2 + \\left(\\frac{\\Delta h}{h}\\right)^2} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Zichlik formulasi: \\rho = \\frac{4m}{\\pi d^2 h}.",
-      "2. Massaning nisbiy xatosi: \\frac{\\Delta m}{m} = \\frac{0.05}{237.5} = 0.021\\%.",
-      "3. Diametrning nisbiy xatosi (kvadrat bo‘lgani uchun 2 ga ko‘paytiriladi): 2 \\cdot \\frac{0.02}{25.6} = 0.156\\%.",
-      "4. Balandlikning nisbiy xatosi: \\frac{\\Delta h}{h} = \\frac{0.05}{53.4} = 0.094\\%.",
-      "5. To‘liq kvadratik xatolik: \\varepsilon_\\rho = 0.18\\%."
+      "1. Zichlik ifodasi: $\\rho = \\frac{4m}{\\pi d^2 h}$.",
+      "2. Massaning nisbiy xatosi: $\\frac{\\Delta m}{m} = \\frac{0.05}{237.5} = 0.021\\%$.",
+      "3. Diametrning nisbiy xatosi (2-daraja bo‘lgani uchun 2 karra olinadi): $2 \\cdot \\frac{\\Delta d}{d} = 0.156\\%$.",
+      "4. Balandlikning nisbiy xatosi: $\\frac{\\Delta h}{h} = \\frac{0.05}{53.4} = 0.094\\%$.",
+      "5. To‘liq nisbiy xatolik: $\\varepsilon_\\rho = \\sqrt{0.02^2 + 0.16^2 + 0.09^2} = 0.18\\%$."
     ],
     "hints": [
-      "Zichlik formulasida diametr 2-darajada turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
+      "Zichlik formulasida diametr kvadratda turgani uchun uning xatoligi 2 barobar ko‘p hisoblanadi."
     ],
     "simulationPresetId": "met-05"
   },
@@ -2119,7 +2119,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Sferometr yordamida egrilik radiusini aniqlash",
     "difficulty": "o'rta",
     "title": "Botiq/qavariq sferik ko‘zgu egrilik radiusini sferometrda topish (#48)",
-    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa l = 44.5 mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi (egrilik balandligi) h = 3.3 mm bo‘lsa, sferik sirtning egrilik radiusi R ni hisoblang.",
+    "statement": "Sferometrning oyoqlari orasidagi o‘rtacha masofa $l = 44.5$ mm, sferik linza yuzasiga tekkanda o‘q shkalasining ko‘rsatkichi $h = 3.3$ mm bo‘lsa, sferik sirtning egrilik radiusi $R$ ni hisoblang.",
     "given": {
       "l": {
         "value": 44.5,
@@ -2141,13 +2141,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\frac{l^2}{6h} + \\frac{h}{2}",
     "stepByStepSolution": [
-      "1. Sferometr formulasi: R = \\frac{l^2}{6h} + \\frac{h}{2}.",
-      "2. Birinchi had: \\frac{(44.5)^2}{6 \\cdot 3.3} = \\frac{1980.3}{19.800} = 100.01 mm.",
-      "3. Ikkinchi had: \\frac{h}{2} = 1.650 mm.",
-      "4. To‘liq egrilik radiusi: R = 101.66 mm."
+      "1. Sferometrning asosiy formulasi: $R = \\frac{l^2}{6h} + \\frac{h}{2}$.",
+      "2. Bosh had: $\\frac{l^2}{6h} = \\frac{1980.3}{19.800} = 100.01$ mm.",
+      "3. Geometrik tuzatma: $\\frac{h}{2} = 1.650$ mm.",
+      "4. To‘liq egrilik radiusi: $R = 100.01 + 1.650 = 101.66$ mm."
     ],
     "hints": [
-      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa tuzatmadir."
+      "Formuladagi birinchi had asosiy egrilikni beradi, ikkinchi had esa geometrik tuzatmadir."
     ],
     "simulationPresetId": "met-21"
   },
@@ -2158,7 +2158,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Shtangensirkul shkalasi va nonius hisobi",
     "difficulty": "oson",
     "title": "Nonius shkalasi bo‘yicha to‘g‘rilangan o‘lchamni aniqlash (#49)",
-    "statement": "Shtangensirkulning asosiy shkalasi 42 mm ni ko‘rsatmoqda. Nonius shkalasining 7-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati 0.05 mm va nol xatoligi 0 mm bo‘lsa, to‘g‘rilangan o‘lchamni toping.",
+    "statement": "Shtangensirkulning asosiy shkalasi $x_{asosiy} = 42$ mm ni ko‘rsatmoqda. Nonius shkalasining $k = 7$-chiziqchasi asosiy shkala bilan to‘liq ustma-ust tushdi. Asbobning bo‘linma qiymati $c = 0.05$ mm va nol xatoligi $\\Delta_0 = 0$ mm bo‘lsa, to‘g‘rilangan o‘lcham $x$ ni toping.",
     "given": {
       "x_main": {
         "value": 42,
@@ -2192,9 +2192,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "x = x_{asosiy} + k \\cdot c - \\Delta_0",
     "stepByStepSolution": [
-      "1. Nonius qo‘shimcha ko‘rsatkichi: \\Delta x = 7 \\times 0.05 = 0.35 mm.",
-      "2. Xom o‘lchov: x_{xom} = 42 + 0.35 = 42.35 mm.",
-      "3. Nol xatoligini ayiramiz: x = 42.35 - 0 = 42.35 mm."
+      "1. Nonius bo‘yicha qo‘shimcha o‘lcham: $\\Delta x = k \\cdot c = 7 \\times 0.05 = 0.35$ mm.",
+      "2. Xom ko‘rsatkich: $x_{xom} = 42 + 0.35 = 42.35$ mm.",
+      "3. Asbob nol xatosini hisobga olamiz: $x = 42.35 - 0 = 42.35$ mm."
     ],
     "hints": [
       "Nol xatoligi musbat bo‘lsa, o‘lchangan natijadan ayirib tashlanadi."
@@ -2208,7 +2208,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Harorat o‘zgarishining o‘lchash xatosiga ta’siri",
     "difficulty": "o'rta",
     "title": "Po‘lat chizg‘ichning haroratli cho‘zilishi tufayli xatolik (#50)",
-    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich 20 °C da kalibrlangan bo‘lib, uzunligi L_0 = 2000 mm. Laboratoriya harorati 37 °C ga ko‘tarilganda (\\Delta T = 17 °C), po‘latning chiziqli kengayish koeffitsienti \\alpha = 1.2 \\times 10^{-5} K^{-1} bo‘lsa, chizg‘ich uzunligidagi mutlaq kengayish xatoligi \\Delta L ni hisoblang.",
+    "statement": "Metrologik etalon bo‘lgan po‘lat chizg‘ich $20 ^\\circ\\text{C}$ da kalibrlangan bo‘lib, uzunligi $L_0 = 2000$ mm. Laboratoriya harorati $37 ^\\circ\\text{C}$ ga ko‘tarilganda ($\\Delta T = 17$ K), po‘latning kengayish koeffitsienti $\\alpha = 1.2 \\times 10^{-5} \\text{ K}^{-1}$ bo‘lsa, chizg‘ich uzunligidagi mutlaq ortish $\\Delta L$ ni hisoblang.",
     "given": {
       "L_0": {
         "value": 2000,
@@ -2236,9 +2236,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T",
     "stepByStepSolution": [
-      "1. Issiqlikdan kengayish qonuni: \\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T.",
-      "2. Qiymatlarni qo‘yamiz: \\Delta L = 2000 \\times 1.2 \\times 10^{-5} \\times 17.",
-      "3. Hisoblash natijasi: \\Delta L = 0.408 mm."
+      "1. Termik kengayish qonuni: $\\Delta L = L_0 \\cdot \\alpha \\cdot \\Delta T$.",
+      "2. $\\Delta L = 2000 \\times (1.2 \\times 10^{-5}) \\times 17$.",
+      "3. Hisoblash natijasi: $\\Delta L = 0.408$ mm."
     ],
     "hints": [
       "Harorat farqi Kelvinda ham, Selsiyda ham bir xil songa teng."
@@ -2252,7 +2252,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "oson",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#1)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 21.5 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 21.5$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 21.5,
@@ -2280,10 +2280,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(21.5)^2 \\times 0.9613}{9.81} = 45.31 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 8.54 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(21.5)^2 \\times 0.9613}{9.81} = 45.31$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 8.54$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -2296,8 +2296,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#2)",
-    "statement": "Radiusi R = 0.3 m bo‘lgan disksimon maxovik n = 360 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#2)",
+    "statement": "Radiusi $R = 0.3$ m bo‘lgan disk $n = 360$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.3,
@@ -2319,8 +2319,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 360}{60} = 37.70 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (37.70)^2 \\times 0.3 = 426.37 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 360}{60} = 37.70$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (37.70)^2 \\times 0.3 = 426.37$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -2334,7 +2334,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#3)",
-    "statement": "Kengligi d = 135 m bo‘lgan daryoning oqim tezligi u = 2.4 m/s. Qayiq suvga nisbatan doimiy v = 4.2 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 135$ m bo‘lgan daryoning oqim tezligi $u = 2.4$ m/s. Qayiq suvga nisbatan $v = 4.2$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 135,
@@ -2362,8 +2362,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{135}{4.2} = 32.14 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 2.4 \\times 32.14 = 77.14 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{135}{4.2} = 32.14$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 2.4 \\times 32.14 = 77.14$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -2377,7 +2377,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#4)",
-    "statement": "Avtomobil v_0 = 80 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 5.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 80$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 5.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 80,
@@ -2397,10 +2397,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 44.89,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{80}{3.6} = 22.22 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 5.5} = 44.89 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{80}{3.6} = 22.22$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 5.5} = 44.89$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -2414,7 +2414,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#5)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 4 s o‘tgach, aylanish o‘qidan R = 2.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 4$ s o‘tgach, o‘qdan $R = 2.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -2442,10 +2442,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5 m/s².",
-      "2. t = 4 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 4 = 8.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (8.00)^2 \\times 2.5 = 160 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{5^2 + 160^2} = 160.08 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 4 = 8.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (8.00)^2 \\times 2.5 = 160$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{5^2 + 160^2} = 160.08$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -2459,7 +2459,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "oson",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#6)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 29 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 29$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 29,
@@ -2487,10 +2487,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(29)^2 \\times 0.9613}{9.81} = 82.44 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 15.53 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(29)^2 \\times 0.9613}{9.81} = 82.44$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 15.53$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -2503,8 +2503,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#7)",
-    "statement": "Radiusi R = 0.55 m bo‘lgan disksimon maxovik n = 510 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#7)",
+    "statement": "Radiusi $R = 0.55$ m bo‘lgan disk $n = 510$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.55,
@@ -2526,8 +2526,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 510}{60} = 53.41 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (53.41)^2 \\times 0.55 = 1568.77 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 510}{60} = 53.41$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (53.41)^2 \\times 0.55 = 1568.77$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -2541,7 +2541,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#8)",
-    "statement": "Kengligi d = 160 m bo‘lgan daryoning oqim tezligi u = 1.5 m/s. Qayiq suvga nisbatan doimiy v = 3.8 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 160$ m bo‘lgan daryoning oqim tezligi $u = 1.5$ m/s. Qayiq suvga nisbatan $v = 3.8$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 160,
@@ -2569,8 +2569,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{160}{3.8} = 42.11 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 1.5 \\times 42.11 = 63.17 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{160}{3.8} = 42.11$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 1.5 \\times 42.11 = 63.17$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -2584,7 +2584,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#9)",
-    "statement": "Avtomobil v_0 = 105 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 4.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 105$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 4.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 105,
@@ -2604,10 +2604,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 94.52,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{105}{3.6} = 29.17 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 4.5} = 94.52 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{105}{3.6} = 29.17$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 4.5} = 94.52$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -2621,7 +2621,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#10)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 3.5 s o‘tgach, aylanish o‘qidan R = 1.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 3.5$ s o‘tgach, o‘qdan $R = 1.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -2649,10 +2649,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3 m/s².",
-      "2. t = 3.5 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 3.5 = 7.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (7.00)^2 \\times 1.5 = 73.5 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{3^2 + 73.5^2} = 73.56 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 3.5 = 7.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (7.00)^2 \\times 1.5 = 73.5$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{3^2 + 73.5^2} = 73.56$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -2666,7 +2666,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "oson",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#11)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 36.5 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 36.5$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 36.5,
@@ -2694,10 +2694,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(36.5)^2 \\times 0.9613}{9.81} = 130.59 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 24.6 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(36.5)^2 \\times 0.9613}{9.81} = 130.59$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 24.6$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -2710,8 +2710,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#12)",
-    "statement": "Radiusi R = 0.8 m bo‘lgan disksimon maxovik n = 660 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#12)",
+    "statement": "Radiusi $R = 0.8$ m bo‘lgan disk $n = 660$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.8,
@@ -2733,8 +2733,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 660}{60} = 69.12 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (69.12)^2 \\times 0.8 = 3821.51 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 660}{60} = 69.12$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (69.12)^2 \\times 0.8 = 3821.51$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -2748,7 +2748,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#13)",
-    "statement": "Kengligi d = 185 m bo‘lgan daryoning oqim tezligi u = 3 m/s. Qayiq suvga nisbatan doimiy v = 3.4 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 185$ m bo‘lgan daryoning oqim tezligi $u = 3$ m/s. Qayiq suvga nisbatan $v = 3.4$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 185,
@@ -2776,8 +2776,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{185}{3.4} = 54.41 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 3 \\times 54.41 = 163.23 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{185}{3.4} = 54.41$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 3 \\times 54.41 = 163.23$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -2791,7 +2791,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#14)",
-    "statement": "Avtomobil v_0 = 130 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 3.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 130$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 3.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 130,
@@ -2811,10 +2811,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 186.29,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{130}{3.6} = 36.11 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 3.5} = 186.29 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{130}{3.6} = 36.11$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 3.5} = 186.29$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -2828,7 +2828,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#15)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 3 s o‘tgach, aylanish o‘qidan R = 2.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 3$ s o‘tgach, o‘qdan $R = 2.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -2856,10 +2856,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5 m/s².",
-      "2. t = 3 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 3 = 6.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (6.00)^2 \\times 2.5 = 90 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{5^2 + 90^2} = 90.14 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 3 = 6.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (6.00)^2 \\times 2.5 = 90$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{5^2 + 90^2} = 90.14$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -2873,7 +2873,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#16)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 44 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 44$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 44,
@@ -2901,10 +2901,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(44)^2 \\times 0.9613}{9.81} = 189.77 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 35.75 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(44)^2 \\times 0.9613}{9.81} = 189.77$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 35.75$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -2917,8 +2917,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#17)",
-    "statement": "Radiusi R = 1.05 m bo‘lgan disksimon maxovik n = 810 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#17)",
+    "statement": "Radiusi $R = 1.05$ m bo‘lgan disk $n = 810$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 1.05,
@@ -2940,8 +2940,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 810}{60} = 84.82 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (84.82)^2 \\times 1.05 = 7554.69 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 810}{60} = 84.82$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (84.82)^2 \\times 1.05 = 7554.69$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -2955,7 +2955,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#18)",
-    "statement": "Kengligi d = 210 m bo‘lgan daryoning oqim tezligi u = 2.1 m/s. Qayiq suvga nisbatan doimiy v = 3 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 210$ m bo‘lgan daryoning oqim tezligi $u = 2.1$ m/s. Qayiq suvga nisbatan $v = 3$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 210,
@@ -2983,8 +2983,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{210}{3} = 70 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 2.1 \\times 70 = 147 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{210}{3} = 70$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 2.1 \\times 70 = 147$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -2998,7 +2998,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#19)",
-    "statement": "Avtomobil v_0 = 80 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 6 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 80$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 6$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 80,
@@ -3018,10 +3018,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 41.15,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{80}{3.6} = 22.22 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 6} = 41.15 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{80}{3.6} = 22.22$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 6} = 41.15$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -3035,7 +3035,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#20)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 2.5 s o‘tgach, aylanish o‘qidan R = 1.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 2.5$ s o‘tgach, o‘qdan $R = 1.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -3063,10 +3063,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3 m/s².",
-      "2. t = 2.5 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 2.5 = 5.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (5.00)^2 \\times 1.5 = 37.5 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{3^2 + 37.5^2} = 37.62 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 2.5 = 5.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (5.00)^2 \\times 1.5 = 37.5$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{3^2 + 37.5^2} = 37.62$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -3080,7 +3080,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#21)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 51.5 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 51.5$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 51.5,
@@ -3108,10 +3108,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(51.5)^2 \\times 0.9613}{9.81} = 259.98 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 48.98 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(51.5)^2 \\times 0.9613}{9.81} = 259.98$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 48.98$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -3124,8 +3124,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#22)",
-    "statement": "Radiusi R = 0.3 m bo‘lgan disksimon maxovik n = 960 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#22)",
+    "statement": "Radiusi $R = 0.3$ m bo‘lgan disk $n = 960$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.3,
@@ -3147,8 +3147,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 960}{60} = 100.53 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (100.53)^2 \\times 0.3 = 3031.94 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 960}{60} = 100.53$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (100.53)^2 \\times 0.3 = 3031.94$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -3162,7 +3162,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#23)",
-    "statement": "Kengligi d = 235 m bo‘lgan daryoning oqim tezligi u = 3.6 m/s. Qayiq suvga nisbatan doimiy v = 5 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 235$ m bo‘lgan daryoning oqim tezligi $u = 3.6$ m/s. Qayiq suvga nisbatan $v = 5$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 235,
@@ -3190,8 +3190,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{235}{5} = 47 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 3.6 \\times 47 = 169.2 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{235}{5} = 47$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 3.6 \\times 47 = 169.2$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -3205,7 +3205,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#24)",
-    "statement": "Avtomobil v_0 = 105 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 105$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 105,
@@ -3225,10 +3225,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 85.07,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{105}{3.6} = 29.17 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 5} = 85.07 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{105}{3.6} = 29.17$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 5} = 85.07$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -3242,7 +3242,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#25)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 2 s o‘tgach, aylanish o‘qidan R = 2.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 2$ s o‘tgach, o‘qdan $R = 2.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -3270,10 +3270,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5 m/s².",
-      "2. t = 2 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 2 = 4.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (4.00)^2 \\times 2.5 = 40 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{5^2 + 40^2} = 40.31 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 2 = 4.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (4.00)^2 \\times 2.5 = 40$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{5^2 + 40^2} = 40.31$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -3287,7 +3287,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#26)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 59 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 59$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 59,
@@ -3315,10 +3315,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(59)^2 \\times 0.9613}{9.81} = 341.21 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 64.28 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(59)^2 \\times 0.9613}{9.81} = 341.21$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 64.28$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -3331,8 +3331,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#27)",
-    "statement": "Radiusi R = 0.55 m bo‘lgan disksimon maxovik n = 1110 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#27)",
+    "statement": "Radiusi $R = 0.55$ m bo‘lgan disk $n = 1110$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.55,
@@ -3354,8 +3354,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 1110}{60} = 116.24 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (116.24)^2 \\times 0.55 = 7431.32 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 1110}{60} = 116.24$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (116.24)^2 \\times 0.55 = 7431.32$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -3369,7 +3369,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#28)",
-    "statement": "Kengligi d = 260 m bo‘lgan daryoning oqim tezligi u = 2.7 m/s. Qayiq suvga nisbatan doimiy v = 4.6 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 260$ m bo‘lgan daryoning oqim tezligi $u = 2.7$ m/s. Qayiq suvga nisbatan $v = 4.6$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 260,
@@ -3397,8 +3397,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{260}{4.6} = 56.52 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 2.7 \\times 56.52 = 152.6 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{260}{4.6} = 56.52$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 2.7 \\times 56.52 = 152.6$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -3412,7 +3412,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#29)",
-    "statement": "Avtomobil v_0 = 130 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 4 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 130$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 4$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 130,
@@ -3432,10 +3432,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 163,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{130}{3.6} = 36.11 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 4} = 163 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{130}{3.6} = 36.11$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 4} = 163$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -3449,7 +3449,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#30)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 1.5 s o‘tgach, aylanish o‘qidan R = 1.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 1.5$ s o‘tgach, o‘qdan $R = 1.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -3477,10 +3477,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3 m/s².",
-      "2. t = 1.5 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 1.5 = 3.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (3.00)^2 \\times 1.5 = 13.5 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{3^2 + 13.5^2} = 13.83 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 1.5 = 3.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (3.00)^2 \\times 1.5 = 13.5$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{3^2 + 13.5^2} = 13.83$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -3494,7 +3494,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#31)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 66.5 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 66.5$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 66.5,
@@ -3522,10 +3522,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(66.5)^2 \\times 0.9613}{9.81} = 433.48 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 81.66 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(66.5)^2 \\times 0.9613}{9.81} = 433.48$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 81.66$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -3538,8 +3538,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#32)",
-    "statement": "Radiusi R = 0.8 m bo‘lgan disksimon maxovik n = 1260 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#32)",
+    "statement": "Radiusi $R = 0.8$ m bo‘lgan disk $n = 1260$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.8,
@@ -3561,8 +3561,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 1260}{60} = 131.95 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (131.95)^2 \\times 0.8 = 13927.99 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 1260}{60} = 131.95$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (131.95)^2 \\times 0.8 = 13927.99$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -3576,7 +3576,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#33)",
-    "statement": "Kengligi d = 285 m bo‘lgan daryoning oqim tezligi u = 1.8 m/s. Qayiq suvga nisbatan doimiy v = 4.2 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 285$ m bo‘lgan daryoning oqim tezligi $u = 1.8$ m/s. Qayiq suvga nisbatan $v = 4.2$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 285,
@@ -3604,8 +3604,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{285}{4.2} = 67.86 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 1.8 \\times 67.86 = 122.15 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{285}{4.2} = 67.86$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 1.8 \\times 67.86 = 122.15$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -3619,7 +3619,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#34)",
-    "statement": "Avtomobil v_0 = 80 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 6.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 80$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 6.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 80,
@@ -3639,10 +3639,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 37.99,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{80}{3.6} = 22.22 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 6.5} = 37.99 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{80}{3.6} = 22.22$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 6.5} = 37.99$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -3656,7 +3656,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#35)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 4 s o‘tgach, aylanish o‘qidan R = 2.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 4$ s o‘tgach, o‘qdan $R = 2.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -3684,10 +3684,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5 m/s².",
-      "2. t = 4 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 4 = 8.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (8.00)^2 \\times 2.5 = 160 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{5^2 + 160^2} = 160.08 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 4 = 8.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (8.00)^2 \\times 2.5 = 160$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{5^2 + 160^2} = 160.08$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -3701,7 +3701,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#36)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 74 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 74$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 74,
@@ -3729,10 +3729,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(74)^2 \\times 0.9613}{9.81} = 536.77 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 101.12 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(74)^2 \\times 0.9613}{9.81} = 536.77$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 101.12$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -3745,8 +3745,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#37)",
-    "statement": "Radiusi R = 1.05 m bo‘lgan disksimon maxovik n = 1410 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#37)",
+    "statement": "Radiusi $R = 1.05$ m bo‘lgan disk $n = 1410$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 1.05,
@@ -3768,8 +3768,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 1410}{60} = 147.65 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (147.65)^2 \\times 1.05 = 22892.05 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 1410}{60} = 147.65$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (147.65)^2 \\times 1.05 = 22892.05$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -3783,7 +3783,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#38)",
-    "statement": "Kengligi d = 310 m bo‘lgan daryoning oqim tezligi u = 3.3 m/s. Qayiq suvga nisbatan doimiy v = 3.8 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 310$ m bo‘lgan daryoning oqim tezligi $u = 3.3$ m/s. Qayiq suvga nisbatan $v = 3.8$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 310,
@@ -3811,8 +3811,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{310}{3.8} = 81.58 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 3.3 \\times 81.58 = 269.21 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{310}{3.8} = 81.58$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 3.3 \\times 81.58 = 269.21$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -3826,7 +3826,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#39)",
-    "statement": "Avtomobil v_0 = 105 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 5.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 105$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 5.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 105,
@@ -3846,10 +3846,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 77.34,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{105}{3.6} = 29.17 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 5.5} = 77.34 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{105}{3.6} = 29.17$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(29.17)^2}{2 \\times 5.5} = 77.34$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -3863,7 +3863,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#40)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 3.5 s o‘tgach, aylanish o‘qidan R = 1.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 3.5$ s o‘tgach, o‘qdan $R = 1.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -3891,10 +3891,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3 m/s².",
-      "2. t = 3.5 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 3.5 = 7.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (7.00)^2 \\times 1.5 = 73.5 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{3^2 + 73.5^2} = 73.56 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 3.5 = 7.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (7.00)^2 \\times 1.5 = 73.5$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{3^2 + 73.5^2} = 73.56$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -3908,7 +3908,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#41)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 81.5 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 81.5$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 81.5,
@@ -3936,10 +3936,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(81.5)^2 \\times 0.9613}{9.81} = 651.08 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 122.66 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(81.5)^2 \\times 0.9613}{9.81} = 651.08$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 122.66$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -3952,8 +3952,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#42)",
-    "statement": "Radiusi R = 0.3 m bo‘lgan disksimon maxovik n = 1560 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#42)",
+    "statement": "Radiusi $R = 0.3$ m bo‘lgan disk $n = 1560$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.3,
@@ -3975,8 +3975,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 1560}{60} = 163.36 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (163.36)^2 \\times 0.3 = 8006.22 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 1560}{60} = 163.36$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (163.36)^2 \\times 0.3 = 8006.22$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -3990,7 +3990,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#43)",
-    "statement": "Kengligi d = 335 m bo‘lgan daryoning oqim tezligi u = 2.4 m/s. Qayiq suvga nisbatan doimiy v = 3.4 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 335$ m bo‘lgan daryoning oqim tezligi $u = 2.4$ m/s. Qayiq suvga nisbatan $v = 3.4$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 335,
@@ -4018,8 +4018,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{335}{3.4} = 98.53 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 2.4 \\times 98.53 = 236.47 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{335}{3.4} = 98.53$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 2.4 \\times 98.53 = 236.47$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -4033,7 +4033,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#44)",
-    "statement": "Avtomobil v_0 = 130 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 4.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 130$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 4.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 130,
@@ -4053,10 +4053,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 144.89,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{130}{3.6} = 36.11 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 4.5} = 144.89 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{130}{3.6} = 36.11$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(36.11)^2}{2 \\times 4.5} = 144.89$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -4070,7 +4070,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#45)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 3 s o‘tgach, aylanish o‘qidan R = 2.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 3$ s o‘tgach, o‘qdan $R = 2.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -4098,10 +4098,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5 m/s².",
-      "2. t = 3 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 3 = 6.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (6.00)^2 \\times 2.5 = 90 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{5^2 + 90^2} = 90.14 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 2.5 = 5$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 3 = 6.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (6.00)^2 \\times 2.5 = 90$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{5^2 + 90^2} = 90.14$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -4115,7 +4115,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Gorizontga burchak ostida otilgan jism harakati",
     "difficulty": "o'rta",
     "title": "Gorizontga 37° burchak ostida otilgan jismning uchish masofasi (#46)",
-    "statement": "Jism gorizontga nisbatan \\alpha = 37° burchak ostida v_0 = 89 m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi L ni toping (g = 9.81 m/s²).",
+    "statement": "Jism gorizontga nisbatan $\\alpha = 37^\\circ$ burchak ostida $v_0 = 89$ m/s boshlang‘ich tezlik bilan otildi. Havo qarshiligini hisobga olmagan holda, jismning to‘liq gorizontal uchish masofasi $L$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "v_0": {
         "value": 89,
@@ -4143,10 +4143,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "L = \\frac{v_0^2 \\sin(2\\alpha)}{g}",
     "stepByStepSolution": [
-      "1. Uchish masofasi formulasi: L = \\frac{v_0^2 \\sin(2\\alpha)}{g}.",
-      "2. Burchak argumenti: 2\\alpha = 74°, \\sin(74°) = 0.9613.",
-      "3. Hisoblash: L = \\frac{(89)^2 \\times 0.9613}{9.81} = 776.43 m.",
-      "4. Ma’lumot uchun: Maksimal balandlik H_{max} = 146.27 m."
+      "1. Uchish masofasi formulasi: $L = \\frac{v_0^2 \\sin(2\\alpha)}{g}$.",
+      "2. Burchak argumenti: $2\\alpha = 74^\\circ$, $\\sin(74^\\circ) = 0.9613$.",
+      "3. Hisoblash: $L = \\frac{(89)^2 \\times 0.9613}{9.81} = 776.43$ m.",
+      "4. Maksimal ko‘tarilish balandligi: $H_{max} = \\frac{v_0^2 \\sin^2\\alpha}{2g} = 146.27$ m."
     ],
     "hints": [
       "Uchish masofasi 45 gradusda maksimal qiymatga erishadi."
@@ -4159,8 +4159,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "chapterNameUz": "Kinematika",
     "topic": "Aylana bo‘ylab tekis harakat",
     "difficulty": "oson",
-    "title": "Aylanayotgan g‘ildirak chetidagi nuqtaning markazga intilma tezlanishi (#47)",
-    "statement": "Radiusi R = 0.55 m bo‘lgan disksimon maxovik n = 1710 ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi chekka nuqtaning markazga intilma tezlanishi a_n ni aniqlang.",
+    "title": "Aylanayotgan disk chetidagi nuqtaning markazga intilma tezlanishi (#47)",
+    "statement": "Radiusi $R = 0.55$ m bo‘lgan disk $n = 1710$ ayl/min chastota bilan tekis aylanmoqda. Disk gardishidagi nuqtaning markazga intilma tezlanishi $a_n$ ni aniqlang.",
     "given": {
       "R": {
         "value": 0.55,
@@ -4182,8 +4182,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\omega = \\frac{2\\pi n}{60}, \\quad a_n = \\omega^2 R",
     "stepByStepSolution": [
-      "1. Burchak tezlikni rad/s ga o‘tkazamiz: \\omega = \\frac{2\\pi \\times 1710}{60} = 179.07 rad/s.",
-      "2. Markazga intilma tezlanish: a_n = \\omega^2 R = (179.07)^2 \\times 0.55 = 17636.49 m/s²."
+      "1. Burchak tezlikni rad/s ga o‘tkazamiz: $\\omega = \\frac{2\\pi \\times 1710}{60} = 179.07$ rad/s.",
+      "2. Markazga intilma tezlanish: $a_n = \\omega^2 R = (179.07)^2 \\times 0.55 = 17636.49$ m/s²."
     ],
     "hints": [
       "Dastlab minutdagi aylanishlar sonini sekundiga burchak tezlik (rad/s) ga aylantiring."
@@ -4197,7 +4197,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tezliklarni qo‘shish va nisbiy harakat",
     "difficulty": "o'rta",
     "title": "Daryodan perpendikulyar o‘tayotgan qayiqning oqizilish masofasi (#48)",
-    "statement": "Kengligi d = 360 m bo‘lgan daryoning oqim tezligi u = 1.5 m/s. Qayiq suvga nisbatan doimiy v = 3 m/s tezlik bilan qirg‘oqqa qat’iy perpendikulyar yo‘nalishda suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha masofaga (x) oqizib ketadi?",
+    "statement": "Kengligi $d = 360$ m bo‘lgan daryoning oqim tezligi $u = 1.5$ m/s. Qayiq suvga nisbatan $v = 3$ m/s tezlik bilan qirg‘oqqa perpendikulyar suzmoqda. Qayiq qarama-qarshi qirg‘oqqa yetguncha oqim uni qancha $x$ masofaga oqizib ketadi?",
     "given": {
       "d": {
         "value": 360,
@@ -4225,8 +4225,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "t = \\frac{d}{v}, \\quad x = u \\cdot t",
     "stepByStepSolution": [
-      "1. Qayiqning qarama-qarshi qirg‘oqqa yetish vaqti faqat v tezlikka bog‘liq: t = \\frac{360}{3} = 120 s.",
-      "2. Oqim yo‘nalishidagi siljish: x = u \\cdot t = 1.5 \\times 120 = 180 m."
+      "1. Qirg‘oqqa yetib borish vaqti: $t = \\frac{d}{v} = \\frac{360}{3} = 120$ s.",
+      "2. Oqim yo‘nalishidagi siljish masofasi: $x = u \\cdot t = 1.5 \\times 120 = 180$ m."
     ],
     "hints": [
       "Qirg‘oqqa perpendikulyar tezlik oqim tezligiga bog‘liq emas."
@@ -4240,7 +4240,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tekis sekinlanuvchan to‘g‘ri chiziqli harakat",
     "difficulty": "oson",
     "title": "Avtomobilning tormozlanish masofasini aniqlash (#49)",
-    "statement": "Avtomobil v_0 = 80 km/soat tezlikda ketayotgan paytda haydovchi tormozni bosdi. Doimiy a = 3.5 m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa (S) bosib o‘tadi?",
+    "statement": "Avtomobil $v_0 = 80$ km/soat tezlikda ketayotganda tormozlandi. Doimiy $a = 3.5$ m/s² sekinlanish bilan harakatlangan avtomobil to‘liq to‘xtaguncha qancha masofa $S$ bosib o‘tadi?",
     "given": {
       "v_0": {
         "value": 80,
@@ -4260,10 +4260,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "m",
     "correctAnswer": 70.55,
     "tolerancePct": 1,
-    "formulaLatex": "v_0 (m/s) = \\frac{v_0}{3.6}, \\quad S = \\frac{v_0^2}{2a}",
+    "formulaLatex": "S = \\frac{v_0^2}{2a}",
     "stepByStepSolution": [
-      "1. Tezlikni SI sistemasiga o‘tkazamiz: v_0 = \\frac{80}{3.6} = 22.22 m/s.",
-      "2. Tormoz yo‘li formulasi: S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 3.5} = 70.55 m."
+      "1. Tezlikni SI ga o‘tkazamiz: $v_0 = \\frac{80}{3.6} = 22.22$ m/s.",
+      "2. Tormoz yo‘li formulasi: $S = \\frac{v_0^2}{2a} = \\frac{(22.22)^2}{2 \\times 3.5} = 70.55$ m."
     ],
     "hints": [
       "Avval tezlikni km/soatdan m/s ga o‘tkazishni unutmang (3.6 ga bo‘ling)."
@@ -4277,7 +4277,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Aylana bo‘ylab tekis tezlanuvchan harakat",
     "difficulty": "murakkab",
     "title": "Nuqtaning to‘liq tezlanishini hisoblash (#50)",
-    "statement": "Tinch turgan g‘ildirak \\varepsilon = 2 rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan t = 2.5 s o‘tgach, aylanish o‘qidan R = 1.5 m masofadagi nuqtaning to‘liq tezlanishi a ni hisoblang.",
+    "statement": "Tinch turgan g‘ildirak $\\varepsilon = 2$ rad/s² burchak tezlanish bilan aylana boshladi. Aylanish boshlanganidan $t = 2.5$ s o‘tgach, o‘qdan $R = 1.5$ m masofadagi nuqtaning to‘liq tezlanishi $a$ ni hisoblang.",
     "given": {
       "epsilon": {
         "value": 2,
@@ -4305,10 +4305,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a_\\tau = \\varepsilon R, \\quad \\omega = \\varepsilon t, \\quad a_n = \\omega^2 R, \\quad a = \\sqrt{a_\\tau^2 + a_n^2}",
     "stepByStepSolution": [
-      "1. Tangensial tezlanish: a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3 m/s².",
-      "2. t = 2.5 s dagi burchak tezlik: \\omega = \\varepsilon t = 2 \\times 2.5 = 5.00 rad/s.",
-      "3. Normal (markazga intilma) tezlanish: a_n = \\omega^2 R = (5.00)^2 \\times 1.5 = 37.5 m/s².",
-      "4. To‘liq tezlanish: a = \\sqrt{3^2 + 37.5^2} = 37.62 m/s²."
+      "1. Tangensial tezlanish: $a_\\tau = \\varepsilon R = 2 \\times 1.5 = 3$ m/s².",
+      "2. Burchak tezlik: $\\omega = \\varepsilon t = 2 \\times 2.5 = 5.00$ rad/s.",
+      "3. Normal (markazga intilma) tezlanish: $a_n = \\omega^2 R = (5.00)^2 \\times 1.5 = 37.5$ m/s².",
+      "4. To‘liq tezlanish: $a = \\sqrt{a_\\tau^2 + a_n^2} = \\sqrt{3^2 + 37.5^2} = 37.62$ m/s²."
     ],
     "hints": [
       "Tangensial va normal tezlanishlar o‘zaro perpendikulyar bo‘ladi."
@@ -4322,7 +4322,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#1)",
-    "statement": "Gorizontga nisbatan \\alpha = 26° burchak ostida qiyalangan tekislikda massasi m = 2.5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.17 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 26^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 2.5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.17$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 2.5,
@@ -4356,10 +4356,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(26°) = 0.4384, \\cos(26°) = 0.8988.",
-      "4. a = 9.81 \\times (0.4384 - 0.17 \\times 0.8988) = 2.801 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(26^\\circ) = 0.4384, \\cos(26^\\circ) = 0.8988$.",
+      "4. $a = 9.81 \\times (0.4384 - 0.17 \\times 0.8988) = 2.801$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -4373,7 +4373,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#2)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.1 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.1$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -4401,9 +4401,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.961 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.1}{3.50} \\times 9.81 = 16.48 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.961$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.1}{3.50} \\times 9.81 = 16.48$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -4417,7 +4417,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#3)",
-    "statement": "Massasi m_1 = 1150 kg bo‘lgan vagon v_1 = 19.5 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1500 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 1150$ kg bo‘lgan vagon $v_1 = 19.5$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1500$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 1150,
@@ -4445,9 +4445,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{1150 \\times 19.5}{1150 + 1500} = \\frac{22425}{2650} = 8.462 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 123766.5 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{1150 \\times 19.5}{2650} = 8.462$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -4461,7 +4460,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#4)",
-    "statement": "Bikrligi k = 70 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.4 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 70$ N/m bo‘lgan elastik prujinaga massasi $m = 0.4$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 70,
@@ -4483,8 +4482,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{70}{0.4}} = 13.23 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{70}} = 0.475 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{70}{0.4}} = 13.23$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{70}} = 0.475$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -4498,7 +4497,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#5)",
-    "statement": "Massasi m = 1300 kg bo‘lgan avtomobil o‘z tezligini v_1 = 61 km/soat dan v_2 = 97 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1300$ kg bo‘lgan avtomobil tezligini $v_1 = 61$ km/soat dan $v_2 = 97$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1300,
@@ -4526,9 +4525,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 16.94 m/s, v_2 = 26.94 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1300}{2} [(26.94)^2 - (16.94)^2].",
-      "3. A = 650 \\times 438.89 = 285278 J = 285.28 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 16.94$ m/s, $v_2 = 26.94$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1300}{2} [(26.94)^2 - (16.94)^2] = 285278$ J = 285.28$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -4542,7 +4541,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#6)",
-    "statement": "Gorizontga nisbatan \\alpha = 31° burchak ostida qiyalangan tekislikda massasi m = 5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.27 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 31^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.27$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 5,
@@ -4576,10 +4575,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(31°) = 0.5150, \\cos(31°) = 0.8572.",
-      "4. a = 9.81 \\times (0.5150 - 0.27 \\times 0.8572) = 2.781 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(31^\\circ) = 0.5150, \\cos(31^\\circ) = 0.8572$.",
+      "4. $a = 9.81 \\times (0.5150 - 0.27 \\times 0.8572) = 2.781$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -4593,7 +4592,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#7)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -4621,9 +4620,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.731 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2}{3.40} \\times 9.81 = 16.15 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.731$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2}{3.40} \\times 9.81 = 16.15$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -4637,7 +4636,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#8)",
-    "statement": "Massasi m_1 = 1400 kg bo‘lgan vagon v_1 = 27 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1200 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 1400$ kg bo‘lgan vagon $v_1 = 27$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1200$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 1400,
@@ -4665,9 +4664,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{1400 \\times 27}{1400 + 1200} = \\frac{37800}{2600} = 14.538 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 235540.5 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{1400 \\times 27}{2600} = 14.538$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -4681,7 +4679,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#9)",
-    "statement": "Bikrligi k = 95 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.65 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 95$ N/m bo‘lgan elastik prujinaga massasi $m = 0.65$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 95,
@@ -4703,8 +4701,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{95}{0.65}} = 12.09 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{95}} = 0.5197 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{95}{0.65}} = 12.09$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{95}} = 0.5197$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -4718,7 +4716,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#10)",
-    "statement": "Massasi m = 1400 kg bo‘lgan avtomobil o‘z tezligini v_1 = 36 km/soat dan v_2 = 72 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1400$ kg bo‘lgan avtomobil tezligini $v_1 = 36$ km/soat dan $v_2 = 72$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1400,
@@ -4746,9 +4744,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 10.00 m/s, v_2 = 20.00 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1400}{2} [(20.00)^2 - (10.00)^2].",
-      "3. A = 700 \\times 300.00 = 210000 J = 210 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 10.00$ m/s, $v_2 = 20.00$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1400}{2} [(20.00)^2 - (10.00)^2] = 210000$ J = 210$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -4762,7 +4760,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#11)",
-    "statement": "Gorizontga nisbatan \\alpha = 36° burchak ostida qiyalangan tekislikda massasi m = 2.5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.21 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 36^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 2.5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.21$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 2.5,
@@ -4796,10 +4794,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(36°) = 0.5878, \\cos(36°) = 0.8090.",
-      "4. a = 9.81 \\times (0.5878 - 0.21 \\times 0.8090) = 4.098 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(36^\\circ) = 0.5878, \\cos(36^\\circ) = 0.8090$.",
+      "4. $a = 9.81 \\times (0.5878 - 0.21 \\times 0.8090) = 4.098$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -4813,7 +4811,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#12)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 1.9 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 1.9$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -4841,9 +4839,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.486 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 1.9}{3.30} \\times 9.81 = 15.81 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.486$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 1.9}{3.30} \\times 9.81 = 15.81$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -4857,7 +4855,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#13)",
-    "statement": "Massasi m_1 = 1650 kg bo‘lgan vagon v_1 = 19.5 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1700 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 1650$ kg bo‘lgan vagon $v_1 = 19.5$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1700$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 1650,
@@ -4885,9 +4883,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{1650 \\times 19.5}{1650 + 1700} = \\frac{32175}{3350} = 9.604 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 159209.6 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{1650 \\times 19.5}{3350} = 9.604$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -4901,7 +4898,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#14)",
-    "statement": "Bikrligi k = 120 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.9 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 120$ N/m bo‘lgan elastik prujinaga massasi $m = 0.9$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 120,
@@ -4923,8 +4920,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{120}{0.9}} = 11.55 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{120}} = 0.5441 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{120}{0.9}} = 11.55$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{120}} = 0.5441$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -4938,7 +4935,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#15)",
-    "statement": "Massasi m = 1500 kg bo‘lgan avtomobil o‘z tezligini v_1 = 61 km/soat dan v_2 = 97 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1500$ kg bo‘lgan avtomobil tezligini $v_1 = 61$ km/soat dan $v_2 = 97$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1500,
@@ -4966,9 +4963,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 16.94 m/s, v_2 = 26.94 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1500}{2} [(26.94)^2 - (16.94)^2].",
-      "3. A = 750 \\times 438.89 = 329167 J = 329.17 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 16.94$ m/s, $v_2 = 26.94$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1500}{2} [(26.94)^2 - (16.94)^2] = 329167$ J = 329.17$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -4982,7 +4979,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#16)",
-    "statement": "Gorizontga nisbatan \\alpha = 41° burchak ostida qiyalangan tekislikda massasi m = 5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.15 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 41^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.15$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 5,
@@ -5016,10 +5013,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(41°) = 0.6561, \\cos(41°) = 0.7547.",
-      "4. a = 9.81 \\times (0.6561 - 0.15 \\times 0.7547) = 5.324 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(41^\\circ) = 0.6561, \\cos(41^\\circ) = 0.7547$.",
+      "4. $a = 9.81 \\times (0.6561 - 0.15 \\times 0.7547) = 5.324$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -5033,7 +5030,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#17)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.4 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.4$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -5061,9 +5058,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.581 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.4}{3.80} \\times 9.81 = 17.34 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.581$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.4}{3.80} \\times 9.81 = 17.34$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -5077,7 +5074,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#18)",
-    "statement": "Massasi m_1 = 1900 kg bo‘lgan vagon v_1 = 27 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1400 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 1900$ kg bo‘lgan vagon $v_1 = 27$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1400$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 1900,
@@ -5105,9 +5102,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{1900 \\times 27}{1900 + 1400} = \\frac{51300}{3300} = 15.545 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 293832.4 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{1900 \\times 27}{3300} = 15.545$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -5121,7 +5117,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#19)",
-    "statement": "Bikrligi k = 145 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.4 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 145$ N/m bo‘lgan elastik prujinaga massasi $m = 0.4$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 145,
@@ -5143,8 +5139,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{145}{0.4}} = 19.04 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{145}} = 0.33 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{145}{0.4}} = 19.04$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{145}} = 0.33$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -5158,7 +5154,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#20)",
-    "statement": "Massasi m = 1600 kg bo‘lgan avtomobil o‘z tezligini v_1 = 36 km/soat dan v_2 = 72 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1600$ kg bo‘lgan avtomobil tezligini $v_1 = 36$ km/soat dan $v_2 = 72$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1600,
@@ -5186,9 +5182,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 10.00 m/s, v_2 = 20.00 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1600}{2} [(20.00)^2 - (10.00)^2].",
-      "3. A = 800 \\times 300.00 = 240000 J = 240 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 10.00$ m/s, $v_2 = 20.00$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1600}{2} [(20.00)^2 - (10.00)^2] = 240000$ J = 240$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -5202,7 +5198,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#21)",
-    "statement": "Gorizontga nisbatan \\alpha = 26° burchak ostida qiyalangan tekislikda massasi m = 2.5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.25 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 26^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 2.5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.25$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 2.5,
@@ -5236,10 +5232,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(26°) = 0.4384, \\cos(26°) = 0.8988.",
-      "4. a = 9.81 \\times (0.4384 - 0.25 \\times 0.8988) = 2.095 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(26^\\circ) = 0.4384, \\cos(26^\\circ) = 0.8988$.",
+      "4. $a = 9.81 \\times (0.4384 - 0.25 \\times 0.8988) = 2.095$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -5253,7 +5249,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#22)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.3 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.3$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -5281,9 +5277,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.385 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.3}{3.70} \\times 9.81 = 17.07 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.385$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.3}{3.70} \\times 9.81 = 17.07$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -5297,7 +5293,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#23)",
-    "statement": "Massasi m_1 = 2150 kg bo‘lgan vagon v_1 = 19.5 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1900 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 2150$ kg bo‘lgan vagon $v_1 = 19.5$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1900$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 2150,
@@ -5325,9 +5321,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{2150 \\times 19.5}{2150 + 1900} = \\frac{41925}{4050} = 10.352 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 191761.8 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{2150 \\times 19.5}{4050} = 10.352$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -5341,7 +5336,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#24)",
-    "statement": "Bikrligi k = 170 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.65 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 170$ N/m bo‘lgan elastik prujinaga massasi $m = 0.65$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 170,
@@ -5363,8 +5358,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{170}{0.65}} = 16.17 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{170}} = 0.3885 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{170}{0.65}} = 16.17$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{170}} = 0.3885$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -5378,7 +5373,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#25)",
-    "statement": "Massasi m = 1700 kg bo‘lgan avtomobil o‘z tezligini v_1 = 61 km/soat dan v_2 = 97 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1700$ kg bo‘lgan avtomobil tezligini $v_1 = 61$ km/soat dan $v_2 = 97$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1700,
@@ -5406,9 +5401,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 16.94 m/s, v_2 = 26.94 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1700}{2} [(26.94)^2 - (16.94)^2].",
-      "3. A = 850 \\times 438.89 = 373056 J = 373.06 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 16.94$ m/s, $v_2 = 26.94$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1700}{2} [(26.94)^2 - (16.94)^2] = 373056$ J = 373.06$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -5422,7 +5417,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#26)",
-    "statement": "Gorizontga nisbatan \\alpha = 31° burchak ostida qiyalangan tekislikda massasi m = 5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.19 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 31^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.19$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 5,
@@ -5456,10 +5451,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(31°) = 0.5150, \\cos(31°) = 0.8572.",
-      "4. a = 9.81 \\times (0.5150 - 0.19 \\times 0.8572) = 3.454 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(31^\\circ) = 0.5150, \\cos(31^\\circ) = 0.8572$.",
+      "4. $a = 9.81 \\times (0.5150 - 0.19 \\times 0.8572) = 3.454$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -5473,7 +5468,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#27)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.2 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.2$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -5501,9 +5496,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.179 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.2}{3.60} \\times 9.81 = 16.78 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.179$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.2}{3.60} \\times 9.81 = 16.78$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -5517,7 +5512,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#28)",
-    "statement": "Massasi m_1 = 2400 kg bo‘lgan vagon v_1 = 27 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1600 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 2400$ kg bo‘lgan vagon $v_1 = 27$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1600$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 2400,
@@ -5545,9 +5540,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{2400 \\times 27}{2400 + 1600} = \\frac{64800}{4000} = 16.2 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 349920 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{2400 \\times 27}{4000} = 16.2$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -5561,7 +5555,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#29)",
-    "statement": "Bikrligi k = 195 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.9 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 195$ N/m bo‘lgan elastik prujinaga massasi $m = 0.9$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 195,
@@ -5583,8 +5577,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{195}{0.9}} = 14.72 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{195}} = 0.4269 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{195}{0.9}} = 14.72$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{195}} = 0.4269$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -5598,7 +5592,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#30)",
-    "statement": "Massasi m = 1800 kg bo‘lgan avtomobil o‘z tezligini v_1 = 36 km/soat dan v_2 = 72 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1800$ kg bo‘lgan avtomobil tezligini $v_1 = 36$ km/soat dan $v_2 = 72$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1800,
@@ -5626,9 +5620,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 10.00 m/s, v_2 = 20.00 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1800}{2} [(20.00)^2 - (10.00)^2].",
-      "3. A = 900 \\times 300.00 = 270000 J = 270 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 10.00$ m/s, $v_2 = 20.00$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1800}{2} [(20.00)^2 - (10.00)^2] = 270000$ J = 270$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -5642,7 +5636,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#31)",
-    "statement": "Gorizontga nisbatan \\alpha = 36° burchak ostida qiyalangan tekislikda massasi m = 2.5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.29 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 36^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 2.5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.29$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 2.5,
@@ -5676,10 +5670,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(36°) = 0.5878, \\cos(36°) = 0.8090.",
-      "4. a = 9.81 \\times (0.5878 - 0.29 \\times 0.8090) = 3.463 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(36^\\circ) = 0.5878, \\cos(36^\\circ) = 0.8090$.",
+      "4. $a = 9.81 \\times (0.5878 - 0.29 \\times 0.8090) = 3.463$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -5693,7 +5687,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#32)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.1 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.1$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -5721,9 +5715,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.961 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.1}{3.50} \\times 9.81 = 16.48 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.961$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.1}{3.50} \\times 9.81 = 16.48$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -5737,7 +5731,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#33)",
-    "statement": "Massasi m_1 = 2650 kg bo‘lgan vagon v_1 = 19.5 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1300 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 2650$ kg bo‘lgan vagon $v_1 = 19.5$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1300$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 2650,
@@ -5765,9 +5759,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{2650 \\times 19.5}{2650 + 1300} = \\frac{51675}{3950} = 13.082 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 165832.3 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{2650 \\times 19.5}{3950} = 13.082$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -5781,7 +5774,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#34)",
-    "statement": "Bikrligi k = 220 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.4 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 220$ N/m bo‘lgan elastik prujinaga massasi $m = 0.4$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 220,
@@ -5803,8 +5796,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{220}{0.4}} = 23.45 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{220}} = 0.2679 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{220}{0.4}} = 23.45$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{220}} = 0.2679$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -5818,7 +5811,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#35)",
-    "statement": "Massasi m = 1900 kg bo‘lgan avtomobil o‘z tezligini v_1 = 61 km/soat dan v_2 = 97 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 1900$ kg bo‘lgan avtomobil tezligini $v_1 = 61$ km/soat dan $v_2 = 97$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 1900,
@@ -5846,9 +5839,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 16.94 m/s, v_2 = 26.94 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{1900}{2} [(26.94)^2 - (16.94)^2].",
-      "3. A = 950 \\times 438.89 = 416944 J = 416.94 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 16.94$ m/s, $v_2 = 26.94$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{1900}{2} [(26.94)^2 - (16.94)^2] = 416944$ J = 416.94$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -5862,7 +5855,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#36)",
-    "statement": "Gorizontga nisbatan \\alpha = 41° burchak ostida qiyalangan tekislikda massasi m = 5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.23 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 41^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.23$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 5,
@@ -5896,10 +5889,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(41°) = 0.6561, \\cos(41°) = 0.7547.",
-      "4. a = 9.81 \\times (0.6561 - 0.23 \\times 0.7547) = 4.731 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(41^\\circ) = 0.6561, \\cos(41^\\circ) = 0.7547$.",
+      "4. $a = 9.81 \\times (0.6561 - 0.23 \\times 0.7547) = 4.731$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -5913,7 +5906,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#37)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -5941,9 +5934,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.731 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2}{3.40} \\times 9.81 = 16.15 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.731$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2}{3.40} \\times 9.81 = 16.15$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -5957,7 +5950,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#38)",
-    "statement": "Massasi m_1 = 2900 kg bo‘lgan vagon v_1 = 27 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1800 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 2900$ kg bo‘lgan vagon $v_1 = 27$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1800$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 2900,
@@ -5985,9 +5978,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{2900 \\times 27}{2900 + 1800} = \\frac{78300}{4700} = 16.66 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 404794.3 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{2900 \\times 27}{4700} = 16.66$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -6001,7 +5993,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#39)",
-    "statement": "Bikrligi k = 245 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.65 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 245$ N/m bo‘lgan elastik prujinaga massasi $m = 0.65$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 245,
@@ -6023,8 +6015,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{245}{0.65}} = 19.41 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{245}} = 0.3236 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{245}{0.65}} = 19.41$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.65}{245}} = 0.3236$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -6038,7 +6030,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#40)",
-    "statement": "Massasi m = 2000 kg bo‘lgan avtomobil o‘z tezligini v_1 = 36 km/soat dan v_2 = 72 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 2000$ kg bo‘lgan avtomobil tezligini $v_1 = 36$ km/soat dan $v_2 = 72$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 2000,
@@ -6066,9 +6058,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 10.00 m/s, v_2 = 20.00 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{2000}{2} [(20.00)^2 - (10.00)^2].",
-      "3. A = 1000 \\times 300.00 = 300000 J = 300 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 10.00$ m/s, $v_2 = 20.00$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{2000}{2} [(20.00)^2 - (10.00)^2] = 300000$ J = 300$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -6082,7 +6074,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#41)",
-    "statement": "Gorizontga nisbatan \\alpha = 26° burchak ostida qiyalangan tekislikda massasi m = 2.5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.17 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 26^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 2.5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.17$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 2.5,
@@ -6116,10 +6108,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(26°) = 0.4384, \\cos(26°) = 0.8988.",
-      "4. a = 9.81 \\times (0.4384 - 0.17 \\times 0.8988) = 2.801 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(26^\\circ) = 0.4384, \\cos(26^\\circ) = 0.8988$.",
+      "4. $a = 9.81 \\times (0.4384 - 0.17 \\times 0.8988) = 2.801$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -6133,7 +6125,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#42)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 1.9 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 1.9$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -6161,9 +6153,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.486 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 1.9}{3.30} \\times 9.81 = 15.81 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 1.486$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 1.9}{3.30} \\times 9.81 = 15.81$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -6177,7 +6169,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#43)",
-    "statement": "Massasi m_1 = 3150 kg bo‘lgan vagon v_1 = 19.5 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1500 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 3150$ kg bo‘lgan vagon $v_1 = 19.5$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1500$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 3150,
@@ -6205,9 +6197,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{3150 \\times 19.5}{3150 + 1500} = \\frac{61425}{4650} = 13.21 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 193171.7 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{3150 \\times 19.5}{4650} = 13.21$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -6221,7 +6212,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#44)",
-    "statement": "Bikrligi k = 270 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.9 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 270$ N/m bo‘lgan elastik prujinaga massasi $m = 0.9$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 270,
@@ -6243,8 +6234,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{270}{0.9}} = 17.32 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{270}} = 0.3628 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{270}{0.9}} = 17.32$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.9}{270}} = 0.3628$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -6258,7 +6249,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#45)",
-    "statement": "Massasi m = 2100 kg bo‘lgan avtomobil o‘z tezligini v_1 = 61 km/soat dan v_2 = 97 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 2100$ kg bo‘lgan avtomobil tezligini $v_1 = 61$ km/soat dan $v_2 = 97$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 2100,
@@ -6286,9 +6277,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 16.94 m/s, v_2 = 26.94 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{2100}{2} [(26.94)^2 - (16.94)^2].",
-      "3. A = 1050 \\times 438.89 = 460833 J = 460.83 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 16.94$ m/s, $v_2 = 26.94$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{2100}{2} [(26.94)^2 - (16.94)^2] = 460833$ J = 460.83$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -6302,7 +6293,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Qiya tekislikdagi ishqalanishli harakat",
     "difficulty": "o'rta",
     "title": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi (#46)",
-    "statement": "Gorizontga nisbatan \\alpha = 31° burchak ostida qiyalangan tekislikda massasi m = 5 kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti \\mu = 0.27 bo‘lsa, jismning tezlanishi a ni hisoblang (g = 9.81 m/s²).",
+    "statement": "Gorizontga nisbatan $\\alpha = 31^\\circ$ burchak ostida qiyalangan tekislikda massasi $m = 5$ kg bo‘lgan jism pastga sirpanmoqda. Sirpanish ishqalanish koeffitsienti $\\mu = 0.27$ bo‘lsa, jismning tezlanishi $a$ ni hisoblang ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 5,
@@ -6336,10 +6327,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "a = g(\\sin\\alpha - \\mu\\cos\\alpha)",
     "stepByStepSolution": [
-      "1. Qiya tekislikdagi kuchlar muvozanati bo‘yicha Nyutonning 2-qonuni: m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha.",
-      "2. Massani qisqartiramiz: a = g (\\sin\\alpha - \\mu \\cos\\alpha).",
-      "3. Qiymatlar: \\sin(31°) = 0.5150, \\cos(31°) = 0.8572.",
-      "4. a = 9.81 \\times (0.5150 - 0.27 \\times 0.8572) = 2.781 m/s²."
+      "1. Qiya tekislik bo‘yicha Nyutonning 2-qonuni: $m a = m g \\sin\\alpha - \\mu m g \\cos\\alpha$.",
+      "2. Massani qisqartirib tezlanishni topamiz: $a = g (\\sin\\alpha - \\mu \\cos\\alpha)$.",
+      "3. Qiymatlar: $\\sin(31^\\circ) = 0.5150, \\cos(31^\\circ) = 0.8572$.",
+      "4. $a = 9.81 \\times (0.5150 - 0.27 \\times 0.8572) = 2.781$ m/s²."
     ],
     "hints": [
       "Jism pastga harakatlanganda ishqalanish kuchi qiyalik bo‘ylab yuqoriga yo‘naladi."
@@ -6353,7 +6344,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bog‘langan jismlar harakati (Atvud mashinasi)",
     "difficulty": "o'rta",
     "title": "Atvud mashinasida ipning taranglik kuchi (#47)",
-    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari m_1 = 1.4 kg va m_2 = 2.4 kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi T ni aniqlang (g = 9.81 m/s²).",
+    "statement": "Vaznsiz va ishqalanishsiz blok orqali o‘tkazilgan ipga massalari $m_1 = 1.4$ kg va $m_2 = 2.4$ kg bo‘lgan ikkita yuk osilgan. Tizim erkin qo‘yib yuborilganda, ipdagi taranglik kuchi $T$ ni aniqlang ($g = 9.81$ m/s²).",
     "given": {
       "m1": {
         "value": 1.4,
@@ -6381,9 +6372,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = \\frac{2 m_1 m_2}{m_1 + m_2} g",
     "stepByStepSolution": [
-      "1. Har bir yuk uchun harakat tenglamasi: m_2 g - T = m_2 a va T - m_1 g = m_1 a.",
-      "2. Tenglamalar tizimidan tezlanish: a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.581 m/s².",
-      "3. Ipning taranglik kuchi: T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.4}{3.80} \\times 9.81 = 17.34 N."
+      "1. Harakat tenglamalari: $m_2 g - T = m_2 a$ va $T - m_1 g = m_1 a$.",
+      "2. Tizim tezlanishi: $a = \\frac{m_2 - m_1}{m_1 + m_2} g = 2.581$ m/s².",
+      "3. Ipning taranglik kuchi: $T = \\frac{2 m_1 m_2}{m_1 + m_2} g = \\frac{2 \\times 1.4 \\times 2.4}{3.80} \\times 9.81 = 17.34$ N."
     ],
     "hints": [
       "Ipning tarangligi ikkala yukning og‘irlik kuchlari orasidagi oraliq qiymatga teng bo‘ladi."
@@ -6397,7 +6388,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Impulsning saqlanish qonuni va elastikmas to‘qnashuv",
     "difficulty": "oson",
     "title": "Noelastik to‘qnashuvdan keyingi umumiy tezlik (#48)",
-    "statement": "Massasi m_1 = 3400 kg bo‘lgan vagon v_1 = 27 m/s tezlik bilan harakatlanib, temiryo‘lda tinch turgan massasi m_2 = 1200 kg bo‘lgan ikkinchi vagonga urildi va ular birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi u ni hisoblang.",
+    "statement": "Massasi $m_1 = 3400$ kg bo‘lgan vagon $v_1 = 27$ m/s tezlik bilan harakatlanib, tinch turgan massasi $m_2 = 1200$ kg bo‘lgan ikkinchi vagonga urilib birikib ketdi. Birikkan vagonlarning to‘qnashuvdan keyingi tezligi $u$ ni hisoblang.",
     "given": {
       "m1": {
         "value": 3400,
@@ -6425,9 +6416,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "m_1 v_1 = (m_1 + m_2) u \\implies u = \\frac{m_1 v_1}{m_1 + m_2}",
     "stepByStepSolution": [
-      "1. Tizim yopiq bo‘lgani uchun impulsning saqlanish qonunini yozamiz: m_1 v_1 + 0 = (m_1 + m_2) u.",
-      "2. u = \\frac{3400 \\times 27}{3400 + 1200} = \\frac{91800}{4600} = 19.957 m/s.",
-      "3. Deformatsiyaga sarflangan mexanik energiya yo‘qotilishi: \\Delta E_k = 323251.7 J."
+      "1. Impulsning saqlanish qonuni: $m_1 v_1 + 0 = (m_1 + m_2) u$.",
+      "2. Tezlik ifodasi: $u = \\frac{m_1 v_1}{m_1 + m_2} = \\frac{3400 \\times 27}{4600} = 19.957$ m/s."
     ],
     "hints": [
       "Mutlaq noelastik to‘qnashuvda jismlar to‘qnashgandan keyin bitta butun jism kabi harakatlanadi."
@@ -6441,7 +6431,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Garmonik tebranishlar dinamikasi (Prujinali mayatnik)",
     "difficulty": "oson",
     "title": "Prujinaga osilgan yukning tebranish davri (#49)",
-    "statement": "Bikrligi k = 295 N/m bo‘lgan yengil elastik prujinaga massasi m = 0.4 kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz gorizontal sirtda ro‘y beruvchi tebranishlarning davri T ni toping.",
+    "statement": "Bikrligi $k = 295$ N/m bo‘lgan elastik prujinaga massasi $m = 0.4$ kg bo‘lgan yuk mahkamlangan. Ishqalanishsiz sirtda ro‘y beruvchi tebranishlarning davri $T$ ni toping.",
     "given": {
       "k": {
         "value": 295,
@@ -6463,8 +6453,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T = 2\\pi \\sqrt{\\frac{m}{k}}",
     "stepByStepSolution": [
-      "1. Prujinali mayatnikning siklik chastotasi: \\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{295}{0.4}} = 27.16 rad/s.",
-      "2. Tebranish davri: T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{295}} = 0.2314 s."
+      "1. Siklik chastota: $\\omega_0 = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{295}{0.4}} = 27.16$ rad/s.",
+      "2. Tebranish davri: $T = \\frac{2\\pi}{\\omega_0} = 2\\pi \\sqrt{\\frac{0.4}{295}} = 0.2314$ s."
     ],
     "hints": [
       "Bikrlik qanchalik katta bo‘lsa, tebranish shunchalik tez (kichik davr bilan) ro‘y beradi."
@@ -6478,7 +6468,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kinetik energiya va bajarilgan ish teoremasi",
     "difficulty": "o'rta",
     "title": "Avtomobilni tezlatish uchun dvigatel bajargan ish (#50)",
-    "statement": "Massasi m = 2200 kg bo‘lgan avtomobil o‘z tezligini v_1 = 36 km/soat dan v_2 = 72 km/soat gacha oshirdi. Ishqalanish va havo qarshiligi hisobga olinmasa, dvigatelning tortish kuchi bajargan to‘liq ish A ni kilojoulda (kJ) hisoblang.",
+    "statement": "Massasi $m = 2200$ kg bo‘lgan avtomobil tezligini $v_1 = 36$ km/soat dan $v_2 = 72$ km/soat gacha oshirdi. Dvigatelning tortish kuchi bajargan to‘liq ish $A$ ni kilojoulda (kJ) hisoblang.",
     "given": {
       "m": {
         "value": 2200,
@@ -6506,9 +6496,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = \\Delta E_k = \\frac{m}{2} (v_2^2 - v_1^2)",
     "stepByStepSolution": [
-      "1. Tezliklarni m/s ga aylantiramiz: v_1 = 10.00 m/s, v_2 = 20.00 m/s.",
-      "2. Bajarilgan ish kinetik energiyalar farqiga teng: A = \\frac{2200}{2} [(20.00)^2 - (10.00)^2].",
-      "3. A = 1100 \\times 300.00 = 330000 J = 330 kJ."
+      "1. SI birliklariga o‘tkazamiz: $v_1 = 10.00$ m/s, $v_2 = 20.00$ m/s.",
+      "2. Bajarilgan ish kinetik energiyaning ortishiga teng: $A = \\frac{m}{2} (v_2^2 - v_1^2)$.",
+      "3. $A = \\frac{2200}{2} [(20.00)^2 - (10.00)^2] = 330000$ J = 330$ kJ."
     ],
     "hints": [
       "Kinetik energiya teoremasi bo‘yicha natijaviy kuch bajargan ish kinetik energiyaning o‘zgarishiga teng."
@@ -6522,7 +6512,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#1)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 0.9 m masofada F_1 = 110 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.25 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 0.9$ m masofada $F_1 = 110$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.25$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 110,
@@ -6550,9 +6540,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{110 \\times 0.9}{0.25} = 396 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{110 \\times 0.9}{0.25} = 396$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -6566,7 +6555,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#2)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1.6 m masofada F = 550 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1.6$ m masofada $F = 550$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -6594,10 +6583,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 550 \\times \\frac{5 - 1.6}{5}.",
-      "3. R_A = 550 \\times 0.680 = 374 N.",
-      "4. B tayanch reaksiyasi: R_B = 176 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 550 \\times \\frac{5 - 1.6}{5} = 374$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 176$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -6611,7 +6599,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#3)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 75° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 42 N va F_2 = 55 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 75^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 42$ N va $F_2 = 55$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 42,
@@ -6629,7 +6617,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 75,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -6639,9 +6627,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(75°) = 0.2588.",
-      "3. R = \\sqrt{42^2 + 55^2 + 2 \\times 42 \\times 55 \\times 0.2588} = 77.36 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(75^\\circ) = 0.2588$.",
+      "3. $R = \\sqrt{42^2 + 55^2 + 2 \\times 42 \\times 55 \\times 0.2588} = 77.36$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -6655,7 +6643,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#4)",
-    "statement": "Massasi m = 80 kg bo‘lgan yuk n = 2 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 80$ kg bo‘lgan yuk $n = 2$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 80,
@@ -6677,8 +6665,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 80 \\times 9.81 = 784.8 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{784.8}{2} = 392.4 N."
+      "1. Yukning og‘irligi: $P = m g = 80 \\times 9.81 = 784.8$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{784.8}{2} = 392.4$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -6692,13 +6680,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#5)",
-    "statement": "Asosi eni b = 0.65 m va balandligi h = 1.3 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.65$ m va balandligi $h = 1.3$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.65,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.3,
@@ -6714,10 +6702,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.65}{1.3} = 0.5000.",
-      "4. \\theta = \\arctan(0.5000) = 26.57°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.65}{1.3} = 0.5000$.",
+      "3. $\\theta = \\arctan(0.5000) = 26.57^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -6731,7 +6718,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#6)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.4 m masofada F_1 = 160 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.2 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.4$ m masofada $F_1 = 160$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.2$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 160,
@@ -6759,9 +6746,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{160 \\times 1.4}{0.2} = 1120 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{160 \\times 1.4}{0.2} = 1120$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -6775,7 +6761,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#7)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1.3 m masofada F = 675 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1.3$ m masofada $F = 675$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -6803,10 +6789,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 675 \\times \\frac{5 - 1.3}{5}.",
-      "3. R_A = 675 \\times 0.740 = 499.5 N.",
-      "4. B tayanch reaksiyasi: R_B = 175.5 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 675 \\times \\frac{5 - 1.3}{5} = 499.5$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 175.5$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -6820,7 +6805,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#8)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 100° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 62 N va F_2 = 40 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 100^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 62$ N va $F_2 = 40$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 62,
@@ -6838,7 +6823,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 100,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -6848,9 +6833,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(100°) = -0.1736.",
-      "3. R = \\sqrt{62^2 + 40^2 + 2 \\times 62 \\times 40 \\times -0.1736} = 67.7 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(100^\\circ) = -0.1736$.",
+      "3. $R = \\sqrt{62^2 + 40^2 + 2 \\times 62 \\times 40 \\times -0.1736} = 67.7$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -6864,7 +6849,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#9)",
-    "statement": "Massasi m = 105 kg bo‘lgan yuk n = 3 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 105$ kg bo‘lgan yuk $n = 3$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 105,
@@ -6886,8 +6871,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 105 \\times 9.81 = 1030.1 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{1030.1}{3} = 343.37 N."
+      "1. Yukning og‘irligi: $P = m g = 105 \\times 9.81 = 1030.1$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{1030.1}{3} = 343.37$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -6901,13 +6886,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#10)",
-    "statement": "Asosi eni b = 0.5 m va balandligi h = 1.2 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.5$ m va balandligi $h = 1.2$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.5,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.2,
@@ -6923,10 +6908,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.5}{1.2} = 0.4167.",
-      "4. \\theta = \\arctan(0.4167) = 22.62°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.5}{1.2} = 0.4167$.",
+      "3. $\\theta = \\arctan(0.4167) = 22.62^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -6940,7 +6924,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#11)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.1 m masofada F_1 = 210 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.45 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.1$ m masofada $F_1 = 210$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.45$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 210,
@@ -6968,9 +6952,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{210 \\times 1.1}{0.45} = 513.3 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{210 \\times 1.1}{0.45} = 513.3$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -6984,7 +6967,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#12)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1 m masofada F = 800 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1$ m masofada $F = 800$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -7012,10 +6995,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 800 \\times \\frac{5 - 1}{5}.",
-      "3. R_A = 800 \\times 0.800 = 640 N.",
-      "4. B tayanch reaksiyasi: R_B = 160 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 800 \\times \\frac{5 - 1}{5} = 640$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 160$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -7029,7 +7011,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#13)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 65° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 42 N va F_2 = 65 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 65^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 42$ N va $F_2 = 65$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 42,
@@ -7047,7 +7029,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 65,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -7057,9 +7039,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(65°) = 0.4226.",
-      "3. R = \\sqrt{42^2 + 65^2 + 2 \\times 42 \\times 65 \\times 0.4226} = 91.09 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(65^\\circ) = 0.4226$.",
+      "3. $R = \\sqrt{42^2 + 65^2 + 2 \\times 42 \\times 65 \\times 0.4226} = 91.09$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -7073,7 +7055,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#14)",
-    "statement": "Massasi m = 130 kg bo‘lgan yuk n = 4 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 130$ kg bo‘lgan yuk $n = 4$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 130,
@@ -7095,8 +7077,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 130 \\times 9.81 = 1275.3 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{1275.3}{4} = 318.83 N."
+      "1. Yukning og‘irligi: $P = m g = 130 \\times 9.81 = 1275.3$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{1275.3}{4} = 318.83$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -7110,13 +7092,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#15)",
-    "statement": "Asosi eni b = 0.75 m va balandligi h = 1.1 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.75$ m va balandligi $h = 1.1$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.75,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.1,
@@ -7132,10 +7114,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.75}{1.1} = 0.6818.",
-      "4. \\theta = \\arctan(0.6818) = 34.29°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.75}{1.1} = 0.6818$.",
+      "3. $\\theta = \\arctan(0.6818) = 34.29^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -7149,7 +7130,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#16)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 0.8 m masofada F_1 = 260 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.4 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 0.8$ m masofada $F_1 = 260$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.4$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 260,
@@ -7177,9 +7158,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{260 \\times 0.8}{0.4} = 520 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{260 \\times 0.8}{0.4} = 520$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -7193,7 +7173,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#17)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 2.5 m masofada F = 925 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 2.5$ m masofada $F = 925$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -7221,10 +7201,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 925 \\times \\frac{5 - 2.5}{5}.",
-      "3. R_A = 925 \\times 0.500 = 462.5 N.",
-      "4. B tayanch reaksiyasi: R_B = 462.5 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 925 \\times \\frac{5 - 2.5}{5} = 462.5$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 462.5$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -7238,7 +7217,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#18)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 90° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 62 N va F_2 = 50 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 90^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 62$ N va $F_2 = 50$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 62,
@@ -7256,7 +7235,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 90,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -7266,9 +7245,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(90°) = 0.0000.",
-      "3. R = \\sqrt{62^2 + 50^2 + 2 \\times 62 \\times 50 \\times 0.0000} = 79.65 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(90^\\circ) = 0.0000$.",
+      "3. $R = \\sqrt{62^2 + 50^2 + 2 \\times 62 \\times 50 \\times 0.0000} = 79.65$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -7282,7 +7261,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#19)",
-    "statement": "Massasi m = 155 kg bo‘lgan yuk n = 5 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 155$ kg bo‘lgan yuk $n = 5$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 155,
@@ -7304,8 +7283,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 155 \\times 9.81 = 1520.6 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{1520.6}{5} = 304.12 N."
+      "1. Yukning og‘irligi: $P = m g = 155 \\times 9.81 = 1520.6$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{1520.6}{5} = 304.12$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -7319,13 +7298,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#20)",
-    "statement": "Asosi eni b = 0.6 m va balandligi h = 1 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.6$ m va balandligi $h = 1$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.6,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1,
@@ -7341,10 +7320,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.6}{1} = 0.6000.",
-      "4. \\theta = \\arctan(0.6000) = 30.96°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.6}{1} = 0.6000$.",
+      "3. $\\theta = \\arctan(0.6000) = 30.96^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -7358,7 +7336,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#21)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.3 m masofada F_1 = 310 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.35 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.3$ m masofada $F_1 = 310$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.35$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 310,
@@ -7386,9 +7364,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{310 \\times 1.3}{0.35} = 1151.4 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{310 \\times 1.3}{0.35} = 1151.4$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -7402,7 +7379,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#22)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 2.2 m masofada F = 1050 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 2.2$ m masofada $F = 1050$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -7430,10 +7407,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1050 \\times \\frac{5 - 2.2}{5}.",
-      "3. R_A = 1050 \\times 0.560 = 588 N.",
-      "4. B tayanch reaksiyasi: R_B = 462 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1050 \\times \\frac{5 - 2.2}{5} = 588$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 462$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -7447,7 +7423,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#23)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 115° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 42 N va F_2 = 75 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 115^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 42$ N va $F_2 = 75$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 42,
@@ -7465,7 +7441,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 115,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -7475,9 +7451,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(115°) = -0.4226.",
-      "3. R = \\sqrt{42^2 + 75^2 + 2 \\times 42 \\times 75 \\times -0.4226} = 68.75 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(115^\\circ) = -0.4226$.",
+      "3. $R = \\sqrt{42^2 + 75^2 + 2 \\times 42 \\times 75 \\times -0.4226} = 68.75$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -7491,7 +7467,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#24)",
-    "statement": "Massasi m = 180 kg bo‘lgan yuk n = 2 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 180$ kg bo‘lgan yuk $n = 2$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 180,
@@ -7513,8 +7489,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 180 \\times 9.81 = 1765.8 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{1765.8}{2} = 882.9 N."
+      "1. Yukning og‘irligi: $P = m g = 180 \\times 9.81 = 1765.8$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{1765.8}{2} = 882.9$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -7528,13 +7504,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#25)",
-    "statement": "Asosi eni b = 0.45 m va balandligi h = 0.9 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.45$ m va balandligi $h = 0.9$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.45,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 0.9,
@@ -7550,10 +7526,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.45}{0.9} = 0.5000.",
-      "4. \\theta = \\arctan(0.5000) = 26.57°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.45}{0.9} = 0.5000$.",
+      "3. $\\theta = \\arctan(0.5000) = 26.57^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -7567,7 +7542,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#26)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1 m masofada F_1 = 360 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.3 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1$ m masofada $F_1 = 360$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.3$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 360,
@@ -7595,9 +7570,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{360 \\times 1}{0.3} = 1200 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{360 \\times 1}{0.3} = 1200$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -7611,7 +7585,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#27)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1.9 m masofada F = 1175 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1.9$ m masofada $F = 1175$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -7639,10 +7613,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1175 \\times \\frac{5 - 1.9}{5}.",
-      "3. R_A = 1175 \\times 0.620 = 728.5 N.",
-      "4. B tayanch reaksiyasi: R_B = 446.5 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1175 \\times \\frac{5 - 1.9}{5} = 728.5$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 446.5$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -7656,7 +7629,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#28)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 80° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 62 N va F_2 = 60 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 80^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 62$ N va $F_2 = 60$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 62,
@@ -7674,7 +7647,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 80,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -7684,9 +7657,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(80°) = 0.1736.",
-      "3. R = \\sqrt{62^2 + 60^2 + 2 \\times 62 \\times 60 \\times 0.1736} = 93.47 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(80^\\circ) = 0.1736$.",
+      "3. $R = \\sqrt{62^2 + 60^2 + 2 \\times 62 \\times 60 \\times 0.1736} = 93.47$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -7700,7 +7673,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#29)",
-    "statement": "Massasi m = 205 kg bo‘lgan yuk n = 3 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 205$ kg bo‘lgan yuk $n = 3$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 205,
@@ -7722,8 +7695,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 205 \\times 9.81 = 2011.1 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{2011.1}{3} = 670.37 N."
+      "1. Yukning og‘irligi: $P = m g = 205 \\times 9.81 = 2011.1$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{2011.1}{3} = 670.37$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -7737,13 +7710,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#30)",
-    "statement": "Asosi eni b = 0.7 m va balandligi h = 0.8 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.7$ m va balandligi $h = 0.8$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.7,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 0.8,
@@ -7759,10 +7732,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.7}{0.8} = 0.8750.",
-      "4. \\theta = \\arctan(0.8750) = 41.19°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.7}{0.8} = 0.8750$.",
+      "3. $\\theta = \\arctan(0.8750) = 41.19^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -7776,7 +7748,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#31)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.5 m masofada F_1 = 410 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.25 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.5$ m masofada $F_1 = 410$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.25$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 410,
@@ -7804,9 +7776,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{410 \\times 1.5}{0.25} = 2460 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{410 \\times 1.5}{0.25} = 2460$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -7820,7 +7791,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#32)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1.6 m masofada F = 1300 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1.6$ m masofada $F = 1300$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -7848,10 +7819,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1300 \\times \\frac{5 - 1.6}{5}.",
-      "3. R_A = 1300 \\times 0.680 = 884 N.",
-      "4. B tayanch reaksiyasi: R_B = 416 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1300 \\times \\frac{5 - 1.6}{5} = 884$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 416$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -7865,7 +7835,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#33)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 105° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 42 N va F_2 = 45 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 105^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 42$ N va $F_2 = 45$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 42,
@@ -7883,7 +7853,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 105,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -7893,9 +7863,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(105°) = -0.2588.",
-      "3. R = \\sqrt{42^2 + 45^2 + 2 \\times 42 \\times 45 \\times -0.2588} = 53.02 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(105^\\circ) = -0.2588$.",
+      "3. $R = \\sqrt{42^2 + 45^2 + 2 \\times 42 \\times 45 \\times -0.2588} = 53.02$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -7909,7 +7879,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#34)",
-    "statement": "Massasi m = 230 kg bo‘lgan yuk n = 4 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 230$ kg bo‘lgan yuk $n = 4$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 230,
@@ -7931,8 +7901,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 230 \\times 9.81 = 2256.3 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{2256.3}{4} = 564.08 N."
+      "1. Yukning og‘irligi: $P = m g = 230 \\times 9.81 = 2256.3$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{2256.3}{4} = 564.08$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -7946,13 +7916,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#35)",
-    "statement": "Asosi eni b = 0.55 m va balandligi h = 1.3 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.55$ m va balandligi $h = 1.3$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.55,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.3,
@@ -7968,10 +7938,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.55}{1.3} = 0.4231.",
-      "4. \\theta = \\arctan(0.4231) = 22.93°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.55}{1.3} = 0.4231$.",
+      "3. $\\theta = \\arctan(0.4231) = 22.93^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -7985,7 +7954,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#36)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.2 m masofada F_1 = 460 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.2 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.2$ m masofada $F_1 = 460$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.2$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 460,
@@ -8013,9 +7982,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{460 \\times 1.2}{0.2} = 2760 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{460 \\times 1.2}{0.2} = 2760$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -8029,7 +7997,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#37)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1.3 m masofada F = 1425 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1.3$ m masofada $F = 1425$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -8057,10 +8025,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1425 \\times \\frac{5 - 1.3}{5}.",
-      "3. R_A = 1425 \\times 0.740 = 1054.5 N.",
-      "4. B tayanch reaksiyasi: R_B = 370.5 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1425 \\times \\frac{5 - 1.3}{5} = 1054.5$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 370.5$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -8074,7 +8041,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#38)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 70° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 62 N va F_2 = 70 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 70^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 62$ N va $F_2 = 70$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 62,
@@ -8092,7 +8059,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 70,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -8102,9 +8069,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(70°) = 0.3420.",
-      "3. R = \\sqrt{62^2 + 70^2 + 2 \\times 62 \\times 70 \\times 0.3420} = 108.23 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(70^\\circ) = 0.3420$.",
+      "3. $R = \\sqrt{62^2 + 70^2 + 2 \\times 62 \\times 70 \\times 0.3420} = 108.23$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -8118,7 +8085,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#39)",
-    "statement": "Massasi m = 255 kg bo‘lgan yuk n = 5 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 255$ kg bo‘lgan yuk $n = 5$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 255,
@@ -8140,8 +8107,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 255 \\times 9.81 = 2501.6 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{2501.6}{5} = 500.32 N."
+      "1. Yukning og‘irligi: $P = m g = 255 \\times 9.81 = 2501.6$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{2501.6}{5} = 500.32$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -8155,13 +8122,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#40)",
-    "statement": "Asosi eni b = 0.4 m va balandligi h = 1.2 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.4$ m va balandligi $h = 1.2$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.4,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.2,
@@ -8177,10 +8144,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.4}{1.2} = 0.3333.",
-      "4. \\theta = \\arctan(0.3333) = 18.43°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.4}{1.2} = 0.3333$.",
+      "3. $\\theta = \\arctan(0.3333) = 18.43^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -8194,7 +8160,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#41)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 0.9 m masofada F_1 = 510 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.45 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 0.9$ m masofada $F_1 = 510$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.45$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 510,
@@ -8222,9 +8188,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{510 \\times 0.9}{0.45} = 1020 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{510 \\times 0.9}{0.45} = 1020$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -8238,7 +8203,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#42)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 1 m masofada F = 1550 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 1$ m masofada $F = 1550$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -8266,10 +8231,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1550 \\times \\frac{5 - 1}{5}.",
-      "3. R_A = 1550 \\times 0.800 = 1240 N.",
-      "4. B tayanch reaksiyasi: R_B = 310 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1550 \\times \\frac{5 - 1}{5} = 1240$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 310$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -8283,7 +8247,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#43)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 95° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 42 N va F_2 = 55 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 95^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 42$ N va $F_2 = 55$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 42,
@@ -8301,7 +8265,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 95,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -8311,9 +8275,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(95°) = -0.0872.",
-      "3. R = \\sqrt{42^2 + 55^2 + 2 \\times 42 \\times 55 \\times -0.0872} = 66.23 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(95^\\circ) = -0.0872$.",
+      "3. $R = \\sqrt{42^2 + 55^2 + 2 \\times 42 \\times 55 \\times -0.0872} = 66.23$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -8327,7 +8291,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#44)",
-    "statement": "Massasi m = 280 kg bo‘lgan yuk n = 2 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 280$ kg bo‘lgan yuk $n = 2$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 280,
@@ -8349,8 +8313,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 280 \\times 9.81 = 2746.8 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{2746.8}{2} = 1373.4 N."
+      "1. Yukning og‘irligi: $P = m g = 280 \\times 9.81 = 2746.8$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{2746.8}{2} = 1373.4$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -8364,13 +8328,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#45)",
-    "statement": "Asosi eni b = 0.65 m va balandligi h = 1.1 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.65$ m va balandligi $h = 1.1$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.65,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1.1,
@@ -8386,10 +8350,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.65}{1.1} = 0.5909.",
-      "4. \\theta = \\arctan(0.5909) = 30.58°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.65}{1.1} = 0.5909$.",
+      "3. $\\theta = \\arctan(0.5909) = 30.58^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -8403,7 +8366,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Momentlar qoidasi va richag muvozanati",
     "difficulty": "oson",
     "title": "Richagni muvozanatda tutib turuvchi kuch (#46)",
-    "statement": "Tayanch nuqtasiga ega vaznsiz richagning birinchi yelkasiga d_1 = 1.4 m masofada F_1 = 560 N kuch qo‘yilgan. Richagni gorizontal muvozanatda ushlab turish uchun, tayanchdan d_2 = 0.4 m masofadagi ikkinchi yelkaga qanday F_2 kuch qo‘yish kerak?",
+    "statement": "Vaznsiz richagning birinchi yelkasiga $d_1 = 1.4$ m masofada $F_1 = 560$ N kuch qo‘yilgan. Richagni muvozanatda tutish uchun, tayanchdan $d_2 = 0.4$ m masofadagi ikkinchi yelkaga qanday $F_2$ kuch qo‘yish kerak?",
     "given": {
       "F1": {
         "value": 560,
@@ -8431,9 +8394,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_1 d_1 = F_2 d_2 \\implies F_2 = \\frac{F_1 d_1}{d_2}",
     "stepByStepSolution": [
-      "1. Tayanchga nisbatan momentlar muvozanat sharti: \\sum M = 0.",
-      "2. F_1 d_1 = F_2 d_2.",
-      "3. F_2 = \\frac{560 \\times 1.4}{0.4} = 1960 N."
+      "1. Momentlar muvozanat sharti: $\\sum M = 0 \\implies F_1 d_1 = F_2 d_2$.",
+      "2. $F_2 = \\frac{F_1 d_1}{d_2} = \\frac{560 \\times 1.4}{0.4} = 1960$ N."
     ],
     "hints": [
       "Kichik yelkada katta kuch, katta yelkada kichik kuch muvozanat hosil qiladi."
@@ -8447,7 +8409,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Ikki tayanchdagi balka reaksiyalari",
     "difficulty": "o'rta",
     "title": "Balkadagi A tayanchining reaksiya kuchini aniqlash (#47)",
-    "statement": "Uzunligi L = 5 m bo‘lgan va ikki chetidan erkin tayangan vaznsiz to‘singa (balkaga) A tayanchdan x = 2.5 m masofada F = 1675 N konsentrlangan vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi R_A ni hisoblang.",
+    "statement": "Uzunligi $L = 5$ m bo‘lgan ikki chetidan erkin tayangan vaznsiz to‘singa A tayanchdan $x = 2.5$ m masofada $F = 1675$ N vertikal yuk ta’sir qilmoqda. A tayanchdagi reaksiya kuchi $R_A$ ni hisoblang.",
     "given": {
       "L": {
         "value": 5,
@@ -8475,10 +8437,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\sum M_B = 0 \\implies R_A = F \\frac{L - x}{L}",
     "stepByStepSolution": [
-      "1. B tayanchiga nisbatan momentlar tenglamasini tuzamiz: R_A \\cdot L - F \\cdot (L - x) = 0.",
-      "2. R_A = F \\cdot \\frac{L - x}{L} = 1675 \\times \\frac{5 - 2.5}{5}.",
-      "3. R_A = 1675 \\times 0.500 = 837.5 N.",
-      "4. B tayanch reaksiyasi: R_B = 837.5 N."
+      "1. B tayanchiga nisbatan momentlar: $R_A \\cdot L - F \\cdot (L - x) = 0$.",
+      "2. $R_A = F \\cdot \\frac{L - x}{L} = 1675 \\times \\frac{5 - 2.5}{5} = 837.5$ N.",
+      "3. B tayanch reaksiyasi: $R_B = F - R_A = 837.5$ N."
     ],
     "hints": [
       "Yuk qaysi tayanchga yaqinroq bo‘lsa, o‘sha tayanch ko‘proq reaksiya kuchi oladi."
@@ -8492,7 +8453,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kuchlar parallelogrammi va teng ta’sir etuvchi kuch",
     "difficulty": "oson",
     "title": "Burchak ostida qo‘yilgan ikki kuchning teng ta’sir etuvchisi (#48)",
-    "statement": "Bitta nuqtaga burchagi \\alpha = 60° bo‘lgan ikkita kuch qo‘yilgan: F_1 = 62 N va F_2 = 40 N. Parallelogramm qoidasiga ko‘ra, bu kuchlarning teng ta’sir etuvchisi (natijaviy kuch) R ni hisoblang.",
+    "statement": "Bir nuqtaga burchagi $\\alpha = 60^\\circ$ bo‘lgan ikkita kuch qo‘yilgan: $F_1 = 62$ N va $F_2 = 40$ N. Parallelogramm qoidasiga ko‘ra, ularning teng ta’sir etuvchisi $R$ ni hisoblang.",
     "given": {
       "F1": {
         "value": 62,
@@ -8510,7 +8471,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
         "value": 60,
         "unit": "°",
         "symbol": "\\alpha",
-        "labelUz": "Kuchlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "R",
@@ -8520,9 +8481,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}",
     "stepByStepSolution": [
-      "1. Kosinuslar teoremasi bo‘yicha teng ta’sir etuvchi: R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}.",
-      "2. \\cos(60°) = 0.5000.",
-      "3. R = \\sqrt{62^2 + 40^2 + 2 \\times 62 \\times 40 \\times 0.5000} = 89.02 N."
+      "1. Kosinuslar qonuni: $R = \\sqrt{F_1^2 + F_2^2 + 2 F_1 F_2 \\cos\\alpha}$.",
+      "2. $\\cos(60^\\circ) = 0.5000$.",
+      "3. $R = \\sqrt{62^2 + 40^2 + 2 \\times 62 \\times 40 \\times 0.5000} = 89.02$ N."
     ],
     "hints": [
       "Kuchlar vektor kattalik bo‘lgani uchun ularni geometrik qo‘shish kerak."
@@ -8536,7 +8497,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Polispast va oddiy mexanizmlarda yutuq",
     "difficulty": "oson",
     "title": "Polispast tizimida yukni ko‘tarish kuchi (#49)",
-    "statement": "Massasi m = 305 kg bo‘lgan yuk n = 3 ta tarmoqli ipga ega polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish uchun ipning erkin uchiga qanday F kuch bilan tortish kerak (g = 9.81 m/s²)?",
+    "statement": "Massasi $m = 305$ kg bo‘lgan yuk $n = 3$ ta tarmoqli polispast tizimi yordamida ko‘tarilmoqda. Tizimdagi ishqalanish hisobga olinmasa, yukni muvozanatda ushlab turish kuchi $F$ ni toping ($g = 9.81$ m/s²).",
     "given": {
       "m": {
         "value": 305,
@@ -8558,8 +8519,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F = \\frac{m g}{n}",
     "stepByStepSolution": [
-      "1. Yukning og‘irligi: P = m g = 305 \\times 9.81 = 2992.1 N.",
-      "2. Polispast beradigan kuchdagi yutuq ko‘taruvchi iplar soniga teng: F = \\frac{P}{n} = \\frac{2992.1}{3} = 997.37 N."
+      "1. Yukning og‘irligi: $P = m g = 305 \\times 9.81 = 2992.1$ N.",
+      "2. Kuchdagi yutuq: $F = \\frac{P}{n} = \\frac{2992.1}{3} = 997.37$ N."
     ],
     "hints": [
       "Kuchdan qancha marta yutsa, masofadan shuncha marta yutqaziladi."
@@ -8573,13 +8534,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Jismning ag‘darilish sharti va turg‘unlik",
     "difficulty": "murakkab",
     "title": "Quti shaklidagi jismning ag‘darilish chegaraviy burchagi (#50)",
-    "statement": "Asosi eni b = 0.5 m va balandligi h = 1 m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Ishqalanish yetarlicha katta bo‘lib sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik \\theta burchagida quti o‘z og‘irlik kuchi ta’sirida ag‘darila boshlaydi?",
+    "statement": "Asosi eni $b = 0.5$ m va balandligi $h = 1$ m bo‘lgan bir jinsli to‘g‘ri burchakli quti qiya tekislikka qo‘yilgan. Sirpanish bo‘lmaydi deb hisoblansa, tekislikning qaysi eng kichik $\\theta$ burchagida quti og‘irlik kuchi ta’sirida ag‘dariladi?",
     "given": {
       "b": {
         "value": 0.5,
         "unit": "m",
         "symbol": "b",
-        "labelUz": "Quti eni (tayanch bazasi)"
+        "labelUz": "Quti eni"
       },
       "h": {
         "value": 1,
@@ -8595,10 +8556,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tan\\theta = \\frac{b}{h} \\implies \\theta = \\arctan\\left(\\frac{b}{h}\\right)",
     "stepByStepSolution": [
-      "1. Og‘irlik markazi qutining geometrik markazida joylashgan: x_c = b/2, y_c = h/2.",
-      "2. Quti pastki qirrasiga nisbatan ag‘darilish sharti: og‘irlik kuchining chizig‘i tayanch perimetridan chiqqanda ro‘y beradi: \\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}.",
-      "3. \\tan\\theta = \\frac{0.5}{1} = 0.5000.",
-      "4. \\theta = \\arctan(0.5000) = 26.57°."
+      "1. Ag‘darilish chegaraviy sharti: og‘irlik markazi burchak tayanchidan o‘tadi: $\\tan\\theta = \\frac{b/2}{h/2} = \\frac{b}{h}$.",
+      "2. $\\tan\\theta = \\frac{0.5}{1} = 0.5000$.",
+      "3. $\\theta = \\arctan(0.5000) = 26.57^\\circ$."
     ],
     "hints": [
       "Og‘irlik kuchi vektori tayanch maydonidan tashqariga chiqishi bilan jism ag‘dariladi."
@@ -8612,7 +8572,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#1)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 110 \\Omega, R_2 = 220 \\Omega va R_3 = 165 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 110 \\ \\Omega, R_2 = 220 \\ \\Omega$ va $R_3 = 165 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 110,
@@ -8640,8 +8600,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 165 \\times \\frac{220}{110} = 330 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 165 \\times \\frac{220}{110} = 330 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -8655,7 +8615,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#2)",
-    "statement": "Induktivligi L = 14 mGn va sig‘imi C = 0.2 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 14$ mGn va sig‘imi $C = 0.2 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 14,
@@ -8677,11 +8637,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 14.0 \\times 10^{-3} Gn, C = 0.200 \\times 10^{-6} F.",
-      "4. LC = 2.8000e-9, \\sqrt{LC} = 5.2915e-5 s.",
-      "5. f_0 = 3007.7 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 14 \\times 10^{-3}$ Gn, $C = 0.2 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 5.2915e-5$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 5.2915e-5} = 3007.7$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -8695,7 +8654,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#3)",
-    "statement": "Qarshiligi R = 25 k\\Omega bo‘lgan rezistor va sig‘imi C = 50 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 25 \\ \\text{k}\\Omega$ va sig‘imi $C = 50 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 25,
@@ -8717,9 +8676,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 25 \\times 10^3 \\Omega, C = 50 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (25 \\times 10^3) \\times (50 \\times 10^{-6}) = 1.25 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 25 \\times 10^3 \\ \\Omega, C = 50 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (25 \\times 10^3) \\times (50 \\times 10^{-6}) = 1.25$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -8730,10 +8688,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-04",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#4)",
-    "statement": "Elektron induksiyasi B = 40 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 700 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 40$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 700$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 40,
@@ -8761,9 +8719,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (700000 m/s) \\times (0.04 Tl).",
-      "3. F_L = 4.4861e-15 N = 4.486 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (700000) \\times (0.04) = 4.4861e-15$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 4.486$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -8777,7 +8735,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#5)",
-    "statement": "Induktivligi L = 75 mGn bo‘lgan drosseldan I = 4.5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 75$ mGn bo‘lgan g‘altakdan $I = 4.5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 75,
@@ -8799,12 +8757,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (75 \\times 10^{-3} Gn) \\times (4.5 A)^2 = 0.75937 J.",
-      "3. Millijoulga o‘tkazamiz: W = 759.37 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (75 \\times 10^{-3}) \\times (4.5)^2 = 0.75937$ J = 759.37$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -8815,7 +8772,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#6)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 160 \\Omega, R_2 = 320 \\Omega va R_3 = 150 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 160 \\ \\Omega, R_2 = 320 \\ \\Omega$ va $R_3 = 150 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 160,
@@ -8843,8 +8800,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 150 \\times \\frac{320}{160} = 300 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 150 \\times \\frac{320}{160} = 300 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -8858,7 +8815,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#7)",
-    "statement": "Induktivligi L = 24 mGn va sig‘imi C = 0.45 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 24$ mGn va sig‘imi $C = 0.45 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 24,
@@ -8880,11 +8837,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 24.0 \\times 10^{-3} Gn, C = 0.450 \\times 10^{-6} F.",
-      "4. LC = 1.0800e-8, \\sqrt{LC} = 1.0392e-4 s.",
-      "5. f_0 = 1531.5 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 24 \\times 10^{-3}$ Gn, $C = 0.45 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.0392e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.0392e-4} = 1531.5$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -8898,7 +8854,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#8)",
-    "statement": "Qarshiligi R = 50 k\\Omega bo‘lgan rezistor va sig‘imi C = 20 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 50 \\ \\text{k}\\Omega$ va sig‘imi $C = 20 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 50,
@@ -8920,9 +8876,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 50 \\times 10^3 \\Omega, C = 20 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (50 \\times 10^3) \\times (20 \\times 10^{-6}) = 1 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 50 \\times 10^3 \\ \\Omega, C = 20 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (50 \\times 10^3) \\times (20 \\times 10^{-6}) = 1$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -8933,10 +8888,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-09",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#9)",
-    "statement": "Elektron induksiyasi B = 65 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 950 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 65$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 950$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 65,
@@ -8964,9 +8919,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (950000 m/s) \\times (0.065 Tl).",
-      "3. F_L = 9.8934e-15 N = 9.893 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (950000) \\times (0.065) = 9.8934e-15$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 9.893$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -8980,7 +8935,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#10)",
-    "statement": "Induktivligi L = 100 mGn bo‘lgan drosseldan I = 3 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 100$ mGn bo‘lgan g‘altakdan $I = 3$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 100,
@@ -9002,12 +8957,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (100 \\times 10^{-3} Gn) \\times (3 A)^2 = 0.45000 J.",
-      "3. Millijoulga o‘tkazamiz: W = 450 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (100 \\times 10^{-3}) \\times (3)^2 = 0.45000$ J = 450$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -9018,7 +8972,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#11)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 110 \\Omega, R_2 = 260 \\Omega va R_3 = 225 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 110 \\ \\Omega, R_2 = 260 \\ \\Omega$ va $R_3 = 225 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 110,
@@ -9046,8 +9000,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 225 \\times \\frac{260}{110} = 531.82 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 225 \\times \\frac{260}{110} = 531.82 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -9061,7 +9015,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#12)",
-    "statement": "Induktivligi L = 34 mGn va sig‘imi C = 0.2 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 34$ mGn va sig‘imi $C = 0.2 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 34,
@@ -9083,11 +9037,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 34.0 \\times 10^{-3} Gn, C = 0.200 \\times 10^{-6} F.",
-      "4. LC = 6.8000e-9, \\sqrt{LC} = 8.2462e-5 s.",
-      "5. f_0 = 1930 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 34 \\times 10^{-3}$ Gn, $C = 0.2 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 8.2462e-5$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 8.2462e-5} = 1930$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -9101,7 +9054,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#13)",
-    "statement": "Qarshiligi R = 25 k\\Omega bo‘lgan rezistor va sig‘imi C = 70 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 25 \\ \\text{k}\\Omega$ va sig‘imi $C = 70 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 25,
@@ -9123,9 +9076,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 25 \\times 10^3 \\Omega, C = 70 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (25 \\times 10^3) \\times (70 \\times 10^{-6}) = 1.75 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 25 \\times 10^3 \\ \\Omega, C = 70 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (25 \\times 10^3) \\times (70 \\times 10^{-6}) = 1.75$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -9136,10 +9088,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-14",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#14)",
-    "statement": "Elektron induksiyasi B = 40 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 1200 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 40$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 1200$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 40,
@@ -9167,9 +9119,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (1200000 m/s) \\times (0.04 Tl).",
-      "3. F_L = 7.6904e-15 N = 7.69 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (1200000) \\times (0.04) = 7.6904e-15$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 7.69$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -9183,7 +9135,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#15)",
-    "statement": "Induktivligi L = 125 mGn bo‘lgan drosseldan I = 5.5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 125$ mGn bo‘lgan g‘altakdan $I = 5.5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 125,
@@ -9205,12 +9157,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (125 \\times 10^{-3} Gn) \\times (5.5 A)^2 = 1.89063 J.",
-      "3. Millijoulga o‘tkazamiz: W = 1890.63 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (125 \\times 10^{-3}) \\times (5.5)^2 = 1.89063$ J = 1890.63$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -9221,7 +9172,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#16)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 160 \\Omega, R_2 = 200 \\Omega va R_3 = 210 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 160 \\ \\Omega, R_2 = 200 \\ \\Omega$ va $R_3 = 210 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 160,
@@ -9249,8 +9200,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 210 \\times \\frac{200}{160} = 262.5 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 210 \\times \\frac{200}{160} = 262.5 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -9264,7 +9215,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#17)",
-    "statement": "Induktivligi L = 44 mGn va sig‘imi C = 0.45 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 44$ mGn va sig‘imi $C = 0.45 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 44,
@@ -9286,11 +9237,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 44.0 \\times 10^{-3} Gn, C = 0.450 \\times 10^{-6} F.",
-      "4. LC = 1.9800e-8, \\sqrt{LC} = 1.4071e-4 s.",
-      "5. f_0 = 1131.1 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 44 \\times 10^{-3}$ Gn, $C = 0.45 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.4071e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.4071e-4} = 1131.1$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -9304,7 +9254,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#18)",
-    "statement": "Qarshiligi R = 50 k\\Omega bo‘lgan rezistor va sig‘imi C = 40 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 50 \\ \\text{k}\\Omega$ va sig‘imi $C = 40 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 50,
@@ -9326,9 +9276,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 50 \\times 10^3 \\Omega, C = 40 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (50 \\times 10^3) \\times (40 \\times 10^{-6}) = 2 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 50 \\times 10^3 \\ \\Omega, C = 40 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (50 \\times 10^3) \\times (40 \\times 10^{-6}) = 2$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -9339,10 +9288,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-19",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#19)",
-    "statement": "Elektron induksiyasi B = 65 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 1450 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 65$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 1450$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 65,
@@ -9370,9 +9319,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (1450000 m/s) \\times (0.065 Tl).",
-      "3. F_L = 1.5101e-14 N = 15.101 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (1450000) \\times (0.065) = 1.5101e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 15.101$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -9386,7 +9335,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#20)",
-    "statement": "Induktivligi L = 150 mGn bo‘lgan drosseldan I = 4 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 150$ mGn bo‘lgan g‘altakdan $I = 4$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 150,
@@ -9408,12 +9357,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (150 \\times 10^{-3} Gn) \\times (4 A)^2 = 1.20000 J.",
-      "3. Millijoulga o‘tkazamiz: W = 1200 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (150 \\times 10^{-3}) \\times (4)^2 = 1.20000$ J = 1200$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -9424,7 +9372,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#21)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 110 \\Omega, R_2 = 300 \\Omega va R_3 = 195 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 110 \\ \\Omega, R_2 = 300 \\ \\Omega$ va $R_3 = 195 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 110,
@@ -9452,8 +9400,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 195 \\times \\frac{300}{110} = 531.82 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 195 \\times \\frac{300}{110} = 531.82 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -9467,7 +9415,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#22)",
-    "statement": "Induktivligi L = 54 mGn va sig‘imi C = 0.2 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 54$ mGn va sig‘imi $C = 0.2 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 54,
@@ -9489,11 +9437,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 54.0 \\times 10^{-3} Gn, C = 0.200 \\times 10^{-6} F.",
-      "4. LC = 1.0800e-8, \\sqrt{LC} = 1.0392e-4 s.",
-      "5. f_0 = 1531.5 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 54 \\times 10^{-3}$ Gn, $C = 0.2 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.0392e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.0392e-4} = 1531.5$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -9507,7 +9454,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#23)",
-    "statement": "Qarshiligi R = 25 k\\Omega bo‘lgan rezistor va sig‘imi C = 90 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 25 \\ \\text{k}\\Omega$ va sig‘imi $C = 90 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 25,
@@ -9529,9 +9476,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 25 \\times 10^3 \\Omega, C = 90 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (25 \\times 10^3) \\times (90 \\times 10^{-6}) = 2.25 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 25 \\times 10^3 \\ \\Omega, C = 90 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (25 \\times 10^3) \\times (90 \\times 10^{-6}) = 2.25$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -9542,10 +9488,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-24",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#24)",
-    "statement": "Elektron induksiyasi B = 40 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 1700 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 40$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 1700$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 40,
@@ -9573,9 +9519,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (1700000 m/s) \\times (0.04 Tl).",
-      "3. F_L = 1.0895e-14 N = 10.895 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (1700000) \\times (0.04) = 1.0895e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 10.895$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -9589,7 +9535,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#25)",
-    "statement": "Induktivligi L = 175 mGn bo‘lgan drosseldan I = 2.5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 175$ mGn bo‘lgan g‘altakdan $I = 2.5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 175,
@@ -9611,12 +9557,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (175 \\times 10^{-3} Gn) \\times (2.5 A)^2 = 0.54688 J.",
-      "3. Millijoulga o‘tkazamiz: W = 546.88 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (175 \\times 10^{-3}) \\times (2.5)^2 = 0.54688$ J = 546.88$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -9627,7 +9572,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#26)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 160 \\Omega, R_2 = 240 \\Omega va R_3 = 180 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 160 \\ \\Omega, R_2 = 240 \\ \\Omega$ va $R_3 = 180 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 160,
@@ -9655,8 +9600,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 180 \\times \\frac{240}{160} = 270 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 180 \\times \\frac{240}{160} = 270 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -9670,7 +9615,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#27)",
-    "statement": "Induktivligi L = 64 mGn va sig‘imi C = 0.45 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 64$ mGn va sig‘imi $C = 0.45 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 64,
@@ -9692,11 +9637,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 64.0 \\times 10^{-3} Gn, C = 0.450 \\times 10^{-6} F.",
-      "4. LC = 2.8800e-8, \\sqrt{LC} = 1.6971e-4 s.",
-      "5. f_0 = 937.8 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 64 \\times 10^{-3}$ Gn, $C = 0.45 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.6971e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.6971e-4} = 937.8$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -9710,7 +9654,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#28)",
-    "statement": "Qarshiligi R = 50 k\\Omega bo‘lgan rezistor va sig‘imi C = 60 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 50 \\ \\text{k}\\Omega$ va sig‘imi $C = 60 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 50,
@@ -9732,9 +9676,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 50 \\times 10^3 \\Omega, C = 60 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (50 \\times 10^3) \\times (60 \\times 10^{-6}) = 3 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 50 \\times 10^3 \\ \\Omega, C = 60 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (50 \\times 10^3) \\times (60 \\times 10^{-6}) = 3$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -9745,10 +9688,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-29",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#29)",
-    "statement": "Elektron induksiyasi B = 65 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 1950 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 65$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 1950$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 65,
@@ -9776,9 +9719,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (1950000 m/s) \\times (0.065 Tl).",
-      "3. F_L = 2.0308e-14 N = 20.308 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (1950000) \\times (0.065) = 2.0308e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 20.308$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -9792,7 +9735,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#30)",
-    "statement": "Induktivligi L = 200 mGn bo‘lgan drosseldan I = 5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 200$ mGn bo‘lgan g‘altakdan $I = 5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 200,
@@ -9814,12 +9757,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (200 \\times 10^{-3} Gn) \\times (5 A)^2 = 2.50000 J.",
-      "3. Millijoulga o‘tkazamiz: W = 2500 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (200 \\times 10^{-3}) \\times (5)^2 = 2.50000$ J = 2500$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -9830,7 +9772,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#31)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 110 \\Omega, R_2 = 340 \\Omega va R_3 = 165 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 110 \\ \\Omega, R_2 = 340 \\ \\Omega$ va $R_3 = 165 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 110,
@@ -9858,8 +9800,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 165 \\times \\frac{340}{110} = 510 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 165 \\times \\frac{340}{110} = 510 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -9873,7 +9815,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#32)",
-    "statement": "Induktivligi L = 74 mGn va sig‘imi C = 0.2 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 74$ mGn va sig‘imi $C = 0.2 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 74,
@@ -9895,11 +9837,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 74.0 \\times 10^{-3} Gn, C = 0.200 \\times 10^{-6} F.",
-      "4. LC = 1.4800e-8, \\sqrt{LC} = 1.2166e-4 s.",
-      "5. f_0 = 1308.2 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 74 \\times 10^{-3}$ Gn, $C = 0.2 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.2166e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.2166e-4} = 1308.2$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -9913,7 +9854,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#33)",
-    "statement": "Qarshiligi R = 25 k\\Omega bo‘lgan rezistor va sig‘imi C = 30 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 25 \\ \\text{k}\\Omega$ va sig‘imi $C = 30 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 25,
@@ -9935,9 +9876,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 25 \\times 10^3 \\Omega, C = 30 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (25 \\times 10^3) \\times (30 \\times 10^{-6}) = 0.75 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 25 \\times 10^3 \\ \\Omega, C = 30 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (25 \\times 10^3) \\times (30 \\times 10^{-6}) = 0.75$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -9948,10 +9888,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-34",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#34)",
-    "statement": "Elektron induksiyasi B = 40 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 2200 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 40$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 2200$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 40,
@@ -9979,9 +9919,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (2200000 m/s) \\times (0.04 Tl).",
-      "3. F_L = 1.4099e-14 N = 14.099 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (2200000) \\times (0.04) = 1.4099e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 14.099$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -9995,7 +9935,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#35)",
-    "statement": "Induktivligi L = 225 mGn bo‘lgan drosseldan I = 3.5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 225$ mGn bo‘lgan g‘altakdan $I = 3.5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 225,
@@ -10017,12 +9957,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (225 \\times 10^{-3} Gn) \\times (3.5 A)^2 = 1.37813 J.",
-      "3. Millijoulga o‘tkazamiz: W = 1378.13 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (225 \\times 10^{-3}) \\times (3.5)^2 = 1.37813$ J = 1378.13$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -10033,7 +9972,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#36)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 160 \\Omega, R_2 = 280 \\Omega va R_3 = 150 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 160 \\ \\Omega, R_2 = 280 \\ \\Omega$ va $R_3 = 150 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 160,
@@ -10061,8 +10000,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 150 \\times \\frac{280}{160} = 262.5 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 150 \\times \\frac{280}{160} = 262.5 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -10076,7 +10015,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#37)",
-    "statement": "Induktivligi L = 84 mGn va sig‘imi C = 0.45 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 84$ mGn va sig‘imi $C = 0.45 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 84,
@@ -10098,11 +10037,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 84.0 \\times 10^{-3} Gn, C = 0.450 \\times 10^{-6} F.",
-      "4. LC = 3.7800e-8, \\sqrt{LC} = 1.9442e-4 s.",
-      "5. f_0 = 818.6 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 84 \\times 10^{-3}$ Gn, $C = 0.45 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.9442e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.9442e-4} = 818.6$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -10116,7 +10054,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#38)",
-    "statement": "Qarshiligi R = 50 k\\Omega bo‘lgan rezistor va sig‘imi C = 80 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 50 \\ \\text{k}\\Omega$ va sig‘imi $C = 80 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 50,
@@ -10138,9 +10076,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 50 \\times 10^3 \\Omega, C = 80 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (50 \\times 10^3) \\times (80 \\times 10^{-6}) = 4 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 50 \\times 10^3 \\ \\Omega, C = 80 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (50 \\times 10^3) \\times (80 \\times 10^{-6}) = 4$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -10151,10 +10088,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-39",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#39)",
-    "statement": "Elektron induksiyasi B = 65 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 2450 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 65$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 2450$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 65,
@@ -10182,9 +10119,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (2450000 m/s) \\times (0.065 Tl).",
-      "3. F_L = 2.5515e-14 N = 25.515 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (2450000) \\times (0.065) = 2.5515e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 25.515$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -10198,7 +10135,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#40)",
-    "statement": "Induktivligi L = 250 mGn bo‘lgan drosseldan I = 2 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 250$ mGn bo‘lgan g‘altakdan $I = 2$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 250,
@@ -10220,12 +10157,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (250 \\times 10^{-3} Gn) \\times (2 A)^2 = 0.50000 J.",
-      "3. Millijoulga o‘tkazamiz: W = 500 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (250 \\times 10^{-3}) \\times (2)^2 = 0.50000$ J = 500$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -10236,7 +10172,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#41)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 110 \\Omega, R_2 = 220 \\Omega va R_3 = 225 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 110 \\ \\Omega, R_2 = 220 \\ \\Omega$ va $R_3 = 225 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 110,
@@ -10264,8 +10200,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 225 \\times \\frac{220}{110} = 450 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 225 \\times \\frac{220}{110} = 450 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -10279,7 +10215,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#42)",
-    "statement": "Induktivligi L = 94 mGn va sig‘imi C = 0.2 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 94$ mGn va sig‘imi $C = 0.2 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 94,
@@ -10301,11 +10237,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 94.0 \\times 10^{-3} Gn, C = 0.200 \\times 10^{-6} F.",
-      "4. LC = 1.8800e-8, \\sqrt{LC} = 1.3711e-4 s.",
-      "5. f_0 = 1160.8 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 94 \\times 10^{-3}$ Gn, $C = 0.2 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 1.3711e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 1.3711e-4} = 1160.8$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -10319,7 +10254,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#43)",
-    "statement": "Qarshiligi R = 25 k\\Omega bo‘lgan rezistor va sig‘imi C = 50 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 25 \\ \\text{k}\\Omega$ va sig‘imi $C = 50 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 25,
@@ -10341,9 +10276,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 25 \\times 10^3 \\Omega, C = 50 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (25 \\times 10^3) \\times (50 \\times 10^{-6}) = 1.25 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 25 \\times 10^3 \\ \\Omega, C = 50 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (25 \\times 10^3) \\times (50 \\times 10^{-6}) = 1.25$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -10354,10 +10288,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-44",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#44)",
-    "statement": "Elektron induksiyasi B = 40 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 2700 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 40$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 2700$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 40,
@@ -10385,9 +10319,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (2700000 m/s) \\times (0.04 Tl).",
-      "3. F_L = 1.7304e-14 N = 17.304 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (2700000) \\times (0.04) = 1.7304e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 17.304$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -10401,7 +10335,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#45)",
-    "statement": "Induktivligi L = 275 mGn bo‘lgan drosseldan I = 4.5 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 275$ mGn bo‘lgan g‘altakdan $I = 4.5$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 275,
@@ -10423,12 +10357,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (275 \\times 10^{-3} Gn) \\times (4.5 A)^2 = 2.78438 J.",
-      "3. Millijoulga o‘tkazamiz: W = 2784.38 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (275 \\times 10^{-3}) \\times (4.5)^2 = 2.78438$ J = 2784.38$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -10439,7 +10372,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Uitston ko‘prigi usulida qarshilikni o‘lchash",
     "difficulty": "oson",
     "title": "Uitston ko‘prigi muvozanatida noma’lum qarshilikni topish (#46)",
-    "statement": "Uitston o‘lchash ko‘prigida galvanometr nolinchi tokni ko‘rsatganda (ko‘prik muvozanat holatida) yelkalar qarshiliklari R_1 = 160 \\Omega, R_2 = 320 \\Omega va R_3 = 210 \\Omega ga teng bo‘ldi. Noma’lum R_x qarshilikni hisoblang.",
+    "statement": "Uitston ko‘prigi muvozanat holatida yelkalar qarshiliklari $R_1 = 160 \\ \\Omega, R_2 = 320 \\ \\Omega$ va $R_3 = 210 \\ \\Omega$ ga teng bo‘ldi. Noma’lum $R_x$ qarshilikni hisoblang.",
     "given": {
       "R1": {
         "value": 160,
@@ -10467,8 +10400,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "R_x = R_3 \\cdot \\frac{R_2}{R_1}",
     "stepByStepSolution": [
-      "1. Ko‘prik muvozanati sharti: \\frac{R_1}{R_2} = \\frac{R_3}{R_x}.",
-      "2. R_x = R_3 \\cdot \\frac{R_2}{R_1} = 210 \\times \\frac{320}{160} = 420 \\Omega."
+      "1. Ko‘prik muvozanat sharti: $\\frac{R_1}{R_2} = \\frac{R_3}{R_x}$.",
+      "2. $R_x = R_3 \\cdot \\frac{R_2}{R_1} = 210 \\times \\frac{320}{160} = 420 \\ \\Omega$."
     ],
     "hints": [
       "Ko‘prik muvozanatida diagonal bo‘ylab ulangan galvanometrdan tok oqmaydi."
@@ -10482,7 +10415,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RLC konturidagi elektromagnit rezonans",
     "difficulty": "o'rta",
     "title": "Ketma-ket RLC tebranish konturining rezonans chastotasi (#47)",
-    "statement": "Induktivligi L = 104 mGn va sig‘imi C = 0.45 \\mu F bo‘lgan kondensatordan tashkil topgan zanjir o‘zgaruvchan tok manbaiga ulangan. Zanjirdagi kuchlanishlar rezonansi chastotasi f_0 ni Gersda (Hz) hisoblang.",
+    "statement": "Induktivligi $L = 104$ mGn va sig‘imi $C = 0.45 \\ \\mu\\text{F}$ bo‘lgan RLC konturining rezonans chastotasi $f_0$ ni Gersda (Hz) hisoblang.",
     "given": {
       "L": {
         "value": 104,
@@ -10504,11 +10437,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "f_0 = \\frac{1}{2\\pi \\sqrt{LC}}",
     "stepByStepSolution": [
-      "1. Tomson formulasi: \\omega_0 = \\frac{1}{\\sqrt{LC}}.",
-      "2. Rezonans chiziqli chastotasi: f_0 = \\frac{1}{2\\pi \\sqrt{LC}}.",
-      "3. L = 104.0 \\times 10^{-3} Gn, C = 0.450 \\times 10^{-6} F.",
-      "4. LC = 4.6800e-8, \\sqrt{LC} = 2.1633e-4 s.",
-      "5. f_0 = 735.7 Hz."
+      "1. Tomson formulasi: $f_0 = \\frac{1}{2\\pi \\sqrt{LC}}$.",
+      "2. $L = 104 \\times 10^{-3}$ Gn, $C = 0.45 \\times 10^{-6}$ F.",
+      "3. $\\sqrt{LC} = 2.1633e-4$ s.",
+      "4. $f_0 = \\frac{1}{2\\pi \\times 2.1633e-4} = 735.7$ Hz."
     ],
     "hints": [
       "Rezonans paytida induktiv qarshilik sig‘im qarshiligiga tenglashadi (X_L = X_C)."
@@ -10522,7 +10454,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "RC zanjirida o‘tish jarayonlari va vaqt doimiysi",
     "difficulty": "o'rta",
     "title": "Kondensator zaryadsizlanishining vaqt doimiysi (\\tau) (#48)",
-    "statement": "Qarshiligi R = 50 k\\Omega bo‘lgan rezistor va sig‘imi C = 20 \\mu F bo‘lgan kondensatordan iborat RC zanjirning vaqt doimiysi \\tau ni sekundlarda aniqlang.",
+    "statement": "Qarshiligi $R = 50 \\ \\text{k}\\Omega$ va sig‘imi $C = 20 \\ \\mu\\text{F}$ bo‘lgan RC zanjirning vaqt doimiysi $\\tau$ ni sekundlarda aniqlang.",
     "given": {
       "R": {
         "value": 50,
@@ -10544,9 +10476,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\tau = R \\cdot C",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: R = 50 \\times 10^3 \\Omega, C = 20 \\times 10^{-6} F.",
-      "2. Vaqt doimiysi: \\tau = R \\cdot C = (50 \\times 10^3) \\times (20 \\times 10^{-6}) = 1 s.",
-      "3. t = \\tau vaqtda kuchlanish boshlang‘ich qiymatining e marta (taxminan 36.8% gacha) kamayadi."
+      "1. SI birliklarida: $R = 50 \\times 10^3 \\ \\Omega, C = 20 \\times 10^{-6}$ F.",
+      "2. $\\tau = R \\cdot C = (50 \\times 10^3) \\times (20 \\times 10^{-6}) = 1$ s."
     ],
     "hints": [
       "Kiloomlarni Omga (10^3), mikrofaradlarni Faradga (10^-6) o‘tkazing."
@@ -10557,10 +10488,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "id": "prob-em-49",
     "chapter": "electromagnetism",
     "chapterNameUz": "Elektromagnetizm va zanjirlar",
-    "topic": "Magnit maydonida harakatlanayotgan zaryadga ta’sir qiluvchi Lorents kuchi",
+    "topic": "Magnit maydonida Lorents kuchi",
     "difficulty": "o'rta",
     "title": "Elektronga magnit maydonida ta’sir etuvchi Lorents kuchi (#49)",
-    "statement": "Elektron induksiyasi B = 65 mTl bo‘lgan bir jinsli magnit maydoniga induksiya chiziqlariga perpendikulyar ravishda v = 2950 km/s tezlik bilan uchib kirdi. Elektronga ta’sir qiluvchi Lorents kuchi F_L ni femtonyutonlarda (1 fN = 10^{-15} N) hisoblang (e = 1.602 \\times 10^{-19} C).",
+    "statement": "Elektron induksiyasi $B = 65$ mTl bo‘lgan bir jinsli magnit maydoniga perpendikulyar ravishda $v = 2950$ km/s tezlik bilan kirdi. Unga ta’sir qiluvchi Lorents kuchi $F_L$ ni femtonyutonlarda ($1 \\text{ fN} = 10^{-15}$ N) hisoblang ($e = 1.602 \\times 10^{-19}$ C).",
     "given": {
       "B": {
         "value": 65,
@@ -10588,9 +10519,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "F_L = e \\cdot v \\cdot B \\sin\\alpha",
     "stepByStepSolution": [
-      "1. \\alpha = 90° bo‘lgani uchun \\sin(90°) = 1.",
-      "2. F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19} C) \\times (2950000 m/s) \\times (0.065 Tl).",
-      "3. F_L = 3.0722e-14 N = 30.722 fN."
+      "1. $\\alpha = 90^\\circ \\implies \\sin(90^\\circ) = 1$.",
+      "2. $F_L = e \\cdot v \\cdot B = (1.602 \\times 10^{-19}) \\times (2950000) \\times (0.065) = 3.0722e-14$ N.",
+      "3. Femtonyutonga o‘tkazamiz: $F_L = 30.722$ fN."
     ],
     "hints": [
       "1 femtonyuton (fN) = 10^-15 N."
@@ -10604,7 +10535,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "G‘altak magnit maydonining energiyasi",
     "difficulty": "oson",
     "title": "Tokli g‘altakda to‘plangan magnit maydon energiyasi (#50)",
-    "statement": "Induktivligi L = 300 mGn bo‘lgan drosseldan I = 3 A tok oqib o‘tganda, uning magnit maydonida qancha energiya W to‘planadi? Javobni millijoulda (mJ) ifodalang.",
+    "statement": "Induktivligi $L = 300$ mGn bo‘lgan g‘altakdan $I = 3$ A tok oqib o‘tganda to‘plangan magnit maydon energiyasi $W$ ni millijoulda (mJ) hisoblang.",
     "given": {
       "L": {
         "value": 300,
@@ -10626,12 +10557,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "W = \\frac{1}{2} L I^2",
     "stepByStepSolution": [
-      "1. Magnit maydon energiyasi: W = \\frac{1}{2} L I^2.",
-      "2. W = \\frac{1}{2} \\times (300 \\times 10^{-3} Gn) \\times (3 A)^2 = 1.35000 J.",
-      "3. Millijoulga o‘tkazamiz: W = 1350 mJ."
+      "1. Magnit maydon energiyasi: $W = \\frac{1}{2} L I^2$.",
+      "2. $W = \\frac{1}{2} \\times (300 \\times 10^{-3}) \\times (3)^2 = 1.35000$ J = 1350$ mJ."
     ],
     "hints": [
-      "Kondensatordagi elektr energiyasi CU^2/2 kabi, g‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
+      "G‘altakdagi magnit energiya LI^2/2 formulasi bilan topiladi."
     ],
     "simulationPresetId": "em-25"
   },
@@ -10642,7 +10572,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#1)",
-    "statement": "Fokus masofasi F = 17 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 24 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 17$ cm bo‘lgan yig‘uvchi linzadan $d = 24$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 17,
@@ -10664,9 +10594,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{24 \\times 17}{24 - 17} = \\frac{408.0}{7.0} = 58.29 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{58.29}{24} = 2.43."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{24 \\times 17}{24 - 17} = \\frac{408.0}{7.0} = 58.29$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 2.43$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -10680,7 +10610,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#2)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.49 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.49$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.49,
@@ -10696,9 +10626,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.49} = 0.6711.",
-      "3. \\theta_c = \\arcsin(0.6711) = 42.16°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.49} = 0.6711$.",
+      "3. $\\theta_c = \\arcsin(0.6711) = 42.16^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -10712,7 +10642,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 1-tartibli maksimum burchagi (#3)",
-    "statement": "1 mm uzunligida N = 600 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 1-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 600$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 1$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 600,
@@ -10740,9 +10670,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{600} = 1.6667e-6 m = 1.6667 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{1.6667e-6} = 0.3534.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.3534) = 20.69°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{600} = 1.6667 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{1.6667e-6} = 0.3534$.",
+      "3. $\\theta = \\arcsin(0.3534) = 20.69^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -10756,13 +10686,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#4)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 50° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 50^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 50,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -10772,9 +10702,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(50°) = 0.6428.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(50°) = (0.6428)^2 = 0.4132 = 41.32\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(50^\\circ) = 0.6428$.",
+      "3. $\\frac{I}{I_0} = (0.6428)^2 = 41.32\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -10788,7 +10718,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#5)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.75 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.75$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.75,
@@ -10804,9 +10734,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.75) = 60.26°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.75) = 60.26^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -10820,7 +10749,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#6)",
-    "statement": "Fokus masofasi F = 27 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 44 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 27$ cm bo‘lgan yig‘uvchi linzadan $d = 44$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 27,
@@ -10842,9 +10771,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{44 \\times 27}{44 - 27} = \\frac{1188.0}{17.0} = 69.88 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{69.88}{44} = 1.59."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{44 \\times 27}{44 - 27} = \\frac{1188.0}{17.0} = 69.88$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 1.59$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -10858,7 +10787,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#7)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.41 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.41$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.41,
@@ -10874,9 +10803,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.41} = 0.7092.",
-      "3. \\theta_c = \\arcsin(0.7092) = 45.17°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.41} = 0.7092$.",
+      "3. $\\theta_c = \\arcsin(0.7092) = 45.17^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -10890,7 +10819,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 3-tartibli maksimum burchagi (#8)",
-    "statement": "1 mm uzunligida N = 500 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 3-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 500$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 3$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 500,
@@ -10918,9 +10847,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{500} = 2.0000e-6 m = 2 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{2.0000e-6} = 0.8835.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.8835) = 62.07°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{500} = 2 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{2.0000e-6} = 0.8835$.",
+      "3. $\\theta = \\arcsin(0.8835) = 62.07^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -10934,13 +10863,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#9)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 30° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 30^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 30,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -10950,9 +10879,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(30°) = 0.8660.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(30°) = (0.8660)^2 = 0.7500 = 75\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(30^\\circ) = 0.8660$.",
+      "3. $\\frac{I}{I_0} = (0.8660)^2 = 75\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -10966,7 +10895,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#10)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.7 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.7$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.7,
@@ -10982,9 +10911,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.7) = 59.53°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.7) = 59.53^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -10998,7 +10926,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#11)",
-    "statement": "Fokus masofasi F = 17 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 44 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 17$ cm bo‘lgan yig‘uvchi linzadan $d = 44$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 17,
@@ -11020,9 +10948,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{44 \\times 17}{44 - 17} = \\frac{748.0}{27.0} = 27.7 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{27.7}{44} = 0.63."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{44 \\times 17}{44 - 17} = \\frac{748.0}{27.0} = 27.7$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 0.63$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11036,7 +10964,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#12)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.33 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.33$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.33,
@@ -11052,9 +10980,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.33} = 0.7519.",
-      "3. \\theta_c = \\arcsin(0.7519) = 48.75°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.33} = 0.7519$.",
+      "3. $\\theta_c = \\arcsin(0.7519) = 48.75^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11068,7 +10996,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 2-tartibli maksimum burchagi (#13)",
-    "statement": "1 mm uzunligida N = 400 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 2-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 400$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 2$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 400,
@@ -11096,9 +11024,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{400} = 2.5000e-6 m = 2.5 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{2.5000e-6} = 0.4712.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.4712) = 28.11°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{400} = 2.5 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{2.5000e-6} = 0.4712$.",
+      "3. $\\theta = \\arcsin(0.4712) = 28.11^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -11112,13 +11040,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#14)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 55° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 55^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 55,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -11128,9 +11056,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(55°) = 0.5736.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(55°) = (0.5736)^2 = 0.3290 = 32.9\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(55^\\circ) = 0.5736$.",
+      "3. $\\frac{I}{I_0} = (0.5736)^2 = 32.9\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -11144,7 +11072,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#15)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.65 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.65$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.65,
@@ -11160,9 +11088,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.65) = 58.78°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.65) = 58.78^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -11176,7 +11103,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#16)",
-    "statement": "Fokus masofasi F = 27 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 40 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 27$ cm bo‘lgan yig‘uvchi linzadan $d = 40$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 27,
@@ -11198,9 +11125,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{40 \\times 27}{40 - 27} = \\frac{1080.0}{13.0} = 83.08 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{83.08}{40} = 2.08."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{40 \\times 27}{40 - 27} = \\frac{1080.0}{13.0} = 83.08$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 2.08$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11214,7 +11141,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#17)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.73 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.73$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.73,
@@ -11230,9 +11157,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.73} = 0.5780.",
-      "3. \\theta_c = \\arcsin(0.5780) = 35.31°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.73} = 0.5780$.",
+      "3. $\\theta_c = \\arcsin(0.5780) = 35.31^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11246,7 +11173,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 1-tartibli maksimum burchagi (#18)",
-    "statement": "1 mm uzunligida N = 300 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 1-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 300$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 1$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 300,
@@ -11274,9 +11201,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{300} = 3.3333e-6 m = 3.3333 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{3.3333e-6} = 0.1767.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.1767) = 10.18°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{300} = 3.3333 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{3.3333e-6} = 0.1767$.",
+      "3. $\\theta = \\arcsin(0.1767) = 10.18^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -11290,13 +11217,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#19)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 35° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 35^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 35,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -11306,9 +11233,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(35°) = 0.8192.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(35°) = (0.8192)^2 = 0.6710 = 67.1\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(35^\\circ) = 0.8192$.",
+      "3. $\\frac{I}{I_0} = (0.8192)^2 = 67.1\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -11322,7 +11249,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#20)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.6 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.6$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.6,
@@ -11338,9 +11265,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.6) = 57.99°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.6) = 57.99^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -11354,7 +11280,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#21)",
-    "statement": "Fokus masofasi F = 17 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 40 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 17$ cm bo‘lgan yig‘uvchi linzadan $d = 40$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 17,
@@ -11376,9 +11302,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{40 \\times 17}{40 - 17} = \\frac{680.0}{23.0} = 29.57 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{29.57}{40} = 0.74."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{40 \\times 17}{40 - 17} = \\frac{680.0}{23.0} = 29.57$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 0.74$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11392,7 +11318,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#22)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.65 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.65$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.65,
@@ -11408,9 +11334,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.65} = 0.6061.",
-      "3. \\theta_c = \\arcsin(0.6061) = 37.31°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.65} = 0.6061$.",
+      "3. $\\theta_c = \\arcsin(0.6061) = 37.31^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11424,7 +11350,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 3-tartibli maksimum burchagi (#23)",
-    "statement": "1 mm uzunligida N = 800 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 3-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 800$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 3$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 800,
@@ -11452,9 +11378,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{800} = 1.2500e-6 m = 1.25 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{1.2500e-6} = 1.4136.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(1.4136) = 0°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{800} = 1.25 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{1.2500e-6} = 1.4136$.",
+      "3. $\\theta = \\arcsin(1.4136) = 0^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -11468,13 +11394,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#24)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 60° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 60^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 60,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -11484,9 +11410,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(60°) = 0.5000.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(60°) = (0.5000)^2 = 0.2500 = 25\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(60^\\circ) = 0.5000$.",
+      "3. $\\frac{I}{I_0} = (0.5000)^2 = 25\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -11500,7 +11426,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#25)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.55 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.55$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.55,
@@ -11516,9 +11442,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.55) = 57.17°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.55) = 57.17^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -11532,7 +11457,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#26)",
-    "statement": "Fokus masofasi F = 27 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 36 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 27$ cm bo‘lgan yig‘uvchi linzadan $d = 36$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 27,
@@ -11554,9 +11479,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{36 \\times 27}{36 - 27} = \\frac{972.0}{9.0} = 108 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{108}{36} = 3."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{36 \\times 27}{36 - 27} = \\frac{972.0}{9.0} = 108$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 3$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11570,7 +11495,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#27)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.57 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.57$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.57,
@@ -11586,9 +11511,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.57} = 0.6369.",
-      "3. \\theta_c = \\arcsin(0.6369) = 39.56°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.57} = 0.6369$.",
+      "3. $\\theta_c = \\arcsin(0.6369) = 39.56^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11602,7 +11527,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 2-tartibli maksimum burchagi (#28)",
-    "statement": "1 mm uzunligida N = 700 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 2-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 700$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 2$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 700,
@@ -11630,9 +11555,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{700} = 1.4286e-6 m = 1.4286 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{1.4286e-6} = 0.8246.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.8246) = 55.55°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{700} = 1.4286 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{1.4286e-6} = 0.8246$.",
+      "3. $\\theta = \\arcsin(0.8246) = 55.55^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -11646,13 +11571,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#29)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 40° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 40^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 40,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -11662,9 +11587,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(40°) = 0.7660.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(40°) = (0.7660)^2 = 0.5868 = 58.68\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(40^\\circ) = 0.7660$.",
+      "3. $\\frac{I}{I_0} = (0.7660)^2 = 58.68\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -11678,7 +11603,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#30)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.5 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.5$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.5,
@@ -11694,9 +11619,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.5) = 56.31°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.5) = 56.31^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -11710,7 +11634,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#31)",
-    "statement": "Fokus masofasi F = 17 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 36 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 17$ cm bo‘lgan yig‘uvchi linzadan $d = 36$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 17,
@@ -11732,9 +11656,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{36 \\times 17}{36 - 17} = \\frac{612.0}{19.0} = 32.21 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{32.21}{36} = 0.89."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{36 \\times 17}{36 - 17} = \\frac{612.0}{19.0} = 32.21$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 0.89$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11748,7 +11672,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#32)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.49 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.49$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.49,
@@ -11764,9 +11688,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.49} = 0.6711.",
-      "3. \\theta_c = \\arcsin(0.6711) = 42.16°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.49} = 0.6711$.",
+      "3. $\\theta_c = \\arcsin(0.6711) = 42.16^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11780,7 +11704,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 1-tartibli maksimum burchagi (#33)",
-    "statement": "1 mm uzunligida N = 600 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 1-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 600$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 1$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 600,
@@ -11808,9 +11732,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{600} = 1.6667e-6 m = 1.6667 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{1.6667e-6} = 0.3534.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.3534) = 20.69°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{600} = 1.6667 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{1.6667e-6} = 0.3534$.",
+      "3. $\\theta = \\arcsin(0.3534) = 20.69^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -11824,13 +11748,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#34)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 65° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 65^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 65,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -11840,9 +11764,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(65°) = 0.4226.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(65°) = (0.4226)^2 = 0.1786 = 17.86\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(65^\\circ) = 0.4226$.",
+      "3. $\\frac{I}{I_0} = (0.4226)^2 = 17.86\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -11856,7 +11780,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#35)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.75 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.75$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.75,
@@ -11872,9 +11796,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.75) = 60.26°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.75) = 60.26^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -11888,7 +11811,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#36)",
-    "statement": "Fokus masofasi F = 27 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 32 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 27$ cm bo‘lgan yig‘uvchi linzadan $d = 32$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 27,
@@ -11910,9 +11833,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{32 \\times 27}{32 - 27} = \\frac{864.0}{5.0} = 172.8 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{172.8}{32} = 5.4."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{32 \\times 27}{32 - 27} = \\frac{864.0}{5.0} = 172.8$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 5.4$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -11926,7 +11849,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#37)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.41 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.41$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.41,
@@ -11942,9 +11865,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.41} = 0.7092.",
-      "3. \\theta_c = \\arcsin(0.7092) = 45.17°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.41} = 0.7092$.",
+      "3. $\\theta_c = \\arcsin(0.7092) = 45.17^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -11958,7 +11881,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 3-tartibli maksimum burchagi (#38)",
-    "statement": "1 mm uzunligida N = 500 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 3-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 500$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 3$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 500,
@@ -11986,9 +11909,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{500} = 2.0000e-6 m = 2 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{2.0000e-6} = 0.8835.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.8835) = 62.07°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{500} = 2 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{3 \\times 589 \\times 10^{-9}}{2.0000e-6} = 0.8835$.",
+      "3. $\\theta = \\arcsin(0.8835) = 62.07^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -12002,13 +11925,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#39)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 45° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 45^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 45,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -12018,9 +11941,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(45°) = 0.7071.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(45°) = (0.7071)^2 = 0.5000 = 50\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(45^\\circ) = 0.7071$.",
+      "3. $\\frac{I}{I_0} = (0.7071)^2 = 50\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -12034,7 +11957,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#40)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.7 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.7$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.7,
@@ -12050,9 +11973,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.7) = 59.53°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.7) = 59.53^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -12066,7 +11988,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#41)",
-    "statement": "Fokus masofasi F = 17 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 32 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 17$ cm bo‘lgan yig‘uvchi linzadan $d = 32$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 17,
@@ -12088,9 +12010,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{32 \\times 17}{32 - 17} = \\frac{544.0}{15.0} = 36.27 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{36.27}{32} = 1.13."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{32 \\times 17}{32 - 17} = \\frac{544.0}{15.0} = 36.27$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 1.13$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -12104,7 +12026,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#42)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.33 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.33$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.33,
@@ -12120,9 +12042,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.33} = 0.7519.",
-      "3. \\theta_c = \\arcsin(0.7519) = 48.75°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.33} = 0.7519$.",
+      "3. $\\theta_c = \\arcsin(0.7519) = 48.75^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -12136,7 +12058,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 2-tartibli maksimum burchagi (#43)",
-    "statement": "1 mm uzunligida N = 400 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 2-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 400$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 2$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 400,
@@ -12164,9 +12086,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{400} = 2.5000e-6 m = 2.5 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{2.5000e-6} = 0.4712.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.4712) = 28.11°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{400} = 2.5 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{2 \\times 589 \\times 10^{-9}}{2.5000e-6} = 0.4712$.",
+      "3. $\\theta = \\arcsin(0.4712) = 28.11^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -12180,13 +12102,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#44)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 70° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 70^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 70,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -12196,9 +12118,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(70°) = 0.3420.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(70°) = (0.3420)^2 = 0.1170 = 11.7\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(70^\\circ) = 0.3420$.",
+      "3. $\\frac{I}{I_0} = (0.3420)^2 = 11.7\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -12212,7 +12134,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#45)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.65 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.65$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.65,
@@ -12228,9 +12150,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.65) = 58.78°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.65) = 58.78^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -12244,7 +12165,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yupqa qavariq linzaning formulasini qo‘llash",
     "difficulty": "oson",
     "title": "Qavariq linzada hosil bo‘lgan tasvir masofasi (#46)",
-    "statement": "Fokus masofasi F = 27 cm bo‘lgan yig‘uvchi (qavariq) linzadan d = 52 cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan f masofani santimetrlarda hisoblang.",
+    "statement": "Fokus masofasi $F = 27$ cm bo‘lgan yig‘uvchi linzadan $d = 52$ cm masofada buyum joylashtirilgan. Linzadan hosil bo‘lgan haqiqiy tasvirgacha bo‘lgan masofa $f$ ni santimetrlarda hisoblang.",
     "given": {
       "F": {
         "value": 27,
@@ -12266,9 +12187,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{d} + \\frac{1}{f} = \\frac{1}{F} \\implies f = \\frac{d \\cdot F}{d - F}",
     "stepByStepSolution": [
-      "1. Yupqa linza formulasi: \\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}.",
-      "2. f = \\frac{52 \\times 27}{52 - 27} = \\frac{1404.0}{25.0} = 56.16 cm.",
-      "3. Chiziqli kattalashtirish: k = \\frac{f}{d} = \\frac{56.16}{52} = 1.08."
+      "1. Yupqa linza formulasi: $\\frac{1}{f} = \\frac{1}{F} - \\frac{1}{d} = \\frac{d - F}{d \\cdot F}$.",
+      "2. $f = \\frac{52 \\times 27}{52 - 27} = \\frac{1404.0}{25.0} = 56.16$ cm.",
+      "3. Chiziqli kattalashtirish: $k = \\frac{f}{d} = 1.08$."
     ],
     "hints": [
       "Buyum fokus masofasidan uzoqda bo‘lsa, haqiqiy teskari tasvir hosil bo‘ladi."
@@ -12282,7 +12203,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "To‘la ichki qaytish hodisasi va chegaraviy burchak",
     "difficulty": "oson",
     "title": "Muhitdan havoga o‘tishdagi to‘la ichki qaytish burchagi (#47)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.73 bo‘lgan optik muhitdan (masalan, shisha yoki suv) havoga (n_havo = 1.000) o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi \\theta_c ni graduslarda hisoblang.",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.73$ bo‘lgan optik muhitdan havoga o‘tayotgan yorug‘lik nuri uchun to‘la ichki qaytishning chegaraviy burchagi $\\theta_c$ ni graduslarda hisoblang.",
     "given": {
       "n": {
         "value": 1.73,
@@ -12298,9 +12219,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\sin\\theta_c = \\frac{1}{n} \\implies \\theta_c = \\arcsin\\left(\\frac{1}{n}\\right)",
     "stepByStepSolution": [
-      "1. Snellius qonuni bo‘yicha to‘la qaytishda sinish burchagi 90° ga teng: n \\sin\\theta_c = 1 \\cdot \\sin(90°).",
-      "2. \\sin\\theta_c = \\frac{1}{1.73} = 0.5780.",
-      "3. \\theta_c = \\arcsin(0.5780) = 35.31°."
+      "1. Snellius qonuni bo‘yicha to‘la qaytish sharti: $\\sin\\theta_c = \\frac{1}{n}$.",
+      "2. $\\sin\\theta_c = \\frac{1}{1.73} = 0.5780$.",
+      "3. $\\theta_c = \\arcsin(0.5780) = 35.31^\\circ$."
     ],
     "hints": [
       "To‘la ichki qaytish faqat optik zichroq muhitdan kamroq zich muhitga o‘tganda sodir bo‘ladi."
@@ -12314,7 +12235,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Difraksiya panjarasi va spektral chiziqlar",
     "difficulty": "o'rta",
     "title": "Difraksiya panjarasida 1-tartibli maksimum burchagi (#48)",
-    "statement": "1 mm uzunligida N = 300 ta chiziqchasi bo‘lgan difraksiya panjarasiga to‘lqin uzunligi \\lambda = 589 nm (sariq natriy nuri) bo‘lgan monoxromatik yorug‘lik tushmoqda. 1-tartibli difraksiya maksimumining og‘ish burchagi \\theta ni graduslarda aniqlang.",
+    "statement": "1 mm uzunligida $N = 300$ ta chiziqchasi bo‘lgan difraksiya panjarasiga $\\lambda = 589$ nm monoxromatik yorug‘lik tushmoqda. $k = 1$-tartibli difraksiya maksimumining og‘ish burchagi $\\theta$ ni graduslarda aniqlang.",
     "given": {
       "N": {
         "value": 300,
@@ -12342,9 +12263,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "d = \\frac{10^{-3}}{N}, \\quad d \\sin\\theta = k \\lambda \\implies \\theta = \\arcsin\\left(\\frac{k \\lambda}{d}\\right)",
     "stepByStepSolution": [
-      "1. Panjara doimiysi: d = \\frac{10^{-3} m}{300} = 3.3333e-6 m = 3.3333 \\mu m.",
-      "2. Difraksiya sharti: \\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{3.3333e-6} = 0.1767.",
-      "3. Og‘ish burchagi: \\theta = \\arcsin(0.1767) = 10.18°."
+      "1. Panjara doimiysi: $d = \\frac{10^{-3}}{300} = 3.3333 \\ \\mu\\text{m}$.",
+      "2. Difraksiya sharti: $\\sin\\theta = \\frac{k \\lambda}{d} = \\frac{1 \\times 589 \\times 10^{-9}}{3.3333e-6} = 0.1767$.",
+      "3. $\\theta = \\arcsin(0.1767) = 10.18^\\circ$."
     ],
     "hints": [
       "Avval panjara doimiysi d ni toping: d = 1 mm / N."
@@ -12358,13 +12279,13 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Yorug‘lik qutblanishi va Malyus qonuni",
     "difficulty": "oson",
     "title": "Qutblagich va analizator o‘qlari orasidagi intensivlik (#49)",
-    "statement": "Qutblagichdan chiqqan chiziqli qutblangan yorug‘lik nuri analizatorga tushmoqda. Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak \\varphi = 50° bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini tashkil qiladi?",
+    "statement": "Qutblagich va analizatorning o‘tkazish tekisliklari orasidagi burchak $\\varphi = 50^\\circ$ bo‘lsa, analizatordan o‘tgan yorug‘lik intensivligi tushayotgan intensivlikning necha foizini ($I/I_0$) tashkil qiladi?",
     "given": {
       "phi": {
         "value": 50,
         "unit": "°",
         "symbol": "\\varphi",
-        "labelUz": "O‘qlar orasidagi burchak"
+        "labelUz": "Burchak"
       }
     },
     "targetSymbol": "I/I_0",
@@ -12374,9 +12295,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "I = I_0 \\cos^2\\varphi",
     "stepByStepSolution": [
-      "1. Malyus qonuni formulasi: \\frac{I}{I_0} = \\cos^2\\varphi.",
-      "2. \\cos(50°) = 0.6428.",
-      "3. O‘tgan intensivlik ulushi: \\cos^2(50°) = (0.6428)^2 = 0.4132 = 41.32\\%."
+      "1. Malyus qonuni: $\\frac{I}{I_0} = \\cos^2\\varphi$.",
+      "2. $\\cos(50^\\circ) = 0.6428$.",
+      "3. $\\frac{I}{I_0} = (0.6428)^2 = 41.32\\%$."
     ],
     "hints": [
       "Burchak 90° bo‘lganda analizator yorug‘likni butunlay to‘sadi (I = 0)."
@@ -12390,7 +12311,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Dielektrikdan qaytishda to‘liq qutblanish (Bryuster burchagi)",
     "difficulty": "oson",
     "title": "Shisha sirtidan qaytgan nur uchun Bryuster burchagi (#50)",
-    "statement": "Sindirish ko‘rsatkichi n = 1.6 bo‘lgan dielektrik (og‘ir shisha) sirtiga tushayotgan tabiiy yorug‘lik nuri qaysi tushish burchagi i_B da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
+    "statement": "Sindirish ko‘rsatkichi $n = 1.6$ bo‘lgan dielektrik sirtiga tushayotgan yorug‘lik qaysi tushish burchagi $i_B$ da qaytganda to‘liq chiziqli qutblangan bo‘ladi?",
     "given": {
       "n": {
         "value": 1.6,
@@ -12406,9 +12327,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 0.5,
     "formulaLatex": "\\tan(i_B) = n \\implies i_B = \\arctan(n)",
     "stepByStepSolution": [
-      "1. Bryuster qonuni: \\tan(i_B) = n.",
-      "2. i_B = \\arctan(1.6) = 57.99°.",
-      "3. Bu burchak ostida qaytgan va singan nurlar o‘zaro qat’iy 90° burchak hosil qiladi."
+      "1. Bryuster qonuni: $\\tan(i_B) = n$.",
+      "2. $i_B = \\arctan(1.6) = 57.99^\\circ$."
     ],
     "hints": [
       "Bryuster burchagida qaytgan nur tushish tekisligiga perpendikulyar tekislikda to‘liq qutblangan bo‘ladi."
@@ -12422,7 +12342,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#1)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 260 °C, sovutgichining harorati esa t_2 = 25 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 260 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 25 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 260,
@@ -12442,11 +12362,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 44.08,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 260 + 273.15 = 533.15 K, T_2 = 25 + 273.15 = 298.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{533.15 - 298.15}{533.15} = \\frac{235.00}{533.15} = 0.4408.",
-      "3. Foizda: \\eta = 44.08\\%."
+      "1. Mutlaq haroratlar: $T_1 = 260 + 273.15 = 533.15$ K, $T_2 = 25 + 273.15 = 298.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{533.15 - 298.15}{533.15} = 0.4408$.",
+      "3. Foizda: $\\eta = 44.08\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -12460,7 +12380,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Azot (N2) molekulalarining o‘rtacha kvadratik tezligi (#2)",
-    "statement": "Harorati t = 30 °C bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.028 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 30 ^\\circ\\text{C}$ bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.028$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 30,
@@ -12482,8 +12402,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 30 + 273.15 = 303.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 303.15}{0.028}} = \\sqrt{\\frac{7561.6}{0.028}} = 519.7 m/s."
+      "1. Mutlaq harorat: $T = 30 + 273.15 = 303.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 303.15}{0.028}} = 519.7$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -12497,7 +12417,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#3)",
-    "statement": "Doimiy p = 115 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 16 litrdan V_2 = 40 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 115$ kPa bosim ostidagi gaz hajmi $V_1 = 16$ litrdan $V_2 = 40$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 115,
@@ -12525,8 +12445,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 115 \\times 10^3 Pa, \\Delta V = (40 - 16) \\times 10^{-3} m^3 = 24.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (115 \\times 10^3) \\times [24.0 \\times 10^{-3}] = 2760 J."
+      "1. SI da: $p = 115 \\times 10^3$ Pa, $\\Delta V = (40 - 16) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (115 \\times 10^3) \\times [24.0 \\times 10^{-3}] = 2760$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -12540,7 +12460,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#4)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -12562,10 +12482,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -12579,7 +12497,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#5)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 4.5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 25 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 2.2 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 4.5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 25$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 2.2$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 2.2,
@@ -12613,8 +12531,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2.2 \\times 4.5 \\times 25}{0.005} = 49500 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2.2 \\times 4.5 \\times 25}{0.005} = 49500$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -12628,7 +12546,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#6)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 310 °C, sovutgichining harorati esa t_2 = 50 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 310 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 50 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 310,
@@ -12648,11 +12566,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 44.59,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 310 + 273.15 = 583.15 K, T_2 = 50 + 273.15 = 323.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{583.15 - 323.15}{583.15} = \\frac{260.00}{583.15} = 0.4459.",
-      "3. Foizda: \\eta = 44.59\\%."
+      "1. Mutlaq haroratlar: $T_1 = 310 + 273.15 = 583.15$ K, $T_2 = 50 + 273.15 = 323.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{583.15 - 323.15}{583.15} = 0.4459$.",
+      "3. Foizda: $\\eta = 44.59\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -12666,7 +12584,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Kislorod (O2) molekulalarining o‘rtacha kvadratik tezligi (#7)",
-    "statement": "Harorati t = 55 °C bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.032 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 55 ^\\circ\\text{C}$ bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.032$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 55,
@@ -12688,8 +12606,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 55 + 273.15 = 328.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 328.15}{0.032}} = \\sqrt{\\frac{8185.2}{0.032}} = 505.8 m/s."
+      "1. Mutlaq harorat: $T = 55 + 273.15 = 328.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 328.15}{0.032}} = 505.8$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -12703,7 +12621,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#8)",
-    "statement": "Doimiy p = 140 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 26 litrdan V_2 = 41 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 140$ kPa bosim ostidagi gaz hajmi $V_1 = 26$ litrdan $V_2 = 41$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 140,
@@ -12731,8 +12649,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 140 \\times 10^3 Pa, \\Delta V = (41 - 26) \\times 10^{-3} m^3 = 15.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (140 \\times 10^3) \\times [15.0 \\times 10^{-3}] = 2100 J."
+      "1. SI da: $p = 140 \\times 10^3$ Pa, $\\Delta V = (41 - 26) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (140 \\times 10^3) \\times [15.0 \\times 10^{-3}] = 2100$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -12746,7 +12664,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#9)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -12768,10 +12686,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -12785,7 +12701,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#10)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 3 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 15 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 2 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 3$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 15$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 2$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 2,
@@ -12819,8 +12735,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2 \\times 3 \\times 15}{0.005} = 18000 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2 \\times 3 \\times 15}{0.005} = 18000$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -12834,7 +12750,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#11)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 360 °C, sovutgichining harorati esa t_2 = 35 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 360 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 35 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 360,
@@ -12854,11 +12770,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 51.33,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 360 + 273.15 = 633.15 K, T_2 = 35 + 273.15 = 308.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{633.15 - 308.15}{633.15} = \\frac{325.00}{633.15} = 0.5133.",
-      "3. Foizda: \\eta = 51.33\\%."
+      "1. Mutlaq haroratlar: $T_1 = 360 + 273.15 = 633.15$ K, $T_2 = 35 + 273.15 = 308.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{633.15 - 308.15}{633.15} = 0.5133$.",
+      "3. Foizda: $\\eta = 51.33\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -12872,7 +12788,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Azot (N2) molekulalarining o‘rtacha kvadratik tezligi (#12)",
-    "statement": "Harorati t = 80 °C bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.028 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 80 ^\\circ\\text{C}$ bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.028$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 80,
@@ -12894,8 +12810,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 80 + 273.15 = 353.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 353.15}{0.028}} = \\sqrt{\\frac{8808.8}{0.028}} = 560.9 m/s."
+      "1. Mutlaq harorat: $T = 80 + 273.15 = 353.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 353.15}{0.028}} = 560.9$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -12909,7 +12825,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#13)",
-    "statement": "Doimiy p = 165 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 16 litrdan V_2 = 46 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 165$ kPa bosim ostidagi gaz hajmi $V_1 = 16$ litrdan $V_2 = 46$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 165,
@@ -12937,8 +12853,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 165 \\times 10^3 Pa, \\Delta V = (46 - 16) \\times 10^{-3} m^3 = 30.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (165 \\times 10^3) \\times [30.0 \\times 10^{-3}] = 4950 J."
+      "1. SI da: $p = 165 \\times 10^3$ Pa, $\\Delta V = (46 - 16) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (165 \\times 10^3) \\times [30.0 \\times 10^{-3}] = 4950$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -12952,7 +12868,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#14)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -12974,10 +12890,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -12991,7 +12905,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#15)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 5.5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 25 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.8 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 5.5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 25$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.8$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.8,
@@ -13025,8 +12939,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.8 \\times 5.5 \\times 25}{0.005} = 49500 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.8 \\times 5.5 \\times 25}{0.005} = 49500$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -13040,7 +12954,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#16)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 410 °C, sovutgichining harorati esa t_2 = 20 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 410 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 20 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 410,
@@ -13060,11 +12974,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 57.09,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 410 + 273.15 = 683.15 K, T_2 = 20 + 273.15 = 293.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{683.15 - 293.15}{683.15} = \\frac{390.00}{683.15} = 0.5709.",
-      "3. Foizda: \\eta = 57.09\\%."
+      "1. Mutlaq haroratlar: $T_1 = 410 + 273.15 = 683.15$ K, $T_2 = 20 + 273.15 = 293.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{683.15 - 293.15}{683.15} = 0.5709$.",
+      "3. Foizda: $\\eta = 57.09\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -13078,7 +12992,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Kislorod (O2) molekulalarining o‘rtacha kvadratik tezligi (#17)",
-    "statement": "Harorati t = 105 °C bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.032 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 105 ^\\circ\\text{C}$ bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.032$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 105,
@@ -13100,8 +13014,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 105 + 273.15 = 378.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 378.15}{0.032}} = \\sqrt{\\frac{9432.3}{0.032}} = 542.9 m/s."
+      "1. Mutlaq harorat: $T = 105 + 273.15 = 378.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 378.15}{0.032}} = 542.9$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -13115,7 +13029,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#18)",
-    "statement": "Doimiy p = 190 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 26 litrdan V_2 = 47 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 190$ kPa bosim ostidagi gaz hajmi $V_1 = 26$ litrdan $V_2 = 47$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 190,
@@ -13143,8 +13057,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 190 \\times 10^3 Pa, \\Delta V = (47 - 26) \\times 10^{-3} m^3 = 21.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (190 \\times 10^3) \\times [21.0 \\times 10^{-3}] = 3990 J."
+      "1. SI da: $p = 190 \\times 10^3$ Pa, $\\Delta V = (47 - 26) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (190 \\times 10^3) \\times [21.0 \\times 10^{-3}] = 3990$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -13158,7 +13072,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#19)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -13180,10 +13094,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -13197,7 +13109,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#20)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 4 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 15 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.6 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 4$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 15$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.6$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.6,
@@ -13231,8 +13143,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.6 \\times 4 \\times 15}{0.005} = 19200 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.6 \\times 4 \\times 15}{0.005} = 19200$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -13246,7 +13158,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#21)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 460 °C, sovutgichining harorati esa t_2 = 45 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 460 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 45 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 460,
@@ -13266,11 +13178,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 56.61,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 460 + 273.15 = 733.15 K, T_2 = 45 + 273.15 = 318.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{733.15 - 318.15}{733.15} = \\frac{415.00}{733.15} = 0.5661.",
-      "3. Foizda: \\eta = 56.61\\%."
+      "1. Mutlaq haroratlar: $T_1 = 460 + 273.15 = 733.15$ K, $T_2 = 45 + 273.15 = 318.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{733.15 - 318.15}{733.15} = 0.5661$.",
+      "3. Foizda: $\\eta = 56.61\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -13284,7 +13196,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Azot (N2) molekulalarining o‘rtacha kvadratik tezligi (#22)",
-    "statement": "Harorati t = 130 °C bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.028 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 130 ^\\circ\\text{C}$ bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.028$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 130,
@@ -13306,8 +13218,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 130 + 273.15 = 403.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 403.15}{0.028}} = \\sqrt{\\frac{10055.9}{0.028}} = 599.3 m/s."
+      "1. Mutlaq harorat: $T = 130 + 273.15 = 403.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 403.15}{0.028}} = 599.3$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -13321,7 +13233,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#23)",
-    "statement": "Doimiy p = 215 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 16 litrdan V_2 = 52 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 215$ kPa bosim ostidagi gaz hajmi $V_1 = 16$ litrdan $V_2 = 52$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 215,
@@ -13349,8 +13261,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 215 \\times 10^3 Pa, \\Delta V = (52 - 16) \\times 10^{-3} m^3 = 36.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (215 \\times 10^3) \\times [36.0 \\times 10^{-3}] = 7740 J."
+      "1. SI da: $p = 215 \\times 10^3$ Pa, $\\Delta V = (52 - 16) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (215 \\times 10^3) \\times [36.0 \\times 10^{-3}] = 7740$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -13364,7 +13276,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#24)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -13386,10 +13298,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -13403,7 +13313,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#25)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 2.5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 25 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.4 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 2.5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 25$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.4$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.4,
@@ -13437,8 +13347,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.4 \\times 2.5 \\times 25}{0.005} = 17500 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.4 \\times 2.5 \\times 25}{0.005} = 17500$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -13452,7 +13362,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#26)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 510 °C, sovutgichining harorati esa t_2 = 30 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 510 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 30 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 510,
@@ -13472,11 +13382,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 61.29,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 510 + 273.15 = 783.15 K, T_2 = 30 + 273.15 = 303.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{783.15 - 303.15}{783.15} = \\frac{480.00}{783.15} = 0.6129.",
-      "3. Foizda: \\eta = 61.29\\%."
+      "1. Mutlaq haroratlar: $T_1 = 510 + 273.15 = 783.15$ K, $T_2 = 30 + 273.15 = 303.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{783.15 - 303.15}{783.15} = 0.6129$.",
+      "3. Foizda: $\\eta = 61.29\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -13490,7 +13400,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Kislorod (O2) molekulalarining o‘rtacha kvadratik tezligi (#27)",
-    "statement": "Harorati t = 155 °C bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.032 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 155 ^\\circ\\text{C}$ bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.032$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 155,
@@ -13512,8 +13422,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 155 + 273.15 = 428.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 428.15}{0.032}} = \\sqrt{\\frac{10679.5}{0.032}} = 577.7 m/s."
+      "1. Mutlaq harorat: $T = 155 + 273.15 = 428.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 428.15}{0.032}} = 577.7$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -13527,7 +13437,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#28)",
-    "statement": "Doimiy p = 240 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 26 litrdan V_2 = 53 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 240$ kPa bosim ostidagi gaz hajmi $V_1 = 26$ litrdan $V_2 = 53$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 240,
@@ -13555,8 +13465,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 240 \\times 10^3 Pa, \\Delta V = (53 - 26) \\times 10^{-3} m^3 = 27.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (240 \\times 10^3) \\times [27.0 \\times 10^{-3}] = 6480 J."
+      "1. SI da: $p = 240 \\times 10^3$ Pa, $\\Delta V = (53 - 26) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (240 \\times 10^3) \\times [27.0 \\times 10^{-3}] = 6480$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -13570,7 +13480,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#29)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -13592,10 +13502,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -13609,7 +13517,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#30)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 15 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.2 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 15$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.2$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.2,
@@ -13643,8 +13551,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.2 \\times 5 \\times 15}{0.005} = 18000 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.2 \\times 5 \\times 15}{0.005} = 18000$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -13658,7 +13566,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#31)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 560 °C, sovutgichining harorati esa t_2 = 55 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 560 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 55 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 560,
@@ -13678,11 +13586,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 60.61,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 560 + 273.15 = 833.15 K, T_2 = 55 + 273.15 = 328.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{833.15 - 328.15}{833.15} = \\frac{505.00}{833.15} = 0.6061.",
-      "3. Foizda: \\eta = 60.61\\%."
+      "1. Mutlaq haroratlar: $T_1 = 560 + 273.15 = 833.15$ K, $T_2 = 55 + 273.15 = 328.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{833.15 - 328.15}{833.15} = 0.6061$.",
+      "3. Foizda: $\\eta = 60.61\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -13696,7 +13604,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Azot (N2) molekulalarining o‘rtacha kvadratik tezligi (#32)",
-    "statement": "Harorati t = 180 °C bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.028 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 180 ^\\circ\\text{C}$ bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.028$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 180,
@@ -13718,8 +13626,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 180 + 273.15 = 453.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 453.15}{0.028}} = \\sqrt{\\frac{11303.1}{0.028}} = 635.4 m/s."
+      "1. Mutlaq harorat: $T = 180 + 273.15 = 453.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 453.15}{0.028}} = 635.4$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -13733,7 +13641,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#33)",
-    "statement": "Doimiy p = 265 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 16 litrdan V_2 = 34 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 265$ kPa bosim ostidagi gaz hajmi $V_1 = 16$ litrdan $V_2 = 34$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 265,
@@ -13761,8 +13669,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 265 \\times 10^3 Pa, \\Delta V = (34 - 16) \\times 10^{-3} m^3 = 18.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (265 \\times 10^3) \\times [18.0 \\times 10^{-3}] = 4770 J."
+      "1. SI da: $p = 265 \\times 10^3$ Pa, $\\Delta V = (34 - 16) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (265 \\times 10^3) \\times [18.0 \\times 10^{-3}] = 4770$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -13776,7 +13684,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#34)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -13798,10 +13706,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -13815,7 +13721,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#35)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 3.5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 25 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 2.2 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 3.5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 25$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 2.2$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 2.2,
@@ -13849,8 +13755,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2.2 \\times 3.5 \\times 25}{0.005} = 38500 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2.2 \\times 3.5 \\times 25}{0.005} = 38500$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -13864,7 +13770,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#36)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 610 °C, sovutgichining harorati esa t_2 = 40 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 610 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 40 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 610,
@@ -13884,11 +13790,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 64.54,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 610 + 273.15 = 883.15 K, T_2 = 40 + 273.15 = 313.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{883.15 - 313.15}{883.15} = \\frac{570.00}{883.15} = 0.6454.",
-      "3. Foizda: \\eta = 64.54\\%."
+      "1. Mutlaq haroratlar: $T_1 = 610 + 273.15 = 883.15$ K, $T_2 = 40 + 273.15 = 313.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{883.15 - 313.15}{883.15} = 0.6454$.",
+      "3. Foizda: $\\eta = 64.54\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -13902,7 +13808,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Kislorod (O2) molekulalarining o‘rtacha kvadratik tezligi (#37)",
-    "statement": "Harorati t = 205 °C bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.032 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 205 ^\\circ\\text{C}$ bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.032$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 205,
@@ -13924,8 +13830,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 205 + 273.15 = 478.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 478.15}{0.032}} = \\sqrt{\\frac{11926.7}{0.032}} = 610.5 m/s."
+      "1. Mutlaq harorat: $T = 205 + 273.15 = 478.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 478.15}{0.032}} = 610.5$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -13939,7 +13845,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#38)",
-    "statement": "Doimiy p = 290 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 26 litrdan V_2 = 59 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 290$ kPa bosim ostidagi gaz hajmi $V_1 = 26$ litrdan $V_2 = 59$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 290,
@@ -13967,8 +13873,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 290 \\times 10^3 Pa, \\Delta V = (59 - 26) \\times 10^{-3} m^3 = 33.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (290 \\times 10^3) \\times [33.0 \\times 10^{-3}] = 9570 J."
+      "1. SI da: $p = 290 \\times 10^3$ Pa, $\\Delta V = (59 - 26) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (290 \\times 10^3) \\times [33.0 \\times 10^{-3}] = 9570$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -13982,7 +13888,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#39)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -14004,10 +13910,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -14021,7 +13925,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#40)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 2 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 15 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 2 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 2$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 15$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 2$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 2,
@@ -14055,8 +13959,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2 \\times 2 \\times 15}{0.005} = 12000 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{2 \\times 2 \\times 15}{0.005} = 12000$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -14070,7 +13974,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#41)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 660 °C, sovutgichining harorati esa t_2 = 25 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 660 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 25 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 660,
@@ -14090,11 +13994,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 68.05,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 660 + 273.15 = 933.15 K, T_2 = 25 + 273.15 = 298.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{933.15 - 298.15}{933.15} = \\frac{635.00}{933.15} = 0.6805.",
-      "3. Foizda: \\eta = 68.05\\%."
+      "1. Mutlaq haroratlar: $T_1 = 660 + 273.15 = 933.15$ K, $T_2 = 25 + 273.15 = 298.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{933.15 - 298.15}{933.15} = 0.6805$.",
+      "3. Foizda: $\\eta = 68.05\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -14108,7 +14012,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Azot (N2) molekulalarining o‘rtacha kvadratik tezligi (#42)",
-    "statement": "Harorati t = 230 °C bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.028 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 230 ^\\circ\\text{C}$ bo‘lgan Azot (N2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.028$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 230,
@@ -14130,8 +14034,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 230 + 273.15 = 503.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 503.15}{0.028}} = \\sqrt{\\frac{12550.3}{0.028}} = 669.5 m/s."
+      "1. Mutlaq harorat: $T = 230 + 273.15 = 503.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 503.15}{0.028}} = 669.5$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -14145,7 +14049,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#43)",
-    "statement": "Doimiy p = 315 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 16 litrdan V_2 = 40 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 315$ kPa bosim ostidagi gaz hajmi $V_1 = 16$ litrdan $V_2 = 40$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 315,
@@ -14173,8 +14077,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 315 \\times 10^3 Pa, \\Delta V = (40 - 16) \\times 10^{-3} m^3 = 24.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (315 \\times 10^3) \\times [24.0 \\times 10^{-3}] = 7560 J."
+      "1. SI da: $p = 315 \\times 10^3$ Pa, $\\Delta V = (40 - 16) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (315 \\times 10^3) \\times [24.0 \\times 10^{-3}] = 7560$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -14188,7 +14092,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#44)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -14210,10 +14114,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -14227,7 +14129,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#45)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 4.5 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 25 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.8 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 4.5$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 25$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.8$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.8,
@@ -14261,8 +14163,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.8 \\times 4.5 \\times 25}{0.005} = 40500 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.8 \\times 4.5 \\times 25}{0.005} = 40500$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -14276,7 +14178,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Karno sikli va issiqlik dvigatelining maksimal FIKi",
     "difficulty": "oson",
     "title": "Ideal Karno dvigatelining termodinamik FIKini hisoblash (#46)",
-    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati t_1 = 710 °C, sovutgichining harorati esa t_2 = 50 °C ga teng. Ushbu mashinaning maksimal nazariy foydali ish koeffitsienti (FIK) \\eta ni foizlarda hisoblang.",
+    "statement": "Ideal Karno issiqlik mashinasi isitgichining harorati $t_1 = 710 ^\\circ\\text{C}$, sovutgichining harorati esa $t_2 = 50 ^\\circ\\text{C}$ ga teng. Ushbu mashinaning maksimal nazariy FIKi $\\eta$ ni foizlarda hisoblang.",
     "given": {
       "t1": {
         "value": 710,
@@ -14296,11 +14198,11 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 67.13,
     "tolerancePct": 0.5,
-    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%, \\quad T = t + 273.15",
+    "formulaLatex": "\\eta = \\frac{T_1 - T_2}{T_1} \\times 100\\%",
     "stepByStepSolution": [
-      "1. Haroratlarni mutlaq termodinamik shkalaga (Kelvin) o‘tkazamiz: T_1 = 710 + 273.15 = 983.15 K, T_2 = 50 + 273.15 = 323.15 K.",
-      "2. Karno FIKi: \\eta = \\frac{983.15 - 323.15}{983.15} = \\frac{660.00}{983.15} = 0.6713.",
-      "3. Foizda: \\eta = 67.13\\%."
+      "1. Mutlaq haroratlar: $T_1 = 710 + 273.15 = 983.15$ K, $T_2 = 50 + 273.15 = 323.15$ K.",
+      "2. Karno FIKi: $\\eta = \\frac{T_1 - T_2}{T_1} = \\frac{983.15 - 323.15}{983.15} = 0.6713$.",
+      "3. Foizda: $\\eta = 67.13\\%$."
     ],
     "hints": [
       "Haroratni har doim Kelvinga o‘tkazish shart (+273.15)."
@@ -14314,7 +14216,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "MKT: Molekulalarning o‘rtacha kvadratik tezligi",
     "difficulty": "o'rta",
     "title": "Kislorod (O2) molekulalarining o‘rtacha kvadratik tezligi (#47)",
-    "statement": "Harorati t = 255 °C bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik v_{rms} ni hisoblang (Molyar massa \\mu = 0.032 kg/mol, universal gaz doimiysi R = 8.314 J/(mol·K)).",
+    "statement": "Harorati $t = 255 ^\\circ\\text{C}$ bo‘lgan Kislorod (O2) gazining molekulalari uchun o‘rtacha kvadratik tezlik $v_{rms}$ ni hisoblang (Molyar massa $\\mu = 0.032$ kg/mol, $R = 8.314$ J/(mol·K)).",
     "given": {
       "t": {
         "value": 255,
@@ -14336,8 +14238,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "v_{rms} = \\sqrt{\\frac{3RT}{\\mu}}",
     "stepByStepSolution": [
-      "1. Mutlaq harorat: T = 255 + 273.15 = 528.15 K.",
-      "2. v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 528.15}{0.032}} = \\sqrt{\\frac{13173.9}{0.032}} = 641.6 m/s."
+      "1. Mutlaq harorat: $T = 255 + 273.15 = 528.15$ K.",
+      "2. $v_{rms} = \\sqrt{\\frac{3 \\times 8.314 \\times 528.15}{0.032}} = 641.6$ m/s."
     ],
     "hints": [
       "Molyar massani gramm/molda emas, kg/molda olish kerak."
@@ -14351,7 +14253,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Izobarik jarayonda gaz bajargan ish",
     "difficulty": "oson",
     "title": "Izobarik kengayishda gazning bajargan ishi (#48)",
-    "statement": "Doimiy p = 340 kPa bosim ostida turgan ideal gaz qizdirilishi natijasida uning hajmi V_1 = 26 litrdan V_2 = 41 litrgacha kengaydi. Gazning tashqi kuchlarga qarshi bajargan ishi A ni Joulda hisoblang.",
+    "statement": "Doimiy $p = 340$ kPa bosim ostidagi gaz hajmi $V_1 = 26$ litrdan $V_2 = 41$ litrgacha kengaydi. Gazning bajargan ishi $A$ ni Joulda hisoblang.",
     "given": {
       "p": {
         "value": 340,
@@ -14379,8 +14281,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "A = p \\cdot \\Delta V = p \\cdot (V_2 - V_1)",
     "stepByStepSolution": [
-      "1. SI birliklariga o‘tkazamiz: p = 340 \\times 10^3 Pa, \\Delta V = (41 - 26) \\times 10^{-3} m^3 = 15.0 \\times 10^{-3} m^3.",
-      "2. A = p \\cdot \\Delta V = (340 \\times 10^3) \\times [15.0 \\times 10^{-3}] = 5100 J."
+      "1. SI da: $p = 340 \\times 10^3$ Pa, $\\Delta V = (41 - 26) \\times 10^{-3} \\text{ m}^3$.",
+      "2. $A = p \\cdot \\Delta V = (340 \\times 10^3) \\times [15.0 \\times 10^{-3}] = 5100$ J."
     ],
     "hints": [
       "Bosim Pa da, hajm m³ da bo‘lganda ish Joulda chiqadi (1 litr = 10^-3 m³)."
@@ -14394,7 +14296,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Real gazlar va Van-der-Vaals kritik parametrlari",
     "difficulty": "murakkab",
     "title": "Van-der-Vaals konstantalaridan kritik haroratni hisoblash (#49)",
-    "statement": "Azot gazi uchun Van-der-Vaals tenglamasining konstantalari a = 0.137 Pa·m⁶/mol² va b = 0.0000387 m³/mol bo‘lsa, ushbu gazning kritik harorati T_c ni Kelvinda hisoblang (R = 8.314 J/(mol·K)).",
+    "statement": "Azot gazi uchun Van-der-Vaals konstantalari $a = 0.137 \\ \\text{Pa}\\cdot\\text{m}^6/\\text{mol}^2$ va $b = 0.0000387 \\ \\text{m}^3/\\text{mol}$ bo‘lsa, gazning kritik harorati $T_c$ ni Kelvinda hisoblang ($R = 8.314$ J/(mol·K)).",
     "given": {
       "a": {
         "value": 0.137,
@@ -14416,10 +14318,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "T_c = \\frac{8a}{27 R b}",
     "stepByStepSolution": [
-      "1. Van-der-Vaals kritik harorati formulasi: T_c = \\frac{8a}{27 R b}.",
-      "2. Surati: 8 \\times 0.137 = 1.0960.",
-      "3. Maxraji: 27 \\times 8.314 \\times 0.0000387 = 0.008688.",
-      "4. T_c = \\frac{1.0960}{0.008688} = 126.15 K."
+      "1. Kritik harorat formulasi: $T_c = \\frac{8a}{27 R b}$.",
+      "2. $T_c = \\frac{8 \\times 0.137}{27 \\times 8.314 \\times 0.0000387} = 126.15$ K."
     ],
     "hints": [
       "Kritik haroratdan yuqori haroratda gazni hech qanday bosim bilan suyuqlikka aylantirib bo‘lmaydi."
@@ -14433,7 +14333,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Issiqlik o‘tkazuvchanlik va Furye qonuni",
     "difficulty": "o'rta",
     "title": "Oyna orqali statsionar issiqlik oqimi (#50)",
-    "statement": "Qalinligi d = 5.0 mm va yuzi S = 3 m² bo‘lgan deraza oynasining ichki va tashqi sirtlari orasidagi harorat farqi \\Delta T = 15 °C. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti k = 1.6 W/(m·K) bo‘lsa, undan o‘tayotgan issiqlik oqimi quvvati Q ni Vattda (W) hisoblang.",
+    "statement": "Qalinligi $d = 5.0$ mm va yuzi $S = 3$ m² bo‘lgan deraza oynasining sirtlari orasidagi harorat farqi $\\Delta T = 15$ K. Oynaning issiqlik o‘tkazuvchanlik koeffitsienti $k = 1.6$ W/(m·K) bo‘lsa, issiqlik oqimi $Q$ ni Vattda (W) hisoblang.",
     "given": {
       "k": {
         "value": 1.6,
@@ -14467,8 +14367,8 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "Q = \\frac{k \\cdot S \\cdot \\Delta T}{d}",
     "stepByStepSolution": [
-      "1. Qalinlikni metrga o‘tkazamiz: d = 0.005 m.",
-      "2. Furye qonuni: Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.6 \\times 3 \\times 15}{0.005} = 14400 W."
+      "1. Metrga o‘tkazamiz: $d = 0.005$ m.",
+      "2. Furye qonuni: $Q = \\frac{k \\cdot S \\cdot \\Delta T}{d} = \\frac{1.6 \\times 3 \\times 15}{0.005} = 14400$ W."
     ],
     "hints": [
       "Harorat gradiyenti d/Delta T bilan ifodalanadi."
@@ -14482,7 +14382,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#1)",
-    "statement": "Chiqish ishi A = 2.4 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 265 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.4$ eV bo‘lgan metall sirtiga $\\lambda = 265$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 265,
@@ -14504,10 +14404,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{265} = 4.679 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 4.679 - 2.4 = 2.279 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 2.279 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{265} = 4.679$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 4.679 - 2.4 = 2.279$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 2.279$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -14521,7 +14420,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#2)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 84° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 84^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 84,
@@ -14543,10 +14442,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(84°) = 0.1045.",
-      "3. 1 - \\cos(84°) = 0.8955.",
-      "4. \\Delta\\lambda = 2.426 \\times 0.8955 = 2.172 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(84^\\circ) = 0.1045$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - 0.1045) = 2.172$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -14560,7 +14458,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 6 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#3)",
-    "statement": "Vodorod atomidagi elektron n_2 = 6 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 6$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -14588,10 +14486,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{36}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{36} = 0.2222.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.4386e+6} = 4.1007e-7 m = 410.07 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.1007e-7$ m = 410.07$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -14605,7 +14502,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#4)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 13 kun bo‘lgan radioaktiv izotop berilgan. t = 19.5 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 13$ kun bo‘lgan radioaktiv izotop berilgan. $t = 19.5$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 13,
@@ -14625,10 +14522,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 35.36,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-1.50} = 0.3536.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-1.50} = 0.3536$.",
       "3. Foizda: 35.36\\%."
     ],
     "hints": [
@@ -14643,7 +14540,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Temir-56 (^{56}Fe) yadrosining solishtirma bog‘lanish energiyasi (#5)",
-    "statement": "Temir-56 (^{56}Fe) yadrosining tinchlikdagi massasi M = 55.934937 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Temir-56 (^{56}Fe) yadrosining massasi $M = 55.934937$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 55.934937,
@@ -14671,10 +14568,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 55.934937 = 0.514189 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 478.96 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{56} = 8.79 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 55.934937 = 0.514189$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 478.96$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{56} = 8.79$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -14688,7 +14585,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#6)",
-    "statement": "Chiqish ishi A = 2.2 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 340 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.2$ eV bo‘lgan metall sirtiga $\\lambda = 340$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 340,
@@ -14710,10 +14607,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{340} = 3.647 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 3.647 - 2.2 = 1.447 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 1.447 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{340} = 3.647$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 3.647 - 2.2 = 1.447$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 1.447$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -14727,7 +14623,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#7)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 144° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 144^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 144,
@@ -14749,10 +14645,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(144°) = -0.8090.",
-      "3. 1 - \\cos(144°) = 1.8090.",
-      "4. \\Delta\\lambda = 2.426 \\times 1.8090 = 4.389 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(144^\\circ) = -0.8090$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - -0.8090) = 4.389$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -14766,7 +14661,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 3 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#8)",
-    "statement": "Vodorod atomidagi elektron n_2 = 3 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 3$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -14794,10 +14689,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{9}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{9} = 0.1389.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{1.5241e+6} = 6.5611e-7 m = 656.11 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 6.5611e-7$ m = 656.11$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -14811,7 +14705,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#9)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 23 kun bo‘lgan radioaktiv izotop berilgan. t = 46 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 23$ kun bo‘lgan radioaktiv izotop berilgan. $t = 46$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 23,
@@ -14831,10 +14725,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 25,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-2.00} = 0.2500.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-2.00} = 0.2500$.",
       "3. Foizda: 25\\%."
     ],
     "hints": [
@@ -14849,7 +14743,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Geliy-4 (^4He) yadrosining solishtirma bog‘lanish energiyasi (#10)",
-    "statement": "Geliy-4 (^4He) yadrosining tinchlikdagi massasi M = 4.001506 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Geliy-4 (^4He) yadrosining massasi $M = 4.001506$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 4.001506,
@@ -14877,10 +14771,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 4.001506 = 0.030376 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 28.30 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{4} = 7.07 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 4.001506 = 0.030376$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 28.30$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{4} = 7.07$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -14894,7 +14788,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#11)",
-    "statement": "Chiqish ishi A = 3.2 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 415 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 3.2$ eV bo‘lgan metall sirtiga $\\lambda = 415$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 415,
@@ -14916,10 +14810,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{415} = 2.988 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 2.988 - 3.2 = 0 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 0 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{415} = 2.988$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 2.988 - 3.2 = 0$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 0$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -14933,7 +14826,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#12)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 84° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 84^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 84,
@@ -14955,10 +14848,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(84°) = 0.1045.",
-      "3. 1 - \\cos(84°) = 0.8955.",
-      "4. \\Delta\\lambda = 2.426 \\times 0.8955 = 2.172 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(84^\\circ) = 0.1045$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - 0.1045) = 2.172$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -14972,7 +14864,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 4 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#13)",
-    "statement": "Vodorod atomidagi elektron n_2 = 4 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 4$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -15000,10 +14892,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{4^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{16}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{16} = 0.1875.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.1875 = 2.0576e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.0576e+6} = 4.8601e-7 m = 486.01 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{4^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.1875 = 2.0576e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.8601e-7$ m = 486.01$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -15017,7 +14908,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#14)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 13 kun bo‘lgan radioaktiv izotop berilgan. t = 32.5 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 13$ kun bo‘lgan radioaktiv izotop berilgan. $t = 32.5$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 13,
@@ -15037,10 +14928,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 17.68,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{32.5}{13} = 2.50.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-2.50} = 0.1768.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{32.5}{13} = 2.50$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-2.50} = 0.1768$.",
       "3. Foizda: 17.68\\%."
     ],
     "hints": [
@@ -15055,7 +14946,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Temir-56 (^{56}Fe) yadrosining solishtirma bog‘lanish energiyasi (#15)",
-    "statement": "Temir-56 (^{56}Fe) yadrosining tinchlikdagi massasi M = 55.934937 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Temir-56 (^{56}Fe) yadrosining massasi $M = 55.934937$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 55.934937,
@@ -15083,10 +14974,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 55.934937 = 0.514189 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 478.96 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{56} = 8.79 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 55.934937 = 0.514189$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 478.96$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{56} = 8.79$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -15100,7 +14991,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#16)",
-    "statement": "Chiqish ishi A = 3 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 265 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 3$ eV bo‘lgan metall sirtiga $\\lambda = 265$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 265,
@@ -15122,10 +15013,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{265} = 4.679 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 4.679 - 3 = 1.679 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 1.679 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{265} = 4.679$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 4.679 - 3 = 1.679$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 1.679$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -15139,7 +15029,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#17)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 144° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 144^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 144,
@@ -15161,10 +15051,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(144°) = -0.8090.",
-      "3. 1 - \\cos(144°) = 1.8090.",
-      "4. \\Delta\\lambda = 2.426 \\times 1.8090 = 4.389 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(144^\\circ) = -0.8090$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - -0.8090) = 4.389$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -15178,7 +15067,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 5 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#18)",
-    "statement": "Vodorod atomidagi elektron n_2 = 5 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 5$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -15206,10 +15095,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{5^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{25}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{25} = 0.2100.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.2100 = 2.3045e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.3045e+6} = 4.3394e-7 m = 433.94 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{5^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.2100 = 2.3045e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.3394e-7$ m = 433.94$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -15223,7 +15111,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#19)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 23 kun bo‘lgan radioaktiv izotop berilgan. t = 69 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 23$ kun bo‘lgan radioaktiv izotop berilgan. $t = 69$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 23,
@@ -15243,10 +15131,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 12.5,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{69}{23} = 3.00.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-3.00} = 0.1250.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{69}{23} = 3.00$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-3.00} = 0.1250$.",
       "3. Foizda: 12.5\\%."
     ],
     "hints": [
@@ -15261,7 +15149,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Geliy-4 (^4He) yadrosining solishtirma bog‘lanish energiyasi (#20)",
-    "statement": "Geliy-4 (^4He) yadrosining tinchlikdagi massasi M = 4.001506 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Geliy-4 (^4He) yadrosining massasi $M = 4.001506$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 4.001506,
@@ -15289,10 +15177,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 4.001506 = 0.030376 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 28.30 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{4} = 7.07 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 4.001506 = 0.030376$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 28.30$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{4} = 7.07$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -15306,7 +15194,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#21)",
-    "statement": "Chiqish ishi A = 2.8 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 340 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.8$ eV bo‘lgan metall sirtiga $\\lambda = 340$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 340,
@@ -15328,10 +15216,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{340} = 3.647 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 3.647 - 2.8 = 0.847 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 0.847 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{340} = 3.647$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 3.647 - 2.8 = 0.847$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 0.847$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -15345,7 +15232,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#22)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 84° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 84^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 84,
@@ -15367,10 +15254,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(84°) = 0.1045.",
-      "3. 1 - \\cos(84°) = 0.8955.",
-      "4. \\Delta\\lambda = 2.426 \\times 0.8955 = 2.172 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(84^\\circ) = 0.1045$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - 0.1045) = 2.172$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -15384,7 +15270,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 6 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#23)",
-    "statement": "Vodorod atomidagi elektron n_2 = 6 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 6$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -15412,10 +15298,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{36}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{36} = 0.2222.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.4386e+6} = 4.1007e-7 m = 410.07 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.1007e-7$ m = 410.07$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -15429,7 +15314,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#24)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 13 kun bo‘lgan radioaktiv izotop berilgan. t = 19.5 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 13$ kun bo‘lgan radioaktiv izotop berilgan. $t = 19.5$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 13,
@@ -15449,10 +15334,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 35.36,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-1.50} = 0.3536.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-1.50} = 0.3536$.",
       "3. Foizda: 35.36\\%."
     ],
     "hints": [
@@ -15467,7 +15352,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Temir-56 (^{56}Fe) yadrosining solishtirma bog‘lanish energiyasi (#25)",
-    "statement": "Temir-56 (^{56}Fe) yadrosining tinchlikdagi massasi M = 55.934937 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Temir-56 (^{56}Fe) yadrosining massasi $M = 55.934937$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 55.934937,
@@ -15495,10 +15380,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 55.934937 = 0.514189 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 478.96 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{56} = 8.79 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 55.934937 = 0.514189$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 478.96$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{56} = 8.79$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -15512,7 +15397,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#26)",
-    "statement": "Chiqish ishi A = 2.6 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 415 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.6$ eV bo‘lgan metall sirtiga $\\lambda = 415$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 415,
@@ -15534,10 +15419,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{415} = 2.988 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 2.988 - 2.6 = 0.388 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 0.388 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{415} = 2.988$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 2.988 - 2.6 = 0.388$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 0.388$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -15551,7 +15435,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#27)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 144° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 144^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 144,
@@ -15573,10 +15457,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(144°) = -0.8090.",
-      "3. 1 - \\cos(144°) = 1.8090.",
-      "4. \\Delta\\lambda = 2.426 \\times 1.8090 = 4.389 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(144^\\circ) = -0.8090$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - -0.8090) = 4.389$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -15590,7 +15473,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 3 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#28)",
-    "statement": "Vodorod atomidagi elektron n_2 = 3 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 3$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -15618,10 +15501,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{9}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{9} = 0.1389.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{1.5241e+6} = 6.5611e-7 m = 656.11 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 6.5611e-7$ m = 656.11$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -15635,7 +15517,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#29)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 23 kun bo‘lgan radioaktiv izotop berilgan. t = 46 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 23$ kun bo‘lgan radioaktiv izotop berilgan. $t = 46$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 23,
@@ -15655,10 +15537,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 25,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-2.00} = 0.2500.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-2.00} = 0.2500$.",
       "3. Foizda: 25\\%."
     ],
     "hints": [
@@ -15673,7 +15555,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Geliy-4 (^4He) yadrosining solishtirma bog‘lanish energiyasi (#30)",
-    "statement": "Geliy-4 (^4He) yadrosining tinchlikdagi massasi M = 4.001506 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Geliy-4 (^4He) yadrosining massasi $M = 4.001506$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 4.001506,
@@ -15701,10 +15583,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 4.001506 = 0.030376 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 28.30 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{4} = 7.07 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 4.001506 = 0.030376$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 28.30$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{4} = 7.07$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -15718,7 +15600,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#31)",
-    "statement": "Chiqish ishi A = 2.4 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 265 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.4$ eV bo‘lgan metall sirtiga $\\lambda = 265$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 265,
@@ -15740,10 +15622,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{265} = 4.679 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 4.679 - 2.4 = 2.279 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 2.279 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{265} = 4.679$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 4.679 - 2.4 = 2.279$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 2.279$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -15757,7 +15638,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#32)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 84° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 84^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 84,
@@ -15779,10 +15660,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(84°) = 0.1045.",
-      "3. 1 - \\cos(84°) = 0.8955.",
-      "4. \\Delta\\lambda = 2.426 \\times 0.8955 = 2.172 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(84^\\circ) = 0.1045$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - 0.1045) = 2.172$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -15796,7 +15676,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 4 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#33)",
-    "statement": "Vodorod atomidagi elektron n_2 = 4 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 4$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -15824,10 +15704,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{4^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{16}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{16} = 0.1875.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.1875 = 2.0576e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.0576e+6} = 4.8601e-7 m = 486.01 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{4^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.1875 = 2.0576e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.8601e-7$ m = 486.01$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -15841,7 +15720,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#34)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 13 kun bo‘lgan radioaktiv izotop berilgan. t = 32.5 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 13$ kun bo‘lgan radioaktiv izotop berilgan. $t = 32.5$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 13,
@@ -15861,10 +15740,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 17.68,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{32.5}{13} = 2.50.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-2.50} = 0.1768.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{32.5}{13} = 2.50$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-2.50} = 0.1768$.",
       "3. Foizda: 17.68\\%."
     ],
     "hints": [
@@ -15879,7 +15758,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Temir-56 (^{56}Fe) yadrosining solishtirma bog‘lanish energiyasi (#35)",
-    "statement": "Temir-56 (^{56}Fe) yadrosining tinchlikdagi massasi M = 55.934937 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Temir-56 (^{56}Fe) yadrosining massasi $M = 55.934937$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 55.934937,
@@ -15907,10 +15786,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 55.934937 = 0.514189 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 478.96 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{56} = 8.79 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 55.934937 = 0.514189$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 478.96$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{56} = 8.79$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -15924,7 +15803,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#36)",
-    "statement": "Chiqish ishi A = 2.2 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 340 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 2.2$ eV bo‘lgan metall sirtiga $\\lambda = 340$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 340,
@@ -15946,10 +15825,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{340} = 3.647 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 3.647 - 2.2 = 1.447 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 1.447 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{340} = 3.647$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 3.647 - 2.2 = 1.447$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 1.447$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -15963,7 +15841,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#37)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 144° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 144^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 144,
@@ -15985,10 +15863,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(144°) = -0.8090.",
-      "3. 1 - \\cos(144°) = 1.8090.",
-      "4. \\Delta\\lambda = 2.426 \\times 1.8090 = 4.389 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(144^\\circ) = -0.8090$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - -0.8090) = 4.389$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -16002,7 +15879,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 5 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#38)",
-    "statement": "Vodorod atomidagi elektron n_2 = 5 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 5$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -16030,10 +15907,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{5^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{25}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{25} = 0.2100.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.2100 = 2.3045e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.3045e+6} = 4.3394e-7 m = 433.94 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{5^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.2100 = 2.3045e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.3394e-7$ m = 433.94$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -16047,7 +15923,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#39)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 23 kun bo‘lgan radioaktiv izotop berilgan. t = 69 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 23$ kun bo‘lgan radioaktiv izotop berilgan. $t = 69$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 23,
@@ -16067,10 +15943,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 12.5,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{69}{23} = 3.00.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-3.00} = 0.1250.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{69}{23} = 3.00$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-3.00} = 0.1250$.",
       "3. Foizda: 12.5\\%."
     ],
     "hints": [
@@ -16085,7 +15961,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Geliy-4 (^4He) yadrosining solishtirma bog‘lanish energiyasi (#40)",
-    "statement": "Geliy-4 (^4He) yadrosining tinchlikdagi massasi M = 4.001506 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Geliy-4 (^4He) yadrosining massasi $M = 4.001506$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 4.001506,
@@ -16113,10 +15989,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 4.001506 = 0.030376 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 28.30 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{4} = 7.07 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 4.001506 = 0.030376$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 28.30$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{4} = 7.07$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -16130,7 +16006,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#41)",
-    "statement": "Chiqish ishi A = 3.2 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 415 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 3.2$ eV bo‘lgan metall sirtiga $\\lambda = 415$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 415,
@@ -16152,10 +16028,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{415} = 2.988 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 2.988 - 3.2 = 0 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 0 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{415} = 2.988$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 2.988 - 3.2 = 0$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 0$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -16169,7 +16044,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#42)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 84° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 84^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 84,
@@ -16191,10 +16066,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(84°) = 0.1045.",
-      "3. 1 - \\cos(84°) = 0.8955.",
-      "4. \\Delta\\lambda = 2.426 \\times 0.8955 = 2.172 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(84^\\circ) = 0.1045$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - 0.1045) = 2.172$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -16208,7 +16082,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 6 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#43)",
-    "statement": "Vodorod atomidagi elektron n_2 = 6 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 6$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -16236,10 +16110,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{36}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{36} = 0.2222.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{2.4386e+6} = 4.1007e-7 m = 410.07 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{6^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.2222 = 2.4386e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 4.1007e-7$ m = 410.07$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -16253,7 +16126,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#44)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 13 kun bo‘lgan radioaktiv izotop berilgan. t = 19.5 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 13$ kun bo‘lgan radioaktiv izotop berilgan. $t = 19.5$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 13,
@@ -16273,10 +16146,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 35.36,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-1.50} = 0.3536.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{19.5}{13} = 1.50$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-1.50} = 0.3536$.",
       "3. Foizda: 35.36\\%."
     ],
     "hints": [
@@ -16291,7 +16164,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Temir-56 (^{56}Fe) yadrosining solishtirma bog‘lanish energiyasi (#45)",
-    "statement": "Temir-56 (^{56}Fe) yadrosining tinchlikdagi massasi M = 55.934937 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Temir-56 (^{56}Fe) yadrosining massasi $M = 55.934937$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 55.934937,
@@ -16319,10 +16192,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 55.934937 = 0.514189 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 478.96 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{56} = 8.79 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 26 \\times 1.007276 + 30 \\times 1.008665 = 56.449126$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 55.934937 = 0.514189$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 478.96$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{56} = 8.79$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -16336,7 +16209,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Tashqi fotoeffekt va tutuvchi potensial",
     "difficulty": "o'rta",
     "title": "Fotoelektronlarni to‘xtatuvchi potensiallar farqini aniqlash (#46)",
-    "statement": "Chiqish ishi A = 3 eV bo‘lgan metall sirtiga to‘lqin uzunligi \\lambda = 265 nm bo‘lgan ultrabinafsha nurlar tushmoqda. Metall yuzasidan uchib chiqayotgan eng tezkor fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi (tutuvchi) potensial U_0 ni Voltda hisoblang (h = 6.626 \\times 10^{-34} J·s, c = 3.0 \\times 10^8 m/s, 1 eV = 1.602 \\times 10^{-19} J).",
+    "statement": "Chiqish ishi $A = 3$ eV bo‘lgan metall sirtiga $\\lambda = 265$ nm ultrabinafsha nurlar tushmoqda. Fotoelektronlarni to‘liq to‘xtatish uchun zarur bo‘lgan ushlab qoluvchi potensial $U_0$ ni Voltda hisoblang ($hc = 1240 \\text{ eV}\\cdot\\text{nm}$).",
     "given": {
       "lambda": {
         "value": 265,
@@ -16358,10 +16231,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "E_{foton} = \\frac{hc}{\\lambda}, \\quad e U_0 = E_{foton} - A \\implies U_0 = \\frac{E_{foton} - A}{e}",
     "stepByStepSolution": [
-      "1. Tushayotgan foton energiyasini eV da topamiz: E_{foton} = \\frac{hc}{\\lambda e} = \\frac{1239.84}{265} = 4.679 eV.",
-      "2. Eynshteyn tenglamasi: E_{foton} = A + e U_0.",
-      "3. e U_0 = 4.679 - 3 = 1.679 eV.",
-      "4. Elektron zaryadiga bo‘lganda: U_0 = 1.679 V."
+      "1. Foton energiyasi: $E_{foton} = \\frac{hc}{\\lambda} = \\frac{1239.84}{265} = 4.679$ eV.",
+      "2. Eynshteyn tenglamasi: $e U_0 = E_{foton} - A = 4.679 - 3 = 1.679$ eV.",
+      "3. Tutuvchi potensial: $U_0 = 1.679$ V."
     ],
     "hints": [
       "Foton energiyasini tez topish uchun hc = 1240 eV·nm qulay qiymatidan foydalaning."
@@ -16375,7 +16247,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Kompton effekti va to‘lqin uzunligi siljishi",
     "difficulty": "o'rta",
     "title": "Kompton sochilishi natijasida to‘lqin uzunligining ortishi (#47)",
-    "statement": "Rentgen fotoni erkin tinch turgan elektrondan \\theta = 144° burchakka sochildi. Kompton to‘lqin uzunligi \\lambda_C = 2.426 pm bo‘lsa, sochilgan foton to‘lqin uzunligidagi siljish \\Delta\\lambda ni pikometrlarda (pm) hisoblang.",
+    "statement": "Rentgen fotoni tinch turgan elektrondan $\\theta = 144^\\circ$ burchakka sochildi. Kompton to‘lqin uzunligi $\\lambda_C = 2.426$ pm bo‘lsa, to‘lqin uzunligidagi siljish $\\Delta\\lambda$ ni pikometrlarda (pm) hisoblang.",
     "given": {
       "theta": {
         "value": 144,
@@ -16397,10 +16269,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)",
     "stepByStepSolution": [
-      "1. Kompton formulasi: \\Delta\\lambda = \\lambda_C (1 - \\cos\\theta).",
-      "2. \\cos(144°) = -0.8090.",
-      "3. 1 - \\cos(144°) = 1.8090.",
-      "4. \\Delta\\lambda = 2.426 \\times 1.8090 = 4.389 pm."
+      "1. Kompton formulasi: $\\Delta\\lambda = \\lambda_C (1 - \\cos\\theta)$.",
+      "2. $\\cos(144^\\circ) = -0.8090$.",
+      "3. $\\Delta\\lambda = 2.426 \\times (1 - -0.8090) = 4.389$ pm."
     ],
     "hints": [
       "Maksimal siljish 180 gradusda (orqaga sochilganda) 2*lambda_C ga teng bo‘ladi."
@@ -16414,7 +16285,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Bor nazariyasi va Vodorod atomining Balmer seriyasi",
     "difficulty": "o'rta",
     "title": "Vodorod atomida n = 3 dan n = 2 pog‘onaga o‘tish to‘lqin uzunligi (#48)",
-    "statement": "Vodorod atomidagi elektron n_2 = 3 statsionar energetik pog‘onadan n_1 = 2 pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan fotonning to‘lqin uzunligi \\lambda ni nanometrlarda (nm) hisoblang (Ridberg doimiysi R_\\infty = 1.0974 \\times 10^7 m^{-1}).",
+    "statement": "Vodorod atomidagi elektron $n_2 = 3$ energetik pog‘onadan $n_1 = 2$ pog‘onaga (Balmer seriyasi) o‘tganda nurlanadigan foton to‘lqin uzunligi $\\lambda$ ni nanometrlarda (nm) hisoblang ($R_\\infty = 1.0974 \\times 10^7 \\text{ m}^{-1}$).",
     "given": {
       "n1": {
         "value": 2,
@@ -16442,10 +16313,9 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1,
     "formulaLatex": "\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)",
     "stepByStepSolution": [
-      "1. Ridberg formulasi: \\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right) = R_\\infty \\left(\\frac{1}{4} - \\frac{1}{9}\\right).",
-      "2. Qavs ichi: \\frac{1}{4} - \\frac{1}{9} = 0.1389.",
-      "3. 1/\\lambda = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 m^{-1}.",
-      "4. \\lambda = \\frac{1}{1.5241e+6} = 6.5611e-7 m = 656.11 nm."
+      "1. Ridberg formulasi: $\\frac{1}{\\lambda} = R_\\infty \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right)$.",
+      "2. $\\frac{1}{\\lambda} = 1.0974 \\times 10^7 \\times 0.1389 = 1.5241e+6 \\text{ m}^{-1}$.",
+      "3. $\\lambda = 6.5611e-7$ m = 656.11$ nm."
     ],
     "hints": [
       "Balmer seriyasi n1 = 2 ga o‘tishlar bo‘lib, ko‘rinuvchi yorug‘lik spektriga to‘g‘ri keladi."
@@ -16459,7 +16329,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Radioaktiv yemirilish qonuni va yarim yemirilish davri",
     "difficulty": "oson",
     "title": "Radioaktiv izotopning vaqt o‘tishi bilan qolgan qismi (#49)",
-    "statement": "Yarim yemirilish davri T_{1/2} = 23 kun bo‘lgan radioaktiv izotop berilgan. t = 46 kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi (%) yemirilmasdan qoladi?",
+    "statement": "Yarim yemirilish davri $T_{1/2} = 23$ kun bo‘lgan radioaktiv izotop berilgan. $t = 46$ kun o‘tgandan so‘ng, namunadagi boshlang‘ich radioaktiv yadrolarning necha foizi ($N/N_0$) yemirilmasdan qoladi?",
     "given": {
       "T_half": {
         "value": 23,
@@ -16479,10 +16349,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "targetUnit": "%",
     "correctAnswer": 25,
     "tolerancePct": 1,
-    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}, \\quad \\lambda = \\frac{\\ln 2}{T_{1/2}}",
+    "formulaLatex": "N(t) = N_0 \\cdot 2^{-t / T_{1/2}} = N_0 \\cdot e^{-\\lambda t}",
     "stepByStepSolution": [
-      "1. Yarim yemirilish davrlari soni: k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00.",
-      "2. Qolgan yadrolar ulushi: \\frac{N}{N_0} = 2^{-2.00} = 0.2500.",
+      "1. Yarim yemirilish davrlari soni: $k = \\frac{t}{T_{1/2}} = \\frac{46}{23} = 2.00$.",
+      "2. Qolgan yadrolar: $\\frac{N}{N_0} = 2^{-2.00} = 0.2500$.",
       "3. Foizda: 25\\%."
     ],
     "hints": [
@@ -16497,7 +16367,7 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "topic": "Massa defekti va solishtirma bog‘lanish energiyasi",
     "difficulty": "murakkab",
     "title": "Geliy-4 (^4He) yadrosining solishtirma bog‘lanish energiyasi (#50)",
-    "statement": "Geliy-4 (^4He) yadrosining tinchlikdagi massasi M = 4.001506 u ga teng. Bitta proton massasi m_p = 1.007276 u, bitta neytron massasi m_n = 1.008665 u va 1 u = 931.494 MeV bo‘lsa, yadroning nuklon boshiga to‘g‘ri keluvchi solishtirma bog‘lanish energiyasi \\varepsilon = E_b / A ni MeV/nuklonda hisoblang.",
+    "statement": "Geliy-4 (^4He) yadrosining massasi $M = 4.001506$ u ga teng. Bitta proton massasi $m_p = 1.007276$ u, neytron massasi $m_n = 1.008665$ u va $1 \\text{ u} = 931.494$ MeV bo‘lsa, nuklon boshiga solishtirma bog‘lanish energiyasi $\\varepsilon = E_b / A$ ni hisoblang.",
     "given": {
       "M_nuclide": {
         "value": 4.001506,
@@ -16525,10 +16395,10 @@ export const PHYSICS_PROBLEMS: PhysicsProblem[] = [
     "tolerancePct": 1.5,
     "formulaLatex": "\\Delta m = Z m_p + (A - Z) m_n - M, \\quad E_b = \\Delta m \\cdot 931.494 \\text{ MeV}, \\quad \\varepsilon = \\frac{E_b}{A}",
     "stepByStepSolution": [
-      "1. Tarkibiy nuklonlar massalari yig‘indisi: M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882 u.",
-      "2. Massa defekti: \\Delta m = M_{tarkib} - 4.001506 = 0.030376 u.",
-      "3. To‘liq bog‘lanish energiyasi: E_b = \\Delta m \\times 931.494 = 28.30 MeV.",
-      "4. Solishtirma bog‘lanish energiyasi: \\varepsilon = \\frac{E_b}{4} = 7.07 MeV/nuklon."
+      "1. Tarkibiy nuklonlar massalari: $M_{tarkib} = 2 \\times 1.007276 + 2 \\times 1.008665 = 4.031882$ u.",
+      "2. Massa defekti: $\\Delta m = M_{tarkib} - 4.001506 = 0.030376$ u.",
+      "3. To‘liq bog‘lanish energiyasi: $E_b = \\Delta m \\times 931.494 = 28.30$ MeV.",
+      "4. Solishtirma bog‘lanish energiyasi: $\\varepsilon = \\frac{E_b}{4} = 7.07$ MeV/nuklon."
     ],
     "hints": [
       "Yadro massasi uni tashkil etuvchi alohida proton va neytronlar massalari yig‘indisidan doim kam bo‘ladi."
@@ -16572,9 +16442,9 @@ export function checkProblemAnswer(problemId: string, userAnswer: number): {
 
   let feedbackUz = "";
   if (isCorrect) {
-    feedbackUz = `Ajoyib! Javobingiz to‘g‘ri (${userAnswer} ${prob.targetUnit}). Xatolik ${errorPct.toFixed(2)}% (ruxsat etilgan: ±${prob.tolerancePct}%).`;
+    feedbackUz = `Ajoyib! Javobingiz to‘g‘ri (${userAnswer} ${prob.targetUnit}). Xatolik ${errorPct.toFixed(2)}% (ruxsat etilgan chegara: ±${prob.tolerancePct}%).`;
   } else {
-    feedbackUz = `Noto‘g‘ri yoki noaniq javob (${userAnswer} ${prob.targetUnit}). Kutilgan javob: ${prob.correctAnswer} ${prob.targetUnit}. Xatolik: ${errorPct.toFixed(2)}% (ruxsat: ±${prob.tolerancePct}%).`;
+    feedbackUz = `Noto‘g‘ri javob (${userAnswer} ${prob.targetUnit}). Qaytadan hisoblab ko‘ring yoki formulalardan foydalaning (Ruxsat etilgan xatolik chegarasi: ±${prob.tolerancePct}%).`;
   }
 
   return {
