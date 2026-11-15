@@ -37,10 +37,22 @@ export interface NavUser {
   faculty?: string;
 }
 
-const HEMIS_ITEMS = [
+const STUDENT_HEMIS_ITEMS = [
   { href: "/profile", label: "Talaba Profili (HEMIS)", icon: User },
   { href: "/syllabus", label: "O'quv Rejasi & Sillabus", icon: GraduationCap },
   { href: "/assignments", label: "Topshiriqlar & Maqolalar", icon: FileText },
+];
+
+const TEACHER_PRIMARY_ITEMS = [
+  { href: "/teacher", label: "Ustoz Kabineti & Jurnal", icon: GraduationCap },
+  { href: "/syllabus", label: "O'quv Rejasi & Sillabus", icon: BookOpen },
+  { href: "/assignments", label: "Topshiriqlar & Maqolalar", icon: FileText },
+];
+
+const ADMIN_PRIMARY_ITEMS = [
+  { href: "/darksystem", label: "Foydalanuvchilar & Tizim", icon: ShieldCheck },
+  { href: "/teacher", label: "Akademik Vedomostlar", icon: GraduationCap },
+  { href: "/syllabus", label: "O'quv Rejasi Nazorati", icon: BookOpen },
 ];
 
 const NAV_ITEMS = [
@@ -54,12 +66,21 @@ const NAV_ITEMS = [
   { href: "/labs/atomic", label: "8. Atom & Yadro Fizikasi", icon: Radiation },
 ];
 
-const SECONDARY_ITEMS = [
-  { href: "/interactive-labs", label: "16 ta Interaktiv Stendlar", icon: FlaskConical },
+const STUDENT_SECONDARY_ITEMS = [
+  { href: "/reports", label: "Hisobotlarim & Baholarim", icon: FileText },
   { href: "/practice", label: "400 ta Masala & Mashqlar", icon: CheckCircle2 },
-  { href: "/instruments", label: "75 ta Qurilma Katalogi", icon: Wrench },
   { href: "/reference", label: "100+ Formulalar & CODATA", icon: BookOpen },
-  { href: "/reports", label: "Hisobotlarim & Topshiriqlar", icon: FileText },
+];
+
+const TEACHER_SECONDARY_ITEMS = [
+  { href: "/practice", label: "400 ta Masalalar Banki", icon: CheckCircle2 },
+  { href: "/reference", label: "Formulalar & CODATA", icon: BookOpen },
+  { href: "/instruments", label: "Qurilmalar Katalogi", icon: Wrench },
+];
+
+const ADMIN_SECONDARY_ITEMS = [
+  { href: "/reference", label: "Formulalar & CODATA", icon: BookOpen },
+  { href: "/instruments", label: "Qurilmalar Katalogi", icon: Wrench },
 ];
 
 export function AppShell({
@@ -115,10 +136,19 @@ export function AppShell({
         </div>
 
         <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          HEMIS O&apos;quv Portali
+          {user.role === "admin" || user.role === "darksystem"
+            ? "Tizim Boshqaruvi"
+            : user.role === "teacher"
+            ? "O‘qituvchi Portali"
+            : "HEMIS O‘quv Portali"}
         </div>
         <nav className="space-y-0.5 mb-4">
-          {HEMIS_ITEMS.map((item) => {
+          {(user.role === "admin" || user.role === "darksystem"
+            ? ADMIN_PRIMARY_ITEMS
+            : user.role === "teacher"
+            ? TEACHER_PRIMARY_ITEMS
+            : STUDENT_HEMIS_ITEMS
+          ).map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
             return (
@@ -165,10 +195,15 @@ export function AppShell({
         </nav>
 
         <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          Ma’lumotnoma & Jurnal
+          {user.role === "student" ? "Mashg‘ulot & Natijalar" : "Akademik Resurslar"}
         </div>
         <nav className="space-y-0.5 mb-5">
-          {SECONDARY_ITEMS.map((item) => {
+          {(user.role === "admin" || user.role === "darksystem"
+            ? ADMIN_SECONDARY_ITEMS
+            : user.role === "teacher"
+            ? TEACHER_SECONDARY_ITEMS
+            : STUDENT_SECONDARY_ITEMS
+          ).map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
             return (
@@ -188,44 +223,6 @@ export function AppShell({
             );
           })}
         </nav>
-
-        {(user.role === "admin" || user.role === "darksystem" || user.role === "teacher") && (
-          <>
-            <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              {user.role === "admin" || user.role === "darksystem"
-                ? "Boshqaruv & Ustozlar"
-                : "O‘qituvchi Paneli"}
-            </div>
-            <nav className="space-y-0.5">
-              {(user.role === "admin" || user.role === "darksystem") && (
-                <Link
-                  href="/darksystem"
-                  onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-colors border-l-2 ${
-                    pathname === "/darksystem"
-                      ? "border-blue-900 bg-white text-blue-900 font-semibold shadow-2xs"
-                      : "border-transparent text-slate-700 hover:bg-white hover:text-slate-900"
-                  }`}
-                >
-                  <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                  <span>Darksystem Boshqaruvi</span>
-                </Link>
-              )}
-              <Link
-                href="/teacher"
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-colors border-l-2 ${
-                  pathname === "/teacher"
-                    ? "border-blue-900 bg-white text-blue-900 font-semibold shadow-2xs"
-                    : "border-transparent text-slate-700 hover:bg-white hover:text-slate-900"
-                }`}
-              >
-                <GraduationCap className="h-3.5 w-3.5 shrink-0" />
-                <span>Ustoz & Guruhlar Paneli</span>
-              </Link>
-            </nav>
-          </>
-        )}
       </div>
 
       <div className="shrink-0 border-t border-slate-200 bg-white p-3">
