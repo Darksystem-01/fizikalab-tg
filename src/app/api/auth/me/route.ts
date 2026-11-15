@@ -9,6 +9,9 @@ import {
   type UserRole,
 } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(req: Request) {
   const user = await getSessionUser(req);
   if (!user || !user.sessionId) {

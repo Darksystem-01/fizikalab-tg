@@ -639,7 +639,7 @@ test("Challenger Suite 3: End-to-end HTTP API simulation dispatch across all 8 c
   const PORT = 3195;
   const baseUrl = `http://127.0.0.1:${PORT}`;
 
-  const serverProc = spawn("npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], {
+  const serverProc = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], {
     cwd: PROJECT_ROOT,
     env: {
       ...process.env,

@@ -46,6 +46,17 @@ export function LabReportPanel({
   const [message, setMessage] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
   useEffect(() => {
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const qAssignmentId = params?.get("assignmentId");
+    const qTitle = params?.get("title");
+    if (qTitle) {
+      try {
+        setTitle(decodeURIComponent(qTitle));
+      } catch {
+        setTitle(qTitle);
+      }
+    }
+
     fetch("/api/assignments")
       .then((r) => (r.ok ? r.json() : { assignments: [] }))
       .then((d) => {
@@ -53,7 +64,11 @@ export function LabReportPanel({
           (a: AssignmentOption) => a.lab_key === labKey
         );
         setAssignments(list);
-        if (list.length > 0) setAssignmentId(String(list[0].id));
+        if (qAssignmentId && list.some((a: AssignmentOption) => String(a.id) === qAssignmentId)) {
+          setAssignmentId(qAssignmentId);
+        } else if (list.length > 0) {
+          setAssignmentId(String(list[0].id));
+        }
       })
       .catch(() => {});
   }, [labKey]);

@@ -39,7 +39,7 @@ test.before(async () => {
   if (!baseUrl) {
     const port = 3199;
     baseUrl = `http://127.0.0.1:${port}`;
-    serverProc = spawn("npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
+    serverProc = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
       cwd: PROJECT_ROOT,
       env: {
         ...process.env,

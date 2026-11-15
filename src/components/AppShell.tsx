@@ -73,8 +73,7 @@ export function AppShell({
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
+    window.location.assign("/");
   }
 
   const roleLabel =
@@ -86,7 +85,7 @@ export function AppShell({
 
   const sidebarContent = (
     <div className="flex h-full flex-col justify-between bg-slate-50 border-r border-slate-200">
-      <div className="overflow-y-auto p-3">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3">
         <div className="mb-4 border-b border-slate-200 pb-3 px-1">
           <Link
             href={
@@ -197,7 +196,7 @@ export function AppShell({
         )}
       </div>
 
-      <div className="border-t border-slate-200 bg-white p-3">
+      <div className="shrink-0 border-t border-slate-200 bg-white p-3">
         <div className="mb-2">
           <div className="flex items-center justify-between gap-2">
             <span className="truncate text-xs font-semibold text-slate-900">
