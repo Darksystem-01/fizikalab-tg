@@ -217,8 +217,8 @@ export function KinematicsLab() {
               unit="°"
               value={angleDeg}
               onChange={setAngleDeg}
-              sliderMin={1}
-              sliderMax={89}
+              sliderMin={0}
+              sliderMax={90}
               step={0.5}
               minValid={0}
               maxValid={90}
@@ -603,6 +603,18 @@ export function KinematicsLab() {
                       const maxY = Math.max(2, ...pts.map((p) => p.y));
                       const toX = (xv: number) => padL + (xv / maxX) * w;
                       const toY = (yv: number) => padT + h - (yv / maxY) * h;
+
+                      // Visual tangent angle correction so cannon barrel strictly matches the trajectory slope on canvas
+                      const scaleX = w / Math.max(0.1, maxX);
+                      const scaleY = h / Math.max(0.1, maxY);
+                      const rad = (angleDeg * Math.PI) / 180;
+                      const visualAngleRad = Math.atan2(Math.sin(rad) * scaleY, Math.max(1e-6, Math.cos(rad) * scaleX));
+                      const visualAngleDeg = (visualAngleRad * 180) / Math.PI;
+
+                      const barrelLen = 26;
+                      const cannonBaseX = padL - barrelLen * Math.cos(visualAngleRad);
+                      const cannonBaseY = toY(y0) + barrelLen * Math.sin(visualAngleRad);
+
                       const fullPath = pts
                         .map((p, i) => `${i === 0 ? "M" : "L"}${toX(p.x).toFixed(1)},${toY(p.y).toFixed(1)}`)
                         .join(" ");
@@ -842,10 +854,92 @@ export function KinematicsLab() {
                             </g>
                           )}
 
-                          {/* Realistic Cannon Launcher Apparatus at Launch Point */}
+                          {/* Launch Column / Support Tower when y0 > 0 */}
                           {realisticView && (
-                            <g transform={`translate(${padL}, ${toY(y0)})`}>
-                              {/* Heavy Pedestal Base */}
+                            <g>
+                              {padT + h - cannonBaseY > 4 && (
+                                <g>
+                                  {/* Pillar column */}
+                                  <rect
+                                    x={cannonBaseX - 7}
+                                    y={cannonBaseY}
+                                    width="14"
+                                    height={Math.max(0, padT + h - cannonBaseY)}
+                                    fill="#475569"
+                                    stroke="#1E293B"
+                                    strokeWidth="1.2"
+                                    rx="2"
+                                  />
+                                  {/* Base plate on ground */}
+                                  <rect
+                                    x={cannonBaseX - 14}
+                                    y={padT + h - 5}
+                                    width="28"
+                                    height="5"
+                                    fill="#334155"
+                                    stroke="#0F172A"
+                                    strokeWidth="1"
+                                    rx="1"
+                                  />
+                                  {/* Height label on tower if high enough */}
+                                  {y0 > 1 && (
+                                    <text
+                                      x={cannonBaseX - 10}
+                                      y={cannonBaseY + (padT + h - cannonBaseY) / 2 + 3}
+                                      textAnchor="end"
+                                      fontSize="8.5"
+                                      fill="#475569"
+                                      fontFamily="monospace"
+                                      fontWeight="600"
+                                    >
+                                      h₀={y0}m
+                                    </text>
+                                  )}
+                                </g>
+                              )}
+                            </g>
+                          )}
+
+                          {/* Angle Protractor Arc & Guide at Muzzle (padL, toY(y0)) */}
+                          <g>
+                            {/* Horizontal reference baseline */}
+                            <line
+                              x1={padL}
+                              y1={toY(y0)}
+                              x2={padL + 36}
+                              y2={toY(y0)}
+                              stroke="#64748B"
+                              strokeWidth="1"
+                              strokeDasharray="2 2"
+                            />
+                            {/* Protractor angle arc */}
+                            {angleDeg > 2 && (
+                              <path
+                                d={`M ${padL + 24} ${toY(y0)} A 24 24 0 0 0 ${(
+                                  padL + 24 * Math.cos(visualAngleRad)
+                                ).toFixed(1)} ${(toY(y0) - 24 * Math.sin(visualAngleRad)).toFixed(1)}`}
+                                fill="none"
+                                stroke="#2563EB"
+                                strokeWidth="1.5"
+                              />
+                            )}
+                            {/* Angle label */}
+                            <text
+                              x={(padL + 32 * Math.cos(visualAngleRad / 2)).toFixed(1)}
+                              y={(toY(y0) - 32 * Math.sin(visualAngleRad / 2) + 3).toFixed(1)}
+                              fontSize="9.5"
+                              fill="#1D4ED8"
+                              fontFamily="monospace"
+                              fontWeight="bold"
+                            >
+                              {angleDeg}°
+                            </text>
+                          </g>
+
+                          {/* Realistic Cannon Launcher Apparatus at Launch Pivot */}
+                          {realisticView ? (
+                            <g transform={`translate(${cannonBaseX.toFixed(1)}, ${cannonBaseY.toFixed(1)})`}>
+                              {/* Heavy Pedestal / Carriage Base */}
                               <path
                                 d="M-13,0 L-7,-9 L7,-9 L13,0 Z"
                                 fill="#334155"
@@ -862,12 +956,12 @@ export function KinematicsLab() {
                                 strokeWidth="1.5"
                               />
                               <circle cx="0" cy="0" r="2.5" fill="#CBD5E1" />
-                              {/* Rotating Cannon Barrel */}
-                              <g transform={`rotate(${-angleDeg}, 0, 0)`}>
+                              {/* Rotating Cannon Barrel strictly aligned with visual trajectory angle */}
+                              <g transform={`rotate(${-visualAngleDeg.toFixed(2)}, 0, 0)`}>
                                 <rect
                                   x="0"
                                   y="-5.5"
-                                  width="26"
+                                  width={barrelLen}
                                   height="11"
                                   rx="2"
                                   fill="url(#cannonMetal)"
@@ -875,7 +969,7 @@ export function KinematicsLab() {
                                   strokeWidth="1"
                                 />
                                 <rect
-                                  x="23"
+                                  x={barrelLen - 3}
                                   y="-6.5"
                                   width="4"
                                   height="13"
@@ -884,18 +978,30 @@ export function KinematicsLab() {
                                   stroke="#854D0E"
                                   strokeWidth="0.8"
                                 />
-                                <ellipse cx="26" cy="0" rx="1.5" ry="5.5" fill="#0F172A" />
+                                <ellipse cx={barrelLen} cy="0" rx="1.5" ry="5.5" fill="#0F172A" />
                               </g>
-                              <text
-                                x="12"
-                                y="-12"
-                                fontSize="9"
-                                fill="#1E3A8A"
-                                fontFamily="monospace"
-                                fontWeight="bold"
-                              >
-                                {angleDeg}°
-                              </text>
+                              {/* Muzzle smoke / flash burst upon firing */}
+                              {progress > 0 && progress < 0.06 && (
+                                <g transform={`translate(${barrelLen * Math.cos(visualAngleRad)}, ${-barrelLen * Math.sin(visualAngleRad)})`}>
+                                  <circle cx="0" cy="0" r="8" fill="#F59E0B" opacity="0.8" />
+                                  <circle cx="0" cy="0" r="4.5" fill="#FEF08A" opacity="0.95" />
+                                  <circle cx="-3" cy="-3" r="5" fill="#94A3B8" opacity="0.5" />
+                                </g>
+                              )}
+                            </g>
+                          ) : (
+                            /* Schematic Velocity Vector Indicator */
+                            <g transform={`translate(${padL}, ${toY(y0)})`}>
+                              <circle cx="0" cy="0" r="4" fill="#3B82F6" />
+                              <line
+                                x1="0"
+                                y1="0"
+                                x2={(28 * Math.cos(visualAngleRad)).toFixed(1)}
+                                y2={(-28 * Math.sin(visualAngleRad)).toFixed(1)}
+                                stroke="#3B82F6"
+                                strokeWidth="2"
+                                markerEnd="url(#kinArrBlue)"
+                              />
                             </g>
                           )}
 
