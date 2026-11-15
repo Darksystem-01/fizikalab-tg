@@ -30,8 +30,8 @@ export async function PATCH(
   };
 
   const grade =
-    typeof body.grade === "number"
-      ? Math.min(100, Math.max(0, Math.round(body.grade)))
+    typeof body.grade === "number" && !isNaN(body.grade)
+      ? Math.min(100, Math.max(0, Math.round(body.grade * 10) / 10))
       : null;
   const status =
     body.status === "needs_revision"

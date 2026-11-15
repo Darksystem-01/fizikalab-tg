@@ -329,14 +329,18 @@ export function TeacherDashboard() {
 
   async function submitGrade(reportId: number, status: "graded" | "needs_revision" = "graded") {
     setNotice(null);
-    const gradeNum = Number(grades[reportId] ?? 0);
+    const targetRep = data?.reports.find((r) => r.id === reportId);
+    const defaultGrade = targetRep?.grade !== null && targetRep?.grade !== undefined ? String(targetRep.grade) : "90";
+    const gradeNum = Number(grades[reportId] ?? defaultGrade);
+    const feedbackText = feedbacks[reportId] ?? (targetRep?.admin_feedback || "");
+
     const res = await fetch(`/api/teacher/reports/${reportId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         grade: status === "needs_revision" ? null : gradeNum,
         status,
-        adminFeedback: feedbacks[reportId] ?? "",
+        adminFeedback: feedbackText,
       }),
     });
     if (res.ok) {
@@ -1062,7 +1066,8 @@ export function TeacherDashboard() {
                       type="number"
                       min={0}
                       max={100}
-                      value={grades[rep.id] ?? "90"}
+                      step={0.5}
+                      value={grades[rep.id] ?? (rep.grade !== null && rep.grade !== undefined ? String(rep.grade) : "90")}
                       onChange={(e) =>
                         setGrades((prev) => ({ ...prev, [rep.id]: e.target.value }))
                       }
@@ -1076,7 +1081,7 @@ export function TeacherDashboard() {
                     <input
                       type="text"
                       placeholder="Talabaga tavsiya yoki baho izohi..."
-                      value={feedbacks[rep.id] ?? ""}
+                      value={feedbacks[rep.id] ?? (rep.admin_feedback || "")}
                       onChange={(e) =>
                         setFeedbacks((prev) => ({ ...prev, [rep.id]: e.target.value }))
                       }

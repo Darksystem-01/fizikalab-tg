@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   ClipboardList,
   Clock,
+  Download,
   ExternalLink,
   FileText,
   GraduationCap,
@@ -41,6 +42,11 @@ interface ReportItem {
   admin_feedback: string;
   submitted_at: string;
   reviewed_at: string | null;
+  file_url?: string | null;
+  file_name?: string | null;
+  file_size?: number | null;
+  article_content?: string | null;
+  submission_type?: "report" | "file" | "article" | null;
 }
 
 const ALL_LABS = [
@@ -433,9 +439,44 @@ export function StudentReportsView() {
                     </div>
                   </div>
 
-                  <div className="mt-2 border border-slate-100 bg-slate-50 p-2.5 text-xs text-slate-700">
-                    <strong className="text-slate-900">Talaba xulosasi:</strong> {rep.conclusion}
-                  </div>
+                  {rep.file_url && (
+                    <div className="mt-2 flex items-center justify-between border border-blue-200 bg-blue-50/50 p-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <Download className="h-4 w-4 text-[#1E3A8A]" />
+                        <span className="font-semibold text-slate-900">
+                          {rep.file_name || "Biriktirilgan fayl"}
+                        </span>
+                        {rep.file_size ? (
+                          <span className="text-[10px] text-slate-500 font-mono">
+                            ({(rep.file_size / (1024 * 1024)).toFixed(2)} MB)
+                          </span>
+                        ) : null}
+                      </div>
+                      <a
+                        href={rep.file_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="border border-[#1E3A8A] bg-white px-2.5 py-1 text-xs font-semibold text-[#1E3A8A] hover:bg-blue-50"
+                      >
+                        Faylni ochish / Yuklash
+                      </a>
+                    </div>
+                  )}
+
+                  {rep.article_content ? (
+                    <div className="mt-2 border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-800">
+                      <strong className="text-[#1E3A8A] block mb-1">
+                        Ilmiy Maqola / Mustaqil ish matni:
+                      </strong>
+                      <div className="whitespace-pre-wrap max-h-36 overflow-y-auto bg-white p-2 border border-slate-100 font-mono text-[11px]">
+                        {rep.article_content}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-2 border border-slate-100 bg-slate-50 p-2.5 text-xs text-slate-700">
+                      <strong className="text-slate-900">Talaba xulosasi:</strong> {rep.conclusion}
+                    </div>
+                  )}
 
                   {rep.admin_feedback && (
                     <div className="mt-2 border border-blue-200 bg-blue-50/60 p-2.5 text-xs text-slate-800">

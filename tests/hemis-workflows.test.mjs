@@ -219,6 +219,22 @@ test("HEMIS 3: Diversified assignments, file upload, article submission and teac
   assert.ok(uploadData.url, "Upload must return a file URL");
   assert.equal(uploadData.fileName, "gravitatsiya_maqola_hisobot.pdf");
 
+  // Verify file is retrievable via HTTP GET and content matches
+  const downloadRes = await fetch(`${baseUrl}${uploadData.url}`);
+  assert.equal(downloadRes.status, 200, "Uploaded file must be retrievable via GET");
+  const downloadedText = await downloadRes.text();
+  assert.ok(downloadedText.includes("PDF-1.4 DUMMY CONTENT"), "Downloaded content must match uploaded content");
+
+  // Path traversal defense
+  const traversalRes = await fetch(`${baseUrl}/uploads/..%2fpackage.json`);
+  assert.notEqual(traversalRes.status, 200, "Directory traversal on /uploads must be rejected");
+
+  // Verify lecture resource route works without 404
+  const lectureRes = await fetch(`${baseUrl}/resources/lectures/1-maruza.pdf`);
+  assert.equal(lectureRes.status, 200, "Lecture resource route must return 200");
+  const lectureHtml = await lectureRes.text();
+  assert.ok(lectureHtml.includes("TATU"), "Lecture resource should contain TATU header");
+
   // 3. Student submits an Article + File via /api/reports
   const targetAssignment = assignData.assignments[0];
   const submitReportRes = await fetch(`${baseUrl}/api/reports`, {
@@ -276,4 +292,38 @@ test("HEMIS 3: Diversified assignments, file upload, article submission and teac
     headers: { Cookie: studentCookie },
   });
   assert.equal(assignPageRes.status, 200, "/assignments HTML page must return 200");
+
+  // 7. Teacher creates a new scientific article assignment with custom rubric
+  const createAssignRes = await fetch(`${baseUrl}/api/assignments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: adminCookie,
+    },
+    body: JSON.stringify({
+      title: "Ilmiy maqola: Kvant optikasi va fotonlar interferensiyasi",
+      labKey: "optics",
+      description: "Yung tajribasi va bitta fotonli interferensiya bo'yicha ilmiy maqola tayyorlash.",
+      lessonType: "maqola",
+      maxScore: 10.0,
+      rubric: [
+        { criterion: "Nazariy apparat", weight: 50 },
+        { criterion: "Tajriba tahlili", weight: 50 },
+      ],
+      groupName: "310-24 DIF",
+    }),
+  });
+  assert.equal(createAssignRes.status, 201, "Teacher should be able to create scientific article assignment");
+  const createAssignData = await createAssignRes.json();
+  assert.ok(createAssignData.id);
+
+  // Student fetches assignments and sees the new scientific article assignment
+  const studentRefreshedRes = await fetch(`${baseUrl}/api/assignments`, {
+    headers: { Cookie: studentCookie },
+  });
+  const studentRefreshedData = await studentRefreshedRes.json();
+  const foundNew = studentRefreshedData.assignments.find((a) => a.id === createAssignData.id);
+  assert.ok(foundNew, "Student must see the teacher's newly created scientific article assignment");
+  assert.equal(foundNew.lesson_type, "maqola");
+  assert.equal(foundNew.max_score, 10.0);
 });

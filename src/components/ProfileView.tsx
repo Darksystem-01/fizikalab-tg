@@ -6,6 +6,7 @@ import {
   BookOpen,
   Building2,
   Calendar,
+  Camera,
   CheckCircle2,
   Copy,
   Edit3,
@@ -167,7 +168,7 @@ export function ProfileView() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
               {/* Student Photo */}
-              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-md">
+              <div className="relative group h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-md">
                 {profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -180,7 +181,19 @@ export function ProfileView() {
                     {profile.fullName.slice(0, 2).toUpperCase()}
                   </div>
                 )}
-                <div className="absolute bottom-0 inset-x-0 bg-blue-950/80 py-0.5 text-center text-[9px] font-bold text-white uppercase tracking-wider">
+                <button
+                  type="button"
+                  onClick={() => {
+                    populateForm(profile);
+                    setIsEditing(true);
+                  }}
+                  className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[10px] font-semibold"
+                  title="Rasmni o'zgartirish"
+                >
+                  <Camera className="h-5 w-5 mb-0.5" />
+                  Rasm
+                </button>
+                <div className="absolute bottom-0 inset-x-0 bg-blue-950/80 py-0.5 text-center text-[9px] font-bold text-white uppercase tracking-wider pointer-events-none">
                   HEMIS
                 </div>
               </div>
@@ -506,15 +519,60 @@ export function ProfileView() {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                  Avatar / Rasm URL manzili
+                  Avatar / Talaba Fotosurati
                 </label>
-                <input
-                  type="text"
-                  value={editAvatarUrl}
-                  onChange={(e) => setEditAvatarUrl(e.target.value)}
-                  placeholder="https://... yoki bo'sh qoldiring"
-                  className="w-full border border-slate-300 px-3 py-1.5 text-xs text-slate-900 focus:border-blue-900 focus:outline-hidden"
-                />
+                <div className="flex items-center gap-3">
+                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-slate-300 bg-slate-100 flex items-center justify-center">
+                    {editAvatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={editAvatarUrl} alt="Preview" className="h-full w-full object-cover" />
+                    ) : (
+                      <User className="h-6 w-6 text-slate-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-1.5">
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 10 * 1024 * 1024) {
+                          alert("Rasm hajmi 10 MB dan oshmasligi kerak");
+                          return;
+                        }
+                        const formData = new FormData();
+                        formData.append("file", file);
+                        const res = await fetch("/api/upload", { method: "POST", body: formData });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setEditAvatarUrl(data.url);
+                        } else {
+                          alert("Rasmni yuklashda xatolik");
+                        }
+                      }}
+                      className="w-full text-[11px] text-slate-500 file:mr-2 file:border-0 file:bg-blue-900 file:px-2.5 file:py-1 file:text-[11px] file:font-semibold file:text-white hover:file:bg-blue-950 cursor-pointer"
+                    />
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editAvatarUrl}
+                        onChange={(e) => setEditAvatarUrl(e.target.value)}
+                        placeholder="Yoki to'g'ridan-to'g'ri URL kiriting..."
+                        className="w-full border border-slate-300 px-2 py-1 text-[11px] text-slate-900 focus:border-blue-900 focus:outline-hidden"
+                      />
+                      {editAvatarUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setEditAvatarUrl("")}
+                          className="shrink-0 text-[10px] text-red-600 hover:underline cursor-pointer"
+                        >
+                          Tozalash
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div>

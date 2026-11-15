@@ -5,8 +5,8 @@ import { getDb, writeAuditLog } from "@/lib/db";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET() {
-  const user = await getSessionUser();
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
   if (!user) {
     return NextResponse.json({ error: "Autentifikatsiya talab qilinadi" }, { status: 401 });
   }
@@ -35,7 +35,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const user = await getSessionUser();
+    const user = await getSessionUser(req);
     if (!user) {
       return NextResponse.json({ error: "Autentifikatsiya talab qilinadi" }, { status: 401 });
     }

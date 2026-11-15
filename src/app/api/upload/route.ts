@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import fs from "fs";
 import path from "path";
+import os from "os";
 import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
@@ -92,15 +93,25 @@ export async function POST(req: Request) {
     const safeBaseName = fileName.replace(/[^a-zA-Z0-9_\u0400-\u04FF-]/g, "_").slice(0, 40);
     const storedFileName = `${Date.now()}_${safeHash}_${safeBaseName}.${ext}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    try {
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+    const primaryDir = path.join(process.cwd(), "public", "uploads");
+    const fallbackDir = path.join(os.tmpdir(), "fizikalab_uploads");
+
+    let saved = false;
+    for (const dir of [primaryDir, fallbackDir]) {
+      try {
+        if (!fs.existsSync(/*turbopackIgnore: true*/ dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+        fs.writeFileSync(path.join(dir, storedFileName), fileBuffer);
+        saved = true;
+        break;
+      } catch {
+        // try next candidate
       }
-      fs.writeFileSync(path.join(uploadDir, storedFileName), fileBuffer);
-    } catch {
-      // Fallback if filesystem write is blocked (e.g. read-only serverless):
-      // deliver data URI
+    }
+
+    if (!saved) {
+      // Final fallback if all disk writes are blocked: data URI
       const base64Str = fileBuffer.toString("base64");
       const dataUri = `data:${fileMime || "application/octet-stream"};base64,${base64Str}`;
       return NextResponse.json({
