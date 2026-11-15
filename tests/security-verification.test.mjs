@@ -84,6 +84,7 @@ test.before(async () => {
         AUTH_SECRET,
         FIZIKALAB_TEST: "1",
       },
+      shell: process.platform === "win32",
       stdio: "ignore",
     });
     await waitForHealth(baseUrl);

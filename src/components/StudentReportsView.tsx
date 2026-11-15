@@ -270,6 +270,12 @@ export function StudentReportsView() {
             <ClipboardList className="h-4 w-4 text-[#1E3A8A]" />
             O‘qituvchi Tomonidan Berilgan Vazifalar ({assignments.length})
           </div>
+          <Link
+            href="/assignments"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[#1E3A8A] hover:underline"
+          >
+            HEMIS Topshiriqlar & Maqola Topshirish Jadvali →
+          </Link>
         </div>
 
         {assignments.length === 0 ? (

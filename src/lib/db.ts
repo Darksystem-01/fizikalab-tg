@@ -20,6 +20,19 @@ export interface DbUser {
   google_id?: string | null;
   created_by: number | null;
   created_at: string;
+  phone?: string;
+  birth_date?: string;
+  gender?: string;
+  address?: string;
+  degree?: string;
+  education_type?: string;
+  education_payment?: string;
+  course_year?: string;
+  tutor_name?: string;
+  scholarship_status?: string;
+  avatar_url?: string;
+  student_id_code?: string;
+  bio?: string;
 }
 
 export interface DbAcademicGroup {
@@ -44,6 +57,11 @@ export interface DbAssignment {
   created_by: number;
   due_date: string | null;
   created_at: string;
+  lesson_type?: "laboratoriya" | "mustaqil_ish" | "maqola" | "amaliyot" | "referat";
+  max_score?: number;
+  rubric_json?: string;
+  attachment_url?: string;
+  attachment_name?: string;
 }
 
 export interface DbExperimentRun {
@@ -65,12 +83,17 @@ export interface DbLabReport {
   measurements_json: string;
   error_analysis_json: string;
   conclusion: string;
-  status: "submitted" | "reviewed" | "graded";
+  status: "submitted" | "reviewed" | "graded" | "needs_revision";
   grade: number | null;
   admin_feedback: string | null;
   graded_by: number | null;
   submitted_at: string;
   reviewed_at: string | null;
+  file_url?: string | null;
+  file_name?: string | null;
+  file_size?: number | null;
+  article_content?: string | null;
+  submission_type?: "report" | "file" | "article" | null;
 }
 
 export interface DbAuditLog {
@@ -216,6 +239,38 @@ async function getAdapter(): Promise<DbAdapter> {
 }
 
 async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise<void> {
+  const userProfileCols = [
+    { name: "phone", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "birth_date", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "gender", pgType: "TEXT NOT NULL DEFAULT 'erkak'", sqType: "TEXT NOT NULL DEFAULT 'erkak'" },
+    { name: "address", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "degree", pgType: "TEXT NOT NULL DEFAULT 'Bakalavr'", sqType: "TEXT NOT NULL DEFAULT 'Bakalavr'" },
+    { name: "education_type", pgType: "TEXT NOT NULL DEFAULT 'Kunduzgi'", sqType: "TEXT NOT NULL DEFAULT 'Kunduzgi'" },
+    { name: "education_payment", pgType: "TEXT NOT NULL DEFAULT 'Davlat granti'", sqType: "TEXT NOT NULL DEFAULT 'Davlat granti'" },
+    { name: "course_year", pgType: "TEXT NOT NULL DEFAULT '1-kurs'", sqType: "TEXT NOT NULL DEFAULT '1-kurs'" },
+    { name: "tutor_name", pgType: "TEXT NOT NULL DEFAULT 'Alimuradov Lochinbek'", sqType: "TEXT NOT NULL DEFAULT 'Alimuradov Lochinbek'" },
+    { name: "scholarship_status", pgType: "TEXT NOT NULL DEFAULT 'Bor'", sqType: "TEXT NOT NULL DEFAULT 'Bor'" },
+    { name: "avatar_url", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "student_id_code", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "bio", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+  ];
+
+  const assignExtCols = [
+    { name: "lesson_type", pgType: "TEXT NOT NULL DEFAULT 'laboratoriya'", sqType: "TEXT NOT NULL DEFAULT 'laboratoriya'" },
+    { name: "max_score", pgType: "REAL NOT NULL DEFAULT 5.0", sqType: "REAL NOT NULL DEFAULT 5.0" },
+    { name: "rubric_json", pgType: "TEXT NOT NULL DEFAULT '[]'", sqType: "TEXT NOT NULL DEFAULT '[]'" },
+    { name: "attachment_url", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "attachment_name", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+  ];
+
+  const reportExtCols = [
+    { name: "file_url", pgType: "TEXT DEFAULT ''", sqType: "TEXT DEFAULT ''" },
+    { name: "file_name", pgType: "TEXT DEFAULT ''", sqType: "TEXT DEFAULT ''" },
+    { name: "file_size", pgType: "INTEGER DEFAULT 0", sqType: "INTEGER DEFAULT 0" },
+    { name: "article_content", pgType: "TEXT DEFAULT ''", sqType: "TEXT DEFAULT ''" },
+    { name: "submission_type", pgType: "TEXT DEFAULT 'report'", sqType: "TEXT DEFAULT 'report'" },
+  ];
+
   if (isPg) {
     await adapter.execute(
       `ALTER TABLE users ADD COLUMN IF NOT EXISTS university TEXT NOT NULL DEFAULT ''`
@@ -232,15 +287,27 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
     await adapter.execute(
       `ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id TEXT`
     );
+    for (const c of userProfileCols) {
+      await adapter.execute(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ${c.name} ${c.pgType}`);
+    }
+
     await adapter.execute(
       `ALTER TABLE assignments ADD COLUMN IF NOT EXISTS group_name TEXT`
     );
     await adapter.execute(
       `ALTER TABLE assignments ADD COLUMN IF NOT EXISTS assignment_type TEXT NOT NULL DEFAULT 'lab'`
     );
+    for (const c of assignExtCols) {
+      await adapter.execute(`ALTER TABLE assignments ADD COLUMN IF NOT EXISTS ${c.name} ${c.pgType}`);
+    }
+
     await adapter.execute(
       `ALTER TABLE lab_reports ADD COLUMN IF NOT EXISTS graded_by INTEGER`
     );
+    for (const c of reportExtCols) {
+      await adapter.execute(`ALTER TABLE lab_reports ADD COLUMN IF NOT EXISTS ${c.name} ${c.pgType}`);
+    }
+
     // Update Postgres role CHECK constraint to allow 'teacher'
     await adapter.execute(`
       DO $$
@@ -273,8 +340,22 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
         faculty TEXT NOT NULL DEFAULT '',
         is_active INTEGER NOT NULL DEFAULT 1,
         is_banned INTEGER NOT NULL DEFAULT 0,
+        google_id TEXT,
         created_by INTEGER,
-        created_at TEXT NOT NULL
+        created_at TEXT NOT NULL,
+        phone TEXT NOT NULL DEFAULT '',
+        birth_date TEXT NOT NULL DEFAULT '',
+        gender TEXT NOT NULL DEFAULT 'erkak',
+        address TEXT NOT NULL DEFAULT '',
+        degree TEXT NOT NULL DEFAULT 'Bakalavr',
+        education_type TEXT NOT NULL DEFAULT 'Kunduzgi',
+        education_payment TEXT NOT NULL DEFAULT 'Davlat granti',
+        course_year TEXT NOT NULL DEFAULT '1-kurs',
+        tutor_name TEXT NOT NULL DEFAULT 'Alimuradov Lochinbek',
+        scholarship_status TEXT NOT NULL DEFAULT 'Bor',
+        avatar_url TEXT NOT NULL DEFAULT '',
+        student_id_code TEXT NOT NULL DEFAULT '',
+        bio TEXT NOT NULL DEFAULT ''
       )
     `);
     await adapter.execute(`
@@ -302,6 +383,11 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
     if (!colSet.has("google_id")) {
       await adapter.execute(`ALTER TABLE users ADD COLUMN google_id TEXT`);
     }
+    for (const c of userProfileCols) {
+      if (!colSet.has(c.name)) {
+        await adapter.execute(`ALTER TABLE users ADD COLUMN ${c.name} ${c.sqType}`);
+      }
+    }
   }
 
   const assignCols = await adapter.queryAll<{ name: string }>(`PRAGMA table_info(assignments)`);
@@ -315,6 +401,11 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
         `ALTER TABLE assignments ADD COLUMN assignment_type TEXT NOT NULL DEFAULT 'lab'`
       );
     }
+    for (const c of assignExtCols) {
+      if (!aSet.has(c.name)) {
+        await adapter.execute(`ALTER TABLE assignments ADD COLUMN ${c.name} ${c.sqType}`);
+      }
+    }
   }
 
   const reportCols = await adapter.queryAll<{ name: string }>(`PRAGMA table_info(lab_reports)`);
@@ -322,6 +413,11 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
     const rSet = new Set(reportCols.map((c) => c.name));
     if (!rSet.has("graded_by")) {
       await adapter.execute(`ALTER TABLE lab_reports ADD COLUMN graded_by INTEGER`);
+    }
+    for (const c of reportExtCols) {
+      if (!rSet.has(c.name)) {
+        await adapter.execute(`ALTER TABLE lab_reports ADD COLUMN ${c.name} ${c.sqType}`);
+      }
     }
   }
 }
@@ -345,7 +441,20 @@ async function ensureSchemaAndSeed() {
           is_banned INTEGER NOT NULL DEFAULT 0,
           google_id TEXT,
           created_by INTEGER,
-          created_at TEXT NOT NULL
+          created_at TEXT NOT NULL,
+          phone TEXT NOT NULL DEFAULT '',
+          birth_date TEXT NOT NULL DEFAULT '',
+          gender TEXT NOT NULL DEFAULT 'erkak',
+          address TEXT NOT NULL DEFAULT '',
+          degree TEXT NOT NULL DEFAULT 'Bakalavr',
+          education_type TEXT NOT NULL DEFAULT 'Kunduzgi',
+          education_payment TEXT NOT NULL DEFAULT 'Davlat granti',
+          course_year TEXT NOT NULL DEFAULT '1-kurs',
+          tutor_name TEXT NOT NULL DEFAULT 'Alimuradov Lochinbek',
+          scholarship_status TEXT NOT NULL DEFAULT 'Bor',
+          avatar_url TEXT NOT NULL DEFAULT '',
+          student_id_code TEXT NOT NULL DEFAULT '',
+          bio TEXT NOT NULL DEFAULT ''
         )`,
         `CREATE TABLE IF NOT EXISTS academic_groups (
           id SERIAL PRIMARY KEY,
@@ -365,6 +474,11 @@ async function ensureSchemaAndSeed() {
           tolerance_pct REAL NOT NULL DEFAULT 5.0,
           group_name TEXT,
           assignment_type TEXT NOT NULL DEFAULT 'lab',
+          lesson_type TEXT NOT NULL DEFAULT 'laboratoriya',
+          max_score REAL NOT NULL DEFAULT 5.0,
+          rubric_json TEXT NOT NULL DEFAULT '[]',
+          attachment_url TEXT NOT NULL DEFAULT '',
+          attachment_name TEXT NOT NULL DEFAULT '',
           created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
           due_date TEXT,
           created_at TEXT NOT NULL
@@ -392,7 +506,12 @@ async function ensureSchemaAndSeed() {
           admin_feedback TEXT,
           graded_by INTEGER,
           submitted_at TEXT NOT NULL,
-          reviewed_at TEXT
+          reviewed_at TEXT,
+          file_url TEXT DEFAULT '',
+          file_name TEXT DEFAULT '',
+          file_size INTEGER DEFAULT 0,
+          article_content TEXT DEFAULT '',
+          submission_type TEXT DEFAULT 'report'
         )`,
         `CREATE TABLE IF NOT EXISTS audit_logs (
           id SERIAL PRIMARY KEY,
@@ -427,7 +546,20 @@ async function ensureSchemaAndSeed() {
           is_banned INTEGER NOT NULL DEFAULT 0,
           google_id TEXT,
           created_by INTEGER,
-          created_at TEXT NOT NULL
+          created_at TEXT NOT NULL,
+          phone TEXT NOT NULL DEFAULT '',
+          birth_date TEXT NOT NULL DEFAULT '',
+          gender TEXT NOT NULL DEFAULT 'erkak',
+          address TEXT NOT NULL DEFAULT '',
+          degree TEXT NOT NULL DEFAULT 'Bakalavr',
+          education_type TEXT NOT NULL DEFAULT 'Kunduzgi',
+          education_payment TEXT NOT NULL DEFAULT 'Davlat granti',
+          course_year TEXT NOT NULL DEFAULT '1-kurs',
+          tutor_name TEXT NOT NULL DEFAULT 'Alimuradov Lochinbek',
+          scholarship_status TEXT NOT NULL DEFAULT 'Bor',
+          avatar_url TEXT NOT NULL DEFAULT '',
+          student_id_code TEXT NOT NULL DEFAULT '',
+          bio TEXT NOT NULL DEFAULT ''
         )`,
         `CREATE TABLE IF NOT EXISTS academic_groups (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -447,6 +579,11 @@ async function ensureSchemaAndSeed() {
           tolerance_pct REAL NOT NULL DEFAULT 5.0,
           group_name TEXT,
           assignment_type TEXT NOT NULL DEFAULT 'lab',
+          lesson_type TEXT NOT NULL DEFAULT 'laboratoriya',
+          max_score REAL NOT NULL DEFAULT 5.0,
+          rubric_json TEXT NOT NULL DEFAULT '[]',
+          attachment_url TEXT NOT NULL DEFAULT '',
+          attachment_name TEXT NOT NULL DEFAULT '',
           created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
           due_date TEXT,
           created_at TEXT NOT NULL
@@ -474,7 +611,12 @@ async function ensureSchemaAndSeed() {
           admin_feedback TEXT,
           graded_by INTEGER,
           submitted_at TEXT NOT NULL,
-          reviewed_at TEXT
+          reviewed_at TEXT,
+          file_url TEXT DEFAULT '',
+          file_name TEXT DEFAULT '',
+          file_size INTEGER DEFAULT 0,
+          article_content TEXT DEFAULT '',
+          submission_type TEXT DEFAULT 'report'
         )`,
         `CREATE TABLE IF NOT EXISTS audit_logs (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -629,8 +771,8 @@ async function ensureSchemaAndSeed() {
 
     for (const a of initialAssignments) {
       await adapter.execute(
-        `INSERT INTO assignments (title, lab_key, description, target_params_json, tolerance_pct, group_name, assignment_type, created_by, due_date, created_at)
-         VALUES ($1, $2, $3, $4, $5, NULL, 'lab', $6, $7, $8)`,
+        `INSERT INTO assignments (title, lab_key, description, target_params_json, tolerance_pct, group_name, assignment_type, lesson_type, max_score, rubric_json, created_by, due_date, created_at)
+         VALUES ($1, $2, $3, $4, $5, NULL, 'lab', 'laboratoriya', 5.0, '[]', $6, $7, $8)`,
         [
           a.title,
           a.lab_key,
@@ -639,6 +781,90 @@ async function ensureSchemaAndSeed() {
           a.tolerance_pct,
           admin ? admin.id : null,
           null,
+          now,
+        ]
+      );
+    }
+  }
+
+  // Ensure HEMIS diversified assignments (independent work, article writing, practical seminar, referat)
+  const articleCheck = await adapter.queryOne<{ cnt: number | string }>(
+    "SELECT COUNT(*) AS cnt FROM assignments WHERE lesson_type = 'maqola'"
+  );
+  if (Number(articleCheck?.cnt || 0) === 0) {
+    const now = new Date().toISOString();
+    const hemisAssignments = [
+      {
+        title: "Ilmiy maqola: Gravitatsion maydon, sun'iy yo'ldoshlar harakati va relyativistik mexanika tahlili",
+        lab_key: "kinematics",
+        description:
+          "Talaba kosmik apparatlarning Kepler orbitalari va Eynshteynning umumiy nisbiylik nazariyasi doirasidagi trayektoriyalar bo'yicha mustaqil ilmiy maqola tayyorlaydi. Maqolada annotatsiya, kirish, hisob-kitoblar, tahlil va xulosa to'liq yoritilishi lozim.",
+        lesson_type: "maqola",
+        max_score: 10.0,
+        due_date: "2026-12-01T23:59:59.000Z",
+        rubric: JSON.stringify([
+          { criterion: "Annotatsiya va ilmiy dolzarblik", weight: 20 },
+          { criterion: "Nazariy apparat va matematik modellashtirish", weight: 40 },
+          { criterion: "Grafiklar, tahliliy natijalar va xulosa", weight: 30 },
+          { criterion: "Adabiyotlar ro'yxati va rasmiylashtirish", weight: 10 },
+        ]),
+      },
+      {
+        title: "Mustaqil ish: Klassik mexanika qonunlarining zamonaviy texnologiyalardagi o'rni va tadbiqlari",
+        lab_key: "dynamics",
+        description:
+          "Mexanika qonunlarining robototexnika, avtomobil xavfsizlik tizimlari va gidravlik mexanizmlardagi o'rni bo'yicha mustaqil hisobot tayyorlash va topshirish.",
+        lesson_type: "mustaqil_ish",
+        max_score: 5.0,
+        due_date: "2026-11-28T23:59:59.000Z",
+        rubric: JSON.stringify([
+          { criterion: "Mavzuning to'liq yoritilishi", weight: 40 },
+          { criterion: "Amaliy hisob-kitoblar va misollar", weight: 40 },
+          { criterion: "Xulosa va adabiyotlar", weight: 20 },
+        ]),
+      },
+      {
+        title: "Amaliy mashg'ulot: Kuchlar momenti va statik muvozanat tenglamalari bo'yicha masalalar yechish",
+        lab_key: "statics",
+        description:
+          "400 ta masala bankidan statika bo'yicha 5 ta murakkab masalani to'liq analitik va grafik usulda yechib, hisobot shaklida topshirish.",
+        lesson_type: "amaliyot",
+        max_score: 4.0,
+        due_date: "2026-11-25T23:59:59.000Z",
+        rubric: JSON.stringify([
+          { criterion: "Masalalarning to'g'ri yechimi", weight: 60 },
+          { criterion: "Chizma va kuchlar diagrammasi", weight: 40 },
+        ]),
+      },
+      {
+        title: "Referat: O'zgaruvchan tok zanjirlari, RLC rezonansi va texnikada qo'llanilishi",
+        lab_key: "electromagnetism",
+        description:
+          "Radiotexnika va telekommunikatsiyada RLC tebranish konturlarining roli va rezonans hodisasining fizik mohiyati bo'yicha referat yozish.",
+        lesson_type: "referat",
+        max_score: 5.0,
+        due_date: "2026-12-05T23:59:59.000Z",
+        rubric: JSON.stringify([
+          { criterion: "Nazariy mazmun", weight: 50 },
+          { criterion: "Formulalar va sxemalar", weight: 30 },
+          { criterion: "Fikrning mustaqilligi va xulosalar", weight: 20 },
+        ]),
+      },
+    ];
+
+    for (const h of hemisAssignments) {
+      await adapter.execute(
+        `INSERT INTO assignments (title, lab_key, description, target_params_json, tolerance_pct, group_name, assignment_type, lesson_type, max_score, rubric_json, created_by, due_date, created_at)
+         VALUES ($1, $2, $3, '{}', 5.0, NULL, 'independent', $4, $5, $6, $7, $8, $9)`,
+        [
+          h.title,
+          h.lab_key,
+          h.description,
+          h.lesson_type,
+          h.max_score,
+          h.rubric,
+          admin ? admin.id : null,
+          h.due_date,
           now,
         ]
       );

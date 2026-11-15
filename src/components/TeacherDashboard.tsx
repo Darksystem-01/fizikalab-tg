@@ -47,11 +47,17 @@ interface TeacherOverviewData {
     tolerance_pct: number;
     group_name: string | null;
     assignment_type: "lab" | "independent";
+    lesson_type?: "laboratoriya" | "mustaqil_ish" | "maqola" | "amaliyot" | "referat";
+    max_score?: number;
+    rubric_json?: string;
+    attachment_url?: string;
+    attachment_name?: string;
     creator_name: string;
     due_date: string | null;
   }[];
   reports: {
     id: number;
+    assignment_id?: number | null;
     lab_key: string;
     title: string;
     conclusion: string;
@@ -61,6 +67,11 @@ interface TeacherOverviewData {
     grade: number | null;
     admin_feedback: string;
     submitted_at: string;
+    file_url?: string | null;
+    file_name?: string | null;
+    file_size?: number | null;
+    article_content?: string | null;
+    submission_type?: "report" | "file" | "article" | null;
     student_name: string;
     student_email: string;
     student_group: string;
@@ -112,6 +123,8 @@ export function TeacherDashboard() {
   const [asTitle, setAsTitle] = useState("");
   const [asLabKey, setAsLabKey] = useState("metrology");
   const [asType, setAsType] = useState<"lab" | "independent">("independent");
+  const [asLessonType, setAsLessonType] = useState<"laboratoriya" | "mustaqil_ish" | "maqola" | "amaliyot" | "referat">("mustaqil_ish");
+  const [asMaxScore, setAsMaxScore] = useState("5.0");
   const [asGroup, setAsGroup] = useState("");
   const [asDesc, setAsDesc] = useState("");
   const [asTolerance, setAsTolerance] = useState("5");
@@ -295,6 +308,8 @@ export function TeacherDashboard() {
         title: asTitle,
         labKey: asLabKey,
         assignmentType: asType,
+        lessonType: asLessonType,
+        maxScore: Number(asMaxScore || (asLessonType === "maqola" ? 10 : 5)),
         groupName: asGroup || null,
         description: asDesc,
         tolerancePct: Number(asTolerance) || 5,
@@ -774,14 +789,53 @@ export function TeacherDashboard() {
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <label className="mb-1 block font-medium text-slate-700">Turi</label>
+                <label className="mb-1 block font-medium text-slate-700">Dars turi</label>
                 <select
-                  value={asType}
-                  onChange={(e) => setAsType(e.target.value as "lab" | "independent")}
+                  value={asLessonType}
+                  onChange={(e) => {
+                    const val = e.target.value as typeof asLessonType;
+                    setAsLessonType(val);
+                    setAsType(val === "laboratoriya" ? "lab" : "independent");
+                    if (val === "maqola") setAsMaxScore("10.0");
+                    else setAsMaxScore("5.0");
+                  }}
                   className="w-full border border-slate-300 bg-white px-2 py-1.5"
                 >
-                  <option value="independent">Mustaqil ish</option>
-                  <option value="lab">Laboratoriya ishi</option>
+                  <option value="laboratoriya">Laboratoriya ishi</option>
+                  <option value="mustaqil_ish">Mustaqil ish</option>
+                  <option value="maqola">Ilmiy maqola yozish</option>
+                  <option value="amaliyot">Amaliy mashg&apos;ulot</option>
+                  <option value="referat">Referat / Taqriz</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block font-medium text-slate-700">Maksimal ball</label>
+                <input
+                  type="number"
+                  step={0.5}
+                  value={asMaxScore}
+                  onChange={(e) => setAsMaxScore(e.target.value)}
+                  className="w-full border border-slate-300 px-2 py-1.5 font-mono"
+                  placeholder="5.0"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label className="mb-1 block font-medium text-slate-700">Laboratoriya bo&apos;limi</label>
+                <select
+                  value={asLabKey}
+                  onChange={(e) => setAsLabKey(e.target.value)}
+                  className="w-full border border-slate-300 bg-white px-2 py-1.5"
+                >
+                  <option value="metrology">1. Metrologiya & Asboblar</option>
+                  <option value="kinematics">2. Kinematika & Ballistika</option>
+                  <option value="dynamics">3. Dinamika & Mayatniklar</option>
+                  <option value="statics">4. Statika & Muvozanat</option>
+                  <option value="electromagnetism">5. Elektromagnetizm</option>
+                  <option value="optics">6. Geometrik & To‘lqin Optika</option>
+                  <option value="thermodynamics">7. Molekulyar & Termodinamika</option>
+                  <option value="atomic">8. Atom & Yadro Fizikasi</option>
                 </select>
               </div>
               <div>
@@ -803,23 +857,6 @@ export function TeacherDashboard() {
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <label className="mb-1 block font-medium text-slate-700">Laboratoriya</label>
-                <select
-                  value={asLabKey}
-                  onChange={(e) => setAsLabKey(e.target.value)}
-                  className="w-full border border-slate-300 bg-white px-2 py-1.5"
-                >
-                  <option value="metrology">1. Metrologiya & Asboblar</option>
-                  <option value="kinematics">2. Kinematika & Ballistika</option>
-                  <option value="dynamics">3. Dinamika & Mayatniklar</option>
-                  <option value="statics">4. Statika & Muvozanat</option>
-                  <option value="electromagnetism">5. Elektromagnetizm</option>
-                  <option value="optics">6. Geometrik & To‘lqin Optika</option>
-                  <option value="thermodynamics">7. Molekulyar & Termodinamika</option>
-                  <option value="atomic">8. Atom & Yadro Fizikasi</option>
-                </select>
-              </div>
-              <div>
                 <label className="mb-1 block font-medium text-slate-700">Xatolik limiti (%)</label>
                 <input
                   type="number"
@@ -829,15 +866,15 @@ export function TeacherDashboard() {
                   className="w-full border border-slate-300 px-2 py-1.5 font-mono"
                 />
               </div>
-            </div>
-            <div className="text-xs">
-              <label className="mb-1 block font-medium text-slate-700">Muddat (Deadline)</label>
-              <input
-                type="date"
-                value={asDueDate}
-                onChange={(e) => setAsDueDate(e.target.value)}
-                className="w-full border border-slate-300 px-2.5 py-1.5 font-mono"
-              />
+              <div>
+                <label className="mb-1 block font-medium text-slate-700">Muddat (Deadline)</label>
+                <input
+                  type="date"
+                  value={asDueDate}
+                  onChange={(e) => setAsDueDate(e.target.value)}
+                  className="w-full border border-slate-300 px-2 py-1.5 font-mono"
+                />
+              </div>
             </div>
             <div className="text-xs">
               <label className="mb-1 block font-medium text-slate-700">Topshiriq sharti & yo‘riqnoma *</label>
@@ -948,10 +985,50 @@ export function TeacherDashboard() {
                       : "Tekshirilmoqda"}
                   </span>
                 </div>
-                <div className="mt-2 bg-slate-50 p-2.5 text-xs text-slate-700">
-                  <div className="font-semibold text-slate-800 mb-0.5">Talaba Ilmiy Xulosasi:</div>
-                  {rep.conclusion}
-                </div>
+
+                {/* Attached File if student uploaded one */}
+                {rep.file_url && (
+                  <div className="mt-2 flex items-center justify-between border border-blue-200 bg-blue-50/50 p-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <Download className="h-4 w-4 text-blue-900" />
+                      <div>
+                        <span className="font-semibold text-slate-900">
+                          {rep.file_name || "Biriktirilgan fayl"}
+                        </span>
+                        {rep.file_size && (
+                          <span className="text-[10px] text-slate-500 ml-2 font-mono">
+                            ({(rep.file_size / (1024 * 1024)).toFixed(2)} MB)
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <a
+                      href={rep.file_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="border border-blue-900 bg-white px-2.5 py-1 text-xs font-semibold text-blue-900 hover:bg-blue-50"
+                    >
+                      Faylni ochish / Yuklash
+                    </a>
+                  </div>
+                )}
+
+                {/* Article Content if student submitted text */}
+                {rep.article_content ? (
+                  <div className="mt-2 bg-slate-50 p-2.5 text-xs text-slate-800 border border-slate-200">
+                    <div className="font-semibold text-blue-900 mb-1 flex items-center gap-1">
+                      Ilmiy Maqola / Mustaqil ish matni:
+                    </div>
+                    <div className="whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto bg-white p-2.5 border border-slate-100">
+                      {rep.article_content}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-2 bg-slate-50 p-2.5 text-xs text-slate-700">
+                    <div className="font-semibold text-slate-800 mb-0.5">Talaba Ilmiy Xulosasi:</div>
+                    {rep.conclusion}
+                  </div>
+                )}
 
                 {/* Quick Feedback Suggestions */}
                 <div className="mt-2.5">

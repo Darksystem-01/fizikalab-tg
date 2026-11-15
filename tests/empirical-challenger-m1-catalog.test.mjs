@@ -650,6 +650,7 @@ test("Challenger Suite 3: End-to-end HTTP API simulation dispatch across all 8 c
       AUTH_SECRET: "ci-test-auth-secret-minimum-32-chars-ok",
       FIZIKALAB_TEST: "1",
     },
+    shell: process.platform === "win32",
     stdio: "ignore",
   });
 

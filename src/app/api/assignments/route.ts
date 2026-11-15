@@ -53,6 +53,11 @@ export async function POST(req: Request) {
     tolerancePct?: number;
     groupName?: string | null;
     assignmentType?: "lab" | "independent";
+    lessonType?: "laboratoriya" | "mustaqil_ish" | "maqola" | "amaliyot" | "referat";
+    maxScore?: number;
+    rubric?: unknown;
+    attachmentUrl?: string;
+    attachmentName?: string;
     dueDate?: string | null;
   };
 
@@ -65,11 +70,19 @@ export async function POST(req: Request) {
 
   const groupName = body.groupName?.trim() ? body.groupName.trim() : null;
   const assignmentType = body.assignmentType === "independent" ? "independent" : "lab";
+  const lessonType = body.lessonType || (assignmentType === "independent" ? "mustaqil_ish" : "laboratoriya");
+  const maxScore = typeof body.maxScore === "number" && body.maxScore > 0 ? body.maxScore : (lessonType === "maqola" ? 10.0 : 5.0);
+  const rubricJson = typeof body.rubric === "string" ? body.rubric : JSON.stringify(body.rubric ?? []);
+  const attachmentUrl = (body.attachmentUrl || "").trim();
+  const attachmentName = (body.attachmentName || "").trim();
 
   const db = await getDb();
   const inserted = await db.execute(
-    `INSERT INTO assignments (title, lab_key, description, target_params_json, tolerance_pct, group_name, assignment_type, created_by, due_date, created_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
+    `INSERT INTO assignments (
+      title, lab_key, description, target_params_json, tolerance_pct, group_name,
+      assignment_type, lesson_type, max_score, rubric_json, attachment_url, attachment_name,
+      created_by, due_date, created_at
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING id`,
     [
       body.title.trim(),
       body.labKey,
@@ -78,6 +91,11 @@ export async function POST(req: Request) {
       Number(body.tolerancePct ?? 5),
       groupName,
       assignmentType,
+      lessonType,
+      maxScore,
+      rubricJson,
+      attachmentUrl,
+      attachmentName,
       user.userId,
       body.dueDate || null,
       new Date().toISOString(),
@@ -87,7 +105,7 @@ export async function POST(req: Request) {
   await writeAuditLog(
     user.userId,
     "CREATE_ASSIGNMENT",
-    `Yangi ${assignmentType === "independent" ? "mustaqil ish" : "laboratoriya"} (#${inserted.lastInsertId}): ${body.title}${groupName ? ` [${groupName}]` : ""}`
+    `Yangi topshiriq [${lessonType}] (#${inserted.lastInsertId}): ${body.title}${groupName ? ` [${groupName}]` : ""}`
   );
 
   return NextResponse.json({ id: inserted.lastInsertId }, { status: 201 });

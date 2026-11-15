@@ -20,6 +20,7 @@ import {
   Sparkles,
   Thermometer,
   Radiation,
+  User,
   Wrench,
   X,
   Zap,
@@ -35,6 +36,12 @@ export interface NavUser {
   university?: string;
   faculty?: string;
 }
+
+const HEMIS_ITEMS = [
+  { href: "/profile", label: "Talaba Profili (HEMIS)", icon: User },
+  { href: "/syllabus", label: "O'quv Rejasi & Sillabus", icon: GraduationCap },
+  { href: "/assignments", label: "Topshiriqlar & Maqolalar", icon: FileText },
+];
 
 const NAV_ITEMS = [
   { href: "/labs/metrology", label: "1. Metrologiya va Asboblar", icon: Ruler },
@@ -106,6 +113,31 @@ export function AppShell({
             </div>
           </Link>
         </div>
+
+        <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          HEMIS O&apos;quv Portali
+        </div>
+        <nav className="space-y-0.5 mb-4">
+          {HEMIS_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-colors border-l-2 ${
+                  active
+                    ? "border-blue-900 bg-white text-blue-900 font-semibold shadow-2xs"
+                    : "border-transparent text-slate-700 hover:bg-white hover:text-slate-900"
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
         <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
           Laboratoriya Stendlari
@@ -226,6 +258,15 @@ export function AppShell({
               ? "ID: [HIMOYALANGAN]"
               : user.email}
           </div>
+          {user.role !== "admin" && user.role !== "darksystem" && (
+            <Link
+              href="/profile"
+              className="mt-1 flex items-center gap-1 text-[11px] font-semibold text-blue-900 hover:underline"
+            >
+              <User className="h-3 w-3" />
+              HEMIS Profilim →
+            </Link>
+          )}
         </div>
         <button
           type="button"

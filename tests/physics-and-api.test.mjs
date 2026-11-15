@@ -51,6 +51,7 @@ test.before(async () => {
         AUTH_SECRET: process.env.AUTH_SECRET || "ci-test-auth-secret-minimum-32-chars-ok",
         FIZIKALAB_TEST: "1",
       },
+      shell: process.platform === "win32",
       stdio: "ignore",
     });
     await waitForHealth(baseUrl);

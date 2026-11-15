@@ -444,6 +444,61 @@ export function simulateKinematics(input: KinematicsInput): KinematicsResult {
   }
 
   // =========================================================================
+  // SUBMODE: AIR TRACK (LINEAR 1D MOTION)
+  // =========================================================================
+  if (input.mode === "air_track") {
+    const dur = Math.max(0.1, input.durationS ?? 10.0);
+    const ax = input.accelX ?? 0;
+    const v0x = input.v0 ?? 0;
+    const steps = 80;
+    const dt = dur / steps;
+    const pts: KinematicsPoint[] = [];
+
+    for (let i = 0; i <= steps; i++) {
+      const t = i * dt;
+      const x = v0x * t + 0.5 * ax * t * t;
+      const vx = v0x + ax * t;
+      const speed = Math.abs(vx);
+      const k = 0.5 * m * speed * speed;
+      pts.push({
+        t: roundTo(t, 4),
+        x: roundTo(x, 4),
+        y: 0,
+        vx: roundTo(vx, 4),
+        vy: 0,
+        speed: roundTo(speed, 4),
+        at: roundTo(ax, 4),
+        an: 0,
+        curvatureRadius: 0,
+        kineticEnergy: roundTo(k, 4),
+        potentialEnergy: 0,
+        totalEnergy: roundTo(k, 4),
+      });
+    }
+
+    const finalPt = pts[pts.length - 1];
+    return {
+      mode: "air_track",
+      flightTimeS: dur,
+      maxHeightM: 0,
+      rangeM: finalPt.x,
+      impactSpeedMs: finalPt.speed,
+      vacuumRangeM: finalPt.x,
+      vacuumMaxHeightM: 0,
+      vacuumFlightTimeS: dur,
+      energyLostPct: 0,
+      points: pts,
+      summary: {
+        flightTimeS: dur,
+        distanceM: finalPt.x,
+        finalSpeedMs: finalPt.speed,
+        accelMs2: ax,
+        initialSpeedMs: v0x,
+      },
+    };
+  }
+
+  // =========================================================================
   // SUBMODE: CIRCULAR MOTION
   // =========================================================================
   if (input.mode === "circular") {
