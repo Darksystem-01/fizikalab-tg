@@ -118,6 +118,19 @@ export interface DbActiveSession {
   is_revoked: number;
 }
 
+export interface DbTelegramLoginToken {
+  token: string;
+  status: "pending" | "verified" | "claimed" | "expired";
+  telegram_id: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+  photo_url: string;
+  auth_date: number;
+  created_at: string;
+  expires_at: string;
+}
+
 export interface CreateActiveSessionParams {
   sessionId: string;
   userId: number;
@@ -324,6 +337,21 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
       EXCEPTION WHEN others THEN NULL;
       END $$;
     `);
+
+    await adapter.execute(`
+      CREATE TABLE IF NOT EXISTS telegram_login_tokens (
+        token TEXT PRIMARY KEY,
+        status TEXT NOT NULL DEFAULT 'pending',
+        telegram_id TEXT NOT NULL DEFAULT '',
+        first_name TEXT NOT NULL DEFAULT '',
+        last_name TEXT NOT NULL DEFAULT '',
+        username TEXT NOT NULL DEFAULT '',
+        photo_url TEXT NOT NULL DEFAULT '',
+        auth_date INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL
+      )
+    `);
     return;
   }
 
@@ -427,6 +455,21 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
       }
     }
   }
+
+  await adapter.execute(`
+    CREATE TABLE IF NOT EXISTS telegram_login_tokens (
+      token TEXT PRIMARY KEY,
+      status TEXT NOT NULL DEFAULT 'pending',
+      telegram_id TEXT NOT NULL DEFAULT '',
+      first_name TEXT NOT NULL DEFAULT '',
+      last_name TEXT NOT NULL DEFAULT '',
+      username TEXT NOT NULL DEFAULT '',
+      photo_url TEXT NOT NULL DEFAULT '',
+      auth_date INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL
+    )
+  `);
 }
 
 async function ensureSchemaAndSeed() {
@@ -540,6 +583,18 @@ async function ensureSchemaAndSeed() {
           expires_at TEXT NOT NULL,
           is_revoked INTEGER NOT NULL DEFAULT 0
         )`,
+        `CREATE TABLE IF NOT EXISTS telegram_login_tokens (
+          token TEXT PRIMARY KEY,
+          status TEXT NOT NULL DEFAULT 'pending',
+          telegram_id TEXT NOT NULL DEFAULT '',
+          first_name TEXT NOT NULL DEFAULT '',
+          last_name TEXT NOT NULL DEFAULT '',
+          username TEXT NOT NULL DEFAULT '',
+          photo_url TEXT NOT NULL DEFAULT '',
+          auth_date INTEGER NOT NULL DEFAULT 0,
+          created_at TEXT NOT NULL,
+          expires_at TEXT NOT NULL
+        )`,
       ]
     : [
         `CREATE TABLE IF NOT EXISTS users (
@@ -647,6 +702,18 @@ async function ensureSchemaAndSeed() {
           expires_at TEXT NOT NULL,
           is_revoked INTEGER NOT NULL DEFAULT 0
         )`,
+        `CREATE TABLE IF NOT EXISTS telegram_login_tokens (
+          token TEXT PRIMARY KEY,
+          status TEXT NOT NULL DEFAULT 'pending',
+          telegram_id TEXT NOT NULL DEFAULT '',
+          first_name TEXT NOT NULL DEFAULT '',
+          last_name TEXT NOT NULL DEFAULT '',
+          username TEXT NOT NULL DEFAULT '',
+          photo_url TEXT NOT NULL DEFAULT '',
+          auth_date INTEGER NOT NULL DEFAULT 0,
+          created_at TEXT NOT NULL,
+          expires_at TEXT NOT NULL
+        )`,
       ];
 
   for (const stmt of schemaStatements) {
@@ -658,6 +725,9 @@ async function ensureSchemaAndSeed() {
   );
   await adapter.execute(
     `CREATE INDEX IF NOT EXISTS idx_active_sessions_expires_at ON active_sessions(expires_at)`
+  );
+  await adapter.execute(
+    `CREATE INDEX IF NOT EXISTS idx_telegram_tokens_expires_at ON telegram_login_tokens(expires_at)`
   );
 
   await migrateExistingTables(adapter, isPg);

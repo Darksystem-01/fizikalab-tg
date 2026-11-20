@@ -95,6 +95,38 @@ export function LoginPortal() {
 
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
+  const [telegramAuth, setTelegramAuth] = useState<{
+    token: string;
+    botUrl: string;
+    verified: boolean;
+  } | null>(null);
+
+  // Real-time Telegram Deep-Link Login Poller
+  useEffect(() => {
+    if (!telegramAuth || telegramAuth.verified) return;
+
+    const timer = setInterval(async () => {
+      try {
+        const res = await fetch("/api/auth/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "check_token", token: telegramAuth.token }),
+        });
+        const data = await res.json();
+        if (data.verified && data.user) {
+          setTelegramAuth((prev) => (prev ? { ...prev, verified: true } : null));
+          clearInterval(timer);
+          const role = data.user.role;
+          let target = "/labs/metrology";
+          if (role === "admin" || role === "darksystem") target = "/darksystem";
+          else if (role === "teacher") target = "/teacher";
+          window.location.assign(target);
+        }
+      } catch {}
+    }, 1500);
+
+    return () => clearInterval(timer);
+  }, [telegramAuth]);
 
   // Google OAuth state
   const [googleClientId, setGoogleClientId] = useState<string>("");
@@ -299,19 +331,28 @@ export function LoginPortal() {
       }
     }
 
-    // 2. Oddiy veb-brauzerda: Telegram avtorizatsiya oynasi yoki rasmiy bot
-    if (typeof window !== "undefined") {
-      const origin = window.location.origin;
-      const authUrl = `https://oauth.telegram.org/auth?bot_id=9257020130&origin=${encodeURIComponent(
-        origin
-      )}&embed=1&request_access=write&return_to=${encodeURIComponent(
-        `${origin}/api/auth/telegram`
-      )}`;
-
-      const popup = window.open(authUrl, "telegram_oauth", "width=550,height=470");
-      if (!popup || popup.closed || typeof popup.closed === "undefined") {
+    // 2. Oddiy veb-brauzerda: Telegram Bot orqali real vaqt parolsiz kirish (Deep-Link token)
+    try {
+      const res = await fetch("/api/auth/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "create_token" }),
+      });
+      const data = await res.json();
+      if (data.ok && data.token && data.botUrl) {
+        setTelegramAuth({
+          token: data.token,
+          botUrl: data.botUrl,
+          verified: false,
+        });
+        // Botni alohida oynada ochish
+        window.open(data.botUrl, "_blank");
+      } else {
         window.location.assign("https://t.me/Fizikatuitbot?start=login");
       }
+    } catch {
+      window.location.assign("https://t.me/Fizikatuitbot?start=login");
+    } finally {
       setLoading(false);
     }
   }
@@ -992,6 +1033,72 @@ export function LoginPortal() {
             >
               Yopish
             </button>
+          </div>
+        </div>
+      )}
+      {/* Telegram Deep-Link Login Modal */}
+      {telegramAuth && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl space-y-5 border border-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5 font-bold text-slate-900 text-lg">
+                <div className="h-8 w-8 rounded-xl bg-sky-50 flex items-center justify-center">
+                  <TelegramIcon className="h-5 w-5 text-[#24A1DE]" />
+                </div>
+                <span>Telegram orqali kirish</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTelegramAuth(null)}
+                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1 rounded-lg"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="text-center space-y-4">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Parolsiz xavfsiz kirish uchun quyidagi tugma orqali rasmiy Telegram botimizga o‘ting va <b>«Boshlash» (Start)</b> tugmasini bosing:
+              </p>
+
+              <div className="py-2">
+                <a
+                  href={telegramAuth.botUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#24A1DE] hover:bg-[#1E88C7] text-white py-3.5 px-4 font-semibold text-sm shadow-md transition hover:shadow-lg active:scale-98"
+                >
+                  <TelegramIcon className="h-5 w-5" />
+                  <span>@Fizikatuitbot-da tasdiqlash</span>
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </div>
+
+              {/* Real-time Status Card */}
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-xs">
+                {telegramAuth.verified ? (
+                  <div className="flex items-center justify-center gap-2 text-emerald-600 font-bold text-sm">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span>Tasdiqlandi! Shaxsiy kabinetingizga yo‘naltirilmoqda...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2.5 text-slate-600">
+                    <span className="h-4 w-4 border-2 border-slate-300 border-t-[#24A1DE] rounded-full animate-spin" />
+                    <span className="font-medium">Telegram botdan tasdiq kutilmoqda...</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setTelegramAuth(null)}
+                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition cursor-pointer"
+              >
+                Bekor qilish
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -43,9 +43,9 @@ test.before(async () => {
     fs.mkdirSync(CACHE_DIR, { recursive: true });
   }
 
-  // Compile videoLabs and telegram
+  // Compile videoLabs, telegram and telegramLoginTokens
   execSync(
-    `npx tsc --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --outDir "${CACHE_DIR}" src/lib/videoLabs.ts src/lib/telegram.ts`,
+    `npx tsc --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --outDir "${CACHE_DIR}" src/lib/videoLabs.ts src/lib/telegramLoginTokens.ts src/lib/telegram.ts`,
     { cwd: PROJECT_ROOT, stdio: "pipe" }
   );
 
@@ -353,4 +353,63 @@ test("VT-8: Telegram Login API route /api/auth/telegram authentication and sessi
     body: JSON.stringify({ ...widgetData, hash: "00112233445566778899aabbccddeeff" }),
   });
   assert.equal(badRes.status, 401, "Must reject invalid hash with 401");
+});
+
+test("VT-9: Telegram Deep-Link Login Token Generation, Bot Confirmation & Automatic Web Session Issuance", async () => {
+  // 1. Web client requests a login token
+  const tokenRes = await fetch(`${baseUrl}/api/auth/telegram`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "create_token" }),
+  });
+  assert.equal(tokenRes.status, 200);
+  const tokenData = await tokenRes.json();
+  assert.equal(tokenData.ok, true);
+  assert.ok(tokenData.token, "Must return random login token");
+  assert.ok(tokenData.botUrl.includes(tokenData.token), "botUrl must embed token");
+
+  // 2. Checking before bot confirmation must return verified: false
+  const unconfirmedRes = await fetch(`${baseUrl}/api/auth/telegram`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "check_token", token: tokenData.token }),
+  });
+  assert.equal(unconfirmedRes.status, 200);
+  const unconfirmedData = await unconfirmedRes.json();
+  assert.equal(unconfirmedData.verified, false);
+
+  // 3. User taps /start auth_<token> in Telegram Bot (processed by server webhook endpoint)
+  const hookRes = await fetch(`${baseUrl}/api/telegram/webhook`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      update_id: 999991,
+      message: {
+        message_id: 101,
+        from: {
+          id: 77766655,
+          first_name: "Sherzod",
+          last_name: "Olimov",
+          username: "sherzod_physics",
+        },
+        chat: { id: 77766655, type: "private" },
+        date: Math.floor(Date.now() / 1000),
+        text: `/start auth_${tokenData.token}`,
+      },
+    }),
+  });
+  assert.equal(hookRes.status, 200);
+
+  // 4. Web client polls check_token again, now verified and issues session cookie
+  const verifiedRes = await fetch(`${baseUrl}/api/auth/telegram`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "check_token", token: tokenData.token }),
+  });
+  assert.equal(verifiedRes.status, 200);
+  const verifiedJson = await verifiedRes.json();
+  assert.equal(verifiedJson.ok, true);
+  assert.equal(verifiedJson.user?.fullName, "Sherzod Olimov");
+  const cookie = extractSessionCookie(verifiedRes);
+  assert.ok(cookie.includes("fizikalab_session="), "Must set session cookie for authenticated user");
 });

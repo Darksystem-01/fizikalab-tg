@@ -15,6 +15,10 @@ import {
   verifyTelegramWidgetData,
   verifyTelegramWebAppData,
 } from "@/lib/telegram";
+import {
+  createTelegramLoginToken,
+  checkTelegramLoginToken,
+} from "@/lib/telegramLoginTokens";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -56,6 +60,13 @@ export async function POST(req: Request) {
 
     const body = (await req.json()) as TelegramAuthRequestBody;
 
+    // 0. Telegram Deep-Link Login Token yaratish
+    if ((body as any).action === "create_token") {
+      const token = createTelegramLoginToken();
+      const botUrl = `https://t.me/Fizikatuitbot?start=auth_${token}`;
+      return NextResponse.json({ ok: true, token, botUrl });
+    }
+
     let verifiedUser: {
       id: number | string;
       firstName: string;
@@ -64,51 +75,68 @@ export async function POST(req: Request) {
       photoUrl: string;
     } | null = null;
 
-    // 1. WebApp initData orqali tekshirish
-    if (body.initData) {
-      const res = verifyTelegramWebAppData(body.initData);
-      if (!res.valid || !res.user) {
-        return NextResponse.json(
-          { error: res.error || "Telegram WebApp imzosi noto‘g‘ri yoki eskirgan." },
-          { status: 401 }
-        );
+    // 0.1 Telegram Deep-Link Login Token holatini tekshirish
+    if ((body as any).action === "check_token") {
+      const token = String((body as any).token || "");
+      if (!token) {
+        return NextResponse.json({ error: "Token ko‘rsatilmadi" }, { status: 400 });
       }
-      verifiedUser = res.user;
-    }
-    // 2. Telegram Login Widget hash orqali tekshirish
-    else if (body.hash || body.widgetData?.hash || body.telegramUser?.hash) {
-      const data = body.widgetData || body.telegramUser || body;
-      const res = verifyTelegramWidgetData(data);
-      if (!res.valid || !res.user) {
-        return NextResponse.json(
-          { error: res.error || "Telegram widget imzosi noto‘g‘ri yoki eskirgan." },
-          { status: 401 }
-        );
+      const tokenData = checkTelegramLoginToken(token, true);
+      if (!tokenData || !tokenData.verified || !tokenData.user) {
+        return NextResponse.json({ verified: false });
       }
-      verifiedUser = res.user;
-    }
-    // 3. Test muhitida mock tekshiruvi (CI / test rejimi)
-    else if (
-      body.mockTelegramUser &&
-      (process.env.FIZIKALAB_TEST === "1" ||
-        process.env.CI ||
-        process.env.NODE_ENV !== "production")
-    ) {
       verifiedUser = {
-        id: body.mockTelegramUser.id,
-        firstName: body.mockTelegramUser.first_name || "Test",
-        lastName: body.mockTelegramUser.last_name || "User",
-        username: body.mockTelegramUser.username || "testuser",
-        photoUrl: "",
+        id: tokenData.user.id,
+        firstName: tokenData.user.firstName,
+        lastName: tokenData.user.lastName,
+        username: tokenData.user.username,
+        photoUrl: tokenData.user.photoUrl || "",
       };
-    } else {
-      return NextResponse.json(
-        {
-          error:
-            "Telegram autentifikatsiya ma’lumotlari (initData yoki widget hash) topilmadi.",
-        },
-        { status: 400 }
-      );
+    }
+
+    // 1. WebApp initData, Widget hash yoki mock orqali tekshirish
+    if (!verifiedUser) {
+      if (body.initData) {
+        const res = verifyTelegramWebAppData(body.initData);
+        if (!res.valid || !res.user) {
+          return NextResponse.json(
+            { error: res.error || "Telegram WebApp imzosi noto‘g‘ri yoki eskirgan." },
+            { status: 401 }
+          );
+        }
+        verifiedUser = res.user;
+      } else if (body.hash || body.widgetData?.hash || body.telegramUser?.hash) {
+        const data = body.widgetData || body.telegramUser || body;
+        const res = verifyTelegramWidgetData(data);
+        if (!res.valid || !res.user) {
+          return NextResponse.json(
+            { error: res.error || "Telegram widget imzosi noto‘g‘ri yoki eskirgan." },
+            { status: 401 }
+          );
+        }
+        verifiedUser = res.user;
+      } else if (
+        body.mockTelegramUser &&
+        (process.env.FIZIKALAB_TEST === "1" ||
+          process.env.CI ||
+          process.env.NODE_ENV !== "production")
+      ) {
+        verifiedUser = {
+          id: body.mockTelegramUser.id,
+          firstName: body.mockTelegramUser.first_name || "Test",
+          lastName: body.mockTelegramUser.last_name || "User",
+          username: body.mockTelegramUser.username || "testuser",
+          photoUrl: "",
+        };
+      } else {
+        return NextResponse.json(
+          {
+            error:
+              "Telegram autentifikatsiya ma’lumotlari (initData yoki widget hash) topilmadi.",
+          },
+          { status: 400 }
+        );
+      }
     }
 
     const telegramId = String(verifiedUser.id);

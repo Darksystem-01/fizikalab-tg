@@ -10,6 +10,30 @@
 import crypto from "crypto";
 import type { VideoLabDefinition } from "./videoLabs";
 
+async function confirmTelegramLoginTokenAsync(
+  token: string,
+  user: {
+    id: number | string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    photoUrl?: string;
+  }
+): Promise<boolean> {
+  try {
+    const mod = await import("./telegramLoginTokens");
+    return mod.confirmTelegramLoginToken(token, user);
+  } catch {
+    try {
+      const dynamicImport = new Function("p", "return import(p)");
+      const mod = await dynamicImport("./telegramLoginTokens.js");
+      return mod.confirmTelegramLoginToken(token, user);
+    } catch {
+      return false;
+    }
+  }
+}
+
 async function getVideoLabByKeyAsync(labKey: string): Promise<VideoLabDefinition | null> {
   try {
     const mod = await import("./videoLabs");
@@ -517,6 +541,33 @@ export async function handleTelegramWebhookUpdate(update: any): Promise<void> {
 
     if (!chatId) return;
 
+    if (data.startsWith("confirm_login_")) {
+      const loginToken = data.replace("confirm_login_", "");
+      await confirmTelegramLoginTokenAsync(loginToken, {
+        id: chatId,
+        firstName: cb.from?.first_name || "Talaba",
+        lastName: cb.from?.last_name || "",
+        username: cb.from?.username || "",
+      });
+      await sendTelegramMessage(
+        chatId,
+        "✅ <b>FizikaLab platformasiga kirish tasdiqlandi!</b>\n\nBrauzeringizdagi oyna orqali shaxsiy kabinetga ulanishingiz mumkin.",
+        {
+          replyMarkup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "🚀 FizikaLab WebApp-ni Ochish",
+                  web_app: { url: appUrl },
+                },
+              ],
+            ],
+          },
+        }
+      );
+      return;
+    }
+
     if (data.startsWith("vid_")) {
       const key = data.replace("vid_", "");
       const card = await buildLabVideoCard(key, appUrl);
@@ -554,10 +605,51 @@ export async function handleTelegramWebhookUpdate(update: any): Promise<void> {
 
   if (!chatId) return;
 
-  // 1. /start [link_token]
+  // 1. /start [link_token | auth_token]
   if (text.startsWith("/start")) {
     const parts = text.split(" ");
     const param = parts[1];
+
+    // Saytga parolsiz kirish (Deep-Link login token tasdiqlash)
+    if (param && (param.startsWith("auth_") || param.startsWith("login_"))) {
+      const token = param.replace(/^(auth_|login_)/, "");
+      const ok = await confirmTelegramLoginTokenAsync(token, {
+        id: chatId,
+        firstName: firstName,
+        lastName: msg.from?.last_name || "",
+        username: username,
+      });
+
+      if (ok) {
+        const authConfirmMsg = `
+🔐 <b>FizikaLab — Saytga Kirish Muvaffaqiyatli Tasdiqlandi!</b>
+
+Assalomu alaykum, <b>${firstName}</b>!
+Brauzeringizdagi FizikaLab platformasiga kirish so‘rovingiz qabul qilindi va tasdiqlandi.
+
+Sizning brauzeringiz avtomatik tarzda shaxsiy kabinetga ulanmoqda.
+`;
+        await sendTelegramMessage(chatId, authConfirmMsg.trim(), {
+          replyMarkup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "✅ FizikaLab platformasiga kirishni tasdiqlaysizmi?",
+                  callback_data: `confirm_login_${token}`,
+                },
+              ],
+              [
+                {
+                  text: "🚀 FizikaLab WebApp-ni Ochish",
+                  web_app: { url: appUrl },
+                },
+              ],
+            ],
+          },
+        });
+        return;
+      }
+    }
 
     if (param && param.startsWith("link_")) {
       const token = param.replace("link_", "");
@@ -1004,3 +1096,11 @@ Laboratoriya hisobotlari, o‘lchov xatoliklari yoki texnik muammolar bo‘yicha
     return;
   }
 }
+
+export {
+  createTelegramLoginToken,
+  createTelegramLoginSession,
+  confirmTelegramLoginToken,
+  checkTelegramLoginToken,
+  checkTelegramLoginTokenAsync,
+} from "./telegramLoginTokens";

@@ -35,6 +35,20 @@ export default function RootLayout({
           src="https://telegram.org/js/telegram-web-app.js"
           strategy="beforeInteractive"
         />
+        <Script
+          id="telegram-webapp-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
+                  window.Telegram.WebApp.ready();
+                  window.Telegram.WebApp.expand();
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
         <AntiDevtools />
         {children}
       </body>
