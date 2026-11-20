@@ -409,19 +409,47 @@ export function MetrologyLab() {
                       stroke="#1E3A8A"
                       strokeWidth={1.5}
                     />
-                    {Array.from({ length: 11 }).map((_, idx) => {
-                      const vx = 95 + idx * 9.4;
-                      return (
-                        <g key={idx}>
-                          <line x1={vx} y1={85} x2={vx} y2={idx % 5 === 0 ? 104 : 98} stroke="#1E3A8A" strokeWidth={1} />
-                          {idx % 2 === 0 && (
-                            <text x={vx} y={116} textAnchor="middle" fontSize={8.5} fill="#1E3A8A" fontFamily="monospace">
-                              {idx}
-                            </text>
-                          )}
-                        </g>
-                      );
-                    })}
+                    {(() => {
+                      const numDivs = Math.min(50, Math.round(1 / (leastCountMm || 0.02)));
+                      const vSpacing = pxPerMm * (1 - leastCountMm);
+                      const bestMatchIdx = result?.secondaryDivision ?? 0;
+                      return Array.from({ length: numDivs + 1 }).map((_, idx) => {
+                        const vx = 95 + idx * vSpacing;
+                        const isCoincident = idx === bestMatchIdx;
+                        const isMajor = idx % (leastCountMm === 0.02 ? 5 : leastCountMm === 0.05 ? 2 : 1) === 0;
+                        return (
+                          <g key={idx}>
+                            <line
+                              x1={vx}
+                              y1={85}
+                              x2={vx}
+                              y2={isCoincident ? 108 : isMajor ? 103 : 95}
+                              stroke={isCoincident ? "#16A34A" : "#1E3A8A"}
+                              strokeWidth={isCoincident ? 1.8 : 0.9}
+                            />
+                            {isCoincident && (
+                              <polygon
+                                points={`${vx},109 ${vx - 3},114 ${vx + 3},114`}
+                                fill="#16A34A"
+                              />
+                            )}
+                            {isMajor && (
+                              <text
+                                x={vx}
+                                y={118}
+                                textAnchor="middle"
+                                fontSize={8}
+                                fill={isCoincident ? "#15803D" : "#1E3A8A"}
+                                fontFamily="monospace"
+                                fontWeight={isCoincident ? "bold" : "normal"}
+                              >
+                                {idx}
+                              </text>
+                            )}
+                          </g>
+                        );
+                      });
+                    })()}
                   </g>
                 </g>
               )}
@@ -443,11 +471,76 @@ export function MetrologyLab() {
                       <line x1={263.5 + i * 7} y1={96} x2={263.5 + i * 7} y2={106} stroke="#475569" strokeWidth={0.8} />
                     </g>
                   ))}
-                  {/* Thimble */}
-                  <rect x={260 + microShiftPx} y={62} width={120} height={68} fill="#E2E8F0" stroke="#1E3A8A" strokeWidth={1.5} rx={2} />
-                  <text x={320 + microShiftPx} y={100} textAnchor="middle" fontSize={11} fill="#1E3A8A" fontFamily="monospace" fontWeight="bold">
-                    {result ? `div: ${result.secondaryDivision}` : ""}
-                  </text>
+                  {/* Thimble with Beveled Graduations & Knurled Grip */}
+                  <g>
+                    <rect
+                      x={260 + microShiftPx}
+                      y={62}
+                      width={120}
+                      height={68}
+                      fill="url(#caliperSteel)"
+                      stroke="#1E3A8A"
+                      strokeWidth={1.5}
+                      rx={2}
+                    />
+                    {/* Knurled grip pattern */}
+                    {Array.from({ length: 8 }).map((_, ki) => (
+                      <line
+                        key={ki}
+                        x1={330 + microShiftPx + ki * 5.5}
+                        y1={66}
+                        x2={330 + microShiftPx + ki * 5.5}
+                        y2={126}
+                        stroke="#94A3B8"
+                        strokeWidth={1.5}
+                      />
+                    ))}
+                    {/* Beveled edge circular scale graduations */}
+                    {(() => {
+                      const curDiv = result?.secondaryDivision ?? 0;
+                      const offsets = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+                      return offsets.map((off) => {
+                        const yTick = 96 - off * 6.5;
+                        const tickVal = (curDiv + off + 50) % 50;
+                        const isCoincident = off === 0;
+                        return (
+                          <g key={off}>
+                            <line
+                              x1={260 + microShiftPx}
+                              y1={yTick}
+                              x2={260 + microShiftPx + (isCoincident ? 14 : tickVal % 5 === 0 ? 10 : 6)}
+                              y2={yTick}
+                              stroke={isCoincident ? "#16A34A" : "#0F172A"}
+                              strokeWidth={isCoincident ? 1.8 : 0.9}
+                            />
+                            {tickVal % 5 === 0 && (
+                              <text
+                                x={260 + microShiftPx + 15}
+                                y={yTick + 3}
+                                fontSize={8}
+                                fill={isCoincident ? "#15803D" : "#334155"}
+                                fontFamily="monospace"
+                                fontWeight={isCoincident ? "bold" : "normal"}
+                              >
+                                {tickVal}
+                              </text>
+                            )}
+                          </g>
+                        );
+                      });
+                    })()}
+                    <text
+                      x={305 + microShiftPx}
+                      y={120}
+                      textAnchor="middle"
+                      fontSize={9.5}
+                      fill="#1E3A8A"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      {result ? `div: ${result.secondaryDivision} / 50` : ""}
+                    </text>
+                  </g>
                 </g>
               )}
 

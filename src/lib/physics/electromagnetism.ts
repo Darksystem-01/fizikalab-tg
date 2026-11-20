@@ -207,6 +207,7 @@ export function simulateElectromagnetism(input: EmInput): EmResult {
       : (R2 * R3) / R1;
 
     const balanced = Math.abs(iGalv) < 1e-6;
+    const nullPointCm = isMeter ? roundTo((100 * R3) / (R3 + R4), 2) : 50;
     const nodeBVoltageV = R1 + R2 > 0 ? (Vs * R2) / (R1 + R2) : Vs / 2;
     const nodeCVoltageV = R3 + R4 > 0 ? (Vs * R4) / (R3 + R4) : Vs / 2;
     const galvanometerCurrentMa = iGalv * 1000;
@@ -221,6 +222,7 @@ export function simulateElectromagnetism(input: EmInput): EmResult {
         nodeBVoltageV: roundTo(nodeBVoltageV, 4),
         nodeCVoltageV: roundTo(nodeCVoltageV, 4),
         rUnknownCalculatedOhm: roundTo(rUnknownCalc, 3),
+        nullPointCm,
         balanced,
         balanceRatio: roundTo((R1 * R4) / (R2 * R3), 5),
       },

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -31,8 +31,8 @@ test.before(async () => {
     fs.writeFileSync(filePath, content.replace(/from "\.\/constants"/g, 'from "./constants.js"'), "utf8");
   }
 
-  thermoModule = await import(path.join(CACHE_DIR, "thermodynamics.js"));
-  atomicModule = await import(path.join(CACHE_DIR, "atomic.js"));
+  thermoModule = await import(pathToFileURL(path.join(CACHE_DIR, "thermodynamics.js")).href);
+  atomicModule = await import(pathToFileURL(path.join(CACHE_DIR, "atomic.js")).href);
 });
 
 // ============================================================================

@@ -194,18 +194,19 @@ export function LoginPortal() {
         }
 
         const role = data.user?.role;
-        if (role === "teacher") {
-          router.push("/teacher");
-        } else {
-          router.push("/labs/metrology");
+        let target = "/labs/metrology";
+        if (role === "admin" || role === "darksystem") {
+          target = "/darksystem";
+        } else if (role === "teacher") {
+          target = "/teacher";
         }
-        router.refresh();
+        window.location.assign(target);
       } catch {
         setError("Server bilan aloqa o‘rnatilmadi.");
         setLoading(false);
       }
     },
-    [router]
+    []
   );
 
   // Initialize Google Identity Services when script loads & client_id is available
@@ -305,14 +306,13 @@ export function LoginPortal() {
         return;
       }
       const role = data.user?.role;
+      let target = "/labs/metrology";
       if (role === "admin" || role === "darksystem") {
-        router.push("/darksystem");
+        target = "/darksystem";
       } else if (role === "teacher") {
-        router.push("/teacher");
-      } else {
-        router.push("/labs/metrology");
+        target = "/teacher";
       }
-      router.refresh();
+      window.location.assign(target);
     } catch {
       setError("Server bilan aloqa o‘rnatilmadi.");
       setLoading(false);

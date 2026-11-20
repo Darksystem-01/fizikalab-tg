@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getSessionUser, isAdminOrDarksystem } from "@/lib/auth";
 import { getDb, writeAuditLog } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function PATCH(
   req: Request,
   context: { params: Promise<{ id: string }> }
@@ -22,15 +25,20 @@ export async function PATCH(
 
   const body = (await req.json()) as {
     grade?: number;
-    status?: "reviewed" | "graded";
+    status?: "reviewed" | "graded" | "needs_revision";
     adminFeedback?: string;
   };
 
   const grade =
-    typeof body.grade === "number"
-      ? Math.min(100, Math.max(0, Math.round(body.grade)))
+    typeof body.grade === "number" && !isNaN(body.grade)
+      ? Math.min(100, Math.max(0, Math.round(body.grade * 10) / 10))
       : null;
-  const status = body.status === "reviewed" ? "reviewed" : "graded";
+  const status =
+    body.status === "needs_revision"
+      ? "needs_revision"
+      : body.status === "reviewed"
+      ? "reviewed"
+      : "graded";
   const feedback = (body.adminFeedback || "").trim();
 
   const db = await getDb();

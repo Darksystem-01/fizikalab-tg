@@ -67,7 +67,7 @@ test.before(async () => {
   if (!baseUrl) {
     const port = 3197;
     baseUrl = `http://127.0.0.1:${port}`;
-    serverProc = spawn("npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
+    serverProc = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
       cwd: PROJECT_ROOT,
       env: {
         ...process.env,
@@ -78,6 +78,7 @@ test.before(async () => {
         AUTH_SECRET,
         FIZIKALAB_TEST: "1",
       },
+      shell: process.platform === "win32",
       stdio: "ignore",
     });
     await waitForHealth(baseUrl);

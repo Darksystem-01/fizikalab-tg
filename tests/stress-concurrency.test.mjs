@@ -73,7 +73,7 @@ function createEncryptedToken(payload, secret = AUTH_SECRET) {
 }
 
 test.before(async () => {
-  serverProc = spawn("npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], {
+  serverProc = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], {
     cwd: PROJECT_ROOT,
     env: {
       ...process.env,
@@ -84,6 +84,7 @@ test.before(async () => {
       AUTH_SECRET,
       FIZIKALAB_TEST: "1",
     },
+    shell: process.platform === "win32",
     stdio: "ignore",
   });
   await waitForHealth(baseUrl);

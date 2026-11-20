@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { getDb, writeAuditLog } from "@/lib/db";
 
-export async function GET() {
-  const user = await getSessionUser();
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export async function GET(req: Request) {
+  const user = await getSessionUser(req);
   if (!user) {
     return NextResponse.json({ error: "Autentifikatsiya talab qilinadi" }, { status: 401 });
   }
@@ -32,41 +35,64 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const user = await getSessionUser();
+    const user = await getSessionUser(req);
     if (!user) {
       return NextResponse.json({ error: "Autentifikatsiya talab qilinadi" }, { status: 401 });
     }
 
     const body = (await req.json()) as {
       assignmentId?: number | null;
-      labKey: string;
+      labKey?: string;
       title: string;
-      measurements: unknown[];
-      errorAnalysis: Record<string, unknown>;
-      conclusion: string;
+      measurements?: unknown[];
+      errorAnalysis?: Record<string, unknown>;
+      conclusion?: string;
+      fileUrl?: string;
+      fileName?: string;
+      fileSize?: number;
+      articleContent?: string;
+      submissionType?: "report" | "file" | "article";
     };
 
-    if (!body.labKey || !body.title?.trim() || !body.conclusion?.trim()) {
+    const labKey = (body.labKey || "general").trim();
+    const conclusion = (
+      body.conclusion ||
+      body.articleContent ||
+      (body.fileUrl ? `Biriktirilgan fayl: ${body.fileName || "Hujjat"}` : "")
+    ).trim();
+
+    if (!body.title?.trim() || !conclusion) {
       return NextResponse.json(
-        { error: "Laboratoriya nomi, sarlavha va ilmiy xulosa kiritilishi shart." },
+        { error: "Sarlavha hamda hisobot xulosasi, ilmiy maqola matni yoki yuklangan fayl kiritilishi shart." },
         { status: 400 }
       );
     }
+
+    const fileUrl = (body.fileUrl || "").trim();
+    const fileName = (body.fileName || "").trim();
+    const fileSize = Number(body.fileSize || 0);
+    const articleContent = (body.articleContent || "").trim();
+    const submissionType = body.submissionType || (articleContent ? "article" : fileUrl ? "file" : "report");
 
     const db = await getDb();
     const now = new Date().toISOString();
     const inserted = await db.execute(
       `INSERT INTO lab_reports
-       (user_id, assignment_id, lab_key, title, measurements_json, error_analysis_json, conclusion, status, submitted_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'submitted', $8) RETURNING id`,
+       (user_id, assignment_id, lab_key, title, measurements_json, error_analysis_json, conclusion, status, file_url, file_name, file_size, article_content, submission_type, submitted_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'submitted', $8, $9, $10, $11, $12, $13) RETURNING id`,
       [
         user.userId,
         body.assignmentId ?? null,
-        body.labKey,
+        labKey,
         body.title.trim(),
         JSON.stringify(body.measurements ?? []),
         JSON.stringify(body.errorAnalysis ?? {}),
-        body.conclusion.trim(),
+        conclusion,
+        fileUrl,
+        fileName,
+        fileSize,
+        articleContent,
+        submissionType,
         now,
       ]
     );
@@ -74,7 +100,7 @@ export async function POST(req: Request) {
     await writeAuditLog(
       user.userId,
       "SUBMIT_REPORT",
-      `Hisobot topshirildi (#${inserted.lastInsertId}): ${body.labKey} - ${body.title}`
+      `Topshiriq/maqola yuborildi (#${inserted.lastInsertId}) [${submissionType}]: ${labKey} - ${body.title}`
     );
 
     return NextResponse.json({ id: inserted.lastInsertId, status: "submitted" }, { status: 201 });
