@@ -17,7 +17,9 @@ import {
 } from "@/lib/telegram";
 import {
   createTelegramLoginToken,
+  createTelegramLoginSession,
   checkTelegramLoginToken,
+  checkTelegramLoginTokenAsync,
 } from "@/lib/telegramLoginTokens";
 
 export const dynamic = "force-dynamic";
@@ -62,9 +64,9 @@ export async function POST(req: Request) {
 
     // 0. Telegram Deep-Link Login Token yaratish
     if ((body as any).action === "create_token") {
-      const token = createTelegramLoginToken();
-      const botUrl = `https://t.me/Fizikatuitbot?start=auth_${token}`;
-      return NextResponse.json({ ok: true, token, botUrl });
+      const session = await createTelegramLoginSession();
+      const botUrl = session.deepLink;
+      return NextResponse.json({ ok: true, token: session.token, botUrl });
     }
 
     let verifiedUser: {
@@ -81,7 +83,7 @@ export async function POST(req: Request) {
       if (!token) {
         return NextResponse.json({ error: "Token ko‘rsatilmadi" }, { status: 400 });
       }
-      const tokenData = checkTelegramLoginToken(token, true);
+      const tokenData = await checkTelegramLoginTokenAsync(token, true);
       if (!tokenData || !tokenData.verified || !tokenData.user) {
         return NextResponse.json({ verified: false });
       }

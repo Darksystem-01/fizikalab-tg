@@ -122,6 +122,8 @@ export function LoginPortal() {
         } else if (data.status === "expired") {
           setTelegramAuth((prev) => (prev ? { ...prev, expired: true } : null));
           clearInterval(timer);
+        } else if (res.status === 429 && data.error) {
+          setError(data.error);
         }
       } catch {}
     }, 1500);
@@ -1134,6 +1136,12 @@ export function LoginPortal() {
                   </div>
                 )}
               </div>
+
+              {error && (
+                <div className="rounded-xl border border-red-200 bg-red-50 p-2.5 text-xs text-red-700">
+                  {error}
+                </div>
+              )}
 
               {/* Fallback Option */}
               <div className="pt-0.5">

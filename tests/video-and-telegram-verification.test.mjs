@@ -503,3 +503,76 @@ test("VT-11: Rejection of invalid, missing, and non-existent tokens on /api/auth
   assert.equal(fakeData.ok, false);
   assert.equal(fakeData.status, "expired");
 });
+
+test("VT-12: Telegram Callback Query Login Confirmation (confirm_login_<token>), Dual-Domain Host Headers & Expired Token Rejection", async (t) => {
+  if (!baseUrl) {
+    t.skip("HTTP server is not running; skipping live endpoint test");
+    return;
+  }
+
+  // 1. Generate session token
+  const postRes = await fetch(`${baseUrl}/api/auth/telegram/session-token`, {
+    method: "POST",
+  });
+  assert.equal(postRes.status, 200);
+  const { token } = await postRes.json();
+
+  // 2. User confirms via Telegram Inline Button: callback_data = confirm_login_<token>
+  // Simulate dual-domain environment via x-forwarded-host
+  const cbUserId = 99887766;
+  const cbWebhookRes = await fetch(`${baseUrl}/api/telegram/webhook`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-host": "fizika-lab.vercel.app",
+      "x-forwarded-proto": "https",
+    },
+    body: JSON.stringify({
+      update_id: 999993,
+      callback_query: {
+        id: "cb_query_test_123",
+        from: {
+          id: cbUserId,
+          first_name: "Azizbek",
+          last_name: "Qodirov",
+          username: "azizbek_phys_bot",
+        },
+        message: {
+          message_id: 105,
+          chat: { id: cbUserId, type: "private" },
+        },
+        data: `confirm_login_${token}`,
+      },
+    }),
+  });
+  assert.equal(cbWebhookRes.status, 200, "Webhook must acknowledge callback query update");
+
+  // 3. Web client polling gets verified status and cookie
+  const pollRes = await fetch(`${baseUrl}/api/auth/telegram/session-token?token=${token}`);
+  assert.equal(pollRes.status, 200);
+  const pollData = await pollRes.json();
+  assert.equal(pollData.ok, true);
+  assert.equal(pollData.status, "verified");
+  assert.equal(pollData.user?.fullName, "Azizbek Qodirov");
+  assert.equal(pollData.user?.telegramUsername, "azizbek_phys_bot");
+  const cookie = extractSessionCookie(pollRes);
+  assert.ok(cookie.includes("fizikalab_session="), "Must set session cookie");
+
+  // 4. Webhook with expired or invalid token gracefully sends notice without throwing
+  const expiredWebhookRes = await fetch(`${baseUrl}/api/telegram/webhook`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      update_id: 999994,
+      message: {
+        message_id: 106,
+        from: { id: cbUserId, first_name: "Azizbek" },
+        chat: { id: cbUserId, type: "private" },
+        date: Math.floor(Date.now() / 1000),
+        text: `/start login_expired_fake_token_random_123`,
+      },
+    }),
+  });
+  assert.equal(expiredWebhookRes.status, 200, "Expired token webhook must be acknowledged gracefully");
+});
+

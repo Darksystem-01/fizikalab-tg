@@ -46,7 +46,7 @@ export function createTelegramLoginToken(): string {
     claimed: false,
   });
 
-  // Asynchronously persist to DB if available
+  // Background persistence as fallback for sync callers
   (async () => {
     try {
       const { getDb } = await import("./db");
@@ -65,7 +65,7 @@ export function createTelegramLoginToken(): string {
 }
 
 /**
- * Async helper to create and return session token metadata
+ * Async helper to create and return session token metadata with guaranteed DB persistence
  */
 export async function createTelegramLoginSession(): Promise<{
   token: string;
@@ -73,7 +73,32 @@ export async function createTelegramLoginSession(): Promise<{
   deepLink: string;
   expiresInSeconds: number;
 }> {
-  const token = createTelegramLoginToken();
+  cleanupOldTokens();
+  const token = crypto.randomBytes(32).toString("hex");
+  const now = Date.now();
+  const expiresAt = now + 5 * 60 * 1000;
+
+  tokenStore.set(token, {
+    token,
+    createdAt: now,
+    expiresAt,
+    verified: false,
+    claimed: false,
+  });
+
+  // Await DB persistence to guarantee cross-instance availability in serverless environments
+  try {
+    const { getDb } = await import("./db");
+    const db = await getDb();
+    await db.execute(
+      `INSERT INTO telegram_login_tokens (token, status, telegram_id, first_name, last_name, username, photo_url, auth_date, created_at, expires_at)
+       VALUES ($1, 'pending', '', '', '', '', '', 0, $2, $3)`,
+      [token, new Date(now).toISOString(), new Date(expiresAt).toISOString()]
+    );
+  } catch (err) {
+    console.warn("[createTelegramLoginSession] DB persistence fallback to memory:", err);
+  }
+
   const botUsername = process.env.TELEGRAM_BOT_USERNAME || "Fizikatuitbot";
   const deepLink = `https://t.me/${botUsername}?start=login_${token}`;
 
@@ -86,7 +111,99 @@ export async function createTelegramLoginSession(): Promise<{
 }
 
 /**
- * Called by Telegram webhook when a user sends `/start login_<token>` or clicks login confirmation
+ * Async confirmation called by Telegram webhook when a user sends `/start login_<token>` or clicks confirmation
+ */
+export async function confirmTelegramLoginTokenAsync(
+  token: string,
+  user: {
+    id: number | string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    photoUrl?: string;
+    authDate?: number;
+  }
+): Promise<boolean> {
+  cleanupOldTokens();
+  const now = Date.now();
+  let entry = tokenStore.get(token);
+
+  if (entry) {
+    if (entry.expiresAt ? now > entry.expiresAt : now - entry.createdAt > 5 * 60 * 1000) {
+      tokenStore.delete(token);
+      return false;
+    }
+    entry.verified = true;
+    entry.user = user;
+    tokenStore.set(token, entry);
+  } else {
+    // If not in memory store, create verified record in memory
+    entry = {
+      token,
+      createdAt: now,
+      expiresAt: now + 5 * 60 * 1000,
+      verified: true,
+      user,
+    };
+    tokenStore.set(token, entry);
+  }
+
+  // Await DB update with upsert logic so multi-instance serverless deployments are synchronized
+  try {
+    const { getDb } = await import("./db");
+    const db = await getDb();
+    await db.execute(
+      `UPDATE telegram_login_tokens
+       SET status = 'verified',
+           telegram_id = $1,
+           first_name = $2,
+           last_name = $3,
+           username = $4,
+           photo_url = $5,
+           auth_date = $6
+       WHERE token = $7 AND status = 'pending'`,
+      [
+        String(user.id),
+        user.firstName || "",
+        user.lastName || "",
+        user.username || "",
+        user.photoUrl || "",
+        user.authDate || Math.floor(now / 1000),
+        token,
+      ]
+    );
+
+    // If row wasn't present in DB, insert it directly as verified
+    const existing = await db.queryOne<{ token: string; status: string }>(
+      `SELECT token, status FROM telegram_login_tokens WHERE token = $1`,
+      [token]
+    );
+    if (!existing) {
+      await db.execute(
+        `INSERT INTO telegram_login_tokens (token, status, telegram_id, first_name, last_name, username, photo_url, auth_date, created_at, expires_at)
+         VALUES ($1, 'verified', $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+          token,
+          String(user.id),
+          user.firstName || "",
+          user.lastName || "",
+          user.username || "",
+          user.photoUrl || "",
+          user.authDate || Math.floor(now / 1000),
+          new Date(now).toISOString(),
+          new Date(now + 5 * 60 * 1000).toISOString(),
+        ]
+      );
+    }
+  } catch (err) {
+    console.warn("[confirmTelegramLoginTokenAsync] DB write warning:", err);
+  }
+
+  return true;
+}
+
+/**
+ * Called by Telegram webhook when a user sends `/start login_<token>` or clicks login confirmation (sync API)
  */
 export function confirmTelegramLoginToken(
   token: string,
@@ -112,7 +229,6 @@ export function confirmTelegramLoginToken(
     entry.user = user;
     tokenStore.set(token, entry);
   } else {
-    // If not in memory store, create verified record in memory
     entry = {
       token,
       createdAt: now,
@@ -123,35 +239,8 @@ export function confirmTelegramLoginToken(
     tokenStore.set(token, entry);
   }
 
-  // Update DB asynchronously
-  (async () => {
-    try {
-      const { getDb } = await import("./db");
-      const db = await getDb();
-      await db.execute(
-        `UPDATE telegram_login_tokens
-         SET status = 'verified',
-             telegram_id = $1,
-             first_name = $2,
-             last_name = $3,
-             username = $4,
-             photo_url = $5,
-             auth_date = $6
-         WHERE token = $7 AND status = 'pending'`,
-        [
-          String(user.id),
-          user.firstName || "",
-          user.lastName || "",
-          user.username || "",
-          user.photoUrl || "",
-          user.authDate || Math.floor(now / 1000),
-          token,
-        ]
-      );
-    } catch {
-      // Memory store already updated
-    }
-  })();
+  // Trigger async DB persistence in background for sync callers
+  confirmTelegramLoginTokenAsync(token, user).catch(() => {});
 
   return true;
 }

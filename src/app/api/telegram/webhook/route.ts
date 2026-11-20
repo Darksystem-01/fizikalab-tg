@@ -7,7 +7,10 @@ export const revalidate = 0;
 export async function POST(req: Request) {
   try {
     const update = await req.json();
-    await handleTelegramWebhookUpdate(update);
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+    const proto = req.headers.get("x-forwarded-proto") || "https";
+    const appUrlOverride = host ? `${proto}://${host}` : undefined;
+    await handleTelegramWebhookUpdate(update, appUrlOverride);
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     console.error("[TelegramWebhook] Xatolik:", err);

@@ -22,11 +22,17 @@ async function confirmTelegramLoginTokenAsync(
 ): Promise<boolean> {
   try {
     const mod = await import("./telegramLoginTokens");
+    if (typeof mod.confirmTelegramLoginTokenAsync === "function") {
+      return await mod.confirmTelegramLoginTokenAsync(token, user);
+    }
     return mod.confirmTelegramLoginToken(token, user);
   } catch {
     try {
       const dynamicImport = new Function("p", "return import(p)");
       const mod = await dynamicImport("./telegramLoginTokens.js");
+      if (typeof mod.confirmTelegramLoginTokenAsync === "function") {
+        return await mod.confirmTelegramLoginTokenAsync(token, user);
+      }
       return mod.confirmTelegramLoginToken(token, user);
     } catch {
       return false;
@@ -87,14 +93,27 @@ export interface TelegramVerificationResult {
 }
 
 export function getTelegramBotToken(): string {
-  return process.env.TELEGRAM_BOT_TOKEN || "";
+  const token = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
+  if (
+    (token.startsWith('"') && token.endsWith('"')) ||
+    (token.startsWith("'") && token.endsWith("'"))
+  ) {
+    return token.slice(1, -1).trim();
+  }
+  return token;
 }
 
 export function getAppUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
-    "https://fizika-lab-eta.vercel.app"
-  );
+  if (process.env.NEXT_PUBLIC_APP_URL?.trim()) {
+    return process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/$/, "");
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim().replace(/\/$/, "")}`;
+  }
+  if (process.env.VERCEL_URL?.trim()) {
+    return `https://${process.env.VERCEL_URL.trim().replace(/\/$/, "")}`;
+  }
+  return "https://fizika-lab-eta.vercel.app";
 }
 
 /**
@@ -516,16 +535,19 @@ Iltimos, o‘z vaqtida o‘lchov protokoli, xatoliklar tahlili va yakuniy xulosa
 /**
  * Telegram Webhook orqali kelgan buyruqlar va hodisalarni qayta ishlash
  */
-export async function handleTelegramWebhookUpdate(update: any): Promise<void> {
+export async function handleTelegramWebhookUpdate(
+  update: any,
+  appUrlOverride?: string
+): Promise<void> {
   if (!update) return;
 
-  const appUrl = getAppUrl();
+  const appUrl = (appUrlOverride || getAppUrl()).replace(/\/$/, "");
   const db = await getDatabase();
 
   // 1. Callback Query qayta ishlash
   if (update.callback_query) {
     const cb = update.callback_query;
-    const chatId = cb.message?.chat?.id;
+    const chatId = cb.message?.chat?.id || cb.from?.id;
     const data = String(cb.data || "");
     const token = getTelegramBotToken();
 
@@ -647,6 +669,24 @@ Sizning brauzeringiz avtomatik tarzda shaxsiy kabinetga ulanmoqda.
             ],
           },
         });
+        return;
+      } else {
+        await sendTelegramMessage(
+          chatId,
+          "⚠️ <b>Kirish kodi eskirgan yoki allaqachon foydalanilgan.</b>\n\nIltimos, FizikaLab saytida «Yangi kod olish» tugmasini bosing va qaytadan kiring.",
+          {
+            replyMarkup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "🌐 FizikaLab Saytiga O‘tish",
+                    web_app: { url: appUrl },
+                  },
+                ],
+              ],
+            },
+          }
+        );
         return;
       }
     }

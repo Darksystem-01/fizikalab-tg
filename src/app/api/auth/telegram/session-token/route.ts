@@ -170,7 +170,14 @@ export async function GET(req: Request) {
         ]
       );
 
-      const newId = Number(insertRes.lastInsertId);
+      let newId = Number(insertRes.lastInsertId);
+      if (!newId || Number.isNaN(newId)) {
+        const row = await db.queryOne<{ id: number }>(
+          "SELECT id FROM users WHERE email = $1",
+          [userEmail]
+        );
+        newId = row?.id ? Number(row.id) : 0;
+      }
       user = {
         id: newId,
         full_name: fullName,
