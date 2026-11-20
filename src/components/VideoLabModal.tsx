@@ -505,9 +505,23 @@ export function VideoLabModal({
 
             {/* Bottom Actions */}
             <div className="border-t border-slate-800 bg-slate-950/80 p-3 flex items-center justify-between text-xs">
-              <span className="text-[11px] text-slate-400">
-                Id: <span className="font-mono text-slate-300">{video.id}</span>
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] text-slate-400">
+                  Id: <span className="font-mono text-slate-300">{video.id}</span>
+                </span>
+                {video.googleDrivePreviewUrl && (
+                  <a
+                    href={video.googleDrivePreviewUrl.replace(/\/preview$/, "/view")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:text-emerald-300 transition font-medium"
+                    title="Google Drive-da yangi oynada ochish"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    <span>📁 Google Drive</span>
+                  </a>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={onClose}

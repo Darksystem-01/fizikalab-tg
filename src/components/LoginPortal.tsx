@@ -52,10 +52,22 @@ function GoogleIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
+function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.18 3.35-1.39 3.73-1.39.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+    </svg>
+  );
+}
+
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     google?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Telegram?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onTelegramAuth?: (user: any) => void;
   }
 }
 
@@ -240,6 +252,84 @@ export function LoginPortal() {
       document.cookie = "fizikalab_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/api/auth/google/start");
+    }
+  }
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.onTelegramAuth = async (user: any) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/auth/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error || "Telegram orqali kirishda xatolik yuz berdi.");
+          setLoading(false);
+          return;
+        }
+        const role = data.user?.role;
+        let target = "/labs/metrology";
+        if (role === "admin" || role === "darksystem") {
+          target = "/darksystem";
+        } else if (role === "teacher") {
+          target = "/teacher";
+        }
+        window.location.assign(target);
+      } catch {
+        setError("Telegram orqali kirishda server bilan aloqa o‘rnatilmadi.");
+        setLoading(false);
+      }
+    };
+  }, []);
+
+  async function handleTelegramButtonClick() {
+    setLoading(true);
+    setError(null);
+
+    // 1. Agar foydalanuvchi Telegram WebApp (Mini App) ichida bo'lsa
+    if (typeof window !== "undefined" && window.Telegram?.WebApp?.initData) {
+      try {
+        const res = await fetch("/api/auth/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ initData: window.Telegram.WebApp.initData }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          window.location.assign("/labs/metrology");
+          return;
+        } else {
+          setError(data.error || "Telegram WebApp orqali kirishda xatolik yuz berdi.");
+          setLoading(false);
+          return;
+        }
+      } catch {
+        setError("Telegram serveriga ulanishda xatolik yuz berdi.");
+        setLoading(false);
+        return;
+      }
+    }
+
+    // 2. Oddiy veb-brauzerda: Telegram avtorizatsiya oynasi yoki rasmiy bot
+    if (typeof window !== "undefined") {
+      const origin = window.location.origin;
+      const authUrl = `https://oauth.telegram.org/auth?bot_id=9257020130&origin=${encodeURIComponent(
+        origin
+      )}&embed=1&request_access=write&return_to=${encodeURIComponent(
+        `${origin}/api/auth/telegram`
+      )}`;
+
+      const popup = window.open(authUrl, "telegram_oauth", "width=550,height=470");
+      if (!popup || popup.closed || typeof popup.closed === "undefined") {
+        window.location.assign("https://t.me/Fizikatuitbot?start=login");
+      }
+      setLoading(false);
     }
   }
 
@@ -595,16 +685,29 @@ export function LoginPortal() {
                   </p>
                 </div>
 
-                {/* Google Sign-in Single Clean Button */}
-                <div className="mb-4">
+                {/* Third-Party Authentication: Google & Telegram */}
+                <div className="mb-4 space-y-2.5">
                   <button
                     type="button"
                     onClick={handleGoogleButtonClick}
                     disabled={loading}
-                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900 cursor-pointer disabled:opacity-50"
+                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900 cursor-pointer disabled:opacity-50"
                   >
-                    <GoogleIcon className="h-5 w-5 shrink-0" />
+                    <GoogleIcon className="h-4.5 w-4.5 shrink-0" />
                     <span>Continue with Google</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleTelegramButtonClick}
+                    disabled={loading}
+                    className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-sky-500/40 bg-sky-50 px-4 py-2 text-xs sm:text-sm font-semibold text-sky-800 hover:bg-sky-100 hover:border-sky-500 hover:text-sky-950 transition cursor-pointer shadow-xs disabled:opacity-50"
+                  >
+                    <TelegramIcon className="h-4.5 w-4.5 shrink-0 text-[#24A1DE]" />
+                    <span>Telegram orqali kirish</span>
+                    <span className="hidden sm:inline-block rounded bg-sky-200/70 px-1.5 py-0.5 text-[10px] font-mono font-medium text-sky-900">
+                      @Fizikatuitbot
+                    </span>
                   </button>
                 </div>
 

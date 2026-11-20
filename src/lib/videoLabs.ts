@@ -64,6 +64,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Linear Measurements with Vernier Caliper and Micrometer Screw Gauge",
     duration: "06:42",
     youtubeId: "SQae73zfknQ",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Metrology_ExpStand_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/metrology.jpg",
     summaryUz:
       "Laboratoriya sharoitida shtangensirkul (0.02 mm) va mikrometr (0.01 mm) yordamida qattiq jismlarning tashqi, ichki diametri, qalinligi va chuqurligini o'lchash, asbob xatoligi (Least Count) hamda nol xatolikni (Zero Error) hisobga olish.",
@@ -168,6 +169,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "2D Projectile Motion & Ballistic Trajectory Experiment",
     duration: "05:38",
     youtubeId: "l8VUh4pzhKI",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Kinematics_Ballistics_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/kinematics.jpg",
     summaryUz:
       "Laboratoriya ballistik to'p qurilmasi va fotodatchiklar yordamida po'lat sharcha gorizontga nisbatan turli burchaklarda otiladi. Boshlang'ich tezlik v₀, uchish masofasi R, maksimal balandlik H va uchish vaqti nazariy RK4 modeli bilan solishtiriladi.",
@@ -267,6 +269,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Inclined Plane Friction & Connected Masses Dynamics Experiment",
     duration: "06:15",
     youtubeId: "qwKUb_fN-Go",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Dynamics_Pendulums_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/dynamics.jpg",
     summaryUz:
       "Qiya tekislik stendida aravacha va yuklar harakati: qiyalik burchagi θ ortishi bilan sirpanish sharti, tinchlikdagi sirpanish burchagi α orqali μₛ = tan(α) ni aniqlash hamda blok orqali osilgan ikkinchi yuk m₂ bilan birgalikdagi tezlanish a va ip tarangligi T ni o'lchash.",
@@ -366,6 +369,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Force Table Vector Addition & Concurrent Equilibrium Experiment",
     duration: "05:46",
     youtubeId: "-afmQUEG9BQ",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Statics_ForceTable_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/statics.jpg",
     summaryUz:
       "Doiraviy 360° shkalali kuchlar stoli orqali bir nuqtaga qo'yilgan kuchlar (concurrent forces) vektorial qo'shiladi. Berilgan F₁ va F₂ kuchlar uchun tenglashtiruvchi kuch F_E (Equilibrant) topiladi va markaziy halqaning mutlaq markazlashuvi kuzatiladi.",
@@ -465,6 +469,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Meter Bridge (Wheatstone Bridge) Wire Resistance & Resistivity Experiment",
     duration: "06:28",
     youtubeId: "R1pabnMCZDE",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Electromagnetism_Bridge_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/electromagnetism.jpg",
     summaryUz:
       "1 metrli kalibrlangan manganin simli Uitston ko'prigi stendi. Qarshiliklar qutisi R, sezgir galvanometr va joxkey (jockey) yordamida sim bo'ylab nol-muvozanat nuqtasi l₁ topiladi. Noma'lum o'tkazgich sim qarshiligi X va mikrometr bilan sim diametri o'lchanib solishtirma qarshilik ρ aniqlanadi.",
@@ -569,6 +574,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Newton's Rings Interference & Sodium Light Wavelength Determination",
     duration: "06:50",
     youtubeId: "6O1d19Rd7ys",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Optics_NewtonsRings_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/optics.jpg",
     summaryUz:
       "Katta egrilik radiusli yassi-qavariq linza va yassi oyna plastinkasi orasidagi yupqa havo qatlamida hosil bo'ladigan Nyuton halqalari. Monoxromatik natriy lampasi (λ = 589 nm), 45° yarim shaffof plastinka va gorizontal o'lchov mikroskopi yordamida qorong'i halqalar diametrlari D_n o'lchanadi.",
@@ -673,6 +679,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Boyle's Law Isothermal Gas Compression & Pressure-Volume Apparatus",
     duration: "05:42",
     youtubeId: "UPeE626-SuU",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Thermodynamics_GasLaws_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/thermodynamics.jpg",
     summaryUz:
       "Izotermik jarayonni o'rganish apparati: germetik shprits, yuqori aniqlikdagi raqamli bosim datchigi (absolyut bosim) va termometr. Gaz sekin siqilganda va kengayganda bosim P va hajm V ko'paytmasi P·V = const ekanligi hamda P ning 1/V ga bog'liqlik to'g'ri chiziqli grafigi olinadi.",
@@ -772,6 +779,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Photoelectric Effect Experiment & Planck's Constant Determination",
     duration: "06:12",
     youtubeId: "FFP7fx8ZAu4",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Atomic_Photoelectric_TUIT/preview",
     thumbnailUrl: "/resources/videolabs/atomic.jpg",
     summaryUz:
       "Vakuum fotoelementi, yuqori bosimli simob lampasi va monoxromatik yorug'lik filtrlari (365, 405, 436, 546, 577 nm). Fototokni to'xtatuvchi teskari potensial V₀ o'lchanadi. Eynshteynning fotoeffekt tenglamasi asosida V₀ ning yorug'lik chastotasi ν ga bog'liqlik grafigidan Plank doimiysi h va katodning chiqish ishi A aniqlanadi.",
@@ -870,4 +878,11 @@ export function getVideoLabByKey(labKey: string): VideoLabDefinition | undefined
 
 export function getVideoLabById(id: string): VideoLabDefinition | undefined {
   return VIDEO_LABS_CATALOG.find((v) => v.id === id);
+}
+
+export function getGoogleDriveViewUrl(video: VideoLabDefinition): string {
+  if (!video.googleDrivePreviewUrl) {
+    return "https://drive.google.com";
+  }
+  return video.googleDrivePreviewUrl.replace(/\/preview$/, "/view");
 }
