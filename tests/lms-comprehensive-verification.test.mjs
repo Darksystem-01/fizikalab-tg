@@ -126,9 +126,9 @@ test("LMS-6: HEMIS Gradebook CSV Exporter Schema & Delimiter Compliance", () => 
       university: "O‘zbekiston Milliy Universiteti",
       faculty: "Fizika fakulteti",
       labScores: {
-        metrology: 92,
         kinematics: 88,
         dynamics: 95,
+        statics: 92,
       },
       attendancePct: 100,
       totalJnScore: 91.7,
@@ -142,7 +142,7 @@ test("LMS-6: HEMIS Gradebook CSV Exporter Schema & Delimiter Compliance", () => 
       university: "O‘zbekiston Milliy Universiteti",
       faculty: "Fizika fakulteti",
       labScores: {
-        metrology: 55,
+        kinematics: 55,
       },
       attendancePct: 80,
       totalJnScore: 55.0,

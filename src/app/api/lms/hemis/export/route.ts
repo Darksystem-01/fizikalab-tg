@@ -49,12 +49,22 @@ export async function GET(req: NextRequest) {
       }
     });
 
+    const EXAM_LAB_KEYS = [
+      "kinematics",
+      "dynamics",
+      "statics",
+      "electromagnetism",
+      "optics",
+      "thermodynamics",
+      "atomic",
+    ];
+
     const ratings: HemisStudentRating[] = students.map((s) => {
       const userLabs = reportsByUser[s.id] || {};
-      const labKeys = Object.keys(userLabs);
+      const scoredExamKeys = EXAM_LAB_KEYS.filter((k) => typeof userLabs[k] === "number");
       const totalScore =
-        labKeys.length > 0
-          ? labKeys.reduce((acc, k) => acc + (userLabs[k] || 0), 0) / labKeys.length
+        scoredExamKeys.length > 0
+          ? scoredExamKeys.reduce((acc, k) => acc + (userLabs[k] || 0), 0) / scoredExamKeys.length
           : 0;
 
       const hemis = calculateHemisGrade(totalScore);
