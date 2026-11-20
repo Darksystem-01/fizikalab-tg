@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import {
   diagnoseAdminConfigStatus,
   getConfiguredAdminCredentials,
@@ -12,22 +13,86 @@ import {
 } from "@/lib/auth";
 import {
   ensureConfiguredAdminRecord,
-  getDb,
+  getDb as getLegacyDb,
   writeAuditLog,
   type DbUser,
 } from "@/lib/db";
-import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { checkRateLimit as checkLegacyRateLimit, getClientIp } from "@/lib/rateLimit";
 import { sanitizeEmail } from "@/lib/emailValidation";
+import { validateAndFormatPhone } from "@/lib/auth/phone";
+import { hashPhoneHmac } from "@/lib/crypto";
+import { verifyPasswordArgon2, dummyArgon2Verify } from "@/lib/auth/password";
+import { createSession } from "@/lib/auth/session";
+import { checkRateLimit } from "@/lib/auth/rateLimit";
+import { getDb } from "@/db";
+import { users } from "@/db/schema";
+import { eq, sql } from "drizzle-orm";
 
 export async function POST(req: Request) {
   try {
     const ip = getClientIp(req);
-    const body = (await req.json()) as { email?: string; password?: string };
-    const rawEmail = (body.email || "").trim();
-    const email = rawEmail.includes("@") ? sanitizeEmail(rawEmail) : rawEmail.toLowerCase();
+    const body = (await req.json()) as {
+      email?: string;
+      phone?: string;
+      login?: string;
+      password?: string;
+    };
+
+    const loginIdentifier = (body.login || body.phone || body.email || "").trim();
     const password = body.password || "";
 
-    const ipRl = checkRateLimit(`login_ip:${ip}`, 40, 5 * 60 * 1000);
+    if (!loginIdentifier || !password) {
+      return NextResponse.json(
+        { error: "Email va parol kiritilishi shart." },
+        { status: 400 }
+      );
+    }
+
+    // 1. Check if user is attempting to login via Neon Drizzle (FizikaLab Reels Phone or Nickname)
+    const phoneParsed = validateAndFormatPhone(loginIdentifier);
+    if (phoneParsed.valid && phoneParsed.e164) {
+      const db = getDb();
+      const phoneHmac = hashPhoneHmac(phoneParsed.e164);
+      const [u] = await db
+        .select()
+        .from(users)
+        .where(eq(users.phoneHmac, phoneHmac))
+        .limit(1);
+
+      if (u) {
+        const isPasswordValid = await verifyPasswordArgon2(password, u.passwordHash);
+        if (!isPasswordValid) {
+          return NextResponse.json({ error: "Telefon raqam yoki parol noto‘g‘ri." }, { status: 401 });
+        }
+
+        if (u.status === "pending") {
+          return NextResponse.json(
+            { error: "Akkauntingiz hali tasdiqlanmagan. Iltimos, SMS kod orqali tasdiqlang.", pendingOtp: true },
+            { status: 403 }
+          );
+        }
+
+        if (u.status === "banned" || u.status === "deleted") {
+          return NextResponse.json({ error: "Ushbu hisob qoidabuzarlik sababli bloklangan." }, { status: 403 });
+        }
+
+        await db
+          .update(users)
+          .set({ lastSeenAt: new Date(), updatedAt: new Date() })
+          .where(eq(users.id, u.id));
+
+        const userAgent = req.headers.get("user-agent") || undefined;
+        await createSession(u.id, userAgent, ip);
+
+        return NextResponse.json({
+          success: true,
+          user: { id: u.id, nickname: u.nickname, role: u.role },
+        });
+      }
+    }
+
+    // 2. Legacy Email & Admin flow
+    const ipRl = checkLegacyRateLimit(`login_ip:${ip}`, 40, 5 * 60 * 1000);
     if (!ipRl.allowed) {
       return NextResponse.json(
         {
@@ -37,20 +102,16 @@ export async function POST(req: Request) {
       );
     }
 
-    const rl = checkRateLimit(`login:${ip}:${email}`, 20, 5 * 60 * 1000);
+    const rawEmail = (body.email || loginIdentifier).trim();
+    const email = rawEmail.includes("@") ? sanitizeEmail(rawEmail) : rawEmail.toLowerCase();
+
+    const rl = checkLegacyRateLimit(`login:${ip}:${email}`, 20, 5 * 60 * 1000);
     if (!rl.allowed) {
       return NextResponse.json(
         {
           error: `Juda ko‘p urinish. ${rl.retryAfterSec} soniyadan keyin qayta urinib ko‘ring.`,
         },
         { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } }
-      );
-    }
-
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email va parol kiritilishi shart." },
-        { status: 400 }
       );
     }
 
@@ -86,8 +147,8 @@ export async function POST(req: Request) {
           { status: 401 }
         );
       }
-      const db = await getDb();
-      const found = await db.queryOne<DbUser>(
+      const legacyDb = await getLegacyDb();
+      const found = await legacyDb.queryOne<DbUser>(
         "SELECT * FROM users WHERE LOWER(TRIM(email)) = $1 AND role <> 'admin'",
         [email]
       );
@@ -122,15 +183,18 @@ export async function POST(req: Request) {
     const clientEmail = isDarksystem ? "darksystem@internal" : user.email;
     const clientFullName = isDarksystem ? "Darksystem Administrator" : user.full_name;
 
-    const token = await signSessionToken({
-      userId: user.id,
-      email: clientEmail,
-      fullName: clientFullName,
-      role: clientRole,
-      studentGroup: user.student_group,
-      university: user.university || "",
-      faculty: user.faculty || "",
-    }, req);
+    const token = await signSessionToken(
+      {
+        userId: user.id,
+        email: clientEmail,
+        fullName: clientFullName,
+        role: clientRole,
+        studentGroup: user.student_group,
+        university: user.university || "",
+        faculty: user.faculty || "",
+      },
+      req
+    );
 
     await writeAuditLog(
       user.id,
@@ -149,12 +213,11 @@ export async function POST(req: Request) {
         faculty: user.faculty || "",
       },
     });
+
     res.cookies.set(SESSION_COOKIE_NAME, token, getSessionCookieOptions());
     return res;
-  } catch {
-    return NextResponse.json(
-      { error: "Kirish jarayonida server xatosi yuz berdi." },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error("[Login] Exception:", err);
+    return NextResponse.json({ error: "Kutilmagan server xatoligi." }, { status: 500 });
   }
 }

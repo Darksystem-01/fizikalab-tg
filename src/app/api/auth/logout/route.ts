@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import {
-  getSessionUser,
+  getSessionUser as getLegacySessionUser,
   verifySessionTokenStateless,
   SESSION_COOKIE_NAME,
   getSessionClearCookieOptions,
 } from "@/lib/auth";
 import { writeAuditLog, revokeSession } from "@/lib/db";
+import { destroySession } from "@/lib/auth/session";
 
 export async function POST(req: Request) {
-  const user = await getSessionUser(req);
+  // Revoke Drizzle session if active
+  await destroySession();
+
+  // Also revoke legacy session if active
+  const user = await getLegacySessionUser(req);
   if (user && user.sessionId) {
     await revokeSession(user.sessionId);
     await writeAuditLog(user.userId, "LOGOUT", `${user.email} tizimdan chiqdi`);
@@ -29,11 +34,11 @@ export async function POST(req: Request) {
         }
       }
     } catch {
-      // Best-effort session revocation
+      // Best-effort
     }
   }
 
-  const res = NextResponse.json({ ok: true });
+  const res = NextResponse.json({ ok: true, success: true });
   res.cookies.set(SESSION_COOKIE_NAME, "", getSessionClearCookieOptions());
   return res;
 }
