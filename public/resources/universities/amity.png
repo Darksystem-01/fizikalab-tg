@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="oz" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="csrf-param" content="_csrf">
+<meta name="csrf-token" content="oJc64LLqDXoWshddIV08z-jsyH491CQQKR_cf12vhcra0QKK4p5uDXn3JBZbLW--jouwBFC2HVUbW41LZcHEjA==">
+    <title>Sahifa topilmadi. | Toshkent shahridagi Amity universiteti</title>
+    <meta property="og:title" content="Sahifa topilmadi.">
+<meta property="og:locale" content="uz_UZ">
+<meta property="og:description" content="Toshkent shahridagi Amity universiteti">
+<meta property="og:image" content="https://amity.uz/img/og_logo.png">
+<meta property="og:url" content="https://amity.uz/oz/images/logo.png">
+<meta property="twitter:title" content="Sahifa topilmadi.">
+<meta property="twitter:description" content="Toshkent shahridagi Amity universiteti">
+<meta property="twitter:image" content="https://amity.uz/img/og_logo.png">
+<link href="/css/bootstrap.min.css?v=1" rel="stylesheet">
+<link href="/css/font-awesome.min.css?v=1" rel="stylesheet">
+<link href="/css/material-design-iconic-font.min.css?v=1" rel="stylesheet">
+<link href="/css/plugin.css?v=1" rel="stylesheet">
+<link href="/css/style.css?v=2" rel="stylesheet">
+<link href="/css/responsive.css?v=2" rel="stylesheet">
+<link href="/css/animate.min.css?v=2" rel="stylesheet">        <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon"/>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CLX357TLV8"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-CLX357TLV8');
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(96568780, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+    });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/96568780" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Begin Verbox {literal} -->
+<script>
+    (function(){(function c(d,w,m,i) {
+        window.supportAPIMethod = m;
+        var s = d.createElement('script');
+        s.id = 'supportScript';
+        var id = '1df17c0b7e5f124ea2521c9a0a763537';
+        s.src = (!i ? 'https://admin.verbox.ru/support/support.js' : 'https://static.site-chat.me/support/support.int.js') + '?h=' + id;
+        s.onerror = i ? undefined : function(){c(d,w,m,true)};
+        w[m] = w[m] ? w[m] : function(){(w[m].q = w[m].q ? w[m].q : []).push(arguments);};
+        (d.head ? d.head : d.body).appendChild(s);
+    })(document,window,'Verbox')})();
+</script>
+<!-- {/literal} End Verbox --></head>
+<body>
+<!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!--Loading Area Start-->
+<div class="loading">
+    <div class="text-center middle">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+<!--Loading Area End-->
+<!--Main Wrapper Start-->
+<div class="as-mainwrapper">
+    <!--Bg White Start-->
+    <div class="bg-white">
+
+    <!--_header -->
+    
+<!--Header Area Start-->
+<header>
+<!--    -->
+<!--    --><!--    <div class="header-logo-menu sticker --><!--">-->
+    <div class="header-logo-menu sticker stick header_in">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-12 ">
+                    <div class="logo">
+                        <a href="/oz"><img class="static-logo" src="/img/logo/footer.webp" alt="Amity Logo"><img class="sticky-logo" src="/img/logo/logo.webp" alt="sticky-logo"></a>                    </div>
+                </div>
+                <div class="col-lg-8 col-12 ">
+                    <div class="support-button float-right d-none d-md-block pt-15">
+                        <div class="support float-left mr-35 email-logo">
+                            <div class="icon">
+                                <img src="/img/logo/mail.webp" alt="icon">
+                            </div>
+                            <div class="cont">
+                                <p>Email:</p>
+                                <a href="mailto:info@amity.uz"><span>info@amity.uz</span></a>
+                            </div>
+                        </div>
+                        <div class="support float-left call">
+                            <div class="icon">
+                                <img src="/img/logo/call.webp" alt="icon">
+                            </div>
+                            <div class="cont">
+                                <p>Call-center:</p>
+                                <a href="tel:+998 71 207 90 06"><span>+998 71 207 90 06</span></a><br>
+                                <a href="tel:+998 71 207 90 07"><span>+998 71 207 90 07</span></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mainmenu-area justify-content-center">
+                            
+<div class="mainmenu d-none d-lg-block">
+    <nav>
+        <ul id="nav">
+                        <li class="parent" >
+                <a class="" href="#">Universitet</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/about_us">Biz haqimizda </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Tashkiliy tuzilma <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/guides">Rahbariyat</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/tutors">Professor-o‘qituvchilar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/administrations">Xodimlar</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/accreditation">Akkreditatsiya va reyting </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/campuses">Xalqaro kampuslar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/mission">Maqsad, missiya va asosiy qadriyatlar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target="_blank"  href="https://online.fliphtml5.com/gklwk/tfxn/?1708665198194">Amity onlayn broshyurasi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/regulatory_documents">Me’yoriy hujjatlar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/partners">Hamkorlar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">AUTdagi ilmiy-tadqiqot konferensiyalari <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://ieeexplore.ieee.org/xpl/conhome/10840340/proceeding">ICTAS: 2024</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://ieeexplore.ieee.org/xpl/conhome/10389811/proceeding">ICTAS: 2023</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://ieeexplore.ieee.org/xpl/conhome/9987725/proceeding">ICTAS: 2022</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://ieeexplore.ieee.org/xpl/conhome/11198180/proceeding">INTECH: 2025</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="#">Ta’lim dasturlari</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/programme/71">Xalqaro umumta’lim kursi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Bakalavriat <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/91">Axborot texnologiyalari fanlari bakalavri - B.Sc. (IT)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/673">Kiberxavfsizlik va blokcheyn fanlari bakalavri - B.Sc. (CS & BC)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/677">Sun’iy intellekt va ma’lumotlar ilmi fanlari bakalavri - B.Sc. (AI & DS)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/93">Texnologiya bakalavri (Kompyuter fanlari va injiniringi) - B.Tech (CSE)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/97">Iqtisodiyot bakalavri - BA (Econ)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/102">Turizm boshqaruvi bakalavri - BA (TA)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/107">Biznes boshqaruvi bakalavri - BBA</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Bakalavriat ikki darajali diplomi <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/719">Axborot texnologiyalari fanlari bakalavri - B.Sc. (IT)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/664">Kiberxavfsizlik va blokcheyn fanlari bakalavri - B.Sc. (CS & BC)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/716">Sun’iy intellekt va ma’lumotlar ilmi fanlari bakalavri - B.Sc. (AI & DS)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/696">Texnologiya bakalavri (Kompyuter fanlari va injiniringi) - B.Tech (CSE)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/699">Biznes boshqaruvi bakalavri - BBA</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Magistratura <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/programme/112">Axborot texnologiyalari fanlari magistri - M.Sc. (IT)</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/study_abroad_program">Chet elda ta’lim dasturi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/semester_abroad_program">Chet elda semestr dasturi </a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="#">Kampus hayoti</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a target=""  href="#">Talabalar <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/clubs">Klublar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/achievements">Yutuqlar</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/hostel">Talabalar turar joyi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/cafeteria">Kafeteriya </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/sports_facilities">Sport inshootlari </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/library">Kutubxona  </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/medical_center">Tibbiy punkt </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/incubation_centre">Inkubatsiya markazi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/career_center">Karyera markazi </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/graduates">Bitiruvchilar </a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="/oz/lists/news">Yangiliklar</a>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="#">Tadbirlar</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/aut_events">AUT tadbirlari </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Konferensiyalar <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/events/conferences/intech_2024">International Conference on Technology Enabled Economic Changes (InTech-2025)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/lists/events/conferences/smart-met_2026">International Conference on Smart Tourism, Management & Economics (SMART-MET 2026)</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/pages/view/aut-summer-school-2025">Yozgi maktab 2025 </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target="_blank"  href="https://amity.uz/oz/mps-payment/index">To'lovlar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/guest_lectures">Mehmon ma’ruzalari </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/seminars_workshops">Seminar / vorkshoplar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/partnership">Hamkorlik </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/industry_visits">Sanoatga tashriflar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/olympiads">Olimpiadalar </a>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="/oz/lists/events/eko-faol">Eko faol </a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="/oz/pages/view/vacancies">Vakansiyalar</a>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="/oz/site/contact">Aloqa</a>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="/oz/pages/view/iqac">IQAC</a>
+                            </li>
+                        <li class="parent" >
+                <a class="" href="#">Qabul 2026</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a target=""  href="#">Mahalliy talabalar <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://abiturient.amity.uz/oz/site/login/?">Ariza qoldirish ☑</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/application_process">Ariza berish jarayoni</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/entry_requirements">Kirish uchun talablar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/fees">To‘lovlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/scholarships">Grantlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/transfer_to_amity">O‘qishni ko‘chirish</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a target=""  href="#">Xalqaro talabalar <i class="zmdi zmdi-chevron-right"></i></a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a target="_blank" href="https://admission.amity.uz/login.php">Ariza qoldirish ☑</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/application_process_int">Ariza berish jarayoni</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/entry_requirements_int">Kirish uchun talablar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/fees_int">To‘lovlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/transfer_to_amity_int">O‘qishni ko‘chirish</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a target="" href="/oz/pages/view/visa_and_arrival">Viza va kelish</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                            </ul>
+                            </li>
+                </nav>
+</div>                            <!--<ul class="lang">-->
+<!--    <li class="dropdown">-->
+<!--        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">--><!-- <span class="caret"></span></a>-->
+<!--        <ul  class="dropdown-menu">-->
+<!--            --><!--        </ul>-->
+<!--    </li>-->
+<!--</ul>-->
+<div class="dropdown lang_div">
+    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        O‘z    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="/en/site/error">En</a></li>    </ul>
+</div>                            <!--Search Form-->
+<!--                            -->                            <!--End of Search Form-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu Area start -->
+    <div class="mobile-menu-area">
+        <div class="container clearfix">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    
+<div class="mobile-menu">
+    <nav  id="dropdown">
+        <ul id="nav">
+                        <li class="parent " >
+                <a href="#">Universitet</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a href="/oz/pages/view/about_us">Biz haqimizda</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Tashkiliy tuzilma</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/lists/guides">Rahbariyat</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/lists/tutors">Professor-o‘qituvchilar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/lists/administrations">Xodimlar</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/accreditation">Akkreditatsiya va reyting</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/campuses">Xalqaro kampuslar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/mission">Maqsad, missiya va asosiy qadriyatlar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="https://online.fliphtml5.com/gklwk/tfxn/?1708665198194">Amity onlayn broshyurasi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/regulatory_documents">Me’yoriy hujjatlar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/partners">Hamkorlar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">AUTdagi ilmiy-tadqiqot konferensiyalari</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="https://ieeexplore.ieee.org/xpl/conhome/10840340/proceeding">ICTAS: 2024</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="https://ieeexplore.ieee.org/xpl/conhome/10389811/proceeding">ICTAS: 2023</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="https://ieeexplore.ieee.org/xpl/conhome/9987725/proceeding">ICTAS: 2022</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="https://ieeexplore.ieee.org/xpl/conhome/11198180/proceeding">INTECH: 2025</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent " >
+                <a href="#">Ta’lim dasturlari</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a href="/oz/pages/programme/71">Xalqaro umumta’lim kursi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Bakalavriat</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/91">Axborot texnologiyalari fanlari bakalavri - B.Sc. (IT)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/673">Kiberxavfsizlik va blokcheyn fanlari bakalavri - B.Sc. (CS & BC)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/677">Sun’iy intellekt va ma’lumotlar ilmi fanlari bakalavri - B.Sc. (AI & DS)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/93">Texnologiya bakalavri (Kompyuter fanlari va injiniringi) - B.Tech (CSE)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/97">Iqtisodiyot bakalavri - BA (Econ)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/102">Turizm boshqaruvi bakalavri - BA (TA)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/107">Biznes boshqaruvi bakalavri - BBA</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Bakalavriat ikki darajali diplomi</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/719">Axborot texnologiyalari fanlari bakalavri - B.Sc. (IT)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/664">Kiberxavfsizlik va blokcheyn fanlari bakalavri - B.Sc. (CS & BC)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/716">Sun’iy intellekt va ma’lumotlar ilmi fanlari bakalavri - B.Sc. (AI & DS)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/696">Texnologiya bakalavri (Kompyuter fanlari va injiniringi) - B.Tech (CSE)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/699">Biznes boshqaruvi bakalavri - BBA</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Magistratura</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/pages/programme/112">Axborot texnologiyalari fanlari magistri - M.Sc. (IT)</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/study_abroad_program">Chet elda ta’lim dasturi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/semester_abroad_program">Chet elda semestr dasturi</a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent " >
+                <a href="#">Kampus hayoti</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a href="#">Talabalar</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/clubs">Klublar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/lists/achievements">Yutuqlar</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/hostel">Talabalar turar joyi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/cafeteria">Kafeteriya</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/sports_facilities">Sport inshootlari</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/library">Kutubxona </a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/medical_center">Tibbiy punkt</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/incubation_centre">Inkubatsiya markazi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/career_center">Karyera markazi</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/graduates">Bitiruvchilar</a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent " >
+                <a href="/oz/lists/news">Yangiliklar</a>
+                            </li>
+                        <li class="parent " >
+                <a href="#">Tadbirlar</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a href="/oz/lists/events/aut_events">AUT tadbirlari</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Konferensiyalar</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="/oz/lists/events/conferences/intech_2024">International Conference on Technology Enabled Economic Changes (InTech-2025)</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/lists/events/conferences/smart-met_2026">International Conference on Smart Tourism, Management & Economics (SMART-MET 2026)</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/pages/view/aut-summer-school-2025">Yozgi maktab 2025</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="https://amity.uz/oz/mps-payment/index">To'lovlar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/guest_lectures">Mehmon ma’ruzalari</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/seminars_workshops">Seminar / vorkshoplar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/partnership">Hamkorlik</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/industry_visits">Sanoatga tashriflar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/olympiads">Olimpiadalar</a>
+                                                            </li>
+                                                    <li class="">
+                                <a href="/oz/lists/events/eko-faol">Eko faol</a>
+                                                            </li>
+                                            </ul>
+                            </li>
+                        <li class="parent " >
+                <a href="/oz/pages/view/vacancies">Vakansiyalar</a>
+                            </li>
+                        <li class="parent " >
+                <a href="/oz/site/contact">Aloqa</a>
+                            </li>
+                        <li class="parent " >
+                <a href="/oz/pages/view/iqac">IQAC</a>
+                            </li>
+                        <li class="parent " >
+                <a href="#">Qabul 2026</a>
+                                    <ul class="sub-menu">
+                                                    <li class="">
+                                <a href="#">Mahalliy talabalar</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="https://abiturient.amity.uz/oz/site/login/?">Ariza qoldirish ☑</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/application_process">Ariza berish jarayoni</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/entry_requirements">Kirish uchun talablar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/fees">To‘lovlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/scholarships">Grantlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/transfer_to_amity">O‘qishni ko‘chirish</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                                    <li class="">
+                                <a href="#">Xalqaro talabalar</a>
+                                                                    <ul class="inside-menu">
+                                                                                    <li class="">
+                                                <a href="https://admission.amity.uz/login.php">Ariza qoldirish ☑</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/application_process_int">Ariza berish jarayoni</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/entry_requirements_int">Kirish uchun talablar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/fees_int">To‘lovlar</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/transfer_to_amity_int">O‘qishni ko‘chirish</a>
+                                            </li>
+                                                                                    <li class="">
+                                                <a href="/oz/pages/view/visa_and_arrival">Viza va kelish</a>
+                                            </li>
+                                                                            </ul>
+                                                            </li>
+                                            </ul>
+                            </li>
+                </nav>
+</div>                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu Area end -->
+</header>
+<!--End of Header Area-->
+
+    <!--END _header -->
+    <!--Content -->
+    <!--Breadcrumb Banner Area Start-->
+    <div class="breadcrumb-banner-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="breadcrumb-text">
+                        <h1 class="text-center" data-wow-iteration="3">Sahifa topilmadi.</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End of Breadcrumb Banner Area-->
+    <div class="center-content">
+        <!--Blog Area Start-->
+<div class="blog-area pt-50 pb-50">
+    <div class="container">
+        <div class="row">
+            <div class="has_border">
+                <section class="not_found">
+                    <img src="/img/404.png" alt="" />
+                    <span class="not_found_text">Sahifa topilmadi.</span>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End of Blog Area-->    </div>
+    <!--END Content -->
+    <!--_footer -->
+    
+<footer>
+<!--    -->
+    <!--Footer Widget Area Start-->
+    <div class="footer-widget-area ">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-footer-widget">
+                        <div class="footer-logo">
+                            <a href="/oz"><img src="/img/logo/footer.webp" alt=""></a>
+                        </div>
+<!--                        <p>--><!--</p>-->
+                        <div class="social-icons row row-cols-3">
+    <div class="col">
+        <a class="" target="_blank" href="https://www.facebook.com/amityuniversityuz">
+            <img class="social-main" src="/img/icon/social-icons-01.webp">
+            <img class="social-hover" src="/img/icon/social-icons-01-hover.webp">
+        </a>
+    </div>
+    <div class="col">
+        <a class="" target="_blank" href="https://www.instagram.com/amity_tashkent/">
+            <img class="social-main" src="/img/icon/social-icons-02.webp">
+            <img class="social-hover" src="/img/icon/social-icons-02-hover.webp">
+        </a>
+    </div>
+    <div class="col">
+        <a class="" target="_blank" href="https://t.me/AmityUniversityTashkent">
+            <img class="social-main" src="/img/icon/social-icons-03.webp">
+            <img class="social-hover" src="/img/icon/social-icons-03-hover.webp">
+        </a>
+    </div>
+    <div class="col">
+        <a class="" target="_blank" href="https://www.youtube.com/@AmityUniversityTashkent">
+            <img class="social-main" src="/img/icon/social-icons-04.webp">
+            <img class="social-hover" src="/img/icon/social-icons-04-hover.webp">
+        </a>
+    </div>
+    <div class="col">
+        <a class="" target="_blank" href="https://www.linkedin.com/school/amity-university-tashkent">
+            <img class="social-main" src="/img/icon/social-icons-05.webp">
+            <img class="social-hover" src="/img/icon/social-icons-05-hover.webp">
+        </a>
+    </div>
+    <div class="col">
+        <a class="" target="_blank" href="https://twitter.com/Amity_Tashkent">
+            <img class="social-main" src="/img/icon/social-icons-06.webp">
+            <img class="social-hover" src="/img/icon/social-icons-06-hover.webp">
+        </a>
+    </div>
+    <!--        <a href="--><!--" target="_blank"><i class="zmdi zmdi---><!--"></i></a>-->
+<!--        <a href="--><!--" target="_blank">--><!--</a>-->
+<!--    --></div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 ">
+    <div class="single-footer-widget authority-info">
+        <h3>Bog‘lanish</h3>
+        <a target="_blank" href="tel:+998 71 207 90 06"><i class="fa fa-phone"></i>+998 71 207 90 06</a>
+        <a target="_blank" href="tel:+998 71 207 90 07"><i class="fa fa-phone"></i>+998 71 207 90 07</a>
+        <a href="mailto:info@amity.uz"><i class="fa fa-envelope"></i>info@amity.uz</span></a>
+<!--        <a href="--><!--"><i class="fa fa-globe"></i>--><!--</span></a>-->
+        <span><i class="fa fa-map-marker"></i>Toshkent shahri, Shayxontohur tumani, Labzak ko‘chasi 70, 100128, O‘zbekiston</span>
+    </div>
+</div>
+                <div class="col-lg-3 col-md-6 ">
+    <div class="single-footer-widget">
+        <h3>Havolalar</h3>
+                <ul class="footer-list">
+                            <li><a href="/oz/site/contact">Aloqa</a></li>
+                            <li><a href="/oz/pages/view/vacancies">Vakansiyalar</a></li>
+                            <li><a href="/oz/pages/view/visa_and_arrival">Viza va kelish</a></li>
+                            <li><a href="/oz/lists/news">Yangiliklar</a></li>
+                            <li><a href="/oz/lists/events/aut_events">Tadbirlar</a></li>
+                    </ul>
+            </div>
+</div>
+<div class="col-lg-3 col-md-6 ">
+    <div class="single-footer-widget">
+        <h3>Universitet</h3>
+                <ul class="footer-list">
+                            <li><a href="/oz/pages/view/about_us">Biz haqimizda</a></li>
+                            <li><a href="/oz/pages/view/accreditation">Akkreditatsiya va reyting</a></li>
+                            <li><a href="/oz/pages/campuses">Xalqaro kampuslar</a></li>
+                            <li><a href="/oz/pages/partners">Hamkorlar</a></li>
+                            <li><a href="/oz/pages/view/regulatory_documents">Me’yoriy hujjatlar</a></li>
+                    </ul>
+            </div>
+</div>
+            </div>
+        </div>
+    </div>
+    <!--End of Footer Widget Area-->
+
+    <!--Footer Area Start-->
+    <div class="footer-area ">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-12">
+                    <span>© 2026 Toshkent shahridagi Amity universiteti</span>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12">
+<!--                    <div class="column-right">-->
+                        <span>Barcha huquqlar himoyalangan</span>
+<!--                    </div>-->
+                </div>
+                <div class="col-lg-2 col-md-6 col-12">
+                    <span><a href="/oferta/offerta_platnie_uslugi.pdf" target="_blank">Ommaviy oferta</a></span>
+                </div>
+                <div class="col-lg-2 col-md-6 col-12">
+                    <span><a href="/oferta/politika_konf.pdf" target="_blank">Maxfiylik siyosati</a></span>
+                </div>
+                <!-- <div class="col-lg-2 col-md-7 col-12">
+                    <span> </span>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="footer-area ">
+        <div class="container">
+            <div class="row">
+                <span>Saytda imloviy yoki uslubiy xatoga ko'zingiz tushdimi? Xato jumlani belgilang va CTRL+ENTER'ni bosish orqali bizga xabar bering</span>
+            </div>
+        </div>
+    </div>
+    <!--End of Footer Area-->
+</footer>
+    <!--END _footer -->
+
+    </div>
+    <!--End of Bg White-->
+</div>
+<!--End of Main Wrapper Area-->
+
+<script src="/js/vendor/modernizr-3.6.0.min.js?v=1"></script>
+<script src="/js/jquery.min.js?v=1"></script>
+<script src="/js/ctrlEnter.js?v=1"></script>
+<script src="/js/popper.min.js?v=1"></script>
+<script src="/js/vendor/wow.min.js?v=1"></script>
+<script src="/js/bootstrap.min.js?v=1"></script>
+<script src="/js/ajax-mail.js?v=1"></script>
+<script src="/js/plugins.js?v=1"></script>
+<script src="/js/main.js?v=1"></script></body>
+</html>

@@ -8,6 +8,7 @@ export interface University {
   emblemText: string;
   emblemBg: string;
   faculties: string[];
+  logoUrl?: string;
 }
 
 export const UZBEKISTAN_UNIVERSITIES: University[] = [
@@ -28,6 +29,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "O‘zMU",
     "emblemBg": "#1E3A8A",
+    "logoUrl": "/resources/universities/ozmu.svg",
     "faculties": [
       "Fizika fakulteti",
       "Matematika fakulteti",
@@ -62,6 +64,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0284C7",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kiberxavfsizlik fakulteti",
       "Dasturiy injiniring fakulteti",
@@ -90,6 +93,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0369A1",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kompyuter injiniringi fakulteti",
       "Dasturiy injiniring va axborot xavfsizligi fakulteti",
@@ -111,6 +115,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0369A1",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kompyuter injiniringi fakulteti",
       "Dasturiy injiniring fakulteti",
@@ -132,6 +137,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0369A1",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kompyuter injiniringi fakulteti",
       "Dasturiy injiniring va telekommunikatsiya fakulteti",
@@ -152,6 +158,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0369A1",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kompyuter injiniringi fakulteti",
       "Dasturiy injiniring fakulteti",
@@ -172,6 +179,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TATU",
     "emblemBg": "#0369A1",
+    "logoUrl": "/resources/universities/tatu.png",
     "faculties": [
       "Kompyuter injiniringi fakulteti",
       "Dasturiy injiniring va telekommunikatsiya fakulteti",
@@ -194,6 +202,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDTU",
     "emblemBg": "#B45309",
+    "logoUrl": "/resources/universities/tdtu.png",
     "faculties": [
       "Mashinasozlik fakulteti",
       "Energetika fakulteti",
@@ -220,6 +229,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDTU",
     "emblemBg": "#9A3412",
+    "logoUrl": "/resources/universities/tdtu.png",
     "faculties": [
       "Konchilik ishi fakulteti",
       "Metallurgiya va kimyoviy texnologiya fakulteti",
@@ -239,6 +249,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDTU",
     "emblemBg": "#9A3412",
+    "logoUrl": "/resources/universities/tdtu.png",
     "faculties": [
       "Elektronika va avtomatika fakulteti",
       "Mashinasozlik texnologiyalari fakulteti"
@@ -261,6 +272,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDIU",
     "emblemBg": "#047857",
+    "logoUrl": "/resources/universities/tdiu.png",
     "faculties": [
       "Moliya va bank ishi fakulteti",
       "Buxgalteriya hisobi va audit fakulteti",
@@ -287,6 +299,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TIAM",
     "emblemBg": "#15803D",
+    "logoUrl": "/resources/universities/tiiame.png",
     "faculties": [
       "Gidromelioratsiya fakulteti",
       "Gidrotexnika qurilishi fakulteti",
@@ -310,6 +323,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TIAM",
     "emblemBg": "#166534",
+    "logoUrl": "/resources/universities/tiiame.png",
     "faculties": [
       "Gidromelioratsiya va meliorativ gidrogeologiya fakulteti",
       "Yer resurslari va qishloq xo‘jaligini mexanizatsiyalash fakulteti"
@@ -328,6 +342,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TIAM",
     "emblemBg": "#166534",
+    "logoUrl": "/resources/universities/tiiame.png",
     "faculties": [
       "Gidrotexnika inshootlari va melioratsiya fakulteti",
       "Qishloq xo‘jaligi texnikasi va agrotexnologiyalar fakulteti"
@@ -347,6 +362,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDTrU",
     "emblemBg": "#0E7490",
+    "logoUrl": "/resources/universities/tdtru.png",
     "faculties": [
       "Avtomobil transporti muhandisligi fakulteti",
       "Temir yo‘l transporti muhandisligi fakulteti",
@@ -429,6 +445,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TAQU",
     "emblemBg": "#C2410C",
+    "logoUrl": "/resources/universities/taqu.png",
     "faculties": [
       "Arxitektura fakulteti",
       "Bino va inshootlar qurilishi fakulteti",
@@ -451,6 +468,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDYU",
     "emblemBg": "#1E293B",
+    "logoUrl": "/resources/universities/tdyu.png",
     "faculties": [
       "Ommaviy huquq fakulteti",
       "Xususiy huquq fakulteti",
@@ -473,6 +491,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "JIDU",
     "emblemBg": "#1E40AF",
+    "logoUrl": "/resources/universities/jidu.png",
     "faculties": [
       "Xalqaro munosabatlar fakulteti",
       "Xalqaro iqtisodiyot va menejment fakulteti",
@@ -493,6 +512,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TMA",
     "emblemBg": "#059669",
+    "logoUrl": "/resources/universities/tma.png",
     "faculties": [
       "1-Davolash fakulteti",
       "2-Davolash fakulteti",
@@ -515,6 +535,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TMA",
     "emblemBg": "#047857",
+    "logoUrl": "/resources/universities/tma.png",
     "faculties": [
       "Davolash ishi fakulteti",
       "Pediatriya va oliy hamshiralik fakulteti"
@@ -533,6 +554,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TMA",
     "emblemBg": "#047857",
+    "logoUrl": "/resources/universities/tma.png",
     "faculties": [
       "Davolash ishi fakulteti",
       "Pediatriya va profilaktika fakulteti"
@@ -613,6 +635,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "TDPU",
     "emblemBg": "#6D28D9",
+    "logoUrl": "/resources/universities/tdpu.png",
     "faculties": [
       "Fizika va astronomiya fakulteti",
       "Matematika va informatika fakulteti",
@@ -911,6 +934,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "NUU",
     "emblemBg": "#4338CA",
+    "logoUrl": "/resources/universities/new-uzb.svg",
     "faculties": [
       "Kompyuter fanlari va Sun'iy intellekt maktabi",
       "Muhandislik maktabi (Mechanical & Chemical Engineering)",
@@ -932,6 +956,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "SamDU",
     "emblemBg": "#0F766E",
+    "logoUrl": "/resources/universities/samdu.png",
     "faculties": [
       "Fizika fakulteti",
       "Matematika fakulteti",
@@ -959,6 +984,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "SamDU",
     "emblemBg": "#115E59",
+    "logoUrl": "/resources/universities/samdu.png",
     "faculties": [
       "Aniq va tabiiy fanlar fakulteti",
       "Gumanitar fanlar va pedagogika fakulteti"
@@ -977,6 +1003,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "SamDU",
     "emblemBg": "#115E59",
+    "logoUrl": "/resources/universities/samdu.png",
     "faculties": [
       "Iqtisodiyot va pedagogika fakulteti",
       "Raqamli texnologiyalar va tillar fakulteti"
@@ -1217,6 +1244,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "AndDU",
     "emblemBg": "#1D4ED8",
+    "logoUrl": "/resources/universities/anddu.png",
     "faculties": [
       "Fizika-matematika fakulteti",
       "Axborot texnologiyalari va intellektual tizimlar fakulteti",
@@ -1322,6 +1350,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "NamDU",
     "emblemBg": "#1E40AF",
+    "logoUrl": "/resources/universities/namdu.png",
     "faculties": [
       "Fizika va matematika fakulteti",
       "Axborot texnologiyalari fakulteti",
@@ -1445,6 +1474,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "BuxDU",
     "emblemBg": "#0284C7",
+    "logoUrl": "/resources/universities/buxdu.svg",
     "faculties": [
       "Fizika-matematika fakulteti",
       "Axborot texnologiyalari fakulteti",
@@ -1511,6 +1541,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "BDPI",
     "emblemBg": "#4F46E5",
+    "logoUrl": "/resources/universities/buxdu.svg",
     "faculties": [
       "Tabiiy va aniq fanlar fakulteti",
       "Gumanitar fanlar fakulteti",
@@ -1960,6 +1991,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Davlat OTM",
     "emblemText": "QDU",
     "emblemBg": "#0284C7",
+    "logoUrl": "/resources/universities/qdu.png",
     "faculties": [
       "Fizika fakulteti",
       "Matematika va amaliy informatika fakulteti",
@@ -2051,6 +2083,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "TTPU",
     "emblemBg": "#991B1B",
+    "logoUrl": "/resources/universities/ttpu.png",
     "faculties": [
       "Mashinasozlik va aerokosmik injiniring fakulteti",
       "Axborot texnologiyalari va dasturlash fakulteti",
@@ -2071,6 +2104,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "IUT",
     "emblemBg": "#1D4ED8",
+    "logoUrl": "/resources/universities/inha.png",
     "faculties": [
       "Kompyuter va dasturiy injiniring maktabi (SOCIE)",
       "Logistika va biznes boshqaruvi maktabi (SBL)"
@@ -2089,6 +2123,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "WIUT",
     "emblemBg": "#3730A3",
+    "logoUrl": "/resources/universities/wiut.svg",
     "faculties": [
       "Axborot tizimlari va raqamli texnologiyalar (BIS)",
       "Iqtisodiyot va moliya fakulteti",
@@ -2109,6 +2144,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "AMTY",
     "emblemBg": "#EAB308",
+    "logoUrl": "/resources/universities/amity.png",
     "faculties": [
       "Axborot texnologiyalari va kompyuter injiniringi maktabi",
       "Muhandislik va texnologiyalar maktabi",
@@ -2150,6 +2186,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "MDIS",
     "emblemBg": "#831843",
+    "logoUrl": "/resources/universities/mdis.png",
     "faculties": [
       "Biznes va boshqaruv maktabi",
       "Bank ishi va moliya fakulteti",
@@ -2170,6 +2207,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Xalqaro / Filial",
     "emblemText": "WU",
     "emblemBg": "#1E40AF",
+    "logoUrl": "/resources/universities/webster.png",
     "faculties": [
       "Kompyuter fanlari va axborot texnologiyalari (George Herbert Walker School)",
       "Biznes boshqaruvi va moliya fakulteti",
@@ -2425,6 +2463,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Nodavlat / Xususiy",
     "emblemText": "CAU",
     "emblemBg": "#0F766E",
+    "logoUrl": "/resources/universities/cau.svg",
     "faculties": [
       "School of Engineering & Computer Science",
       "School of Medicine (Tibbiyot fakulteti)",
@@ -2449,6 +2488,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Nodavlat / Xususiy",
     "emblemText": "KIUT",
     "emblemBg": "#1E3A8A",
+    "logoUrl": "/resources/universities/kiut.svg",
     "faculties": [
       "Dasturiy injiniring va axborot tizimlari fakulteti",
       "Arxitektura va shaharsozlik fakulteti",
@@ -2476,6 +2516,7 @@ export const UZBEKISTAN_UNIVERSITIES: University[] = [
     "category": "Nodavlat / Xususiy",
     "emblemText": "PDP",
     "emblemBg": "#059669",
+    "logoUrl": "/resources/universities/pdp.svg",
     "faculties": [
       "School of Software Engineering (Dasturiy injiniring)",
       "School of Artificial Intelligence and Data Science",

@@ -104,12 +104,22 @@ export function UniversitySelect({
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
             {selectedUni ? (
-              <div
-                className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold text-white shadow-2xs"
-                style={{ backgroundColor: selectedUni.emblemBg }}
-              >
-                {selectedUni.emblemText.slice(0, 3)}
-              </div>
+              selectedUni.logoUrl ? (
+                <div className="w-5 h-5 rounded overflow-hidden flex items-center justify-center bg-white border border-slate-200 shadow-2xs">
+                  <img
+                    src={selectedUni.logoUrl}
+                    alt={selectedUni.shortName}
+                    className="w-full h-full object-contain p-0.5"
+                  />
+                </div>
+              ) : (
+                <div
+                  className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold text-white shadow-2xs"
+                  style={{ backgroundColor: selectedUni.emblemBg }}
+                >
+                  {selectedUni.emblemText.slice(0, 3)}
+                </div>
+              )
             ) : (
               <Search className="h-4 w-4" />
             )}
@@ -171,13 +181,24 @@ export function UniversitySelect({
                       isSelected ? "bg-blue-50 font-medium" : "bg-white"
                     }`}
                   >
-                    {/* Emblem Badge */}
-                    <div
-                      className="w-8 h-8 rounded-md flex shrink-0 items-center justify-center text-[10px] font-bold text-white shadow-xs"
-                      style={{ backgroundColor: u.emblemBg }}
-                    >
-                      {u.emblemText.slice(0, 4)}
-                    </div>
+                    {/* Official University Logo or Styled Emblem Badge */}
+                    {u.logoUrl ? (
+                      <div className="w-8 h-8 rounded-md flex shrink-0 items-center justify-center bg-white border border-slate-200/90 shadow-xs p-0.5 overflow-hidden">
+                        <img
+                          src={u.logoUrl}
+                          alt={u.name}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="w-8 h-8 rounded-md flex shrink-0 items-center justify-center text-[10px] font-bold text-white shadow-xs"
+                        style={{ backgroundColor: u.emblemBg }}
+                      >
+                        {u.emblemText.slice(0, 4)}
+                      </div>
+                    )}
 
                     {/* Meta info */}
                     <div className="min-w-0 flex-1">
