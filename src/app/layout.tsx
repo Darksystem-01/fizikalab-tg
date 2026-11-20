@@ -37,13 +37,19 @@ export default function RootLayout({
         />
         <Script
           id="telegram-webapp-init"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {
                 if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
                   window.Telegram.WebApp.ready();
                   window.Telegram.WebApp.expand();
+                  if (window.Telegram.WebApp.setBackgroundColor) {
+                    window.Telegram.WebApp.setBackgroundColor('#ffffff');
+                  }
+                  if (window.Telegram.WebApp.setHeaderColor) {
+                    window.Telegram.WebApp.setHeaderColor('#ffffff');
+                  }
                 }
               } catch (e) {}
             `,

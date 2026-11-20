@@ -786,8 +786,12 @@ Platformani bevosita Telegram ichida to‘liq ochishingiz mumkin:
         inline_keyboard: [
           [
             {
-              text: "🚀 FizikaLab WebApp-ni Ochish",
+              text: "🚀 FizikaLab WebApp",
               web_app: { url: appUrl },
+            },
+            {
+              text: "🌐 Brauzerda Ochish",
+              url: appUrl,
             },
           ],
           [
@@ -1135,8 +1139,12 @@ Laboratoriya hisobotlari, o‘lchov xatoliklari yoki texnik muammolar bo‘yicha
         inline_keyboard: [
           [
             {
-              text: "🚀 FizikaLab WebApp-ni Ochish",
+              text: "🚀 FizikaLab WebApp",
               web_app: { url: appUrl },
+            },
+            {
+              text: "🌐 Brauzerda Ochish",
+              url: appUrl,
             },
           ],
         ],

@@ -306,6 +306,35 @@ export function LoginPortal() {
     };
   }, []);
 
+  // Telegram WebApp (Mini App) ichida ochilganda avtomatik avtorizatsiya qilish
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const tg = window.Telegram?.WebApp;
+    if (tg?.initData && typeof tg.initData === "string" && tg.initData.length > 10) {
+      setLoading(true);
+      fetch("/api/auth/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ initData: tg.initData }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.user) {
+            const role = data.user.role;
+            let target = "/labs/metrology";
+            if (role === "admin" || role === "darksystem") target = "/darksystem";
+            else if (role === "teacher") target = "/teacher";
+            window.location.assign(target);
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
+  }, []);
+
   async function handleTelegramButtonClick() {
     setLoading(true);
     setError(null);
@@ -1144,11 +1173,12 @@ export function LoginPortal() {
               )}
 
               {/* Fallback Option */}
-              <div className="pt-0.5">
+              <div className="pt-0.5 space-y-1">
                 <button
                   type="button"
                   onClick={handleTelegramOAuthPopup}
                   className="text-[11px] text-slate-400 hover:text-slate-600 hover:underline cursor-pointer"
+                  title="Agar popupda 'Bot domain invalid' chiqsa, @BotFather da /setdomain orqali fizika-lab-eta.vercel.app ni kiritish kerak"
                 >
                   Eski Telegram OAuth popup oynasini ochish
                 </button>
