@@ -363,8 +363,17 @@ ${apparatusList}
 💡 <i>Ushbu tajribani YouTube yoki Google Drive orqali tomosha qilishingiz, yoki FizikaLab WebApp-da virtual simulyator bilan parallel bajarishingiz mumkin:</i>
 `.trim();
 
+  const uzTrack = vid.tracks?.uz;
+  const enTrack = vid.tracks?.en;
+  const uzYtUrl = uzTrack?.youtubeId ? `https://www.youtube.com/watch?v=${uzTrack.youtubeId}` : youtubeUrl;
+  const enYtUrl = enTrack?.youtubeId ? `https://www.youtube.com/watch?v=${enTrack.youtubeId}` : youtubeUrl;
+
   const replyMarkup = {
     inline_keyboard: [
+      [
+        { text: "🇺🇿 O‘zbekcha Dars", url: uzYtUrl },
+        { text: "🇬🇧 English Lab (MIT)", url: enYtUrl },
+      ],
       [
         { text: "🎥 YouTube orqali", url: youtubeUrl },
         { text: "📁 Google Drive orqali", url: driveViewUrl },

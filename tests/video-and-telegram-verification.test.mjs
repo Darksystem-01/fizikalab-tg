@@ -576,3 +576,40 @@ test("VT-12: Telegram Callback Query Login Confirmation (confirm_login_<token>),
   assert.equal(expiredWebhookRes.status, 200, "Expired token webhook must be acknowledged gracefully");
 });
 
+test("VT-13: Dual-Track (Uzbek OTM & English MIT/Pasco) Video Catalog and Google Drive verification", () => {
+  const { VIDEO_LABS_CATALOG, getVideoLabByKey, getVideoLabTrack } = videoLabsModule;
+  assert.equal(VIDEO_LABS_CATALOG.length, 8, "Must contain all 8 disciplines");
+
+  for (const lab of VIDEO_LABS_CATALOG) {
+    assert.ok(lab.tracks, `Lab '${lab.labKey}' must contain dual tracks`);
+    assert.ok(lab.tracks.uz, `Lab '${lab.labKey}' must have Uzbek track`);
+    assert.ok(lab.tracks.en, `Lab '${lab.labKey}' must have English track`);
+
+    // Uzbek track checks
+    const uz = lab.tracks.uz;
+    assert.equal(uz.language, "uz");
+    assert.ok(uz.title && uz.title.length > 5, `Uzbek track title must exist for ${lab.labKey}`);
+    assert.ok(uz.institution && uz.institution.length > 3, `Uzbek institution must exist for ${lab.labKey}`);
+    assert.ok(uz.youtubeId && uz.youtubeId.length > 5, `Uzbek YouTube ID must exist for ${lab.labKey}`);
+    assert.ok(uz.googleDrivePreviewUrl.includes("drive.google.com"), `Uzbek Drive preview must exist for ${lab.labKey}`);
+    assert.ok(uz.timestamps.length >= 4, `Uzbek track must have >= 4 timestamps for ${lab.labKey}`);
+
+    // English track checks
+    const en = lab.tracks.en;
+    assert.equal(en.language, "en");
+    assert.ok(en.title && en.title.length > 5, `English track title must exist for ${lab.labKey}`);
+    assert.ok(en.institution && en.institution.length > 3, `English institution must exist for ${lab.labKey}`);
+    assert.ok(en.youtubeId && en.youtubeId.length > 5, `English YouTube ID must exist for ${lab.labKey}`);
+    assert.ok(en.googleDrivePreviewUrl.includes("drive.google.com"), `English Drive preview must exist for ${lab.labKey}`);
+    assert.ok(en.timestamps.length >= 4, `English track must have >= 4 timestamps for ${lab.labKey}`);
+
+    // Helper function getVideoLabTrack
+    if (getVideoLabTrack) {
+      const helperUz = getVideoLabTrack(lab, "uz");
+      assert.equal(helperUz.language, "uz");
+      const helperEn = getVideoLabTrack(lab, "en");
+      assert.equal(helperEn.language, "en");
+    }
+  }
+});
+

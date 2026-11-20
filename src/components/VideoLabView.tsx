@@ -184,6 +184,15 @@ export function VideoLabView() {
                       </span>
                     )}
                   </div>
+
+                  <div className="mt-3 flex items-center justify-between text-[10px]">
+                    <span className="flex items-center gap-1 font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">
+                      📁 Drive + 🔴 YouTube
+                    </span>
+                    <span className="font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-200">
+                      🇺🇿 UZB + 🇬🇧 ENG
+                    </span>
+                  </div>
                 </div>
               </div>
 

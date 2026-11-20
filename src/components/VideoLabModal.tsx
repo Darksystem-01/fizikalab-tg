@@ -37,6 +37,7 @@ export function VideoLabModal({
   const [activeTab, setActiveTab] = useState<
     "stages" | "apparatus" | "formulas" | "comparison" | "checklist"
   >("stages");
+  const [selectedLang, setSelectedLang] = useState<"uz" | "en">("uz");
   const [activeSeconds, setActiveSeconds] = useState<number>(0);
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [useGoogleDrive, setUseGoogleDrive] = useState<boolean>(false);
@@ -44,6 +45,22 @@ export function VideoLabModal({
   const [showDriveInput, setShowDriveInput] = useState<boolean>(false);
 
   if (!isOpen) return null;
+
+  const activeTrack = video.tracks ? video.tracks[selectedLang] : null;
+  const currentTitle =
+    selectedLang === "en"
+      ? activeTrack?.title || video.titleEn
+      : activeTrack?.title || video.titleUz;
+  const currentInstitution =
+    activeTrack?.institution || (selectedLang === "en" ? "MIT / PASCO Physics" : "TATU Fizika kafedrasi");
+  const currentDuration = activeTrack?.duration || video.duration;
+  const currentYoutubeId = activeTrack?.youtubeId || video.youtubeId;
+  const currentDriveUrl = activeTrack?.googleDrivePreviewUrl || video.googleDrivePreviewUrl || "";
+  const currentTimestamps =
+    activeTrack?.timestamps && activeTrack.timestamps.length > 0
+      ? activeTrack.timestamps
+      : video.timestamps;
+  const currentSummary = activeTrack?.summary || video.summaryUz;
 
   function parseDrivePreview(urlOrId: string): string | null {
     if (!urlOrId) return null;
@@ -57,12 +74,12 @@ export function VideoLabModal({
     return urlOrId.startsWith("http") ? urlOrId : null;
   }
 
-  const drivePreview = parseDrivePreview(customDriveUrl || video.googleDrivePreviewUrl || "");
+  const drivePreview = parseDrivePreview(customDriveUrl || currentDriveUrl || "");
 
   const currentEmbedUrl =
     useGoogleDrive && drivePreview
       ? drivePreview
-      : `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&enablejsapi=1&rel=0&modestbranding=1&start=${activeSeconds}`;
+      : `https://www.youtube-nocookie.com/embed/${currentYoutubeId}?autoplay=1&enablejsapi=1&rel=0&modestbranding=1&start=${activeSeconds}`;
 
   const toggleCheck = (idx: number) => {
     setCheckedItems((prev) => ({ ...prev, [idx]: !prev[idx] }));
@@ -86,34 +103,81 @@ export function VideoLabModal({
                   {video.discipline}
                 </span>
                 <span className="flex items-center gap-1 text-[11px] text-slate-400">
-                  <Clock className="h-3 w-3" /> {video.duration}
+                  <Clock className="h-3 w-3" /> {currentDuration}
+                </span>
+                <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-300 border border-slate-700 hidden md:inline-block">
+                  {currentInstitution}
                 </span>
               </div>
               <h2 className="line-clamp-1 text-sm font-bold text-white sm:text-base">
-                {video.titleUz}
+                {currentTitle}
               </h2>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (!useGoogleDrive && !drivePreview) {
-                  setShowDriveInput(true);
-                } else {
-                  setUseGoogleDrive((v) => !v);
-                }
-              }}
-              className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition inline-flex items-center gap-1.5 border ${
-                useGoogleDrive
-                  ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300"
-                  : "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
-              title="Google Drive / YouTube o'rtasida almashtirish"
-            >
-              <span>{useGoogleDrive ? "📁 Drive Rejimi" : "🎥 YouTube Rejimi"}</span>
-            </button>
+            {/* Dual Language Switcher */}
+            <div className="flex items-center rounded-lg bg-slate-950 p-0.5 border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setSelectedLang("uz")}
+                className={`rounded-md px-2 py-1 text-[11px] font-semibold transition ${
+                  selectedLang === "uz"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "text-slate-400 hover:text-white"
+                }`}
+                title="O‘zbekcha OTM tajriba stendi"
+              >
+                🇺🇿 O‘zbek
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedLang("en")}
+                className={`rounded-md px-2 py-1 text-[11px] font-semibold transition ${
+                  selectedLang === "en"
+                    ? "bg-indigo-600 text-white shadow-xs"
+                    : "text-slate-400 hover:text-white"
+                }`}
+                title="English (PASCO / MIT lab experiment)"
+              >
+                🇬🇧 English
+              </button>
+            </div>
+
+            {/* Source Toggle: YouTube vs Google Drive */}
+            <div className="flex items-center rounded-lg bg-slate-950 p-0.5 border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setUseGoogleDrive(false)}
+                className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition flex items-center gap-1 ${
+                  !useGoogleDrive
+                    ? "bg-red-600 text-white shadow-xs"
+                    : "text-slate-400 hover:text-white"
+                }`}
+                title="YouTube HD formatida ko‘rish"
+              >
+                <Film className="h-3 w-3" />
+                <span className="hidden sm:inline">YouTube</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!drivePreview) {
+                    setShowDriveInput(true);
+                  }
+                  setUseGoogleDrive(true);
+                }}
+                className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition flex items-center gap-1 ${
+                  useGoogleDrive
+                    ? "bg-emerald-600 text-white shadow-xs"
+                    : "text-slate-400 hover:text-white"
+                }`}
+                title="Google Drive to‘g‘ridan-to‘g‘ri pleyerida ko‘rish"
+              >
+                <ExternalLink className="h-3 w-3" />
+                <span>Drive</span>
+              </button>
+            </div>
 
             <button
               type="button"
@@ -189,7 +253,7 @@ export function VideoLabModal({
               <iframe
                 key={`${currentEmbedUrl}-${activeSeconds}`}
                 src={currentEmbedUrl}
-                title={video.titleUz}
+                title={currentTitle}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 className="h-full w-full border-0"
@@ -207,7 +271,7 @@ export function VideoLabModal({
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {video.timestamps.map((ts, idx) => {
+                {currentTimestamps.map((ts, idx) => {
                   const isSelected = activeSeconds === ts.seconds;
                   return (
                     <button
@@ -311,7 +375,7 @@ export function VideoLabModal({
                   <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                     Eksperiment Xronologiyasi & Asosiy Kuzatishlar
                   </div>
-                  {video.timestamps.map((ts, idx) => (
+                  {currentTimestamps.map((ts, idx) => (
                     <div
                       key={idx}
                       onClick={() => setActiveSeconds(ts.seconds)}
