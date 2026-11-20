@@ -229,6 +229,8 @@ async function getAdapter(): Promise<DbAdapter> {
     fs.mkdirSync(path.dirname(dbFile), { recursive: true });
     sqliteDb = new DatabaseSync(dbFile);
     sqliteDb.exec("PRAGMA foreign_keys = ON;");
+    sqliteDb.exec("PRAGMA journal_mode = WAL;");
+    sqliteDb.exec("PRAGMA busy_timeout = 10000;");
   }
 
   const db = sqliteDb;

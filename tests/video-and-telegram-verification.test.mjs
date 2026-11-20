@@ -91,6 +91,9 @@ test.after(() => {
       // ignore
     }
   }
+  try {
+    execSync("fuser -k 3197/tcp 2>/dev/null || true");
+  } catch {}
 });
 
 test("VT-1: Video Labs Catalog schema and all 8 disciplines completeness with Google Drive", () => {
@@ -412,4 +415,91 @@ test("VT-9: Telegram Deep-Link Login Token Generation, Bot Confirmation & Automa
   assert.equal(verifiedJson.user?.fullName, "Sherzod Olimov");
   const cookie = extractSessionCookie(verifiedRes);
   assert.ok(cookie.includes("fizikalab_session="), "Must set session cookie for authenticated user");
+});
+
+test("VT-10: Dedicated /api/auth/telegram/session-token POST generation, polling pending, webhook /start login_<token>, and session issuance", async (t) => {
+  if (!baseUrl) {
+    t.skip("HTTP server is not running; skipping live endpoint test");
+    return;
+  }
+
+  // 1. Generate 32-byte secure session token via POST /api/auth/telegram/session-token
+  const postRes = await fetch(`${baseUrl}/api/auth/telegram/session-token`, {
+    method: "POST",
+  });
+  assert.equal(postRes.status, 200, "Must return HTTP 200 on token generation");
+  const postData = await postRes.json();
+  assert.equal(postData.ok, true);
+  assert.ok(postData.token, "Must return token string");
+  assert.equal(postData.token.length, 64, "Token must be 32 bytes (64 hex characters)");
+  assert.ok(postData.deepLink, "Must return deepLink");
+  assert.ok(postData.deepLink.includes(`start=login_${postData.token}`), "Deep link must include login_<token>");
+
+  // 2. Poll GET /api/auth/telegram/session-token?token=... before verification (pending status)
+  const poll1Res = await fetch(`${baseUrl}/api/auth/telegram/session-token?token=${postData.token}`);
+  assert.equal(poll1Res.status, 200);
+  const poll1Data = await poll1Res.json();
+  assert.equal(poll1Data.ok, true);
+  assert.equal(poll1Data.status, "pending", "Status must be pending before user authorizes in bot");
+
+  // 3. User opens Telegram bot with /start login_<token>
+  const testUserId = 88990011;
+  const webhookRes = await fetch(`${baseUrl}/api/telegram/webhook`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      update_id: 999992,
+      message: {
+        message_id: 102,
+        from: {
+          id: testUserId,
+          first_name: "Farrux",
+          last_name: "Turgunov",
+          username: "farrux_phys_tuit",
+        },
+        chat: { id: testUserId, type: "private" },
+        date: Math.floor(Date.now() / 1000),
+        text: `/start login_${postData.token}`,
+      },
+    }),
+  });
+  assert.equal(webhookRes.status, 200, "Webhook must acknowledge update with HTTP 200");
+
+  // 4. Web client polls GET /api/auth/telegram/session-token?token=... again (now verified)
+  const poll2Res = await fetch(`${baseUrl}/api/auth/telegram/session-token?token=${postData.token}`);
+  assert.equal(poll2Res.status, 200);
+  const poll2Data = await poll2Res.json();
+  assert.equal(poll2Data.ok, true);
+  assert.equal(poll2Data.status, "verified", "Status must become verified after Telegram webhook authorization");
+  assert.ok(poll2Data.user, "Must return user object");
+  assert.equal(poll2Data.user.fullName, "Farrux Turgunov");
+  assert.equal(poll2Data.redirectUrl, "/labs/metrology", "Must provide redirect target");
+
+  const sessionCookie = extractSessionCookie(poll2Res);
+  assert.ok(sessionCookie.includes("fizikalab_session="), "Must issue secure fizikalab_session cookie");
+
+  // 5. Replay attack prevention: second verification poll on claimed token must fail
+  const replayRes = await fetch(`${baseUrl}/api/auth/telegram/session-token?token=${postData.token}`);
+  assert.equal(replayRes.status, 400, "Claimed token must not be reusable and must reject with 400");
+  const replayData = await replayRes.json();
+  assert.equal(replayData.ok, false);
+  assert.equal(replayData.status, "expired");
+});
+
+test("VT-11: Rejection of invalid, missing, and non-existent tokens on /api/auth/telegram/session-token", async (t) => {
+  if (!baseUrl) {
+    t.skip("HTTP server is not running; skipping live endpoint test");
+    return;
+  }
+
+  // Missing token
+  const noTokenRes = await fetch(`${baseUrl}/api/auth/telegram/session-token`);
+  assert.equal(noTokenRes.status, 400, "Must return 400 when token query is missing");
+
+  // Non-existent token
+  const fakeTokenRes = await fetch(`${baseUrl}/api/auth/telegram/session-token?token=non_existent_token_1234567890`);
+  assert.equal(fakeTokenRes.status, 400, "Must return 400 for non-existent token");
+  const fakeData = await fakeTokenRes.json();
+  assert.equal(fakeData.ok, false);
+  assert.equal(fakeData.status, "expired");
 });

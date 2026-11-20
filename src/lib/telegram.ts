@@ -1096,11 +1096,3 @@ Laboratoriya hisobotlari, o‘lchov xatoliklari yoki texnik muammolar bo‘yicha
     return;
   }
 }
-
-export {
-  createTelegramLoginToken,
-  createTelegramLoginSession,
-  confirmTelegramLoginToken,
-  checkTelegramLoginToken,
-  checkTelegramLoginTokenAsync,
-} from "./telegramLoginTokens";

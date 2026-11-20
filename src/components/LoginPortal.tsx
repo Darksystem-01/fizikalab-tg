@@ -19,6 +19,9 @@ import {
   X,
   PlayCircle,
   ExternalLink,
+  QrCode,
+  RefreshCw,
+  Smartphone,
 } from "lucide-react";
 
 function GoogleIcon({ className = "h-5 w-5" }: { className?: string }) {
@@ -99,28 +102,26 @@ export function LoginPortal() {
     token: string;
     botUrl: string;
     verified: boolean;
+    expired?: boolean;
   } | null>(null);
 
-  // Real-time Telegram Deep-Link Login Poller
+  // Real-time Telegram Deep-Link Login Poller (1.5s interval)
   useEffect(() => {
-    if (!telegramAuth || telegramAuth.verified) return;
+    if (!telegramAuth || telegramAuth.verified || telegramAuth.expired) return;
 
     const timer = setInterval(async () => {
       try {
-        const res = await fetch("/api/auth/telegram", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "check_token", token: telegramAuth.token }),
-        });
+        const res = await fetch(
+          `/api/auth/telegram/session-token?token=${encodeURIComponent(telegramAuth.token)}`
+        );
         const data = await res.json();
-        if (data.verified && data.user) {
+        if (data.status === "verified") {
           setTelegramAuth((prev) => (prev ? { ...prev, verified: true } : null));
           clearInterval(timer);
-          const role = data.user.role;
-          let target = "/labs/metrology";
-          if (role === "admin" || role === "darksystem") target = "/darksystem";
-          else if (role === "teacher") target = "/teacher";
-          window.location.assign(target);
+          window.location.assign(data.redirectUrl || "/labs/metrology");
+        } else if (data.status === "expired") {
+          setTelegramAuth((prev) => (prev ? { ...prev, expired: true } : null));
+          clearInterval(timer);
         }
       } catch {}
     }, 1500);
@@ -331,30 +332,38 @@ export function LoginPortal() {
       }
     }
 
-    // 2. Oddiy veb-brauzerda: Telegram Bot orqali real vaqt parolsiz kirish (Deep-Link token)
+    // 2. Oddiy veb-brauzerda: Telegram Bot orqali real vaqt parolsiz kirish (Deep-Link session token)
     try {
-      const res = await fetch("/api/auth/telegram", {
+      const res = await fetch("/api/auth/telegram/session-token", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "create_token" }),
       });
       const data = await res.json();
-      if (data.ok && data.token && data.botUrl) {
+      if (data.ok && data.token && data.deepLink) {
         setTelegramAuth({
           token: data.token,
-          botUrl: data.botUrl,
+          botUrl: data.deepLink,
           verified: false,
+          expired: false,
         });
-        // Botni alohida oynada ochish
-        window.open(data.botUrl, "_blank");
       } else {
-        window.location.assign("https://t.me/Fizikatuitbot?start=login");
+        setError(data.error || "Telegram avtorizatsiyasini yaratishda xatolik yuz berdi.");
       }
     } catch {
-      window.location.assign("https://t.me/Fizikatuitbot?start=login");
+      setError("Telegram serveriga ulanishda xatolik yuz berdi.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleTelegramOAuthPopup() {
+    if (typeof window === "undefined") return;
+    const origin = window.location.origin;
+    const authUrl = `https://oauth.telegram.org/auth?bot_id=9257020130&origin=${encodeURIComponent(
+      origin
+    )}&embed=1&request_access=write&return_to=${encodeURIComponent(
+      `${origin}/api/auth/telegram`
+    )}`;
+    window.open(authUrl, "telegram_oauth", "width=550,height=470");
   }
 
   async function handleCompleteGoogleProfile(e: React.FormEvent) {
@@ -1038,59 +1047,108 @@ export function LoginPortal() {
       )}
       {/* Telegram Deep-Link Login Modal */}
       {telegramAuth && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl space-y-5 border border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-3xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-slate-100">
+            {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5 font-bold text-slate-900 text-lg">
-                <div className="h-8 w-8 rounded-xl bg-sky-50 flex items-center justify-center">
+              <div className="flex items-center gap-2.5">
+                <div className="h-9 w-9 rounded-xl bg-sky-50 flex items-center justify-center">
                   <TelegramIcon className="h-5 w-5 text-[#24A1DE]" />
                 </div>
-                <span>Telegram orqali kirish</span>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base leading-tight">Telegram orqali kirish</h3>
+                  <p className="text-[11px] text-slate-500">Parolsiz, 1-klikda va xavfsiz autentifikatsiya</p>
+                </div>
               </div>
               <button
                 type="button"
                 onClick={() => setTelegramAuth(null)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1 rounded-lg"
+                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1.5 rounded-lg hover:bg-slate-100 transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="text-center space-y-4">
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Parolsiz xavfsiz kirish uchun quyidagi tugma orqali rasmiy Telegram botimizga o‘ting va <b>«Boshlash» (Start)</b> tugmasini bosing:
-              </p>
+            {/* Modal Body */}
+            <div className="space-y-4 text-center">
+              {/* QR Code Container */}
+              <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                <div className="relative flex items-center justify-center bg-white p-2.5 rounded-xl shadow-xs border border-slate-200">
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(telegramAuth.botUrl)}`}
+                    alt="Telegram Login QR Code"
+                    className="h-36 w-36 rounded-lg object-contain"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="rounded-full bg-white p-1 shadow-md border border-slate-100">
+                      <TelegramIcon className="h-5 w-5 text-[#24A1DE]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-slate-500 font-medium">
+                  <Smartphone className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Telefon kamerangiz bilan QR kodni skanerlang</span>
+                </div>
+              </div>
 
-              <div className="py-2">
+              {/* Direct Deep-Link Button */}
+              <div>
                 <a
                   href={telegramAuth.botUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#24A1DE] hover:bg-[#1E88C7] text-white py-3.5 px-4 font-semibold text-sm shadow-md transition hover:shadow-lg active:scale-98"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#24A1DE] hover:bg-[#1E88C7] text-white py-3 px-4 font-semibold text-sm shadow-md transition hover:shadow-lg active:scale-98"
                 >
                   <TelegramIcon className="h-5 w-5" />
-                  <span>@Fizikatuitbot-da tasdiqlash</span>
-                  <ExternalLink className="h-4 w-4" />
+                  <span>Telegram orqali tasdiqlash (@Fizikatuitbot)</span>
+                  <ExternalLink className="h-4 w-4 opacity-80" />
                 </a>
               </div>
 
               {/* Real-time Status Card */}
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-xs">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 text-xs">
                 {telegramAuth.verified ? (
                   <div className="flex items-center justify-center gap-2 text-emerald-600 font-bold text-sm">
-                    <CheckCircle2 className="h-5 w-5" />
+                    <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                     <span>Tasdiqlandi! Shaxsiy kabinetingizga yo‘naltirilmoqda...</span>
+                  </div>
+                ) : telegramAuth.expired ? (
+                  <div className="flex flex-col items-center justify-center gap-1.5 text-amber-700">
+                    <span className="font-semibold">⚠️ Kirish tokenining 5 daqiqalik muddati tugadi.</span>
+                    <button
+                      type="button"
+                      onClick={handleTelegramButtonClick}
+                      className="inline-flex items-center gap-1 text-[#0E71EB] hover:underline font-semibold cursor-pointer text-xs mt-1"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      <span>Yangi kod olish</span>
+                    </button>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center gap-2.5 text-slate-600">
-                    <span className="h-4 w-4 border-2 border-slate-300 border-t-[#24A1DE] rounded-full animate-spin" />
-                    <span className="font-medium">Telegram botdan tasdiq kutilmoqda...</span>
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#24A1DE]"></span>
+                    </span>
+                    <span className="font-medium">Telegram botdan tasdiq kutilmoqda... (har 1.5s)</span>
                   </div>
                 )}
               </div>
+
+              {/* Fallback Option */}
+              <div className="pt-0.5">
+                <button
+                  type="button"
+                  onClick={handleTelegramOAuthPopup}
+                  className="text-[11px] text-slate-400 hover:text-slate-600 hover:underline cursor-pointer"
+                >
+                  Eski Telegram OAuth popup oynasini ochish
+                </button>
+              </div>
             </div>
 
-            <div className="flex gap-2 pt-1">
+            {/* Modal Actions */}
+            <div className="pt-1">
               <button
                 type="button"
                 onClick={() => setTelegramAuth(null)}

@@ -47,10 +47,8 @@ export function AntiDevtools() {
       }
     };
 
-    // 3. DevTools open detection & anti-debugging trap
-    let detectorTimer: NodeJS.Timeout | null = null;
+    // 3. Mute console output in production to prevent leaking runtime models or state
     if (typeof window !== "undefined") {
-      // Mute console output in production to prevent leaking runtime models or state
       if (process.env.NODE_ENV === "production") {
         const noop = () => {};
         try {
@@ -60,23 +58,6 @@ export function AntiDevtools() {
           console.table = noop;
         } catch {}
       }
-
-      // Telegram WebApp / embedded iframes operate with different inner/outer window geometry.
-      // Skip the anti-debugger trap when embedded in Telegram or iframes to avoid freezing the UI.
-      const isEmbedded = window.self !== window.top || Boolean((window as any).Telegram?.WebApp);
-
-      if (!isEmbedded) {
-        detectorTimer = setInterval(() => {
-          const threshold = 160;
-          const widthDiff = window.outerWidth - window.innerWidth > threshold;
-          const heightDiff = window.outerHeight - window.innerHeight > threshold;
-          if (widthDiff || heightDiff) {
-            try {
-              Function("debugger")();
-            } catch {}
-          }
-        }, 1000);
-      }
     }
 
     document.addEventListener("contextmenu", handleContextMenu);
@@ -85,7 +66,6 @@ export function AntiDevtools() {
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("keydown", handleKeyDown, true);
-      if (detectorTimer) clearInterval(detectorTimer);
     };
   }, []);
 
