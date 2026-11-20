@@ -5,10 +5,13 @@ import {
   CheckCircle2,
   ClipboardPlus,
   FileCheck2,
+  FileSpreadsheet,
   FolderPlus,
+  Sparkles,
   Trash2,
   Users,
 } from "lucide-react";
+import { SpeedGraderModal, type StudentReportSubmission } from "./SpeedGraderModal";
 
 interface TeacherOverviewData {
   groups: {
@@ -88,6 +91,7 @@ export function TeacherDashboard() {
   // Grading state
   const [grades, setGrades] = useState<Record<number, string>>({});
   const [feedbacks, setFeedbacks] = useState<Record<number, string>>({});
+  const [selectedReportForSpeedGrader, setSelectedReportForSpeedGrader] = useState<StudentReportSubmission | null>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -219,6 +223,27 @@ export function TeacherDashboard() {
     } else {
       const json = await res.json();
       setNotice({ type: "err", text: json.error || "Baholashda xatolik." });
+    }
+  }
+
+  async function submitSpeedGrade(reportId: number, grade: number, feedback: string) {
+    setNotice(null);
+    const res = await fetch(`/api/teacher/reports/${reportId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        grade: grade,
+        status: "graded",
+        adminFeedback: feedback,
+      }),
+    });
+    if (res.ok) {
+      setNotice({ type: "ok", text: `Hisobot #${reportId} SpeedGrader orqali baholandi (${grade}/100).` });
+      setGrades((prev) => ({ ...prev, [reportId]: String(grade) }));
+      setFeedbacks((prev) => ({ ...prev, [reportId]: feedback }));
+      loadData();
+    } else {
+      setNotice({ type: "err", text: "SpeedGrader bahosini saqlashda xatolik yuz berdi." });
     }
   }
 
@@ -600,21 +625,32 @@ export function TeacherDashboard() {
       {tab === "reports" && (
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2 border border-slate-200 bg-white p-3 text-xs">
-            <span className="font-semibold text-slate-800">
-              Guruh bo‘yicha filtrlash:
-            </span>
-            <select
-              value={selectedGroupName}
-              onChange={(e) => setSelectedGroupName(e.target.value)}
-              className="border border-slate-300 bg-white px-2.5 py-1 text-xs"
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-slate-800">
+                Guruh bo‘yicha filtrlash:
+              </span>
+              <select
+                value={selectedGroupName}
+                onChange={(e) => setSelectedGroupName(e.target.value)}
+                className="border border-slate-300 bg-white px-2.5 py-1 text-xs"
+              >
+                <option value="">Barcha guruhlar ({data.reports.length})</option>
+                {data.groups.map((g) => (
+                  <option key={g.id} value={g.name}>
+                    {g.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <a
+              href={`/api/lms/hemis/export?group=${encodeURIComponent(selectedGroupName)}`}
+              download
+              className="flex items-center gap-1.5 rounded-lg border border-emerald-600 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition-colors shadow-2xs"
             >
-              <option value="">Barcha guruhlar ({data.reports.length})</option>
-              {data.groups.map((g) => (
-                <option key={g.id} value={g.name}>
-                  {g.name}
-                </option>
-              ))}
-            </select>
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-700" />
+              <span>HEMIS Jurnalini Eksport Qilish (CSV)</span>
+            </a>
           </div>
 
           {groupReports.length === 0 ? (
@@ -634,15 +670,25 @@ export function TeacherDashboard() {
                     </div>
                     <h3 className="mt-0.5 text-sm font-semibold text-slate-900">{rep.title}</h3>
                   </div>
-                  <span
-                    className={`border px-2 py-0.5 font-mono text-xs font-semibold ${
-                      rep.grade !== null
-                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                        : "border-amber-300 bg-amber-50 text-amber-800"
-                    }`}
-                  >
-                    {rep.grade !== null ? `Baholangan: ${rep.grade}/100` : "Baholanmagan"}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReportForSpeedGrader(rep as StudentReportSubmission)}
+                      className="flex items-center gap-1.5 rounded-lg border border-blue-900 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-900 hover:bg-blue-100 transition-colors cursor-pointer"
+                    >
+                      <Sparkles className="h-3.5 w-3.5 text-blue-800" />
+                      <span>SpeedGrader</span>
+                    </button>
+                    <span
+                      className={`border px-2 py-0.5 font-mono text-xs font-semibold ${
+                        rep.grade !== null
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                          : "border-amber-300 bg-amber-50 text-amber-800"
+                      }`}
+                    >
+                      {rep.grade !== null ? `Baholangan: ${rep.grade}/100` : "Baholanmagan"}
+                    </span>
+                  </div>
                 </div>
                 <p className="mt-2 bg-slate-50 p-2.5 text-xs text-slate-700">{rep.conclusion}</p>
                 <div className="mt-3 flex flex-wrap items-end gap-2">
@@ -686,6 +732,14 @@ export function TeacherDashboard() {
             ))
           )}
         </div>
+      )}
+
+      {selectedReportForSpeedGrader && (
+        <SpeedGraderModal
+          report={selectedReportForSpeedGrader}
+          onClose={() => setSelectedReportForSpeedGrader(null)}
+          onGraded={submitSpeedGrade}
+        />
       )}
     </div>
   );

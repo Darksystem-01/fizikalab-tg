@@ -8,6 +8,7 @@ import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
 import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import { SocraticAiAssistant } from "@/components/SocraticAiAssistant";
 import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { KinematicsResult } from "@/lib/physics/kinematics";
 
@@ -1156,6 +1157,8 @@ export function KinematicsLab() {
         onClearRows={() => setRows([])}
         onDeleteRow={(id) => setRows((p) => p.filter((r) => r.id !== id))}
       />
+
+      <SocraticAiAssistant labKey="kinematics" labTitle="2. Kinematika va Ballistika Stendi" />
     </div>
   );
 }

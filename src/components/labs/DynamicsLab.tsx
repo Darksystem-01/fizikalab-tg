@@ -20,6 +20,7 @@ import { MathFormula } from "@/components/MathFormula";
 import { ParamInput } from "@/components/ParamInput";
 import { ScientificChart } from "@/components/ScientificChart";
 import { ScenarioCatalogSelector } from "@/components/labs/ScenarioCatalogSelector";
+import { SocraticAiAssistant } from "@/components/SocraticAiAssistant";
 import type { ScenarioDefinition } from "@/lib/physics/catalog";
 import type { DynamicsResult, DynamicsSubMode } from "@/lib/physics/dynamics";
 
@@ -2239,6 +2240,9 @@ export function DynamicsLab() {
           </div>
         </div>
       )}
+
+      {/* Socratic Pedagogical AI Assistant */}
+      <SocraticAiAssistant labKey="dynamics" labTitle="3. Qiya Tekislik va Dinamika Stendi" />
     </div>
   );
 }

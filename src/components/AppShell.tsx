@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   Atom,
+  Award,
   BookOpen,
   CheckCircle2,
   Compass,
@@ -48,11 +49,13 @@ const NAV_ITEMS = [
 ];
 
 const SECONDARY_ITEMS = [
+  { href: "/courses", label: "O‘quv Dasturi & Kurslar (LMS)", icon: BookOpen },
   { href: "/interactive-labs", label: "16 ta Interaktiv Stendlar", icon: FlaskConical },
   { href: "/practice", label: "400 ta Masala & Mashqlar", icon: CheckCircle2 },
   { href: "/instruments", label: "75 ta Qurilma Katalogi", icon: Wrench },
   { href: "/reference", label: "100+ Formulalar & CODATA", icon: BookOpen },
   { href: "/reports", label: "Hisobotlarim & Topshiriqlar", icon: FileText },
+  { href: "/verify/cert-phys101-demo", label: "Akademik Sertifikat", icon: Award },
 ];
 
 export function AppShell({
