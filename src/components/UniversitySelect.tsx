@@ -183,13 +183,25 @@ export function UniversitySelect({
                   >
                     {/* Official University Logo or Styled Emblem Badge */}
                     {u.logoUrl ? (
-                      <div className="w-8 h-8 rounded-md flex shrink-0 items-center justify-center bg-white border border-slate-200/90 shadow-xs p-0.5 overflow-hidden">
+                      <div className="w-8 h-8 rounded-md flex shrink-0 items-center justify-center bg-white border border-slate-200/90 shadow-xs p-0.5 overflow-hidden relative">
                         <img
                           src={u.logoUrl}
                           alt={u.name}
                           className="w-full h-full object-contain"
                           loading="lazy"
+                          onError={(e) => {
+                            // Gracefully fallback to stylized badge if image fails to load
+                            e.currentTarget.style.display = "none";
+                            const fallback = e.currentTarget.parentElement?.querySelector(".logo-fallback");
+                            if (fallback) (fallback as HTMLElement).style.display = "flex";
+                          }}
                         />
+                        <div
+                          className="logo-fallback hidden absolute inset-0 w-full h-full rounded-md items-center justify-center text-[10px] font-bold text-white"
+                          style={{ backgroundColor: u.emblemBg }}
+                        >
+                          {u.emblemText.slice(0, 4)}
+                        </div>
                       </div>
                     ) : (
                       <div
