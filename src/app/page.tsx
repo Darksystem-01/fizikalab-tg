@@ -1,26 +1,10 @@
-import { redirect } from "next/navigation";
-import { LoginPortal } from "@/components/LoginPortal";
-import { getSessionUser } from "@/lib/auth";
+import { ReelsFeed } from "@/components/reels/ReelsFeed";
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const sp = searchParams ? await searchParams : {};
-  const isGoogleFlow =
-    sp?.google_onboarding === "1" ||
-    typeof sp?.google_error === "string" ||
-    Boolean(sp?.google_onboarding);
+export const metadata = {
+  title: "FizikaLab Reels — Fizika har bir talabaning ekranida!",
+  description: "Universitet talabalari uchun umumiy fizika bo'yicha qisqa videolar, masalalar, tajribalar va talabalar chati platformasi.",
+};
 
-  // If user is currently in the middle of Google onboarding or seeing an error, do NOT auto-redirect!
-  if (!isGoogleFlow) {
-    const user = await getSessionUser();
-    if (user) {
-      if (user.role === "admin" || user.role === "darksystem") redirect("/darksystem");
-      if (user.role === "teacher") redirect("/teacher");
-      redirect("/labs/metrology");
-    }
-  }
-  return <LoginPortal />;
+export default function HomePage() {
+  return <ReelsFeed />;
 }
