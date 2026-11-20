@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "test:regression": "node --test tests/physics-and-api.test.mjs",
     "test:security": "node --test tests/security-verification.test.mjs",
