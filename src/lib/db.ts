@@ -33,6 +33,8 @@ export interface DbUser {
   avatar_url?: string;
   student_id_code?: string;
   bio?: string;
+  telegram_chat_id?: string;
+  telegram_username?: string;
 }
 
 export interface DbAcademicGroup {
@@ -158,7 +160,8 @@ interface DbAdapter {
   execute(sql: string, params?: unknown[]): Promise<{ lastInsertId?: number }>;
 }
 
-let pgPool: import("pg").Pool | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let pgPool: any = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let sqliteDb: any = null;
 let initPromise: Promise<void> | null = null;
@@ -171,6 +174,7 @@ async function getAdapter(): Promise<DbAdapter> {
   const pgUrl = getPostgresUrl();
   if (pgUrl) {
     if (!pgPool) {
+      // @ts-ignore
       const { Pool } = await import("pg");
       pgPool = new Pool({
         connectionString: pgUrl,
@@ -204,6 +208,7 @@ async function getAdapter(): Promise<DbAdapter> {
   }
 
   if (!sqliteDb) {
+    // @ts-ignore
     const { DatabaseSync } = await import("node:sqlite");
     const dbFile = process.env.VERCEL
       ? "/tmp/fizika_lab.db"
@@ -253,6 +258,8 @@ async function migrateExistingTables(adapter: DbAdapter, isPg: boolean): Promise
     { name: "avatar_url", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
     { name: "student_id_code", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
     { name: "bio", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "telegram_chat_id", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
+    { name: "telegram_username", pgType: "TEXT NOT NULL DEFAULT ''", sqType: "TEXT NOT NULL DEFAULT ''" },
   ];
 
   const assignExtCols = [
@@ -454,7 +461,9 @@ async function ensureSchemaAndSeed() {
           scholarship_status TEXT NOT NULL DEFAULT 'Bor',
           avatar_url TEXT NOT NULL DEFAULT '',
           student_id_code TEXT NOT NULL DEFAULT '',
-          bio TEXT NOT NULL DEFAULT ''
+          bio TEXT NOT NULL DEFAULT '',
+          telegram_chat_id TEXT NOT NULL DEFAULT '',
+          telegram_username TEXT NOT NULL DEFAULT ''
         )`,
         `CREATE TABLE IF NOT EXISTS academic_groups (
           id SERIAL PRIMARY KEY,
@@ -559,7 +568,9 @@ async function ensureSchemaAndSeed() {
           scholarship_status TEXT NOT NULL DEFAULT 'Bor',
           avatar_url TEXT NOT NULL DEFAULT '',
           student_id_code TEXT NOT NULL DEFAULT '',
-          bio TEXT NOT NULL DEFAULT ''
+          bio TEXT NOT NULL DEFAULT '',
+          telegram_chat_id TEXT NOT NULL DEFAULT '',
+          telegram_username TEXT NOT NULL DEFAULT ''
         )`,
         `CREATE TABLE IF NOT EXISTS academic_groups (
           id INTEGER PRIMARY KEY AUTOINCREMENT,

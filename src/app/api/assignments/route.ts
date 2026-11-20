@@ -14,9 +14,9 @@ export async function GET(req: Request) {
   const db = await getDb();
   if (isAdminOrDarksystem(user) || user.role === "teacher") {
     const assignments = await db.queryAll(
-      `SELECT a.*, u.full_name AS creator_name
+      `SELECT a.*, COALESCE(u.full_name, 'Bosh O‘qituvchi') AS creator_name
        FROM assignments a
-       JOIN users u ON u.id = a.created_by
+       LEFT JOIN users u ON u.id = a.created_by
        ORDER BY a.id DESC`
     );
     return NextResponse.json({ assignments });
@@ -24,9 +24,9 @@ export async function GET(req: Request) {
 
   // Students receive global assignments OR assignments targeted to their student group
   const assignments = await db.queryAll(
-    `SELECT a.*, u.full_name AS creator_name
+    `SELECT a.*, COALESCE(u.full_name, 'Bosh O‘qituvchi') AS creator_name
      FROM assignments a
-     JOIN users u ON u.id = a.created_by
+     LEFT JOIN users u ON u.id = a.created_by
      WHERE a.group_name IS NULL
         OR TRIM(a.group_name) = ''
         OR LOWER(TRIM(a.group_name)) = LOWER(TRIM($1))

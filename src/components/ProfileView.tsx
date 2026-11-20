@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Award,
+  Bell,
   BookOpen,
   Building2,
   Calendar,
@@ -47,6 +48,8 @@ export interface StudentProfile {
   avatarUrl?: string;
   studentIdCode?: string;
   bio?: string;
+  telegramChatId?: string;
+  telegramUsername?: string;
   academicYear?: string;
   semester?: string;
 }
@@ -56,6 +59,7 @@ export function ProfileView() {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [linkingTg, setLinkingTg] = useState(false);
   const [copied, setCopied] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -134,6 +138,37 @@ export function ProfileView() {
     navigator.clipboard.writeText(idCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  async function handleConnectTelegram() {
+    setLinkingTg(true);
+    try {
+      const res = await fetch("/api/telegram/link");
+      const data = await res.json();
+      if (data.deepLink) {
+        window.open(data.deepLink, "_blank");
+      }
+    } catch {
+      alert("Telegram havolasini olishda xatolik yuz berdi.");
+    } finally {
+      setLinkingTg(false);
+    }
+  }
+
+  async function handleUnlinkTelegram() {
+    if (!confirm("Telegram hisobingizni ajratishni istaysizmi?")) return;
+    try {
+      await fetch("/api/telegram/link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "unlink" }),
+      });
+      setProfile((p) => (p ? { ...p, telegramChatId: "", telegramUsername: "" } : null));
+      setNotice("Telegram hisob muvaffaqiyatli ajratildi.");
+      setTimeout(() => setNotice(null), 4000);
+    } catch {
+      alert("Ajratishda xatolik.");
+    }
   }
 
   if (loading) {
@@ -412,6 +447,78 @@ export function ProfileView() {
                 </dd>
               </div>
             </dl>
+          </div>
+
+          {/* Section 3: Telegram Bot & Push Notifications */}
+          <div className="p-5 space-y-4 border-t border-slate-200 bg-slate-50/50">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+              <div className="flex items-center gap-2">
+                <Bell className="h-4 w-4 text-blue-900" />
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  Telegram Bot & Tezkor Bildirishnomalar
+                </h2>
+              </div>
+              {profile.telegramChatId ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-800 border border-emerald-300">
+                  <CheckCircle2 className="h-3 w-3" /> Bot Faol Bog‘langan
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-semibold text-amber-800 border border-amber-300">
+                  ⚠️ Ulanmagan
+                </span>
+              )}
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              FizikaLab rasmiy Telegram boti orqali ustoz SpeedGrader tizimida hisobotingizga baho qo‘yishi bilanoq sizga push xabar yuboriladi, topshiriq muddatlari eslatiladi hamda barcha laboratoriya stendlarini to‘g‘ridan-to‘g‘ri Telegram WebApp-da ochish imkoni yaratiladi.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
+              <div className="text-xs">
+                <span className="font-semibold text-slate-900 block">
+                  {profile.telegramChatId ? "Ulangan Telegram Profili:" : "Telegram Profilingizni Bog‘lang:"}
+                </span>
+                <span className="text-slate-500 font-mono text-[11px]">
+                  {profile.telegramChatId
+                    ? profile.telegramUsername
+                      ? `@${profile.telegramUsername} (ID: ${profile.telegramChatId})`
+                      : `Chat ID: ${profile.telegramChatId}`
+                    : "Xabarlar va baholar olish uchun @FizikaLabBot ni ulang"}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {profile.telegramChatId ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => window.open("https://t.me/FizikaLabBot", "_blank")}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-blue-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-800 shadow-2xs cursor-pointer"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      <span>Botni Ochish</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleUnlinkTelegram}
+                      className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 hover:text-red-600 cursor-pointer"
+                    >
+                      Ajratish
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleConnectTelegram}
+                    disabled={linkingTg}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-blue-800 disabled:opacity-50 cursor-pointer"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span>{linkingTg ? "Ulanmoqda..." : "Telegram Botga Ulash"}</span>
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

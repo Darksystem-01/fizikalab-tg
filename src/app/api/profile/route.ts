@@ -47,6 +47,8 @@ export async function GET(req: Request) {
     bio:
       dbUser?.bio ||
       "TATU Dasturiy injiniring yo'nalishi 1-kurs talabasi. Fizika va modellashtirishga qiziquvchi.",
+    telegramChatId: dbUser?.telegram_chat_id || "",
+    telegramUsername: dbUser?.telegram_username || "",
     academicYear: "2026-2027",
     semester: "2-semestr",
   };

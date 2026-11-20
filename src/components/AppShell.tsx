@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Compass,
   FileText,
+  Film,
   FlaskConical,
   Gauge,
   GraduationCap,
@@ -69,6 +70,7 @@ const NAV_ITEMS = [
 
 const STUDENT_SECONDARY_ITEMS = [
   { href: "/reports", label: "Hisobotlarim & Baholarim", icon: FileText },
+  { href: "/video-labs", label: "🎥 Haqiqiy Video Tajribalar", icon: Film },
   { href: "/courses", label: "O‘quv Dasturi & Kurslar (LMS)", icon: BookOpen },
   { href: "/interactive-labs", label: "16 ta Interaktiv Stendlar", icon: FlaskConical },
   { href: "/practice", label: "400 ta Masala & Mashqlar", icon: CheckCircle2 },
@@ -77,6 +79,7 @@ const STUDENT_SECONDARY_ITEMS = [
 ];
 
 const TEACHER_SECONDARY_ITEMS = [
+  { href: "/video-labs", label: "🎥 Haqiqiy Video Tajribalar", icon: Film },
   { href: "/courses", label: "Akademik Kurslar (LMS)", icon: BookOpen },
   { href: "/practice", label: "400 ta Masalalar Banki", icon: CheckCircle2 },
   { href: "/reference", label: "Formulalar & CODATA", icon: BookOpen },
@@ -84,6 +87,7 @@ const TEACHER_SECONDARY_ITEMS = [
 ];
 
 const ADMIN_SECONDARY_ITEMS = [
+  { href: "/video-labs", label: "🎥 Haqiqiy Video Tajribalar", icon: Film },
   { href: "/courses", label: "Akademik Kurslar (LMS)", icon: BookOpen },
   { href: "/reference", label: "Formulalar & CODATA", icon: BookOpen },
   { href: "/instruments", label: "Qurilmalar Katalogi", icon: Wrench },

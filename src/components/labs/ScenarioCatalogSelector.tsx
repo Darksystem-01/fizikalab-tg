@@ -7,11 +7,14 @@ import {
   type ScenarioDefinition,
 } from "@/lib/physics/catalog";
 import type { LabKey } from "@/app/api/physics/simulate/route";
+import { getVideoLabByKey } from "@/lib/videoLabs";
+import { VideoLabModal } from "@/components/VideoLabModal";
 import {
   BookOpen,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
+  Film,
   Filter,
   Layers,
   Search,
@@ -32,6 +35,9 @@ export function ScenarioCatalogSelector({
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+
+  const videoLab = useMemo(() => getVideoLabByKey(chapter), [chapter]);
 
   const allScenarios = useMemo(() => {
     return getScenariosByChapter(chapter);
@@ -87,6 +93,18 @@ export function ScenarioCatalogSelector({
         </div>
 
         <div className="flex items-center gap-2">
+          {videoLab && (
+            <button
+              type="button"
+              onClick={() => setVideoModalOpen(true)}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition hover:bg-red-100 shadow-xs cursor-pointer"
+            >
+              <Film className="h-4 w-4 text-red-600" />
+              <span className="hidden sm:inline">Haqiqiy Tajriba Videosi</span>
+              <span className="sm:hidden">Video</span>
+            </button>
+          )}
+
           <Link
             href="/practice"
             className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-300 bg-blue-50/80 px-3 py-2 text-xs font-semibold text-[#1E3A8A] transition hover:bg-blue-100"
@@ -214,6 +232,14 @@ export function ScenarioCatalogSelector({
             })}
           </div>
         </div>
+      )}
+
+      {videoLab && (
+        <VideoLabModal
+          video={videoLab}
+          isOpen={videoModalOpen}
+          onClose={() => setVideoModalOpen(false)}
+        />
       )}
     </div>
   );
