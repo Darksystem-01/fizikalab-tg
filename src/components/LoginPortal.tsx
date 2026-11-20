@@ -3,33 +3,25 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef, useCallback } from "react";
 import Script from "next/script";
+import Link from "next/link";
 import { UniversitySelect } from "./UniversitySelect";
 import {
   Atom,
-  BookOpen,
   CheckCircle2,
-  Compass,
   Eye,
   EyeOff,
-  FileCheck2,
-  FlaskConical,
-  Lock,
-  ShieldCheck,
   Sparkles,
-  UserPlus,
-  Wrench,
+  ShieldCheck,
+  HelpCircle,
+  ChevronDown,
+  ArrowRight,
+  FlaskConical,
+  X,
+  PlayCircle,
+  ExternalLink,
 } from "lucide-react";
 
-const MODULES = [
-  { num: "01", name: "Metrologiya va Asboblar", desc: "Verniy, Mikrometr, Sferometr, t'-mezoni" },
-  { num: "02", name: "Kinematika & Ballistika", desc: "RK4 trayektoriya, havo qarshiligi, erkin tushish" },
-  { num: "03", name: "Dinamika & Mayatniklar", desc: "Qiya tekislik, Kater mayatnigi, Guk, to'qnashuv" },
-  { num: "04", name: "Statika & Muvozanat", desc: "360° kuchlar stoli, balka momentlari, polispast" },
-  { num: "05", name: "Elektromagnetizm", desc: "MNA matritsa, Metr ko'prigi, KRO, Faradey" },
-  { num: "06", name: "Geometrik & To'lqin Optika", desc: "Linzalar, Koshi prizmasi, Difraksiya panjarasi" },
-];
-
-function GoogleIcon({ className = "h-4 w-4" }: { className?: string }) {
+function GoogleIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24">
       <path
@@ -52,7 +44,7 @@ function GoogleIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) {
+function TelegramIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.18 3.35-1.39 3.73-1.39.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
@@ -100,7 +92,9 @@ export function LoginPortal() {
     const p = new URLSearchParams(window.location.search);
     return p.get("google_error") || null;
   });
-  const [phase, setPhase] = useState(0);
+
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
 
   // Google OAuth state
   const [googleClientId, setGoogleClientId] = useState<string>("");
@@ -118,17 +112,6 @@ export function LoginPortal() {
     return null;
   });
   const gisMountedRef = useRef(false);
-
-  useEffect(() => {
-    let frame = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      setPhase(((now - start) / 1000) * 2.1);
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   // Fetch configured Google Client ID from backend
   useEffect(() => {
@@ -218,7 +201,7 @@ export function LoginPortal() {
         setLoading(false);
       }
     },
-    []
+    [fullName]
   );
 
   // Initialize Google Identity Services when script loads & client_id is available
@@ -367,6 +350,16 @@ export function LoginPortal() {
     setError(null);
     try {
       if (tab === "register") {
+        if (!fullName.trim()) {
+          setError("Iltimos, to'liq ism-sharifingizni kiriting.");
+          setLoading(false);
+          return;
+        }
+        if (!studentGroup.trim()) {
+          setError("Akademik guruhingizni kiriting.");
+          setLoading(false);
+          return;
+        }
         if (!university) {
           setError("Iltimos, O‘zbekistondagi tasdiqlangan OTMni tanlang.");
           setLoading(false);
@@ -382,8 +375,15 @@ export function LoginPortal() {
       const endpoint = tab === "login" ? "/api/auth/login" : "/api/auth/register";
       const payload =
         tab === "login"
-          ? { email, password }
-          : { fullName, university, faculty, studentGroup, email, password };
+          ? { email: email.trim(), password }
+          : {
+              fullName: fullName.trim(),
+              university,
+              faculty,
+              studentGroup: studentGroup.trim(),
+              email: email.trim(),
+              password,
+            };
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -409,12 +409,8 @@ export function LoginPortal() {
     }
   }
 
-  const pendAngle = 0.38 * Math.cos(phase);
-  const bobX = 110 + 58 * Math.sin(pendAngle);
-  const bobY = 20 + 58 * Math.cos(pendAngle);
-
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between text-slate-900">
+    <div className="min-h-screen bg-white flex flex-col justify-between text-slate-900 font-sans antialiased">
       {/* Official Google Identity Services Script */}
       <Script
         src="https://accounts.google.com/gsi/client"
@@ -439,142 +435,168 @@ export function LoginPortal() {
         }}
       />
 
-      {/* Institutional Top Header */}
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#1E3A8A] text-white shadow-xs">
-              <Atom className="h-5 w-5" />
+      {/* Modern Zoom-Style Header */}
+      <header className="w-full bg-white border-b border-slate-100">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-8 py-3.5 sm:py-4">
+          {/* Brand Logo - Stylized Zoom-inspired Wordmark */}
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0E71EB] text-white shadow-sm transition group-hover:bg-[#0B5CFF]">
+              <Atom className="h-5 w-5 animate-[spin_12s_linear_infinite]" />
             </div>
-            <div>
-              <div className="text-sm font-bold tracking-tight text-slate-900 sm:text-base">
-                FizikaLab — Akademik Virtual Laboratoriya Platformasi
-              </div>
-              <div className="text-[11px] text-slate-500">
-                Oliy ta’lim muassasalari uchun raqamli fizika tajriba majmuasi
-              </div>
+            <div className="flex items-baseline tracking-tight">
+              <span className="text-2xl sm:text-[26px] font-black tracking-tighter text-[#0E71EB]">
+                fizika
+              </span>
+              <span className="text-2xl sm:text-[26px] font-bold tracking-tighter text-slate-800">
+                lab
+              </span>
+            </div>
+          </Link>
+
+          {/* Top Right Navigation Links */}
+          <div className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
+            <div className="text-slate-600 hidden sm:inline-block">
+              {tab === "login" ? (
+                <>
+                  Yangi foydalanuvchimisiz?{" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTab("register");
+                      setError(null);
+                    }}
+                    className="font-semibold text-[#0E71EB] hover:text-[#0B5CFF] hover:underline cursor-pointer ml-1"
+                  >
+                    Ro‘yxatdan o‘tish
+                  </button>
+                </>
+              ) : (
+                <>
+                  Hisobingiz bormi?{" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTab("login");
+                      setError(null);
+                    }}
+                    className="font-semibold text-[#0E71EB] hover:text-[#0B5CFF] hover:underline cursor-pointer ml-1"
+                  >
+                    Tizimga kirish
+                  </button>
+                </>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(true)}
+              className="text-slate-600 hover:text-slate-900 transition font-medium cursor-pointer"
+            >
+              Yordam
+            </button>
+
+            <div className="flex items-center gap-1 text-slate-600 cursor-pointer font-medium hover:text-slate-900">
+              <span>O‘zbekcha</span>
+              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Auth Workbench */}
-      <main className="mx-auto flex w-full max-w-6xl flex-1 items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="grid w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm lg:grid-cols-12">
-          {/* Left Panel: Academic Syllabus & Live Apparatus Schematic */}
-          <div className="flex flex-col justify-between border-b border-slate-200 bg-slate-50/70 p-6 sm:p-8 lg:col-span-7 lg:border-b-0 lg:border-r">
-            <div className="space-y-5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-[#1E3A8A]">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  Rasmiy Ilmiy-O‘quv Laboratoriya Muhiti
-                </span>
-                <span className="font-mono text-[11px] text-slate-500">
-                  75 ta Asbob · 100+ Formula
-                </span>
-              </div>
+      {/* Main Spacious 2-Column Workbench */}
+      <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center px-4 py-8 sm:px-8 sm:py-12">
+        <div className="grid w-full grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+          {/* Left Column: High-Tech Modern Promotional Card (Zoom 2026 Style) */}
+          <div className="lg:col-span-6 xl:col-span-6">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0E71EB] via-[#0B5CFF] to-[#043CB5] p-7 sm:p-10 text-white shadow-xl min-h-[460px] flex flex-col justify-between">
+              {/* Atmospheric Glow Elements */}
+              <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl pointer-events-none" />
+              <div className="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-indigo-400/25 blur-3xl pointer-events-none" />
+              <div className="absolute right-0 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-blue-300/10 blur-2xl pointer-events-none" />
 
-              <div>
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-                  Fizika fanidan interaktiv laboratoriya va hisob-kitob majmuasi
-                </h1>
-                <p className="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
-                  Har bir tajriba server tomonida differensial tenglama yechuvchisi (RK4),
-                  elektr zanjir matritsasi (MNA), Snellius va Koshi optik modellashtirishi hamda
-                  statistik xatoliklar tahlili asosida hisoblanadi.
+              {/* Card Header & Badges */}
+              <div className="relative z-10 space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md px-3.5 py-1 text-xs font-semibold tracking-wide text-white border border-white/20">
+                  <Sparkles className="h-3.5 w-3.5 text-cyan-200" />
+                  <span>FizikaLab 2026: Yangi Avlod</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-extrabold tracking-tight leading-tight text-white">
+                  Yangi avlod virtual laboratoriyalari bilan tanishing
+                </h2>
+
+                <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed max-w-lg">
+                  Mexanika, Elektromagnetizm, Optika va Kvant fizikasi bo‘yicha 100% interaktiv
+                  2D/3D simulyatsiyalar, video qo‘llanmalar va real vaqt matematik hisob-kitoblari.
                 </p>
               </div>
 
-              {/* Compact Dual Apparatus Preview Card */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="lab-grid rounded-lg border border-slate-200 p-3">
-                  <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-700">
-                    <span className="inline-flex items-center gap-1">
-                      <Compass className="h-3.5 w-3.5 text-[#1E3A8A]" />
-                      Jonli Mexanik Model
-                    </span>
-                    <span className="font-mono text-[#1E3A8A]">RK4</span>
-                  </div>
-                  <svg viewBox="0 0 220 96" className="h-24 w-full">
-                    <line x1={30} y1={16} x2={190} y2={16} stroke="#334155" strokeWidth="2.5" />
-                    <line x1={110} y1={16} x2={110} y2={88} stroke="#CBD5E1" strokeDasharray="3 3" />
-                    <line x1={110} y1={16} x2={bobX} y2={bobY} stroke="#1E3A8A" strokeWidth="2" />
-                    <circle cx={110} cy={16} r={3.5} fill="#0F172A" />
-                    <circle cx={bobX} cy={bobY} r={9} fill="#1E3A8A" stroke="#FFFFFF" strokeWidth="1.5" />
-                  </svg>
+              {/* Interactive Apparatus Preview Banner */}
+              <div className="relative z-10 my-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-4 text-white shadow-inner">
+                <div className="flex items-center justify-between text-xs font-medium text-blue-100 mb-2.5">
+                  <span className="flex items-center gap-1.5 font-semibold text-white">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Jonli Stendlar va Video Darslar
+                  </span>
+                  <span className="font-mono text-[11px] text-cyan-200">8 ta yo‘nalish</span>
                 </div>
 
-                <div className="lab-grid rounded-lg border border-slate-200 p-3">
-                  <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-700">
-                    <span className="inline-flex items-center gap-1">
-                      <Sparkles className="h-3.5 w-3.5 text-[#1E3A8A]" />
-                      Prizma & Optik Skameyka
-                    </span>
-                    <span className="font-mono text-[#1E3A8A]">Koshi n(λ)</span>
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div className="rounded-lg bg-black/15 p-2 border border-white/10">
+                    <div className="font-semibold text-white">2D/3D Simulyator</div>
+                    <div className="text-blue-200 text-[10px]">RK4 & MNA dvijogi</div>
                   </div>
-                  <svg viewBox="0 0 220 96" className="h-24 w-full">
-                    <polygon points="110,16 74,80 146,80" fill="#EFF6FF" stroke="#1E3A8A" strokeWidth="2" />
-                    <line x1={20} y1={58} x2={89} y2={52} stroke="#0F172A" strokeWidth="2" />
-                    <line x1={89} y1={52} x2={132} y2={56} stroke="#475569" strokeWidth="1.5" />
-                    <line x1={132} y1={56} x2={200} y2={76} stroke="#6D28D9" strokeWidth="1.8" />
-                    <line x1={132} y1={56} x2={200} y2={67} stroke="#15803D" strokeWidth="1.8" />
-                    <line x1={132} y1={56} x2={200} y2={59} stroke="#B91C1C" strokeWidth="1.8" />
-                  </svg>
+                  <div className="rounded-lg bg-black/15 p-2 border border-white/10">
+                    <div className="font-semibold text-white">Universitet Standarti</div>
+                    <div className="text-blue-200 text-[10px]">HEMIS & ECTS moslik</div>
+                  </div>
                 </div>
               </div>
 
-              {/* 6 Modules Compact Grid */}
-              <div className="grid gap-2 sm:grid-cols-2">
-                {MODULES.map((m) => (
-                  <div
-                    key={m.num}
-                    className="flex items-start gap-2.5 rounded-md border border-slate-200 bg-white px-3 py-2"
-                  >
-                    <span className="mt-0.5 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#1E3A8A]">
-                      {m.num}
-                    </span>
-                    <div className="min-w-0">
-                      <div className="truncate text-xs font-semibold text-slate-900">{m.name}</div>
-                      <div className="truncate text-[11px] text-slate-500">{m.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+              {/* Call-to-action button */}
+              <div className="relative z-10 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/video-labs"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-xs sm:text-sm font-semibold text-[#0E71EB] shadow-md transition hover:bg-blue-50 hover:shadow-lg active:scale-98 cursor-pointer"
+                >
+                  <PlayCircle className="h-4 w-4 text-[#0E71EB]" />
+                  <span>Laboratoriyalarni ko‘rish</span>
+                </Link>
 
-            <div className="mt-5 flex flex-wrap items-center gap-4 border-t border-slate-200 pt-4 text-[11px] text-slate-600">
-              <span className="inline-flex items-center gap-1">
-                <Wrench className="h-3.5 w-3.5 text-[#1E3A8A]" /> 75 ta qurilma katalogi
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <BookOpen className="h-3.5 w-3.5 text-[#1E3A8A]" /> 100+ KaTeX formulalar
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <FileCheck2 className="h-3.5 w-3.5 text-[#1E3A8A]" /> Hisobot va baholash tizimi
-              </span>
+                <div className="text-[11px] text-blue-200 flex items-center gap-1.5 ml-1">
+                  <ShieldCheck className="h-4 w-4 text-emerald-300" />
+                  <span>Xavfsiz va sertifikatlangan</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right Panel: Clean Institutional Login / Student Registration / Academic Onboarding */}
-          <div className="flex flex-col justify-center p-6 sm:p-8 lg:col-span-5">
+          {/* Right Column: Clean Zoom-Style Sign-in Box */}
+          <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center max-w-md mx-auto w-full">
             {pendingGoogleUser ? (
               /* Google Academic Profile Onboarding */
-              <div className="space-y-4">
-                <div className="rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-xs text-emerald-950">
-                  <div className="flex items-center gap-2 font-semibold text-emerald-800">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    Google hisobi tasdiqlandi
-                  </div>
-                  <div className="mt-1 font-mono text-[11px] text-emerald-700">
-                    {pendingGoogleUser.email}
-                  </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
-                    Laboratoriya topshiriqlari va baholaringizni biriktirish uchun ta’lim
-                    muassasangiz hamda guruhingizni bir marta belgilang.
+              <div className="space-y-5">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                    Akademik ma‘lumotlar
+                  </h1>
+                  <p className="mt-1 text-xs sm:text-sm text-slate-500">
+                    Laboratoriya topshiriqlari va baholaringizni biriktirish uchun universitetingizni
+                    tanlang.
                   </p>
                 </div>
 
-                <form onSubmit={handleCompleteGoogleProfile} className="space-y-3">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 text-xs text-emerald-950">
+                  <div className="flex items-center gap-2 font-semibold text-emerald-800">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    Google hisobi tasdiqlandi:
+                  </div>
+                  <div className="mt-1 font-mono text-xs text-emerald-700">
+                    {pendingGoogleUser.email}
+                  </div>
+                </div>
+
+                <form onSubmit={handleCompleteGoogleProfile} className="space-y-3.5">
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-slate-700">
                       F.I.Sh. (Ism va Familiya) *
@@ -585,7 +607,7 @@ export function LoginPortal() {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Masalan: Mahmudjon Tolqinov"
-                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
                     />
                   </div>
 
@@ -599,7 +621,7 @@ export function LoginPortal() {
                       value={studentGroup}
                       onChange={(e) => setStudentGroup(e.target.value)}
                       placeholder="Masalan: FI-202"
-                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
                     />
                   </div>
 
@@ -612,23 +634,23 @@ export function LoginPortal() {
                   />
 
                   {error && (
-                    <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800">
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">
                       {error}
                     </div>
                   )}
 
-                  <div className="flex gap-2 pt-1">
+                  <div className="flex gap-2 pt-2">
                     <button
                       type="button"
                       onClick={() => setPendingGoogleUser(null)}
-                      className="rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                      className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
                     >
                       Bekor qilish
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-md bg-[#1E3A8A] px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-[#172554] disabled:opacity-50 cursor-pointer"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0E71EB] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-[#0B5CFF] disabled:opacity-50 cursor-pointer"
                     >
                       <FlaskConical className="h-4 w-4" />
                       {loading ? "Saqlanmoqda..." : "Ro‘yxatdan o‘tishni yakunlash"}
@@ -637,123 +659,51 @@ export function LoginPortal() {
                 </form>
               </div>
             ) : (
-              <>
-                {/* Tabs */}
-                <div className="mb-5 flex rounded-lg border border-slate-200 bg-slate-50 p-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTab("login");
-                      setError(null);
-                    }}
-                    className={`flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-semibold transition cursor-pointer ${
-                      tab === "login"
-                        ? "bg-white text-[#1E3A8A] shadow-xs"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Lock className="h-3.5 w-3.5" />
-                    Tizimga kirish
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTab("register");
-                      setError(null);
-                    }}
-                    className={`flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-semibold transition cursor-pointer ${
-                      tab === "register"
-                        ? "bg-white text-[#1E3A8A] shadow-xs"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <UserPlus className="h-3.5 w-3.5" />
-                    Ro‘yxatdan o‘tish
-                  </button>
-                </div>
-
-                <div className="mb-4">
-                  <h2 className="text-base font-bold text-slate-900">
+              <div>
+                {/* Title */}
+                <div className="mb-6">
+                  <h1 className="text-2xl sm:text-[32px] font-bold tracking-tight text-slate-900 leading-snug">
+                    {tab === "login" ? "Tizimga kirish" : "Ro‘yxatdan o‘tish"}
+                  </h1>
+                  <p className="mt-1 text-xs sm:text-sm text-slate-500">
                     {tab === "login"
-                      ? "Shaxsiy kabinetga kirish"
-                      : "Talaba hisobini yaratish"}
-                  </h2>
-                  <p className="mt-0.5 text-xs text-slate-500">
-                    {tab === "login"
-                      ? "Elektron pochta va parolingizni yoki Google hisobingizni ishlating."
-                      : "Universitet, fakultet va guruhingizni to‘liq tanlang."}
+                      ? "Elektron pochta va parolingiz orqali shaxsiy kabinetga kiring."
+                      : "Talaba hisobini ochish uchun ma'lumotlarni to'ldiring."}
                   </p>
                 </div>
 
-                {/* Third-Party Authentication: Google & Telegram */}
-                <div className="mb-4 space-y-2.5">
-                  <button
-                    type="button"
-                    onClick={handleGoogleButtonClick}
-                    disabled={loading}
-                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900 cursor-pointer disabled:opacity-50"
-                  >
-                    <GoogleIcon className="h-4.5 w-4.5 shrink-0" />
-                    <span>Continue with Google</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleTelegramButtonClick}
-                    disabled={loading}
-                    className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-sky-500/40 bg-sky-50 px-4 py-2 text-xs sm:text-sm font-semibold text-sky-800 hover:bg-sky-100 hover:border-sky-500 hover:text-sky-950 transition cursor-pointer shadow-xs disabled:opacity-50"
-                  >
-                    <TelegramIcon className="h-4.5 w-4.5 shrink-0 text-[#24A1DE]" />
-                    <span>Telegram orqali kirish</span>
-                    <span className="hidden sm:inline-block rounded bg-sky-200/70 px-1.5 py-0.5 text-[10px] font-mono font-medium text-sky-900">
-                      @Fizikatuitbot
-                    </span>
-                  </button>
-                </div>
-
-                {/* Divider */}
-                <div className="relative mb-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200" />
-                  </div>
-                  <div className="relative flex justify-center text-[11px] uppercase">
-                    <span className="bg-white px-2 text-slate-400 font-medium">
-                      yoki pochta orqali
-                    </span>
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-3">
+                {/* Main Email & Password Form */}
+                <form onSubmit={handleSubmit} className="space-y-4">
                   {tab === "register" && (
                     <>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <div>
-                          <label className="mb-1 block text-xs font-semibold text-slate-700">
-                            F.I.Sh. *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            placeholder="Karimov Jasur"
-                            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
-                          />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs font-semibold text-slate-700">
-                            Akademik guruh *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={studentGroup}
-                            onChange={(e) => setStudentGroup(e.target.value)}
-                            placeholder="Masalan: FI-202"
-                            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
-                          />
-                        </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-semibold text-slate-700">
+                          F.I.Sh. (Ism va Familiya) *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          placeholder="Karimov Jasur"
+                          className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
+                        />
                       </div>
+
+                      <div>
+                        <label className="mb-1 block text-xs font-semibold text-slate-700">
+                          Akademik guruh *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={studentGroup}
+                          onChange={(e) => setStudentGroup(e.target.value)}
+                          placeholder="Masalan: FI-202"
+                          className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
+                        />
+                      </div>
+
                       <UniversitySelect
                         university={university}
                         onUniversityChange={(uName) => setUniversity(uName)}
@@ -764,22 +714,24 @@ export function LoginPortal() {
                     </>
                   )}
 
+                  {/* Email Input Field */}
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-slate-700">
-                      Elektron pochta (Email)
+                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                      Elektron pochta (email)
                     </label>
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="ism@university.uz"
-                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
+                      placeholder="Elektron pochta manzilingiz"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
                     />
                   </div>
 
+                  {/* Password Input Field with toggle */}
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-slate-700">
+                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
                       Parol
                     </label>
                     <div className="relative">
@@ -788,48 +740,261 @@ export function LoginPortal() {
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full rounded-md border border-slate-300 bg-white py-2 pl-3 pr-9 text-xs text-slate-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
+                        placeholder="Parolingizni kiriting"
+                        className="w-full rounded-xl border border-slate-300 bg-white py-3 pl-4 pr-11 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 focus:border-[#0E71EB] focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPass((v) => !v)}
-                        className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                        className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-700 transition cursor-pointer"
                         aria-label="Parolni ko'rsatish"
                       >
-                        {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPass ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                       </button>
                     </div>
                   </div>
 
                   {error && (
-                    <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800">
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs sm:text-sm text-red-800">
                       {error}
                     </div>
                   )}
 
+                  {/* Primary Solid Action Button (Zoom Style) */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex w-full items-center justify-center gap-2 rounded-md bg-[#1E3A8A] px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-[#172554] disabled:opacity-50 cursor-pointer"
+                    className="w-full mt-2 py-3.5 px-4 rounded-xl bg-[#0E71EB] hover:bg-[#0B5CFF] text-white font-semibold text-base shadow-sm transition hover:shadow cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 active:scale-99"
                   >
-                    <FlaskConical className="h-4 w-4" />
-                    {loading
-                      ? "Tekshirilmoqda..."
-                      : tab === "login"
-                      ? "Tizimga kirish"
-                      : "Ro‘yxatdan o‘tish"}
+                    <span>
+                      {loading
+                        ? "Tekshirilmoqda..."
+                        : tab === "login"
+                        ? "Kirish"
+                        : "Ro‘yxatdan o‘tish"}
+                    </span>
+                    {!loading && <ArrowRight className="h-4 w-4" />}
                   </button>
                 </form>
-              </>
+
+                {/* Or Sign In With Divider */}
+                <div className="relative my-7 flex items-center justify-center">
+                  <div className="border-t border-slate-200 w-full absolute" />
+                  <span className="bg-white px-3 text-xs text-slate-400 font-medium relative">
+                    yoki quyidagilar orqali kiring
+                  </span>
+                </div>
+
+                {/* Social Login Buttons: ONLY Google and Telegram as explicitly commanded */}
+                <div className="flex items-center justify-center gap-8">
+                  {/* Google Button */}
+                  <div className="flex flex-col items-center">
+                    <button
+                      type="button"
+                      onClick={handleGoogleButtonClick}
+                      disabled={loading}
+                      title="Google orqali kirish"
+                      className="h-14 w-14 rounded-2xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 flex items-center justify-center shadow-xs transition hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 bg-white"
+                    >
+                      <GoogleIcon className="h-6 w-6" />
+                    </button>
+                    <span className="text-xs text-slate-600 font-medium mt-1.5">Google</span>
+                  </div>
+
+                  {/* Telegram Button */}
+                  <div className="flex flex-col items-center">
+                    <button
+                      type="button"
+                      onClick={handleTelegramButtonClick}
+                      disabled={loading}
+                      title="Telegram orqali kirish"
+                      className="h-14 w-14 rounded-2xl border border-slate-200 hover:border-sky-300 hover:bg-sky-50 flex items-center justify-center shadow-xs transition hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 bg-white"
+                    >
+                      <TelegramIcon className="h-7 w-7 text-[#24A1DE]" />
+                    </button>
+                    <span className="text-xs text-slate-600 font-medium mt-1.5">Telegram</span>
+                  </div>
+                </div>
+
+                {/* Sub-links */}
+                <div className="mt-7 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotModal(true)}
+                    className="text-xs sm:text-sm text-[#0E71EB] hover:text-[#0B5CFF] hover:underline font-medium cursor-pointer"
+                  >
+                    Parolni unutdingizmi?
+                  </button>
+                </div>
+
+                {/* Mobile view switch tab link */}
+                <div className="mt-4 pt-4 border-t border-slate-100 text-center sm:hidden text-xs text-slate-600">
+                  {tab === "login" ? (
+                    <>
+                      Hisobingiz yo‘qmi?{" "}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTab("register");
+                          setError(null);
+                        }}
+                        className="font-semibold text-[#0E71EB] hover:underline cursor-pointer"
+                      >
+                        Ro‘yxatdan o‘tish
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Hisobingiz bormi?{" "}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTab("login");
+                          setError(null);
+                        }}
+                        className="font-semibold text-[#0E71EB] hover:underline cursor-pointer"
+                      >
+                        Tizimga kirish
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
       </main>
 
-      <footer className="border-t border-slate-200 bg-white px-6 py-3 text-center text-[11px] text-slate-500">
-        FizikaLab · Akademik Virtual Fizika Laboratoriyasi
+      {/* Modern Zoom-Style Clean Footer */}
+      <footer className="w-full border-t border-slate-100 bg-white py-6 px-4 sm:px-8">
+        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <div className="flex items-center gap-4 text-xs font-medium text-slate-600">
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(true)}
+              className="hover:text-slate-900 cursor-pointer"
+            >
+              Yordam
+            </button>
+            <span>·</span>
+            <span className="hover:text-slate-900 cursor-pointer">Foydalanish shartlari</span>
+            <span>·</span>
+            <span className="hover:text-slate-900 cursor-pointer">Maxfiylik siyosati</span>
+          </div>
+
+          <div className="text-[11px] text-slate-400 text-center sm:text-right">
+            FizikaLab 2026 — Oliy ta‘lim muassasalari uchun raqamli fizika laboratoriya majmuasi.
+          </div>
+        </div>
       </footer>
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 font-bold text-slate-900 text-base">
+                <HelpCircle className="h-5 w-5 text-[#0E71EB]" />
+                <span>Yordam va Yo‘riqnoma</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="text-xs sm:text-sm text-slate-600 space-y-3 leading-relaxed">
+              <p>
+                <b>FizikaLab platformasiga kirish:</b>
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>
+                  <b>Google hisobi:</b> Universitet yoki shaxsiy Gmail orqali bir bosishda kiring.
+                </li>
+                <li>
+                  <b>Telegram bot:</b> @Fizikatuitbot orqali hisobingizni tasdiqlang va parolsiz
+                  kiring.
+                </li>
+                <li>
+                  <b>Email va parol:</b> Agar ro‘yxatdan o‘tgan bo‘lsangiz, pochta va parolingizni
+                  kiriting.
+                </li>
+              </ul>
+              <div className="rounded-xl bg-blue-50 p-3 text-xs text-blue-900">
+                Savollar va texnik yordam uchun:{" "}
+                <a
+                  href="https://t.me/Fizikatuitbot"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-[#0E71EB] underline"
+                >
+                  @Fizikatuitbot
+                </a>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(false)}
+              className="w-full rounded-xl bg-slate-900 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition cursor-pointer"
+            >
+              Tushundim
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Forgot Password Modal */}
+      {showForgotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 font-bold text-slate-900 text-base">
+                <span>Parolni qayta tiklash</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowForgotModal(false)}
+                className="text-slate-400 hover:text-slate-700 cursor-pointer p-1"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="text-xs sm:text-sm text-slate-600 space-y-3 leading-relaxed">
+              <p>
+                Akademik xavfsizlik qoidalariga ko‘ra, talaba va o‘qituvchilarning parollari
+                universitet dekanati yoki HEMIS administratori orqali tasdiqlanadi.
+              </p>
+              <div className="rounded-xl bg-slate-50 border border-slate-200 p-3.5 space-y-2">
+                <div className="font-semibold text-slate-900">Tezkor kirish usullari:</div>
+                <div className="text-xs text-slate-600">
+                  1. <b>Google orqali kirish</b> tugmasini bosing (parol talab etilmaydi).
+                </div>
+                <div className="text-xs text-slate-600">
+                  2. <b>Telegram orqali kirish</b> tugmasini bosing yoki{" "}
+                  <a
+                    href="https://t.me/Fizikatuitbot"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#0E71EB] underline font-medium"
+                  >
+                    @Fizikatuitbot
+                  </a>{" "}
+                  ga kiring.
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(false)}
+              className="w-full rounded-xl bg-[#0E71EB] py-2.5 text-xs font-semibold text-white hover:bg-[#0B5CFF] transition cursor-pointer"
+            >
+              Yopish
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

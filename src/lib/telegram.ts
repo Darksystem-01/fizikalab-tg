@@ -114,6 +114,15 @@ export function verifyAccountLinkToken(token: string): number | null {
   }
 }
 
+const ALLOWED_WIDGET_KEYS = new Set([
+  "auth_date",
+  "first_name",
+  "id",
+  "last_name",
+  "photo_url",
+  "username",
+]);
+
 /**
  * Telegram Login Widget ma'lumotlarini HMAC-SHA256 orqali tekshirish
  * https://core.telegram.org/widgets/login
@@ -132,15 +141,25 @@ export function verifyTelegramWidgetData(
     return { valid: false, error: "Majburiy maydonlar (id, auth_date, hash) yetishmaydi" };
   }
 
-  // auth_date tekshiruvi (maksimal 7 kunlik amal muddati)
+  // auth_date tekshiruvi (0 bo'lmasligi, kelajakdagi soxta vaqt va 7 kundan oshmasligi kerak)
   const authTimestamp = Number(data.auth_date);
-  if (isNaN(authTimestamp) || Math.floor(Date.now() / 1000) - authTimestamp > 86400 * 7) {
-    return { valid: false, error: "Telegram autentifikatsiya muddati o'tgan" };
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (
+    isNaN(authTimestamp) ||
+    authTimestamp <= 0 ||
+    authTimestamp > nowSec + 300 ||
+    nowSec - authTimestamp > 86400 * 7
+  ) {
+    return { valid: false, error: "Telegram autentifikatsiya muddati o'tgan yoki yaroqsiz" };
   }
 
-  // Tartiblangan data-check-string (hash dan tashqari barcha kalitlar)
+  // Tartiblangan data-check-string (faqat Telegram tomonidan imzolangan ruxsat etilgan kalitlar)
   const keys = Object.keys(data).filter(
-    (k) => k !== "hash" && data[k] !== undefined && data[k] !== null && data[k] !== ""
+    (k) =>
+      ALLOWED_WIDGET_KEYS.has(k) &&
+      data[k] !== undefined &&
+      data[k] !== null &&
+      data[k] !== ""
   );
   keys.sort();
 
@@ -151,8 +170,8 @@ export function verifyTelegramWidgetData(
     .update(dataCheckString)
     .digest("hex");
 
-  if (calculatedHash.length !== hash.length) {
-    return { valid: false, error: "Imzo (hash) uzunligi mos kelmadi" };
+  if (calculatedHash.length !== hash.length || !/^[0-9a-fA-F]{64}$/.test(hash)) {
+    return { valid: false, error: "Imzo (hash) uzunligi yoki formati mos kelmadi" };
   }
 
   const hashBuf = Buffer.from(hash, "hex");
@@ -193,13 +212,20 @@ export function verifyTelegramWebAppData(
 
   const params = new URLSearchParams(initData);
   const hash = params.get("hash");
-  if (!hash) {
-    return { valid: false, error: "initData ichida hash parametri topilmadi" };
+  if (!hash || !/^[0-9a-fA-F]{64}$/.test(hash)) {
+    return { valid: false, error: "initData ichida hash parametri topilmadi yoki yaroqsiz" };
   }
 
   const authDate = Number(params.get("auth_date") || 0);
-  if (authDate && Math.floor(Date.now() / 1000) - authDate > 86400 * 7) {
-    return { valid: false, error: "Telegram WebApp ma'lumotlar muddati o'tgan" };
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (
+    !authDate ||
+    isNaN(authDate) ||
+    authDate <= 0 ||
+    authDate > nowSec + 300 ||
+    nowSec - authDate > 86400 * 7
+  ) {
+    return { valid: false, error: "Telegram WebApp ma'lumotlar muddati o'tgan yoki yaroqsiz" };
   }
 
   params.delete("hash");
@@ -226,7 +252,7 @@ export function verifyTelegramWebAppData(
     return { valid: false, error: "Telegram WebApp imzosi haqiqiy emas" };
   }
 
-  let userObj: any = {};
+  let userObj: any = null;
   const userRaw = params.get("user");
   if (userRaw) {
     try {
@@ -234,10 +260,17 @@ export function verifyTelegramWebAppData(
     } catch {}
   }
 
+  if (!userObj || !userObj.id) {
+    return {
+      valid: false,
+      error: "Telegram WebApp foydalanuvchi ma'lumotlari (user obyekti) topilmadi",
+    };
+  }
+
   return {
     valid: true,
     user: {
-      id: userObj.id || params.get("query_id") || "webapp_user",
+      id: userObj.id,
       firstName: userObj.first_name || "",
       lastName: userObj.last_name || "",
       username: userObj.username || "",
@@ -280,6 +313,9 @@ ${apparatusList}
 
 🎯 <b>Akademik maqsad:</b>
 <i>«${vid.academicObjective}»</i>
+
+📁 <b>Google Drive to‘g‘ridan-to‘g‘ri havola:</b> <a href="${driveViewUrl}">${driveViewUrl}</a>
+🎥 <b>YouTube video dars:</b> <a href="${youtubeUrl}">${youtubeUrl}</a>
 
 💡 <i>Ushbu tajribani YouTube yoki Google Drive orqali tomosha qilishingiz, yoki FizikaLab WebApp-da virtual simulyator bilan parallel bajarishingiz mumkin:</i>
 `.trim();
@@ -500,13 +536,19 @@ export async function handleTelegramWebhookUpdate(update: any): Promise<void> {
       update.message = { chat: { id: chatId }, text: "/syllabus", from: cb.from };
     } else if (data === "cmd_profile") {
       update.message = { chat: { id: chatId }, text: "/profile", from: cb.from };
+    } else if (data === "cmd_help") {
+      update.message = { chat: { id: chatId }, text: "/help", from: cb.from };
+    } else if (data === "cmd_start") {
+      update.message = { chat: { id: chatId }, text: "/start", from: cb.from };
     }
   }
 
   if (!update.message) return;
   const msg = update.message;
   const chatId = msg.chat?.id;
-  const text = msg.text?.trim() || "";
+  const rawText = msg.text?.trim() || "";
+  // Buyruq oxiridagi @botname suffiksini olib tashlaymiz (masalan: /labs@Fizikatuitbot -> /labs)
+  const text = rawText.replace(/^(\/[a-zA-Z0-9_]+)@[a-zA-Z0-9_]+bot\b/i, "$1");
   const username = msg.from?.username || "";
   const firstName = msg.from?.first_name || "Talaba";
 
