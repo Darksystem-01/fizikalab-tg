@@ -1,31 +1,31 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  ShieldCheck,
-  Smartphone,
+  Flame,
   Lock,
+  Smartphone,
   User,
   CheckCircle2,
   XCircle,
   Eye,
   EyeOff,
   ArrowRight,
-  Sparkles,
-  HelpCircle,
-  Flame,
+  ShieldCheck,
+  Radio,
 } from "lucide-react";
+import { validateAndFormatPhone, getUzbekistanOperator } from "@/lib/auth/phone";
 
 export default function AuthPage() {
   const router = useRouter();
-  const [tab, setTab] = useState<"login" | "register">("login");
+  const [tab, setTab] = useState<"login" | "register">("register");
   const [isPending, startTransition] = useTransition();
 
   // Registration state
   const [nickname, setNickname] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+998");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -39,10 +39,27 @@ export default function AuthPage() {
   const [otpStep, setOtpStep] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [otpPhone, setOtpPhone] = useState("");
+  const [devNotice, setDevNotice] = useState<string | null>(null);
 
-  // UI state
+  // UI state & Cooldown
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [cooldown, setCooldown] = useState<number>(0);
+
+  // Live Operator Detection
+  const cleanDigits = phone.replace(/\D/g, "");
+  const nationalPart = cleanDigits.startsWith("998") ? cleanDigits.slice(3) : cleanDigits;
+  const detectedOperator =
+    nationalPart.length >= 2 ? getUzbekistanOperator(nationalPart) : null;
+
+  // Countdown timer for 60s SMS rate limiter
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   // Password strength checks
   const hasMinLength = password.length >= 8;
@@ -59,6 +76,11 @@ export default function AuthPage() {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
+
+    if (cooldown > 0) {
+      setErrorMessage(`Iltimos, qayta so'rov yuborish uchun ${cooldown} soniya kuting.`);
+      return;
+    }
 
     if (!termsAccepted) {
       setErrorMessage("Foydalanish shartlariga rozilik bildirishingiz kerak.");
@@ -85,13 +107,21 @@ export default function AuthPage() {
         const data = await res.json();
 
         if (!res.ok) {
+          if (res.status === 429 && data.cooldownSeconds) {
+            setCooldown(data.cooldownSeconds);
+          }
           setErrorMessage(data.error || "Ro'yxatdan o'tishda xatolik.");
           return;
         }
 
-        setSuccessMessage("Tasdiqlash kodi yuborildi!");
+        setSuccessMessage(data.message || "Tasdiqlash kodi yuborildi!");
         setOtpPhone(data.phone || phone);
+        if (data.devCode) {
+          setDevNotice(data.devCode);
+          setOtpCode(data.devCode);
+        }
         setOtpStep(true);
+        setCooldown(60);
       } catch {
         setErrorMessage("Internet bilan aloqa uzildi.");
       }
@@ -213,6 +243,22 @@ export default function AuthPage() {
               </p>
             </div>
 
+            {/* Simulated / Test OTP Banner if SMS Gateway isn't filled */}
+            {devNotice && (
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between">
+                <span>
+                  🔔 Sinov kodi: <strong className="font-mono text-white text-sm">{devNotice}</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setOtpCode(devNotice)}
+                  className="text-[11px] underline text-blue-400 hover:text-blue-300"
+                >
+                  Kiritish
+                </button>
+              </div>
+            )}
+
             <div>
               <input
                 type="text"
@@ -236,7 +282,10 @@ export default function AuthPage() {
 
             <button
               type="button"
-              onClick={() => setOtpStep(false)}
+              onClick={() => {
+                setOtpStep(false);
+                setDevNotice(null);
+              }}
               className="w-full text-xs text-slate-400 hover:text-slate-300 transition text-center"
             >
               &larr; Raqamni o&apos;zgartirish
@@ -253,7 +302,7 @@ export default function AuthPage() {
                   setErrorMessage("");
                 }}
                 className={`py-2 text-xs font-semibold rounded-lg transition ${
-                  tab === "login" ? "bg-slate-800 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+                  tab === "login" ? "bg-slate-800 text-white shadow" : "text-slate-400 hover:text-white"
                 }`}
               >
                 Kirish
@@ -265,27 +314,27 @@ export default function AuthPage() {
                   setErrorMessage("");
                 }}
                 className={`py-2 text-xs font-semibold rounded-lg transition ${
-                  tab === "register" ? "bg-slate-800 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+                  tab === "register" ? "bg-slate-800 text-white shadow" : "text-slate-400 hover:text-white"
                 }`}
               >
                 Ro&apos;yxatdan o&apos;tish
               </button>
             </div>
 
-            {/* Login Tab */}
             {tab === "login" ? (
+              /* Login Tab */
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Telefon raqam yoki Nickname
+                    Telefon raqam yoki Taxallus (Nickname) *
                   </label>
                   <div className="relative">
-                    <Smartphone className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                    <User className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                     <input
                       type="text"
                       value={loginIdentifier}
                       onChange={(e) => setLoginIdentifier(e.target.value)}
-                      placeholder="+998 90 123 45 67 yoki student_nick"
+                      placeholder="+998901234567 yoki taxallus"
                       className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-blue-500 transition"
                       required
                     />
@@ -293,9 +342,7 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-medium text-slate-300">Parol</label>
-                  </div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">Parol *</label>
                   <div className="relative">
                     <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                     <input
@@ -335,7 +382,7 @@ export default function AuthPage() {
                       type="text"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
-                      placeholder="masalan: fizika_talaba"
+                      placeholder="masalan: fizik_talaba"
                       className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-blue-500 transition"
                       required
                     />
@@ -343,17 +390,36 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Telefon raqam *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-medium text-slate-300">Telefon raqam *</label>
+                    {detectedOperator && (
+                      <span
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 transition-all"
+                        style={{
+                          backgroundColor: `${detectedOperator.color}15`,
+                          color: detectedOperator.color,
+                          border: `1px solid ${detectedOperator.color}40`,
+                        }}
+                      >
+                        <Radio className="w-2.5 h-2.5" />
+                        {detectedOperator.operator}
+                      </span>
+                    )}
+                  </div>
                   <div className="relative">
                     <Smartphone className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+998 90 123 45 67"
-                      className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+                      placeholder="+998 77 096 36 10"
+                      className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-blue-500 transition font-mono"
                       required
                     />
+                  </div>
+                  <div className="mt-1 flex items-center gap-1 text-[10px] text-slate-500">
+                    <ShieldCheck className="w-3 h-3 text-emerald-500 shrink-0" />
+                    <span>Uztelecom, Mobiuz, Beeline, Ucell, Humans to&apos;liq qo&apos;llab-quvvatlanadi</span>
                   </div>
                 </div>
 
@@ -446,10 +512,14 @@ export default function AuthPage() {
 
                 <button
                   type="submit"
-                  disabled={isPending || !termsAccepted || strengthScore < 3}
+                  disabled={isPending || !termsAccepted || strengthScore < 3 || cooldown > 0}
                   className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  {isPending ? "Kutilmoqda..." : "SMS Kod Olish"} &rarr;
+                  {isPending
+                    ? "Kutilmoqda..."
+                    : cooldown > 0
+                    ? `Iltimos, kuting (${cooldown}s)`
+                    : "SMS Kod Olish →"}
                 </button>
               </form>
             )}

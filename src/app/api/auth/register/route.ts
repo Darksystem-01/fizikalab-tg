@@ -176,25 +176,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: passResult.error }, { status: 400 });
     }
 
-    // Rate limit SMS per phone (max 1 per 60s, max 5 per hour)
-    const phoneCooldownKey = `sms_cooldown:${e164}`;
-    const rlCooldown = await checkRateLimit(phoneCooldownKey, 1, 60);
-    if (!rlCooldown.success) {
-      return NextResponse.json(
-        { error: `SMS yaqinda yuborilgan. Iltimos, ${rlCooldown.resetSeconds} soniyadan keyin qayta urinib ko'ring.` },
-        { status: 429 }
-      );
-    }
-
-    const phoneHourlyKey = `sms_hourly:${e164}`;
-    const rlHourly = await checkRateLimit(phoneHourlyKey, 5, 3600);
-    if (!rlHourly.success) {
-      return NextResponse.json(
-        { error: "Bir soatlik SMS limiti tugadi. Iltimos, keyinroq urinib ko'ring." },
-        { status: 429 }
-      );
-    }
-
     const db = getDb();
     const phoneHmac = hashPhoneHmac(e164);
 
@@ -224,6 +205,28 @@ export async function POST(req: Request) {
         return NextResponse.json(
           { error: "Ushbu taxallus (nickname) allaqachon band. Boshqa taxallus tanlang." },
           { status: 409 }
+        );
+      }
+
+      // Rate limit SMS per phone (max 1 per 60s, max 5 per hour)
+      const phoneCooldownKey = `sms_cooldown:${e164}`;
+      const rlCooldown = await checkRateLimit(phoneCooldownKey, 1, 60);
+      if (!rlCooldown.success) {
+        return NextResponse.json(
+          {
+            error: `SMS yaqinda yuborilgan. Iltimos, ${rlCooldown.resetSeconds} soniyadan keyin qayta urinib ko'ring.`,
+            cooldownSeconds: rlCooldown.resetSeconds,
+          },
+          { status: 429 }
+        );
+      }
+
+      const phoneHourlyKey = `sms_hourly:${e164}`;
+      const rlHourly = await checkRateLimit(phoneHourlyKey, 5, 3600);
+      if (!rlHourly.success) {
+        return NextResponse.json(
+          { error: "Bir soatlik SMS limiti tugadi. Iltimos, keyinroq urinib ko'ring." },
+          { status: 429 }
         );
       }
 
@@ -276,15 +279,27 @@ export async function POST(req: Request) {
         });
       }
 
-      // Send SMS via provider
+      // Send SMS via configured provider (Eskiz.uz / PlayMobile / Dev simulator)
       const smsProvider = getSmsProvider();
       const smsMessage = `FizikaLab tasdiqlash kodi: ${otp}. Hech kimga bermang. 5 daqiqa amal qiladi.`;
-      await smsProvider.sendSms(e164, smsMessage);
+      const smsResult = await smsProvider.sendSms(e164, smsMessage, otp);
+
+      if (!smsResult.success) {
+        return NextResponse.json(
+          { error: smsResult.error || "SMS yuborishda xatolik yuz berdi." },
+          { status: 502 }
+        );
+      }
 
       return NextResponse.json({
         success: true,
-        message: "Tasdiqlash kodi telefon raqamingizga SMS orqali yuborildi.",
+        message: smsResult.simulated
+          ? "Sinov rejimida tasdiqlash kodi tayyorlandi."
+          : `Tasdiqlash kodi ${phoneResult.operator || "O'zbekiston"} tarmog'idagi telefon raqamingizga SMS orqali yuborildi.`,
         phone: e164,
+        operator: phoneResult.operator,
+        simulated: smsResult.simulated,
+        devCode: smsResult.devCode,
       });
     } catch (dbError) {
       console.error("[Auth Register] DB Error:", dbError);
