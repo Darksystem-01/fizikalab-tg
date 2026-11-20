@@ -80,7 +80,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     titleEn: "Linear Measurements with Vernier Caliper and Micrometer Screw Gauge",
     duration: "06:42",
     youtubeId: "SQae73zfknQ",
-    googleDrivePreviewUrl: "https://drive.google.com/file/d/1FizikaLab_Metrology_ExpStand_TUIT/preview",
+    googleDrivePreviewUrl: "https://drive.google.com/file/d/1RdFqkJuNrenYAIkpd1QUtNz_YqW79CgW/preview",
     thumbnailUrl: "/resources/videolabs/metrology.jpg",
     summaryUz:
       "Laboratoriya sharoitida shtangensirkul (0.02 mm) va mikrometr (0.01 mm) yordamida qattiq jismlarning tashqi, ichki diametri, qalinligi va chuqurligini o'lchash, asbob xatoligi (Least Count) hamda nol xatolikni (Zero Error) hisobga olish.",
@@ -172,7 +172,7 @@ export const VIDEO_LABS_CATALOG: VideoLabDefinition[] = [
     "institution": "TATU Fizika kafedrasi & Oliy ta'lim laboratoriya stendi",
     "title": "Shtangensirkul va Mikrometr Yordamida Chiziqli O'lchashlar",
     "youtubeId": "SQae73zfknQ",
-    "googleDrivePreviewUrl": "https://drive.google.com/file/d/1FizikaLab_Metrology_ExpStand_TUIT/preview",
+    "googleDrivePreviewUrl": "https://drive.google.com/file/d/1RdFqkJuNrenYAIkpd1QUtNz_YqW79CgW/preview",
     "duration": "06:42",
     "summary": "Laboratoriya sharoitida shtangensirkul (0.02 mm) va mikrometr (0.01 mm) yordamida qattiq jismlarning o'lchamlari va asbob xatoligi.",
     "timestamps": [
