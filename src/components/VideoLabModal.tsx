@@ -40,12 +40,28 @@ export function VideoLabModal({
   const [activeSeconds, setActiveSeconds] = useState<number>(0);
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [useGoogleDrive, setUseGoogleDrive] = useState<boolean>(false);
+  const [customDriveUrl, setCustomDriveUrl] = useState<string>("");
+  const [showDriveInput, setShowDriveInput] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
+  function parseDrivePreview(urlOrId: string): string | null {
+    if (!urlOrId) return null;
+    const match = urlOrId.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
+    const idMatch = urlOrId.match(/id=([a-zA-Z0-9_-]+)/);
+    if (idMatch) return `https://drive.google.com/file/d/${idMatch[1]}/preview`;
+    if (/^[a-zA-Z0-9_-]{20,}$/.test(urlOrId.trim())) {
+      return `https://drive.google.com/file/d/${urlOrId.trim()}/preview`;
+    }
+    return urlOrId.startsWith("http") ? urlOrId : null;
+  }
+
+  const drivePreview = parseDrivePreview(customDriveUrl || video.googleDrivePreviewUrl || "");
+
   const currentEmbedUrl =
-    useGoogleDrive && video.googleDrivePreviewUrl
-      ? video.googleDrivePreviewUrl
+    useGoogleDrive && drivePreview
+      ? drivePreview
       : `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&enablejsapi=1&rel=0&modestbranding=1&start=${activeSeconds}`;
 
   const toggleCheck = (idx: number) => {
@@ -80,20 +96,33 @@ export function VideoLabModal({
           </div>
 
           <div className="flex items-center gap-2">
-            {video.googleDrivePreviewUrl && (
-              <button
-                type="button"
-                onClick={() => setUseGoogleDrive((v) => !v)}
-                className={`hidden rounded-lg px-2.5 py-1.5 text-xs font-medium transition sm:inline-flex items-center gap-1.5 border ${
-                  useGoogleDrive
-                    ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300"
-                    : "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700"
-                }`}
-                title="Google Drive / YouTube o'rtasida almashtirish"
-              >
-                <span>{useGoogleDrive ? "Google Drive Pleeri" : "YouTube Pleeri"}</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                if (!useGoogleDrive && !drivePreview) {
+                  setShowDriveInput(true);
+                } else {
+                  setUseGoogleDrive((v) => !v);
+                }
+              }}
+              className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition inline-flex items-center gap-1.5 border ${
+                useGoogleDrive
+                  ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300"
+                  : "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700"
+              }`}
+              title="Google Drive / YouTube o'rtasida almashtirish"
+            >
+              <span>{useGoogleDrive ? "📁 Drive Rejimi" : "🎥 YouTube Rejimi"}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowDriveInput((v) => !v)}
+              className="rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs text-slate-300 hover:bg-slate-700 hover:text-white transition"
+              title="Google Drive havolasini o‘rnatish"
+            >
+              ⚙️ Link
+            </button>
 
             {onApplySimulatorPreset && (
               <button
@@ -120,6 +149,37 @@ export function VideoLabModal({
             </button>
           </div>
         </div>
+
+        {/* Collapsible Custom Google Drive / Link Input */}
+        {showDriveInput && (
+          <div className="border-b border-slate-800 bg-slate-950 px-4 py-2.5 sm:px-6 flex flex-col sm:flex-row items-center gap-2 text-xs">
+            <span className="text-slate-400 shrink-0 font-medium">
+              📁 Shaxsiy Google Drive havolasi:
+            </span>
+            <input
+              type="text"
+              value={customDriveUrl}
+              onChange={(e) => {
+                setCustomDriveUrl(e.target.value);
+                if (e.target.value.trim()) setUseGoogleDrive(true);
+              }}
+              placeholder="https://drive.google.com/file/d/1.../view yoki file ID ni kiriting"
+              className="flex-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-slate-100 placeholder:text-slate-600 focus:border-blue-500 focus:outline-hidden text-xs font-mono"
+            />
+            {customDriveUrl && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDriveUrl("");
+                  setUseGoogleDrive(false);
+                }}
+                className="text-[11px] text-slate-400 hover:text-red-400 transition"
+              >
+                Tozalash
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Main Content: Split Player and Interactive Control Panel */}
         <div className="grid flex-1 grid-cols-1 overflow-hidden lg:grid-cols-12">
